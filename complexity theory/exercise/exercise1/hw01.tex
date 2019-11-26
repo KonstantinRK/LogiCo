@@ -1,0 +1,939 @@
+   \documentclass [11pt]{article}
+   \usepackage{latexsym}
+   \usepackage{amssymb}
+   \usepackage{amsmath}
+      \usepackage{amsthm}
+   \usepackage{url}
+
+   \textwidth      15cm
+   \textheight     23cm
+   \oddsidemargin 0.5cm
+   \topmargin    -0.5cm
+   \evensidemargin\oddsidemargin
+
+
+   \pagestyle{plain}
+   \bibliographystyle{plain}
+
+
+
+
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+    \newtheorem{observation}[theorem]{Observation}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{example}[theorem]{Example}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem{exercise}[theorem]{Exercise}
+ 
+ 
+
+
+  \newcommand{\ra}{\rightarrow}
+  \newcommand{\Ra}{\Rightarrow}
+  \newcommand{\La}{\Leftarrow}
+  \newcommand{\la}{\leftarrow}
+  \newcommand{\LR}{\Leftrightarrow}
+
+  \newcommand{\lto}{\rightarrow}
+  \newcommand{\sto}{\Rightarrow}
+  \newcommand{\snto}{\Leftarrow}
+  \newcommand{\lnto}{\leftarrow}
+  \newcommand{\siff}{\Leftrightarrow}
+   \newcommand{\liff}{\leftrightarrow}
+   \newcommand{\nmodels}{\not\models}
+
+
+  \renewcommand{\phi}{\varphi}
+  \renewcommand{\theta}{\vartheta}
+
+
+\newcommand{\bigO}{\mathrm{O}}
+\newcommand{\bigOmega}{\Omega}
+\newcommand{\bigTheta}{\Theta}
+\newcommand{\tuple}[1]{\langle#1\rangle}
+
+%%% useful macros for Turing machines:
+\newcommand{\blank}{\sqcup}
+\newcommand{\ssym}{\triangleright}
+\newcommand{\esym}{\triangleleft}
+\newcommand{\halt}{\mbox{h}}
+\newcommand{\yess}{\mbox{``yes''}}
+\newcommand{\nos}{\mbox{``no''}}
+\newcommand{\lmove}{\leftarrow}
+\newcommand{\rmove}{\rightarrow}
+\newcommand{\stay}{-}
+\newcommand{\diverge}{\nearrow}
+\newcommand{\yields}[1]{\stackrel{#1}{\rightarrow}}
+
+\newcommand{\HALTING}{\mbox{\bf HALTING}}
+
+\newcommand{\ccfont}[1]{\protect\mathsf{#1}}
+\newcommand{\NP}{\ccfont{NP}}
+\newcommand{\SAT}{\mbox{\bf SAT}}
+\newcommand{\sym}[3]{\textit{symbol}_{#1}[#2,#3]}
+\newcommand{\cursor}[2]{\textit{cursor}[#1,#2]}
+\newcommand{\state}[2]{\textit{state}_{#1}[#2]}
+\newcommand{\accept}{\textit{accept}}
+\newcommand{\naccept}{\textit{naccept}}
+\newcommand{\conf}{\textit{conf}}
+\newcommand{\trans}[1]{\mathfrak{T}_{\mathcal{#1}}}
+\newcommand{\sequ}[1]{\mathfrak{C}_{#1}}
+\newcommand{\sequint}[2]{ \mathcal{#1}_{\mathfrak{C}_{#2}}}
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+%\maketitle
+
+
+\medskip
+
+\noindent
+\begin{exercise}[5 credits]
+{\em Recall the problem reduction from an arbitrary language $L \in \NP$ 
+to the \SAT-problem given in the lecture. 
+In particular, recall the construction of an instance $R(x)$ of
+\SAT\ from an arbitrary instance $x$ of $L$.
+Give a rigorous proof of the correctness of this reduction, i.e.
+$x \in L \LR R(x) \in \SAT$.
+} % em
+\end{exercise}
+
+
+\noindent
+{\bf Hint.} Prove both directions of the equivalence separately. 
+The intended meaning of
+the propositional atoms in $R(x)$ is clear. You have to be careful, what is given, what is constructed (or defined), and what has to be proved. 
+
+\begin{itemize}
+\item Suppose that $x \in L$. 
+\begin{itemize}
+\item given: Then we know that there exists a successful computation of the NTM $T$ on input $x$. By our assumption, this computation consists of exactly $N$ steps. Let $\conf_0, \dots, \conf_N$ denote the configurations of the NTM $T$ along this computation.
+\item constructed/defined:  We define a truth assignment ${\cal I}$ appropriate to $R(x)$ according to the intended meaning of the propositional atoms in $R(x)$. 
+\item to be proved: It remains to show that all conjuncts in $R(x)$ are indeed satisfied by ${\cal I}$. For this purpose, you have to inspect all groups of conjuncts in $R(x)$ and argue that each of them is true in ${\cal I}$.
+\end{itemize}
+
+\item Suppose that $R(x) \in \SAT$.
+\begin{itemize}
+\item given: Then there exists a satisfying truth assignment ${\cal I}$ of $R(x)$. 
+\item constructed/defined: We can construct a sequence $\conf_0, \dots, \conf_N$ of configurations 
+of the NTM $T$ according to the intended meaning of the propositional atoms in $R(x)$. 
+\item to be proved: First argue that the configurations $\conf_0, \dots, \conf_N$ are well-defined (by using the the fact that ${\cal I}$ satisfies all conjuncts of $R(x)$).
+
+It remains to show that there exists a computation of $T$ on input $x$ which produces exactly this sequence of configurations $\conf_0, \dots, \conf_N$. Note that, in particular, this is a successful computation by the conjunct $\state{s_m}{N}$
+(with $s_m  = \yess$) in $R(x)$ and by the intended meaning of $\state{s_m}{N}$.
+For this purpose, you have to  show by induction on $\tau$ that there exists 
+a computation of $T$ on input $x$ whose first $\tau$ 
+configurations are $\conf_0, \dots, \conf_\tau$.
+
+\end{itemize}
+
+
+\end{itemize}
+
+
+
+\noindent
+{\bf For your convenience.} The groups of conjuncts in $R(x)$ are recalled below.
+
+\smallskip
+\noindent
+{\bf 1. Initialization facts.} \\
+$\sym{\ssym}{0}{0}$  \\
+$\sym{\sigma}{0}{\pi}$
+  \quad\quad for $1\leq \pi \leq |x|$, where $x_\pi=\sigma$ \\
+$\sym{\blank}{0}{\pi}$
+  \quad\quad for $|x| < \pi\leq N$ \\
+$\cursor{0}{0}$\\
+$\state{s_0}{0}$
+
+\smallskip
+\noindent
+{\bf 2. Transition rules.} For each pair $(s,\sigma)$ of state $s$ and symbol $\sigma$ let $\tuple{s,\sigma,s'_1,\sigma'_1,d_1}$, \dots, 
+$\tuple{s,\sigma,s'_k,\sigma'_k,d_k}$ denote all possible transitions according
+to the  transition relation $\Delta$ (for the cursor movements, we write $d_i \in \{-1,0,1\}$ rather than $d_i \in \{\lmove,\stay,\rmove\}$).
+ \\
+Then $R(x)$ contains the 
+following conjuncts for each value of $\tau$ and $\pi$ such that $0\leq \tau<N$ and $0
+\leq \pi < N$
+
+\smallskip
+\noindent
+%
+$\state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$
+$\ra$ \\ 
+\mbox{}\ \  $[({\state{s'_1}{\tau+1}}\wedge 
+\sym{\sigma'_1}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_1}} 
+) \vee \dots \vee $ \\
+\mbox{}\ \  $({\state{s'_k}{\tau+1}} \wedge 
+\sym{\sigma'_k}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_k}} 
+) ] $ 
+
+
+\smallskip
+\noindent
+{\bf 3. Uniqueness constraints.} Let 
+$K = \{s_0, \dots, s_m\}$ and
+$\Sigma = \{\sigma_1, \dots, \sigma_n\}$. \\
+Then $R(x)$ contains the following formulae for each value of $\tau$ and $\pi$ such that $0\leq \tau \leq N$, $0 \leq \pi \leq  N$, 
+$0 \leq i \leq m$, and $1 \leq j \leq n$.
+
+\smallskip
+\noindent
+$\state{s_i}{\tau} \leftrightarrow
+(\neg \state{s_0}{\tau} \wedge \dots \wedge 
+\neg \state{s_{i-1}}{\tau} \wedge \mbox{}$ \\
+\mbox{} \quad \ $\mbox{}\wedge \neg \state{s_{i+1}}{\tau} \wedge \dots \wedge 
+\neg \state{s_{m}}{\tau})$
+
+\noindent
+$\cursor{\tau}{\pi} \leftrightarrow
+(\neg \cursor{\tau}{0} \wedge \dots \wedge \neg \cursor{\tau}{\pi - 1} 
+\wedge \mbox{}$ \\
+\mbox{} \quad \ $\mbox{}\wedge 
+\neg \cursor{\tau}{\pi+1} \wedge \dots \wedge \neg \cursor{\tau}{N}$ 
+
+
+\noindent
+$\sym{\sigma_j}{\tau}{\pi} \leftrightarrow
+(\neg \sym{\sigma_1}{\tau}{\pi} \wedge \dots \wedge
+\neg \sym{\sigma_{j-1}}{\tau}{\pi} \wedge \mbox{}$ \\
+\mbox{} \quad \ $\mbox{}\wedge 
+\neg \sym{\sigma_{j+1}}{\tau}{\pi} \wedge \dots \wedge
+\neg \sym{\sigma_{n}}{\tau}{\pi}$
+
+
+\smallskip 
+\noindent
+{\bf 4. Inertia rules.} 
+$R(x)$ contains the
+following conjuncts for each value $\tau, \pi, \pi', \sigma$,
+where $0 \leq \tau < N$, $0 \leq \pi < \pi' \leq N$, and
+$\sigma \in \Sigma$, 
+
+
+\smallskip 
+
+\noindent
+$\sym{\sigma}{\tau}{\pi}, \cursor{\tau}{\pi'} \ra 
+\sym{\sigma}{\tau+1}{\pi}$
+
+\noindent
+$\sym{\sigma}{\tau}{\pi'}, \cursor{\tau}{\pi} \ra 
+\sym{\sigma}{\tau+1}{\pi'}$
+
+
+\smallskip 
+\noindent
+
+
+
+{\bf 5. Acceptance.} 
+Let $s_m = \yess$. \\
+Then  $R(x)$ contains the following atom as a conjunct:
+
+\smallskip
+
+\noindent
+$\state{s_m}{N})$.
+
+
+
+\newpage
+
+
+\paragraph*{Solution}
+
+
+The following external theorems are used.
+\begin{theorem}[FMI, Woltran]
+\label{thrm:fm-ndt-deciding}
+A non-deterministic Turing machine $T$ decides a language $L$ iff for any $x \in \Sigma^*$, the following holds:
+\begin{equation*}
+x \in L \iff (s,\triangleright,x) \stackrel{T}{\lto}^* (\yess, w,u) 
+\end{equation*}
+for some strings $w$ and $u$. 
+\end{theorem}
+
+
+What follows are some notational conventions.
+
+\begin{definition}
+Consider a NTM $T:=\langle K, \Sigma, \Delta, s \rangle$. 
+\begin{itemize}
+\item For some $0 \leq n$ let $\Sigma^n$ be the set of string of length $n$ over the alphabet $\Sigma$.
+\item For some $0 \leq n$ let $\Sigma^{\leq n}$ be $\bigcup_{i \in \{0 , \dots , n\}} \Sigma^i$.
+\item Let $\Sigma^*$ be $\bigcup_{0 \leq i} \Sigma^i$.
+\end{itemize}
+\end{definition}
+
+
+\begin{definition}
+Consider a NTM $T:=\langle K, \Sigma, \Delta, s \rangle$. A sequence of configuration $C:= c_0, \dots, c_m$ for some $ 0 \leq m$ is called valid.
+If for every $0\leq i < m$ there exists a $\delta	\in \Delta$ such that $c_i \to_{\delta} c_{i+1}$.
+\end{definition}
+
+
+\begin{definition}
+Consider a NTM $T:=\langle K, \Sigma, \Delta, s \rangle$. Given a string $s \in \Sigma^*$ such that $s = s_0 \dots s_n$ for some $0\leq n$, then $s[i] = s_{i}$ if $0 \leq i \leq n$. Otherwise, $s[i]=\sqcup$.
+\end{definition}
+
+
+\begin{definition}
+Consider a NTM $T:=\langle K, \Sigma, \Delta, s \rangle$. Given the strings $s,t \in \Sigma^*$ such that $s = s_0 \dots s_m$ and $t = t_0 \dots t_n$ for some $0\leq m,n$, then $st= s\cdot t = s_0 \dots s_m\, t_0 \dots t_n$.
+\end{definition}
+
+
+
+
+
+%
+%Moreover, w.l.o.g. it can be assumed that all computations of $T$ require $N$ steps. 
+%\begin{remark}
+%This assumption is permitted, as one can easily use a construct a NTM $T$ satisfying this assumption, from a NTM $T'$ that does not satisfy this assumption. Roughly sketched, one can  MISSING
+%\end{remark}
+
+$"\Longrightarrow"$
+\bigskip
+
+To show that $x \in L \Ra R(x) \in \SAT$, it will be assumed that $x \in L$.  Thereby, essentially expressing that the NTM $T$ deciding $L$, terminates ins state "yes". Using this, it will be inferred, that there must exists at least one
+ valid sequence of configurations terminating in an accepting state. The task at hand is to use this valid sequence of configurations, as well as the semantics of non-deterministic Turing machines, to construct an interpretation that satisfies the formula $R(x)$.
+ 
+ 
+ 
+To be more precise, as $L \in \NP$ there must exist a NTM, let it be called $T:=\langle K, \Sigma, \Delta, s \rangle$, that decides $L$ for any input $x$ in a polynomial number of steps. Moreover, w.l.o.g. it can be assumed that all computations of $T$ require $N$ steps. 
+ Assuming that $x\in L$, one can use Theorem \ref{thrm:fm-ndt-deciding} from the Formal Methods-lecture, to infer that there exists a valid sequence of configuration ranging from the initial configuration of input $x$ to a configuration with sate $\yess$. Thereby, allowing the following definition.
+ 
+ \begin{definition}
+ Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Let $\sequ{x}$ be a valid sequence of configuration of the form $\sequ{x}:=(c_i)_{i \in \{ 0,\dots ,N\}}=(s_0,\triangleright,x), \dots , (\yess, w,u)$
+Moreover, as a notational convention for some $0\leq i \leq N$ let $\sequ{x}(i):=c_i$.
+ \end{definition}
+ 
+%  such that there exists a transition $\delta \in  \Delta$ such that $c_i \to_{\delta} c_{i+1}$.
+% 
+% if one considered for all $i \in  \{ 0,\dots ,N\}$,  $d_i=(p,a,a')=(p,a_1 \dots a_k,a_{k+1} \dots a_m) $ and $d_{i+1}=(q,b,b')=(p,b_1 \dots b_l, b_{l+1} \dots b_n) $  where $p \in K$, $q \in K \cup \{h, \mathit{"yes"}, \mathit{"no"}\}$, $a,b,a',b' \in \Sigma^*$ and $1 < l,k \leq m,n \leq N$, it must be the case that $( p, a_k, q ,b_i, d ) \in \Delta$. Hence, it must be the case that $d_{i+1}=(q,b,b')=(p,a_1 \dots b_{l+d}, b_{l+d+1} \dots b_n)$
+
+
+ Using this, an interpretation can be constructed.  
+ 
+ \begin{definition}
+ Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. For $0 \leq \tau \leq N$,  $0 \leq \pi \leq N$ and $\forall \sigma \in \Sigma$,
+ \begin{itemize}
+ \item let $\sequint{I}{x}(\sym{\sigma}{\tau}{\pi}) := 1$ if and only if for $\sequ{x}(\tau)=(p,a,b)$ it holds that $ab[\pi]=\sigma  $ (otherwise let $\sequint{I}{x}(\sym{\sigma}{\tau}{\pi})$ be $0$);
+  \item let $\sequint{I}{x}(\cursor{\tau}{\pi}) := 1$ if and only if for $\sequ{x}(\tau)=(p,a,b)$ it holds that $|a|-1=\pi$ (otherwise let $\sequint{I}{x}(\cursor{\tau}{\pi}) $ be $0$);
+   \item let $\sequint{I}{x}(\state{s}{\tau}) := 1$ if and only if for $\sequ{x}(\tau)=(p,a,b)$ it holds that $s=p$ (otherwise let $\sequint{I}{x}(\state{s}{\tau})$ be $0$).
+ \end{itemize}
+ 
+ \end{definition}
+ 
+% For $0 \leq \tau \leq N$,  $0 \leq \pi \leq N$ and $\sigma \in \Sigma$,
+% 
+% \begin{itemize}
+% \item let $\mathcal{I}(\sym{\sigma}{\tau}{\pi}) := 1$ if and only if for $c_{\tau}=(p,a,a') \in C$ it holds that $aa'[\pi]=\sigma  $ (otherwise let $\mathcal{I}(\sym{\sigma}{\tau}{\pi})$ be $0$);
+%  \item let $\mathcal{I}(\cursor{\tau}{\pi}) := 1$ if and only if for $c_{\tau}=(p,a,a') \in C$ it holds that $|a|-1=\pi$ (otherwise let $\mathcal{I}(\cursor{\tau}{\pi}) $ be $0$);
+%   \item let $\mathcal{I}(\state{s}{\tau}) := 1$ if and only if for $c_{\tau}=(p,a,a') \in C$ it holds that $s=p$ (otherwise let $\mathcal{I}(\state{s}{\tau})$ be $0$).
+% \end{itemize}
+ 
+As $\sequint{I}{x}$ assigns truth values to every atom in $R(x)$, an appropriate interpretation (i.e.\ truth assignment) was constructed. Hence, it remains to demonstrate that $\sequint{I}{x} \models R(x)$.
+To that end, each block of conjuncts will be evaluated separately under $\sequint{I}{x}$. \\
+
+
+Starting with the verification of \emph{Initialisation Facts} in $R(x)$.
+\begin{proposition}
+\label{prop:r-init}
+Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Then all \emph{Initialisation Facts} in $R(x)$ are satisfied under $\sequint{I}{x}$.
+
+\end{proposition}
+\begin{proof}
+ It is known that $\sequ{x}(0)=c_0$ has the form $(s_0,\triangleright,x)=(s_0,\triangleright,x_1 \dots x_n)$, where $\ssym x \in \Sigma^{\leq N}$. 
+\begin{itemize}
+\item By definition, $\triangleright \cdot x [0]=\triangleright$ and thus, by construction, $\sequint{I}{x} \models \sym{\ssym}{0}{0}$.
+\item For all $1 \leq \pi \leq |x|$ where $x_{\pi}=\sigma$ it holds that  $\ssym \cdot x [\pi]=x_{\pi}$ which is precisely $\sigma$. Hence, by construction, $\sequint{I}{x} \models\sym{\sigma}{0}{\pi}$.
+\item For all $|x| < \pi \leq N$ it holds, by definition, that  $\ssym \cdot x [\pi]=\blank$. Hence, by construction, $\sequint{I}{x} \models \sym{\blank}{0}{\pi}$.
+\item By construction, $\sequint{I}{x} \models \cursor{0}{0}$  iff $|\ssym|-1=0$. Which is precisely the case.
+\item By construction, $\sequint{I}{x} \models \state{s_0}{0}$ iff $s_0=s_0$. Which is precisely the case.
+\end{itemize}
+Thereby, verifying the claim.
+\end{proof}
+
+Subsequently, all \emph{Transition Rules} must be checked. 
+
+\begin{proposition}
+\label{prop:r-trans}
+Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Then all \emph{Transition Rules} in $R(x)$ are satisfied under $\sequint{I}{x}$.
+\end{proposition}
+\begin{proof}
+By definition, it is known that $R(x)$ contains the following.   For each pair $(s,\sigma)$ of state $s$ and symbol $\sigma$ let 
+$(s,\sigma,s'_1,\sigma'_1,d_1)$, \dots, $(s,\sigma,s'_k,\sigma'_k,d_k)$ denote all possible transitions according to the  transition relation $\Delta$.
+For each value of $\tau$ and $\pi$ such that $0\leq \tau<N$ and $0\leq \pi < N$
+\begin{equation*}
+\begin{split}
+\state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to \\
+& \Big(({\state{s'_1}{\tau+1}}\wedge \sym{\sigma'_1}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_1}} ) \vee \dots \vee \\
+& \; \; \,  ({\state{s'_k}{\tau+1}} \wedge \sym{\sigma'_k}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_k}} ) \Big)
+\end{split}
+\end{equation*}
+
+Firstly, the semantics of implications allows one to focus solely on the case $\sequint{I}{x} \models \state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$.
+Secondly, as $\tau < N$ one can exclude the case $\tau=N$, thus ensuring that there must be another step of computation, i.e. the disjunction can not be empty.
+Thirdly, take a $0 \leq \tau < N$ such that $\sequint{I}{x}$ satisfies its premiss of an $\tau$-transition rule, i.e. 
+\begin{equation*}
+\sequint{I}{x} \models \state{s}{\tau} \land \sym{\sigma}{\tau}{\pi} \land \cursor{\tau}{\pi}
+\end{equation*}
+for some $\sigma \in \Sigma$, some $0 \leq \pi <N$ and some $s \in K$.
+Hence, by construction of $\sequint{I}{x} $, it must be that from
+\begin{itemize}
+\item $\sequint{I}{x} \models  \state{s}{\tau}$ it follows that $\sequ{x}(\tau)$ contains the state $s$;
+\item  $\sequint{I}{x} \models \sym{\sigma}{\tau}{\pi}$ it follows that  $\sequ{x}(\tau)= (s,a,b)=(s,a_0\dots a_{\pi-1}\sigma, b)$ for $ab \in \Sigma^{\leq N}$ and $s \in K$ ;
+\item  $\sequint{I}{x} \models \cursor{\tau}{\pi}$ it follows that $\sequ{x}(\tau)= (s,a,b)= (s,a_0\dots a_{\pi}, b)$ for $ab \in \Sigma^{\leq N}$ and $s \in K$;.
+\end{itemize}
+Hence, $\sequ{x}(\tau)=(s,a_0\dots a_{\pi-1}\sigma, b)$.
+Moreover, consider the fact that this particular transition rule in $R(x)$ was constructed using the pair $(s,\sigma)$ and all valid transitions $(s,\sigma , s'_i,\sigma'_i, d_i) \in \Delta$ for some $1\leq i\leq k$ where $k$ is the number of all $\delta \in \Delta$ starting with the tuple $(s,\sigma)$.
+That is, the form of the transition rule in question is 
+\begin{equation*}
+\begin{split}
+\state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to  \\
+&\bigvee_{i \in \{1,\dots ,k\}} ({\state{s'_i}{\tau+1}} \wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_i}} ) 
+\end{split}
+\end{equation*}
+However, consider that $\sequ{x}(\tau)$ has a successor, i.e. $\sequ{x}(\tau+1)$. This implies further that there must exist an $\delta \in \Delta$ such that $\sequ{x}(\tau) \to_{\delta} \sequ{x}(\tau+1)$.
+Due to the above observation it must be that this particular $\delta$ is of the form $(s,\sigma, s', \sigma',d')$ implying that there must exist $1\leq i\leq k$ such that $s'_i=s'$, $\sigma'_i=\sigma'$ and $d'_i=d'$.
+Moreover, it also follows that $\sequ{x}(\tau+1)=(s', a',b')$ where $|a'|=\pi +d$ and $a'b'[\pi]=\sigma$. However, by construction of $\sequint{I}{x}$ it thereby follows that 
+$\sequint{I}{x} \models {\state{s'}{\tau+1}} \wedge \sym{\sigma'}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d'}}$, which as already established is one part of the disjunction of the consequent of the transition rule in question.
+Hence, resulting in 
+\begin{equation*}
+\begin{split}
+\sequint{I}{x} \models \state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to  \\
+&\bigvee_{i \in \{1,\dots ,k\}} ({\state{s'_i}{\tau+1}} \wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_i}} ) 
+\end{split}
+\end{equation*}
+As this works for arbitrary $0 \leq \tau <N$ it was demonstrated that all transition relation are satisfied.
+%all transition relation are satisfied.
+%By construction, there exists only a single configuration at position $\tau$.  Hence, for this $\tau$
+%\begin{itemize}
+%\item there exists exactly one $\state{s}{\tau}$ in $R(x)$ such that $\sequint{I}{x} \models  \state{s}{\tau}$, namely the one where $s$ is the sate of $\sequ{x}(\tau)$;
+%\item there exists exactly one $\sym{\sigma}{\tau}{\pi}$ in $R(x)$ such that $\sequint{I}{x} \models \sym{\sigma}{\tau}{\pi}$, namely exactly if $\sequ{x}(\tau)= (s,a_0\dots a_{\pi-1}\sigma, b)$;
+%\item there exists exactly one $\cursor{\tau}{\pi}$ in $R(x)$ such that $\sequint{I}{x} \models \cursor{\tau}{\pi}$, namely exactly if $\sequ{x}(\tau)= (s,a_0\dots a_{\pi}, b)$.
+%\end{itemize}
+%Hence, for this $\tau$ there exists only a single transition rule where all premisses are satisfied. Or more concisely the conjunction 
+%$\state{s}{\tau} \land \sym{\sigma}{\tau}{\pi} \land \cursor{\tau}{\pi}$ is by construction of $\sequint{I}{x}$ only satisfied if and only if the configuration $\sequ{x}(\tau)$ has the form $(s,a_0\dots a_{\pi-1}\sigma, b)$.
+%What remains to show is to demonstrate that $\sequint{I}{x}$ satisfies at least one of the disjuncts. 
+%By construction, all transitions $\delta \in \Delta $ containing $s$ and $\sigma$ as first and second element are used to construct this rule. That is, let $k$ be the number of rules containing $s$ and $\sigma$ as first and second element, then the rule in question has the form
+%\begin{equation*}
+%\begin{split}
+%\state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to  \\
+%&\bigvee_{i \in \{1,\dots ,k\}} ({\state{s'_i}{\tau+1}} \wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_i}} ) 
+%\end{split}
+%\end{equation*}
+%Now considering that there exists a $\delta=(s,\sigma,s',\sigma',d) \in \Delta$ connecting $\sequ{x}(\tau)$ with$\sequ{x}(\tau+1)=(s', a',b')$ with $|a'|=\pi+d$ and $a'b'[\pi]=\sigma$, this rule must also be present in the transition rule in question.
+%Hence, by construction of $\sequint{I}{x}$ there exists one $i \in \{1,\dots , k\}$ such that $\sequint{I}{x} \models {\state{s'_i}{\tau+1}} \wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_i}} $. As this works for arbitrary $0 \leq \tau <N$ it was demonstrated that
+%all transition relation are satisfied.
+\end{proof}
+
+Moving on towards the \emph{Uniqueness Constraints}.
+
+%
+%\noindent
+%{\bf 2. } For each pair $(s,\sigma)$ of state $s$ and symbol $\sigma$ let $\tuple{s,\sigma,s'_1,\sigma'_1,d_1}$, \dots, 
+%$\tuple{s,\sigma,s'_k,\sigma'_k,d_k}$ denote all possible transitions according
+%to the  transition relation $\Delta$ (for the cursor movements, we write $d_i \in \{-1,0,1\}$ rather than $d_i \in \{\lmove,\stay,\rmove\}$).
+% \\
+%Then $R(x)$ contains the 
+%following conjuncts for each value of $\tau$ and $\pi$ such that $0\leq \tau<N$ and $0
+%\leq \pi < N$
+%
+%\smallskip
+%\noindent
+%%
+%$\state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$
+%$\ra$ \\ 
+%\mbox{}\ \  $[({\state{s'_1}{\tau+1}}\wedge 
+%\sym{\sigma'_1}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_1}} 
+%) \vee \dots \vee $ \\
+%\mbox{}\ \  $({\state{s'_k}{\tau+1}} \wedge 
+%\sym{\sigma'_k}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_k}} 
+%) ] $ 
+
+\begin{proposition}
+\label{prop:r-uniqueness}
+Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Then all \emph{Uniqueness Constraints} in $R(x)$ are satisfied under $\sequint{I}{x}$.
+\end{proposition}
+\begin{proof}
+%Consider the values $\tau$ and $\pi$ such that $0\leq \tau \leq N$, $0 \leq \pi \leq  N$, 
+%$0 \leq i \leq m$, and $1 \leq j \leq n$.
+Even though the proof is analogues for all three kinds of constraints, all shall be demonstrated in detail. 
+\begin{itemize}
+\item
+Consider an arbitrary $0\leq \tau \leq N$ and an arbitrary $0 \leq i \leq m$. Let $\varphi:=\state{s_i}{\tau} \leftrightarrow (\neg \state{s_0}{\tau} \wedge \dots \wedge \neg \state{s_{i-1}}{\tau} \wedge  \neg \state{s_{i+1}}{\tau} \wedge \dots \wedge \neg \state{s_{m}}{\tau})$.
+Observe that there exists only a single entry at position $\tau$ in the accepting sequence of configurations $\sequ{x}$.
+Hence, as there exist only one state $s \in K$ that is contained in $\sequ{x}(\tau)$, if follows by construction of $\sequint{I}{x}$ that there can be only one state-atom at step $\tau$ that is satisfied under $\sequint{I}{x}$, i.e. $\sequint{I}{x} \models \state{s}{\tau} $. Therefore, on the one hand, if $s_i=s$ it follows that $\sequint{I}{x} \models  \state{s_i}{\tau}$ and that for all $0 \leq j \leq m$ such that $j \neq i$ $\sequint{I}{x} \nmodels  state{s_j}{\tau}$. Thereby, inducing the conclusion $\sequint{I}{x} \models  \varphi$. On the other hand, if $s_i \neq s$ it must be that
+$\sequint{I}{x} \nmodels \state{s_i}{\tau}$. Moreover, this requires that there exists a $j$ such that $j\neq i$ and  $0 \leq j \leq m$ where $s_j = s$, forcing by construction of the interpretation $\sequint{I}{x} \models \state{s_i}{\tau}$ and further leading to $\sequint{I}{x} \models \varphi$ . 
+
+\item 
+Consider an arbitrary $0\leq \tau \leq N$ and $0 \leq \pi \leq  N$.
+Let $\varphi := \cursor{\tau}{\pi} \leftrightarrow (\neg \cursor{\tau}{0} \wedge \dots \wedge \neg \cursor{\tau}{\pi - 1}  \wedge \neg \cursor{\tau}{\pi+1} \wedge \dots \wedge \neg \cursor{\tau}{N})$.
+Again, there exists only a single entry at position $\tau$ in the sequence $\sequ{x}$, namely $\sequ{x}(\tau)=(s,a,a')$. As $\sequint{I}{x} \models   \cursor{\tau}{\pi} $ if and only if $|a|-1=\pi$, there can only be a single $\tau$-cursor-atom satisfied under $\sequint{I}{x}$.
+Hence, if $\pi=|a|-1$ then $\sequint{I}{x} \models   \cursor{\tau}{\pi}$ and for all other $0 \leq \mu \leq  N$ s.t. $\mu \neq \pi$ it must be $\sequint{I}{x} \nmodels  \cursor{\tau}{\mu}$. Therefore, from the usual semantics if follows that $\sequint{I}{x} \models  \varphi$.
+Alternatively, if $\pi\neq|a|-1$ then $\sequint{I}{x} \nmodels  \cursor{\tau}{\pi}$. But, this implies that there exists the atom $ \cursor{\tau}{|a|-1}$ in the big conjunct, which by construction clearly evaluates to $1$.  Therefore, from the usual semantics if follows that $\sequint{I}{x} \models  \varphi$.
+
+\item Consider an arbitrary $0\leq \tau \leq N$ and $0 \leq \pi \leq  N$, as well as an arbitrary $0 \leq j \leq n$.
+Let $\varphi := \sym{\sigma_j}{\tau}{\pi} \leftrightarrow (\neg \sym{\sigma_1}{\tau}{\pi} \wedge \dots \wedge \neg \sym{\sigma_{j-1}}{\tau}{\pi} \wedge \neg \sym{\sigma_{j+1}}{\tau}{\pi} \wedge \dots \wedge \neg \sym{\sigma_{n}}{\tau}{\pi})$.
+Similarly as before. $\sequint{I}{x} \models\sym{\sigma_j}{\tau}{\pi}$ if and only if  for $\sequ{x}(\tau)=(p,a,a')$ it holds that $aa'[\pi]=\sigma_j$. Assume that this is actually the case, i.e. that $\sequ{x}(\tau)=(p,a,a')$ such that $aa'[\pi]=\sigma_i$, thus by construction  $\sequint{I}{x} \models  \sym{\sigma_j}{\tau}{\pi}$. Hence, due to $aa'[\pi]=\sigma_j$, any atom of the form $\sym{\sigma_i}{\tau}{\pi}$ for $i\neq j$ and $0 \leq i \leq n$ can not be satisfied. Thereby, $\sequint{I}{x} \models  \varphi$ follows from the usual semantics.
+If this is not the case, i.e. $aa'[\pi]\neq\sigma_j$ then  $\sequint{I}{x} \nmodels  \sym{\sigma_j}{\tau}{\pi}$. It is known that $\varphi$ must contain the atom $sym{\sigma_i}{\tau}{\pi}$ in its big conjunct, which  will clearly be satisfied by $\mathcal{I}$. 
+Thereby, $\sequint{I}{x} \models  \varphi $ follows from the usual semantics.
+\end{itemize}
+\end{proof}
+
+Furthermore, the same ought to be done of the \emph{Inertia Rules}.
+\begin{proposition}
+\label{prop:r-inertia}
+Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Then all  \emph{Inertia Rules} in $R(x)$ are satisfied under $\sequint{I}{x}$.
+\end{proposition}
+\begin{proof}
+For each value $\tau, \pi, \pi', \sigma$,
+where $0 \leq \tau < N$, $0 \leq \pi < \pi' \leq N$, and $\sigma \in \Sigma$, one has
+\begin{equation*}
+ \sym{\sigma}{\tau}{\pi} \land \cursor{\tau}{\pi'} \ra 
+\sym{\sigma}{\tau+1}{\pi}
+\end{equation*}
+and 
+\begin{equation*}
+ \sym{\sigma}{\tau}{\pi'} \land \cursor{\tau}{\pi} \ra 
+\sym{\sigma}{\tau+1}{\pi}
+\end{equation*}
+%To demonstrate the prior, consider an arbitrary $0\leq \tau < N$. Take $\sequ{x}(\tau)=(s, a, b)$ clearly by construction of $\sequint{I}{x}$, $\sequint{I}{x} \models  \cursor{\tau}{\pi'}$. Now, take some arbitrary $0 \leq \pi <\pi'$. $\sequ{x}(\tau)$ must have some character $\sigma \in \Sigma$ at position $\pi$ in $a$, i.e. $(\sequ{x}(\tau)=s, a_0 \dots a_{\pi-1} \sigma a_{\pi+1} \dots a_{\pi'-1} \gamma, b)$. Therefore, by construction one obtains 
+%$\sequint{I}{x} \models  \sym{\sigma}{\tau}{\pi}$. This implies that the premiss of the inertia rule
+%\begin{equation*}
+% \sym{\sigma}{\tau}{\pi} \land \cursor{\tau}{\pi'} \ra \sym{\sigma}{\tau+1}{\pi}
+%\end{equation*}
+%is satisfied. Especially, due to the fact that for this particular $\tau, \pi$ and $\pi'$ this is the only inertia rule with satisfied indices. That is, a Turing machine can not contain two characters in a single cell. It remains to show that the  
+
+Assume an arbitrary $\tau, \pi, \pi', \sigma$ such that $0 \leq \tau < N$, $0 \leq \pi < \pi' \leq N$, and $\sigma \in \Sigma$.
+As the implication will always be satisfied, if the premise is false, assume that $\sequint{I}{x} \models   \sym{\sigma}{\tau}{\pi} $ and $\sequint{I}{x} \models   \cursor{\tau}{\pi'}$. However, this can only be the case
+if $\sequ{x}(\tau)=(s, a, b) =(s, a_0 \dots a_{\pi-1} \sigma a_{\pi+1} \dots a_{\pi'-1} \gamma, b)$ for some state $s$ and $ab\in \Sigma^{\leq N} $. Moreover, as $\sequ{x}(\tau+1)= (s', a', b')$ is obtained by a transition $\delta=(s,\gamma,s',\gamma',d) \in \Delta$, it must be that $a'b'[\pi]=\sigma$ as the value of a cell can only change, if the head is positioned at this cell. However, $a'b'[\pi]=\sigma$ implies that $\sequint{I}{x} \models \sym{\sigma}{\tau+1}{\pi}$. Thus demonstrating the prior. 
+The latter can be done in analogue. That is, 
+ assume that $\sequint{I}{x} \models   \sym{\sigma}{\tau}{\pi'} $ and $\sequint{I}{x} \models   \cursor{\tau}{\pi}$. However, this can only be the case
+if $\sequ{x}(\tau)=(s, a, b) =(s, a1 \dots a_{pi-1}\gamma, b_{pi+1} \dots b_{\pi'-1} \sigma b_{\pi'+1} b_n)$ for some state $s$, $ab \in \Sigma^{\leq N} $ and some $\pi'+1 \leq n \leq N$. Moreover, as $\sequ{x}(\tau+1)= (s', a', b')$ is obtained by a transition $\delta=(s,\gamma,s',\gamma',d) \in \Delta$, it must be that $a'b'[\pi']=\sigma$. However, since $a'b'[\pi']=\sigma$ implies that $\sequint{I}{x} \models \sym{\sigma}{\tau+1}{\pi'}$, the latter is demonstrated. 
+Since, this is done for all inertia rules with their premise satisfied. It can be concluded that all inertia rules are satisfied under $\sequint{I}{x} $.
+\end{proof}
+
+The last remaining part, is to check that \emph{Acceptance} holds.
+
+\begin{proposition}
+\label{prop:r-accept}
+Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Then \emph{Acceptance} in $R(x)$ is satisfied under $\sequint{I}{x}$.
+\end{proposition}
+\begin{proof}
+$R(x)$ contains $\state{s_m}{N})$, since the last (and the $N^{th}$) element in $\sequ{x}$ is of the form $\sequ{x}(N)=(\yess, w,u)$, it follows from the construction of $\sequint{I}{x}$ that the atom $\state{s_m}{N}$ is satisfied under $\sequint{I}{x}$.
+\end{proof}
+
+Finally, allowing for the corollary
+\begin{proposition}
+Let $L \in \NP$, let $x \in L$ and let $T$ be a NTM deciding $L$ such that all computations require $N$ steps. Then $R(x)$ is satisfied under $\sequint{I}{x}$.
+\end{proposition}
+\begin{proof}
+It follows directly from the Propositions \ref{prop:r-init}, \ref{prop:r-trans}, \ref{prop:r-uniqueness}, \ref{prop:r-inertia} and \ref{prop:r-accept}.
+\end{proof}
+
+\smallskip
+
+Hence, it was demonstrated that, if $x \in L$ then we can construct an interpretation $\mathcal{I}$ that satisfies $R(x)$ and therefore one can conclude that $R(x) \in \SAT$.
+\bigskip
+
+$"\Longleftarrow"$
+
+\bigskip
+
+
+To show that $R(x) \in \SAT \Ra x \in L $, it will be assumed that $R(x) \in \SAT $.  Hence, there must exists an interpretation of $R(x)$. Using this interpretation, a valid sequence of configurations for the NTM $T$ that decides $L$ will be constructed, such that 
+its first element will reflect the start configuration of $T$ on input $x$ and the last element will terminate in an accepting state.
+   
+ 
+Firstly, some auxiliary results ought to be established.
+
+
+
+\begin{proposition}
+\label{prop:unique}
+Let $L\in \NP$ decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.
+Then it must be that for all interpretations $\mathcal{I} \models R(x)$ the uniqueness constraints ensure uniqueness.
+\end{proposition}
+\begin{proof}
+As the poof is analogue for all types, i.e. state, cursor and symbol, of uniqueness constraints. The claim will only be demonstrated for state.
+Take an arbitrary state predicate $\state{s_i}{\tau}$. If $\mathcal{I}\models \state{s_i}{\tau}$ assume there exists another $\state{s_j}{\tau}$ with $s_i \neq s_j$ such that $\mathcal{I} \models \state{s_j}{\tau}$. However, this would imply that 
+\begin{equation*}
+\begin{split}
+\mathcal{I} \nmodels (\neg \state{s_0}{\tau} \wedge \dots \wedge \neg \state{s_{i-1}}{\tau} \wedge  \neg \state{s_{i+1}}{\tau} \wedge \dots \wedge \neg \state{s_{m}}{\tau})
+\end{split}
+\end{equation*}
+and thus
+\begin{equation*}
+\begin{split}
+\mathcal{I} \nmodels\state{s_i}{\tau}  \liff  (\neg \state{s_0}{\tau} \wedge \dots \wedge \neg \state{s_{i-1}}{\tau} \wedge  \neg \state{s_{i+1}}{\tau} \wedge \dots \wedge \neg \state{s_{m}}{\tau})
+\end{split}
+\end{equation*}
+which is clearly a contradiction.
+On the other hand, if $\mathcal{I}\nmodels \state{s_i}{\tau}$ then using the knowledge that $\mathcal{I} \models R(x)$, there must be a predicate $\state{s_j}{\tau}$ with $s_i \neq s_j$ such that $\mathcal{I} \models \state{s_j}{\tau}$. As otherwise,
+\begin{equation*}
+\begin{split}
+\mathcal{I} \models (\neg \state{s_0}{\tau} \wedge \dots \wedge \neg \state{s_{i-1}}{\tau} \wedge  \neg \state{s_{i+1}}{\tau} \wedge \dots \wedge \neg \state{s_{m}}{\tau})
+\end{split}
+\end{equation*}
+which is an impossibility.
+\end{proof}
+
+
+As a corollary one obtains the following
+
+\begin{corollary}
+\label{cor:unique-trans}
+Let $L$ language decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.
+Then it must be that for all interpretations $\mathcal{I} \models R(x)$ and an arbitrary transition rule 
+\begin{equation*}
+\begin{split}
+\state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to \\
+& \Big(({\state{s'_1}{\tau+1}}\wedge \sym{\sigma'_1}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_1}} ) \vee \dots \vee \\
+& \; \; \,  ({\state{s'_k}{\tau+1}} \wedge \sym{\sigma'_k}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_k}} ) \Big)
+\end{split}
+\end{equation*}
+if $\mathcal{I} \models \state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$, then there exists exactly one $1 \leq i \leq k$ such that 
+\begin{equation*}
+\begin{split}
+\mathcal{I} \models ({\state{s'_i}{\tau+1}}\wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_i}} )
+\end{split}
+\end{equation*}
+That is, exactly a single disjunct is satisfied.
+\end{corollary}
+\begin{proof}
+By assumption it is known that $\mathcal{I} \models R(x)$,  as well as $\mathcal{I} \models \state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$. In particular this means that at least for one $1 \leq i \leq k$  
+\begin{equation*}
+\begin{split}
+\mathcal{I} \models ({\state{s'_i}{\tau+1}}\wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_i}} )
+\end{split}
+\end{equation*}
+Now assume that there exists a  $1 \leq j \leq k$  with $i\neq j$ such that 
+\begin{equation*}
+\begin{split}
+\mathcal{I} \models ({\state{s'_j}{\tau+1}}\wedge \sym{\sigma'_j}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_j}} )
+\end{split}
+\end{equation*}
+Notice that by construction of $R(x)$,  $i\neq j$ requires that  $s'_i \neq s'_j $ or $ \sigma'_i \neq \sigma'_j $  or $ d_i\neq d'_j $. 
+Given the assumption it must be that $\mathcal{I} \models \state{s'_i}{\tau+1} \land  \state{s'_j}{\tau+1} $,  $\mathcal{I} \models  \sym{\sigma'_i}{\tau+1}{\pi} \land \sym{\sigma'_j}{\tau+1}{\pi} $  and 
+$\mathcal{I} \models \cursor{\tau+1}{\pi+d_i} \land \cursor{\tau+1}{\pi+d_j}$. All of which would contradict Proposition \ref{prop:unique}. 
+Thereby, $j$ can not exist thus demonstrating the validity of the 'only'-part of the claim.
+%
+%However,
+%this implies that
+%\begin{equation*}
+%\begin{split}
+%\mathcal{I} \nmodels\state{s'_i}{\tau} \leftrightarrow (\neg \state{s'_0}{\tau} \wedge \dots \wedge \neg \state{s'_{i-1}}{\tau} \wedge  \neg \state{s'_{i+1}}{\tau} \wedge \dots \wedge \neg \state{s'_{m}}{\tau})
+%\end{split}
+%\end{equation*}
+%which considering the fact that $i\neq j$ contradict $\mathcal{I} \models R(x)$. The same can be done in analogue for $\sym{\sigma'_i}{\tau+1}{\pi}$ and $\sym{\sigma'_j}{\tau+1}{\pi}$, as well as for $\cursor{\tau+1}{\pi+d_i}$ and $\cursor{\tau+1}{\pi+d_ij}$.
+\end{proof}
+
+Moreover, an additional support is required.
+\begin{proposition}
+\label{prop:allways-trans}
+Let $L$ language decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.
+Then it must be that for all interpretations $\mathcal{I} \models R(x)$ and for every $\tau$ with $0 \leq \tau < N$, there exists a transition rule where both its premise and its consequent are satisfied by $\mathcal{I}$.
+\end{proposition}
+\begin{proof}
+Assume there exists a $0 \leq \tau< N$ where this is not the case. By construction, $R(x)$ contains a transition rule for every $s \in K$, for every $\sigma \in \Sigma$ and for every $0 \leq \pi \leq N$. Hence, there must exists premises of the form
+\begin{equation*}
+\state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}
+\end{equation*}
+for the fixed $\tau$. However, the uniqueness constraints force that for every $\tau$ there is exactly one stata, one symbol and one cursor predicate satisfied. W.l.o.g assume that they are the ones stated above.
+Hence, the only remaining possibility for the assumption to hold is that there does not exist a transition from this particular state 
+in the set of all $\Delta$. However, by construction this would imply that the particular rule in question has an empty disjunction as consequent, i.e.
+\begin{equation*}
+\state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to \bigvee_{i \in \emptyset}	\state{s'_i}{\tau+1} \wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge \cursor{\tau+1}{\pi+d_i}
+\end{equation*}
+Now with an empty disjunction being always false, the interpretation in question can not satisfy this particular rule. Thereby, causing the desired contradiction. 
+\end{proof}
+
+
+%
+%Allowing further to conclude.
+%
+%\begin{corollary}
+%\label{cor:unique-trans}
+%Let $L$ language decided by some NTM $T$. Moreover, for $x \in L$ let $R(x)$  be the corresponding propositional formula as defined above.
+%If $R(x)$ is satisfiable, then it must be that for all interpretations $\mathcal{I} \models R(x)$ there exists exactly one sequence of transitions
+%\end{corollary}
+
+
+Secondly, a sequence of configuration ought to be established from an interpretation $\mathcal{I}$ that satisfies $R(x)$. 
+%However, it is only possible to talk about a sequence, because of Proposition \ref{prop:unique} it is known that there exists precisely one transition rule with its premise satisfied and due Corollary \ref{cor:unique-trans} is is known that precisely one of its disjuncts is satisfied.
+%Thereby, creating a single sequence of transition rules. 
+Using the knowledge obtained from Proposition \ref{prop:unique}, the following operator is defined.
+
+
+
+\begin{definition}
+\label{def:trans}
+Let $L$ language decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.  For any $\mathcal{I}$ such that $\mathcal{I} \models R(x)$, let $\trans{I}$ be defined as follows. For any $0 \leq \tau \leq N$
+\begin{equation*}
+\trans{I}(\tau):=(s,a,b)
+\end{equation*}
+Let $\pi$ being from the only\footnote{As ensured by Proposition \ref{prop:unique}} $\cursor{\tau}{\pi}$ such that $\mathcal{I}\models \cursor{\tau}{\pi}$, 
+\begin{itemize}
+\item $s$ is from the only$^1$ $\state{s}{\tau}$ such that $\mathcal{I}\models \state{s}{\tau}$;
+\item $a = a_1 \dots a_{\pi}$ with $a_i=\sigma$ being from the only$^1$ $\sym{\sigma}{\tau}{i}$ such that $\mathcal{I}\models \sym{\sigma}{\tau}{i}$; 
+\item $b = b_{\pi+1} \dots b_{N}$ with $b_i=\sigma$ being from the only$^1$  $\sym{\sigma}{\tau}{i}$ such that $\mathcal{I}\models \sym{\sigma}{\tau}{i}$.
+\end{itemize}
+
+%\begin{itemize}
+%\item $\trans{I}(0):=(s_0, \ssym, x)$ where 
+%\begin{itemize}
+%\item $s_0$ is from $\state{s_0}{0}$;
+%\item $\ssym$ is from $\sym{\ssym}{0}{0}$;
+%\item for some $0 \leq n \leq N$ $x= x_1 \dots x_n$ such that for some $1  \leq \pi \leq n$, $x_{\pi}$ is some $\sigma$ taken from $\sym{\sigma}{0}{\pi}$.
+%\end{itemize}
+%\item For $\tau +1 \leq N $, $\trans{I}(\tau+1):= (s', a', b')$, where $(s', a', b')$ is constructed as follows.
+%Let $\trans{I}(\tau):= (s, a, b)$. Moreover, from Proposition \ref{prop:unique} it is known that there exist exactly one consequence of a transition function that is satisfied by $\mathcal{I}$. 
+%That is, $\mathcal{I} \models  \state{s''}{\tau} \wedge \sym{\sigma''}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$. From this, let it be that 
+%\begin{itemize}
+%\item $s' := s''$;
+%\item $a'= a'_1 \dots a'_{\pi}$ with $a'_i:=ab[i]$ for all $i \in \{1, \dots \pi-1\}$ and with $a_{\pi}:=\sigma''$;
+%\item $b'= b'_{\pi+1} \dots b'_{|ab|}$ with $a'_i:=ab[i]$ for all $i \in \{\pi+1, \dots |ab|\}$.
+%\end{itemize}
+%\item For $\tau+1 \geq N$, $\trans{I}(\tau+1)=\trans{I}(\tau)$.
+%\end{itemize}
+%Take the one transition relation 
+%\begin{equation*}
+%\begin{split}
+% \state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to \\
+%& \Big(({\state{s'_1}{\tau+1}}\wedge \sym{\sigma'_1}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_1}} ) \vee \dots \vee \\
+%& \; \; \,  ({\state{s'_k}{\tau+1}} \wedge \sym{\sigma'_k}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_k}} ) \Big)
+%\end{split}
+%\end{equation*}
+%where $\mathcal{I} \models  \state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} $ (as ensured by Proposition \ref{prop:unique}). We know by Corollary \ref{cor:unique-trans} at exactly one the disjuncts in the consequent is satisfied. W.l.o.g assume it is the $j^{\text{th}}$, i.e.
+% $\mathcal{I} \models {\state{s'_j}{\tau+1}} \wedge \sym{\sigma'_j}{\tau+1}{\pi} \wedge \cursor{\tau+1}{\pi+d_j}$. Now consider  $\trans{I}(\pi):= (s'', a'', b'')=(s'', a_1'' \dots a_m, b_1'' \dots b_m'')$. Using this one obtains
+% \begin{itemize}
+% \item  if $d_j=0$ $s', a', b')$
+% \end{itemize}
+\end{definition}
+
+
+ 
+Moreover, for convenience sake let consider the following definition.
+
+ 
+ 
+\begin{definition}
+Let $L$ language decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.
+Let $r$ be a transition rule in $R(x)$ of the form 
+\begin{equation*}
+\begin{split}
+\state{s}{\tau}& \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi} \to \\
+& \Big(({\state{s'_1}{\tau+1}}\wedge \sym{\sigma'_1}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_1}} ) \vee \dots \vee \\
+& \; \; \,  ({\state{s'_k}{\tau+1}} \wedge \sym{\sigma'_k}{\tau+1}{\pi} \wedge {\cursor{\tau+1}{\pi+d_k}} ) \Big)
+\end{split}
+\end{equation*}
+For any $\mathcal{I}$ such that $\mathcal{I} \models R(x)$, let $\delta_{\mathcal{I}}(r)$ be defined as follows.
+If $\mathcal{I} \models \state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}$ and if some $1 \leq i \leq k$
+\begin{equation*}
+\begin{split}
+ \mathcal{I} \models \state{s'_i}{\tau+1} \wedge \sym{\sigma'_i}{\tau+1}{\pi} \wedge \cursor{\tau+1}{\pi+d_i}
+\end{split}
+\end{equation*}
+then $\delta_{\mathcal{I}}(r):= (s,\sigma, s'_i,\sigma'_i, d_i)$ (recall that by Corollary \ref{cor:unique-trans} only a single such $i$ can exist).
+In all other cases, $\delta_{\mathcal{I}}(r)$ is undefined.
+\end{definition}
+
+Clearly, if $\mathcal{I}$ satisfies the premise and the consequent of a transition rule $r$ the $\delta_{\mathcal{I}}(r) \in \Delta$ of the respective NTM
+
+\bigskip
+
+What remains to be shown is that $\trans{I}(0)\dots \trans{I}(N)$ is a valid sequence of configurations for the NTM $T$ given input $x$ on the basis of which $R(x)$ was constructed.
+
+\begin{proposition}
+\label{prop:valid-config}
+Let $L$ language decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.
+Then the sequence $\trans{I}(0)\dots \trans{I}(N)$ is a valid sequence of configurations for $T$ on input $x$.
+\end{proposition}
+\begin{proof}
+This claim shall be confirmed by means of induction.
+\begin{itemize}
+\item \textbf{IH:} For $ i \leq N$ the sequence$\trans{I}(0)\dots \trans{I}(i)$ is a valid sequence of configurations for $T$ on input $x$.
+
+\item \textbf{IB:} $i=0$. In this case, $\trans{I}(i)=\trans{I}(0)=(s_0, \ssym, x)$ as it is characterised in the initialisation facts. That is,
+\begin{itemize}
+\item $s_0$ is from $\state{s_0}{0}$;
+\item $\ssym$ is from $\sym{\ssym}{0}{0}$;
+\item for some $0 \leq n \leq N$ $x= x_1 \dots x_n$ such that for some $1  \leq \pi \leq n$, $x_{\pi}$ is some $\sigma$ taken from $\sym{\sigma}{0}{\pi}$.
+\end{itemize}
+However, this is precisely the start configuration for $T$ on input $x$.
+
+\item \textbf{IS:} $i=\tau+1$. Let $\trans{I}(\tau+1)=(s',a',b')$. By \textbf{IH} $\trans{I}(\tau)=(s,a,b)$ was obtained through a valid sequence of configuration. Hence, it remains to show that there exists a $\delta \in \Delta$ such that 
+$(s,a,b) \to_{\delta}(s',a',b')$. Firstly, from Proposition \ref{prop:unique} \& \ref{prop:allways-trans} it is known that there exists exactly one transition rule $r$, where both its premises and its conclusions are satisfied by $\mathcal{I}$. Due to 
+the Proposition \ref{prop:unique} and due the definition of $\trans{I}$,  it is ensured that the premises in this rule correspond to the sate $(s,a,b)$. That is, the premises of said rule is
+\begin{equation*}
+\state{s}{\tau} \wedge \sym{\sigma}{\tau}{\pi} \wedge \cursor{\tau}{\pi}
+\end{equation*}
+while $(s,a,b)=(s,a_1 \dots a_{\pi-1} \sigma,b_{\pi+1} \dots b_{N})$.
+Moreover, again due to Proposition \ref{prop:unique} due to  the definition of $\trans{I}$, it must be that $(s',a',b')$ corresponds with the only satisfied disjunction of the consequent in $r$ in a similar fashion. That is, the only satisfied disjunction of the consequent in $r$ is
+\begin{equation*}
+\state{s'}{\tau+1} \wedge \sym{\sigma'}{\tau+1}{\pi} \wedge \cursor{\tau+1}{\pi+d}
+\end{equation*}
+while 
+\begin{itemize}
+\item $(s',a',b')=(s',a'_1 \dots a'_{\pi-1} \sigma',b'_{\pi+1} \dots b'_{N})$ if $d =0$;
+\item  $(s',a',b')=(s',a'_1 \dots a'_{\pi-1} \sigma' b'_{\pi+1} , b'_{\pi+2}\dots b'_{N})$ if $d =1$;
+\item  $(s',a',b')=(s',a'_1 \dots a'_{\pi-1} ,\sigma' b'_{\pi+1} \dots b'_{N})$ if $d =-1$.
+\end{itemize}
+with its premises satisfied by $(s,a,b)$. 
+As of now it is known that $\trans{I}(\tau)$ satisfies the premise and $\trans{I}(\tau+1)$ satisfies the consequent of $r$. Hence, one obtains that $\delta_{\mathcal{I}}(r) \in \Delta$. Therefore, the last issue in question to establish that $\trans{I}{\tau} \to_{\delta_{\mathcal{I}}(r)} \trans{I}{\tau+1}$ is to demonstrate that for all $1 \leq i \leq N$ such that  $i \neq \pi$ $ab[i] =a'b'[i]$. However, this is precisely accomplished through the inertia rules. To be precise,  it is known that for arbitrary $i$ such that $1 \leq i < \pi  $ one has 
+$\mathcal{I} \models \sym{\sigma}{\tau}{i}$ for $ab[i]=\sigma$ and thereby by construction one obtains $a'b'[i]=\sigma$. Similarly for $\pi  < i \leq N$, one has $\mathcal{I} \models \sym{\sigma}{\tau}{i}$ for $ab[i]=\sigma$ and thereby by definition one obtains $a'b'[i]=\sigma$.
+Thus, allowing one to conclude that $\trans{I}{\tau} \to_{\delta_{\mathcal{I}}(r)} \trans{I}{\tau+1}$ is valid.
+\end{itemize}
+\end{proof}
+Thus allowing the following simple and final corollary.
+
+
+\begin{corollary}
+\label{prop:fin-config}
+Let $L$ language decided by some NTM $T$ where each computation requires exactly $N$ steps. Moreover, for the string $x \in \Sigma^{\leq N}$ such that $R(x)$  being the corresponding propositional formula as defined above is satisfiable.
+Then the sequence $\trans{I}(0)\dots \trans{I}(N)$ is a valid sequence of configurations for $T$ on input $x$ ending it the accepting state $\yess$. 
+\end{corollary}
+\begin{proof}
+From Proposition \ref{prop:valid-config}, we know that $\trans{I}(0)\dots \trans{I}(N)$ is a valid sequence of configuration for the NTM $T$. By construction, (due to the Acceptance-formula) $\trans{I}(N)=(\yess, a,b)$ for some strings $a$ and $b$. 
+\end{proof}
+
+Using this one can finally conclude that $x \in L$. And thus the validity of the reduction is established.
+\newpage
+
+\noindent
+\begin{exercise}[5 credits]
+{\em 
+Recall the basic, polynomial-time decision procedure for HORNSAT (see cc04.pdf).
+The correctness of this decision procedure 
+relies on the following lemma:
+}%em
+
+\medskip
+
+\noindent
+{\bf Lemma.}
+Let $\phi$ be a propositional Horn-formula. Let 
+$Y$ denote the set of atoms which are obtained by 
+initializing $Y$ to the set of facts in $\phi$ and by 
+exhaustively applying the rules in $\phi$ to $Y$.
+Then, for every atom $x$ in $\phi$, the following equivalence holds: 
+%
+$x \in Y$ $\LR$ 
+$x$ is implied by the facts and rules in $\phi$.
+
+\medskip
+\noindent
+{\em 
+Give a rigorous proof of this lemma.
+}%em
+
+\medskip
+\noindent
+{\em 
+Terminology. We say that a formula $\beta$ is implied by a set of formulas $\alpha$, if
+$\alpha \models \beta$ holds, i.e., every model of (all formulas in) $\alpha$ is a 
+model of $\beta$. In the above lemma, let $\psi$ denote the set consisting of the 
+rules and facts (but not the goals) in $\phi$. The lemma thus claims that   
+$x \in Y$ $\LR$ $\psi \models x$ holds.
+}%em
+
+\end{exercise}
+
+
+\paragraph*{Solution}
+
+Firstly, some notation.
+\begin{definition}
+For a given Horn-formula $\varphi$, let $\mathcal{C}(\varphi)$ denote the set of clauses in the formula $\varphi$. Moreover, let $\mathcal{C}^*(\varphi)$ be the set of clauses $\mathcal{C}(\varphi)$ reduced to facts and rules only.
+\end{definition}
+
+Secondly, a formal definition of $Y$ is required.
+\begin{definition}
+Let $\mathcal{C}(\varphi)$ denote the set of clauses in the formula $\varphi$. Using this consider the following construction
+\begin{equation*}
+\begin{split}
+Y_0&:=\{p \mid \forall (p)\in \mathcal{C}(\varphi) \; p \mathit{\; prop. \, variable}\} \\
+Y_i&:= \{p \mid \forall n \geq 0 \forall (q_1 \land \dots \land q_n \lto p) \in \mathcal{C}(\varphi) \; \{q_1, \dots, q_n\}  \subseteq Y_{i-1}\}
+\end{split}
+\end{equation*}
+Furthermore, for $i>0$ let $Y_i^{\Delta}:= Y_i \setminus Y_{i-1}$ and for $i=0$ $Y_i^{\Delta}=Y_0$. Leading to $Y$ being defined as the fixpoint of this construction, i.e.$Y:= Y_i$ iff $Y_i^{\Delta}= \{\}$.
+\end{definition}
+That is, $Y_0$ is the set of facts in $\varphi$, $Y_i$ is the set of atoms obtained after $i$ direct inferences. Moreover, it is easy to see that $Y_0 \subseteq Y_i$.
+
+
+ 
+\bigskip
+
+To show  $\mathcal{C}^*(\varphi) \models x  \iff x \in Y$ holds for every atom $x$ in $\varphi$, the first step will be to demonstrate $x \in Y \implies  \mathcal{C}^*(\varphi) \models x $. However, fist consider the following proposition. 
+\begin{proposition}
+\label{prop:yi-induction}
+Let $Y$ be constructed from the Horn-formula $\varphi$ as described above. Then it holds for all atoms $x$ in $\varphi$ that $x \in Y_i \implies \mathcal{C}^*(\varphi) \models x$.
+\end{proposition}
+\begin{proof}
+Firstly, if $x$ is an atom in $\varphi$ such that $x \notin Y_i$ for an arbitrary $i$, then $x \in Y_i \implies \mathcal{C}^*(\varphi) \models x$ holds trivially. Hence, it suffices to focus on the claim that for any $x \in Y_i $ it must be that $\mathcal{C}^*(\varphi) \models x$.
+This can be demonstrated by induction on $i$.
+\begin{itemize}
+\item \textbf{IH}: $\forall x \in Y_i \; \mathcal{C}^*(\varphi) \models x$.
+\item \textbf{IB}: $i=0$ if this is the case $Y_i$ is a collection the facts in $\varpi$, all of which are contained as clauses in $\varphi$. That is, $x \in \mathcal{C}^*(\varphi)$. Hence, from the deduction theorem it follows that $\mathcal{C}^*(\varphi) \models x$.
+\item \textbf{IS}: For $i=k>0$. We know that $Y_i=Y_{i-1} \cup Y_i^{\Delta}$. If $Y_i^{\Delta}=\{\}$ then $Y_i=Y_{i-1}$ and thus by \textbf{IH} it follows that for all $x \in Y_i $ we have $\mathcal{C}^*(\varphi) \models x$. Otherwise, there exist an $x \in Y_i^{\Delta}$. By definition, this implies that there exists a rule $(q_1 \land \dots \land q_n \lto x)$ for some $n>0$ in $\mathcal{C}^*(\varphi)$ such that $q_1 , \dots , q_n \in Y_{i-1}$. 
+This implies that $\mathcal{C}^*(\varphi) \models q_1 \land \dots \land q_n \lto x$. Moreover, by \textbf{IH} one obtains 
+for $1 \leq i \leq n$ that $\mathcal{C}^*(\varphi) \models q_i$. Using normal semantics one thus obtains $\mathcal{C}^*(\varphi) \models q_1 \land \dots \land q_n$.  Now having $\mathcal{C}^*(\varphi) \models q_1 \land \dots \land q_n \lto x$ and $\mathcal{C}^*(\varphi) \models q_1 \land \dots \land q_n$ it thereby follows that $\mathcal{C}^*(\varphi) \models x$.
+\end{itemize} 
+\end{proof}
+
+From this proposition the desired statement follows directly as a corollary. 
+
+\begin{corollary} 
+\label{cor:forth}
+Let $Y$ be constructed from the Horn-formula $\varphi$ as described above. Then it holds for all atoms $x$ in $\varphi$ that $x \in Y \implies \mathcal{C}^*(\varphi) \models x$.
+\end{corollary}
+\begin{proof}
+Let $x$ be an atom in $\varphi$. To show that $x \in Y \implies \mathcal{C}^*(\varphi) \models x$, assume $x \in Y$. Hence, there must exists an $i$ such that for all $k\geq i$ one has $x \in Y_k$. By Proposition \ref{prop:yi-induction}, if follows that $\mathcal{C}^*(\varphi)\models x$.
+\end{proof}
+
+\bigskip
+To show that $\mathcal{C}^*(\varphi) \models x  \implies x \in Y$, its contrapositive  $x  \notin Y  \implies \mathcal{C}^*(\varphi) \nmodels x$ will be demonstrated. That is, assuming $x  \notin Y$ it will be shown that there exist an interpretation $\mathcal{I}$ that on the one hand satisfies $ \mathcal{C}^*(\varphi)$, while on the other evaluates $x$ to $0$. To make this notion more precise consider the following proposition.
+\begin{proposition}
+\label{prop:yi-model}
+For $Y$ constructed from the Horn-formula $\varphi$ as described above,
+let $\mathcal{I}$ be an interpretation such that for all atoms $x$ in $\varphi$,  $\mathcal{I}(x)=1$ if and only if $x \in Y$.
+Then $\forall \psi \in \mathcal{C}^*(\varphi) \; \mathcal{I} \models \psi$, i.e. $ \mathcal{I} \models \mathcal{C}^*(\varphi)$.
+\end{proposition}
+\begin{proof}
+Consider an arbitrary $ \psi \in \mathcal{C}^*(\varphi)$. 
+\begin{itemize}
+\item Case 1: If $\psi = p$ where $p$ is a fact, i.e. a propositional atom, then $p \in Y$ per definition. From this one obtains by construction of $\mathcal{I}$ that $\mathcal{I}(p)=1$. 
+\item Case 2: Otherwise, $\psi = q_1 \land \dots \land q_n \lto p$. Assume that $\mathcal{I} \nmodels \psi$. Hence, it must be that
+$\mathcal{I}\models q_1 \land \dots \land q_n $  and $\mathcal{I}\nmodels p $. However, this would imply that $q_1 , \dots , q_n \in Y$, which by construction of $Y$ requires $p \in Y$, thus forcing $\mathcal{I} \models p$. Thereby, one obtains a contradiction, which in turn allows the conclusion of $\mathcal{I} \models \psi$.
+\end{itemize}
+As those are the only two cases, recall $\mathcal{C}^*(\varphi)$ contains only facts and rules, it was demonstrated that every $\psi \in  \mathcal{C}^*(\varphi)$ is modelled by $\mathcal{I}$. 
+\end{proof}
+
+Using this, the desired statement follows as a corollary. 
+
+\begin{corollary} 
+\label{cor:back}
+Let $Y$ be constructed from the Horn-formula $\varphi$ as described above and let $x$ be an atom in $\varphi$.  Then it holds that  $\mathcal{C}^*(\varphi) \models x  \implies x \in Y$
+\end{corollary}
+\begin{proof}
+Let $x$ be an atom in $\varphi$. To show that $x \notin Y \implies \mathcal{C}^*(\varphi) \nmodels x$, assume $x \notin Y$. 
+From Proposition \ref{prop:yi-model}, it is known that $Y$ induces an interpretation $\mathcal{I}$ that models  $ \mathcal{C}^*(\varphi)$.
+However, by construction of $\mathcal{I}$, $\mathcal{I}\nmodels x$ holds.  Thereby, not every interpretation that satisfies $ \mathcal{C}^*(\varphi)$
+also satisfies $x$. Allowing, to conclude $\mathcal{C}^*(\varphi) \nmodels x$, which is equivalent to $\mathcal{C}^*(\varphi) \models x  \implies x \in Y$.
+\end{proof}
+
+Finally, from Corollary  \ref{cor:forth} \& \ref{cor:back} it directly follows that  $\mathcal{C}^*(\varphi) \models x  \iff x \in Y$ for every atom $x$ in $\varphi$.
+\end{document}
+
+

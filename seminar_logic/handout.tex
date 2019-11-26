@@ -1,0 +1,582 @@
+\documentclass{extarticle}
+\usepackage[a4paper]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{import}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{bussproofs}
+%\usepackage{MnSymbol}
+\usepackage{stmaryrd}
+\usepackage{adjustbox}
+
+\usepackage{comment}
+
+%\usepackage[square]{natbib}
+
+\usepackage[utf8]{inputenc}
+
+
+\usepackage[backend=biber, style=chicago-authordate]{biblatex}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{mydef}[thm]{Definition}
+
+
+\newcommand*{\skepcon}{\ensuremath{\mathrel{\medvert\mskip-5.7mu\clipbox{1 0 0 0}{$\sim$}}}}
+
+
+%\bibliographystyle{unsrtnat}
+\addbibresource{seminar_logic.bib}
+
+
+\title{Seminar in Logic: Non-Monotonic Reasoning}
+\author{Konstantin Kueffner}
+\date{}
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Non-Monotonic reasoning is a form of reasoning which rejects the notion of monotonicity, in order to capture, among others \emph{defeasible reasoning}. Therefore, it is strongly connected with the notions of assumption and normality. Since its formal origin in 1980 a variety of formalisms and approaches were developed. This text shall serve as a quick introduction into non-monotonic reasoning. Hence, it starts with introducing monotonicity and its limitations. From there, the two major approaches of non-monotonic reasoning are introduced. This is followed by the presentation of two specific formalisms. And concluded
+by a brief discussion of possible applications. (\cite{BOCHMAN2007557}). 
+
+\subsection{Monotonicity}
+\label{subsec:mono}
+When it comes to reasoning, \emph{monotonicity} ensures that additional information can not invalidate previous conclusions. That is, if a conclusion can be inferred with less information, it should still be possible to obtain the same conclusion with more information. Formally, monotonicity can be understood in two different ways.\\ 
+
+Firstly, global monotonicity ensures that adding formulas to a theory preserves previous inferences. That is,
+
+\begin{mydef}[\cite{mcdermott1980non, mccarthy1981circumscription}]
+    A logic is called globally monotonic, if the following statement holds.
+    \begin{center}
+        Let $A$ and $B$ be two theories, such that $A \subseteq B$
+        then $Th(A) \subseteq Th(B)$.
+    \end{center}
+    Furthermore, $Th(S)$ is defined as the set of sentences
+    derivable from a given theory $S$ by the means of inference provided by the given logic, i.e.  $Th(S)=\{p \mid S \models p \}$ (or syntactically $Th(S)=\{p \mid S \vdash p \}$).
+\end{mydef}
+
+This means that, since $A \subseteq B$ every model of $B$ must also be  model of $A$. Therefore, $A \models p$ implies $B \models p$ for all models of $B$.
+Secondly, \emph{local monotonicity} ensures that adding formulas to a specific inference preserves the conclusion. That is, 
+
+\begin{mydef}[\cite{bochman2005explanatory}]
+    A logic is called locally monotonic, if it upholds the notion of \emph{Strengthening the Antecedent}.
+\end{mydef}
+
+
+This means that if $A$ implies $C$ then one should be able to expand the statement to $A \wedge B$ implies $C$. Lastly, an example where both notion of monotonicity can be observed is classical logic
+(\cite{bochman2005explanatory,BOCHMAN2007557}). 
+
+
+
+
+\section{Motivating Problems}
+The development of non-monotonic formalisms was heavily influenced by the field of artificial intelligence. That is, the pragmatic solution developed to cope with certain problems served as a strong incentive for the development of a more systematic foundation for non-monotonic reasoning. Two common motivating problems will be presented. Namely, the canonical \emph{Tweety}-Problem, depicting the limits of monotonicity, and the general form of the \emph{Frame}-Problem, i.e. the \emph{Temporal Projection Problem}, depicting issues of practicality with respect to monotonicity (\cite{BOCHMAN2007557}).
+
+
+\subsection{Tweety-Problem and defeasible reasoning}
+One of the most prominent examples in the literature displaying why non-monotonic reasoning would be desirable is the \emph{Tweety}-Problem, introduced in \cite{reiter1980logic}. Here, a slight variant of the problem will be presented.\\
+
+Here the desire is to formalise the fundamental principle of \emph{Innocent until proven guilty}, i.e. if $x$ is a person one should assume that $x$ is innocent. Naively, this may result in
+\begin{equation*}
+\begin{split}
+\mathcal{T}_1:= \{ \forall x \; Person(x) \to Innocent(x), Person(Tweety) \} 
+\end{split}
+\end{equation*}
+allowing the safe inference of $Innocent(Tweety)$. However, if additional information is added to the theory,
+\begin{equation*}
+\begin{split}
+\mathcal{T}_2:= \mathcal{T}_1   \cup \{& Murderer(Tweety), \forall x \; Murderer(x) \to Person(x), \forall x \; Murderer(x) \to \neg Innocent(x)\}
+\end{split}
+\end{equation*}
+this will result, given the formalisation presented, in a inconsistent theory. To solve this the newly introduced exception has to be accounted for.
+\begin{equation*}
+\begin{split}
+\mathcal{T}_3:= \mathcal{T}_2 &\setminus \{ \forall x \; Person(x) \to Innocent(x)\}
+ \cup \{ \forall x \; Person(x) \wedge \neg Murderer(x) \to Innocent(x)\} \\
+\end{split}
+\end{equation*}
+As originally intended it is now possible to infer $\neg Innocent(Tweety)$. Unfortunately, if the theory is expanded further, i.e. $\mathcal{T}_4:= \mathcal{T}_3   \cup \{ Person(Polly)\}$ the desired assumption of innocence is no longer possible, as $\neg Murderer(Polly)$ blocks the application of the rule. Hence, $\neg Murderer(Polly)$ has to be proven before innocence can be proclaimed, which is a dramatic departure from the notion of \emph{Innocent until proven guilty}.\\
+
+On a formal level the issue here is twofold. Firstly, in general it is impossible to account for all possible exceptions, thus there is always the danger of producing an inconsistent theory, if new information is obtained. Secondly, in practice it is highly impractical to block any inference until every exception is checked. Hence, it would be desirable to have a formalism, which captured the notion of normality. Thus allowing for the making of assumptions, as well as the retraction of conclusion in light of new information. That is, a formalism that captures \emph{defeasible reasoning}. Lastly, the relevance of defeasible reasoning is not restricted to artificially constructed problems such as the Tweety problem, but it occurs frequently in the everyday reasoning of humans. For example, in medical diagnosis or even scientific reasoning, e.g. revising the hypothesis in light of contradicting measurements.  (\cite{reiter1980logic,BOCHMAN2007557,defeasible_stanford2018,nonmonoton_stanford2018}). 
+\\
+
+
+\subsection{The Temporal Projection Problem}
+The \emph{temporal projection problem} is a pervasive problem within the fiel of artificial intelligence. It encompasses the persistence, ramification and qualification problems. Among those three subproblems it is the persistence or frame problem, initially proposed by McCarthy, which strongly motivated the development of non-monotonic formalisms (\cite{BOCHMAN2007557}).
+
+
+The problem stated in \cite{stanford2016frame} (adapted based on \cite{ginsberg1987reasoning}) will be used to present all three subproblems. 
+The theory 
+\begin{equation*}
+\begin{split}
+&\forall x \; (PAINT(x,c) \to COLOUR_{n+1}(x,c)) \\
+&\forall x \; (MOVE(x,p) \to POSITION_{n+1}(x,p)) \\
+\end{split}
+\end{equation*}
+
+expresses that if in state $n$ something ($x$) is painted ($PAINT$) the colour $c$, then in state $n+1$ the object $x$ will have the colour ($COLOUR$) $c$. Similarly, if in state $n$ something ($x$) is moved ($MOVE$) to the position $p$, then in state $n+1$ the object $x$ will be at position ($POSITION$) $p$. \\
+
+\emph{The persistence problem / frame problem: } The general problem of predicting the properties that remain the same as actions are performed, i.e. stating what remains unaffected by said action. Given the example above in state 0 one has $POSITION_0(Book, Desk)$, if $PAINT(Book,Red)$ is invoked, only $COLOUR_{1}(Book, Red)$ exist, while  $POSITION_1(Book, Desk)$ does not. In the absence of inertia, the book lost its position in space. Ideally inertia could be assumed, i.e. if not explicitly specified everything remains the same, as an axiomatic approach will result in a theory of immense scope (\cite{BOCHMAN2007557,lifschitz2015dramatic}).\\
+
+\emph{The ramification problem: }  The general problem of predicting the properties that do change as actions are performed. Hereby, the difficulty lies within modelling implicit changes. Given the example, assume that inertia axioms where added to the theory, that is 
+\begin{equation*}
+\begin{split}
+&\forall x \; ((MOVE(x,p) \wedge COLOUR_{n}(x,c)) \to COLOUR_{n+1}(x,c)) \\
+&\forall x \; ((PAINT(x,p) \wedge POSITION_{n}(x,p)) \to POSITION_{n+1}(x,p)) \\
+\end{split}
+\end{equation*} 
+Now given $COLOUR_0(Book, Red)$, if $MOVE(Book, Black\_Paint)$ is invoked it will be concluded that \linebreak $POSITION_{1}(Book, Black\_Paint)$ and $COLOUR_1(Book, Red)$. However, by moving the book its colour was implicitly changed, thus $COLOUR_1(Book, Black)$ should hold. Hence, if inertia axioms are used, exceptions have to be considered. Hence, it would be desirable to assume that no implicit changes occur, with the possibility of retraction in light of additional information (\cite{BOCHMAN2007557, ginsberg1987reasoning}). \\
+
+\emph{The qualification problem: }  The general problem of predicting the properties that have to hold such that an action has its intended effects. Given the example, there can be certain conditions prohibiting $MOVE(x,y)$. For example, assume $POSITION_0(Book,  Blackhole)$, thus any application of $MOVE(Book, y)$ will result in $POSITION_0(Book,  Blackhole)$. That is, $MOVE$ has no longer its intended effect. Ideally, one could simply assume that an action has its intended effects
+(\cite{ginsberg1987reasoning,BOCHMAN2007557}). \\
+
+
+The problems described above where simply motivation factors for the development of non-monotonic formalisms, thus it does not follow that these problems can only be accounted for by such formalisms. In fact the non-monotonic formalisms discussed below failed to solve the frame problem (see Yale-Shooting Problem). Moreover, there are also some monotonic approaches, that provide adequate solutions for the frame problem. Lastly, on a technical level for applicative purposes the frame problem is solved to a satisfying degree (\cite{stanford2016frame}). \\
+
+Given the problems presented within this section one can conclude that it would be desirable to have a formalism, which captures statements such as "Normally X holds", "Typically X is the case" or "Assume X as a default". Hence, it should be able to model some notion of normality and thus also abnormality. Ideally, it would allow for a reasoned use of assumptions, which includes the retraction of inferences based on these assumptions. Therefore enabling safe reasoning within a dynamic environment. Moreover, it should be possible to distinguish between assumptions based on preference. Hence, the expectations with non-monotonic reasoning is that by rejecting the notion of monotonicity and by embracing defeasible reasoning rather than just relying deductive reasoning, some of these desires may be satiated.
+
+
+\section{Approaches to Non-Monotonic Reasoning}
+Generally speaking there are two main approaches for capturing non-monotonic reasoning, namely \emph{Explanatory Non-Monotonic Reasoning}  (or \emph{Consistency-Based Logics}) and \emph{Preferential Non-Monotonic Reasoning}. However, other modes of categorisation exist. For instance, while most non-monotonic formalisms extend classical logic in order to obtain non-monotonicity, this can be done either by means of adding additional logical formulas (e.g. Circumscription or Modal Non-Monotonic Logic) or by adding additional rules of inference (e.g. Default Logic). Additionally, how conflicting conclusions are handled, could also be used for categorisation. That is, do they employ sceptical reasoning and simply prohibit the inference of contradicting conclusions, or do they employ credulous reasoning and account for all possible sets of consistent of beliefs.
+Lastly, another possible distinction can be made based on the property of cumulativity, a property essential for the save use of lemmas. Incidentally, most formalisms in the preferential approach are sceptical and cumulative in nature, while most in the explanatory one are credulous and non-cumulative in nature.
+(\cite{nonmonoton_stanford2018, BOCHMAN2007557, brewka1997nonmonotonic, ANTONIOU2007517}).\\
+
+\begin{comment}
+
+On the one hand, the formalisms belonging to the \emph{Explanatory Non-Monotonic Reasoning} are globally non-monotonic and are characterised by the notion of Explanation Closure or Causal Completeness. A concept expressing that any fact holding in a model should be explained, or caused, by the rules and facts that describe the domain. 
+Moreover, many of the formalisms belonging to this approach,  
+Some of the formalism belonging to this approach are \emph{Circumscription}, \emph{Default Logic}, \emph{Modal Non-Monotonic Logic} and \emph{Auto-epistemic Logic} (\cite{bochman2005explanatory,brewka1997nonmonotonic}).\\
+
+
+On the other hand, the formalisms belonging to the \emph{Preferential Non-Monotonic Reasoning} approach are locally non-monotonic. They are characterised by the notion of choosing a preferred set of models with which the a theory has to be interpreted. Some of the formalism belonging to this approach are \emph{Circumscription}, \emph{Closed World Assumption} and \emph{Prefered Models} (\cite{bochman2005explanatory,brewka1997nonmonotonic}).\\
+
+While both approaches are distinct, they can be seen as theories of a reasoned use of assumptions. That is, assuming certain information by default, unless information arises, which "defeats" (contradicts) the information assumed by default.
+\cite{bochman2005explanatory}\\
+
+\end{comment}
+
+
+\subsection{Preferential Non-Monotonic Reasoning}
+\emph{Preferenctial non-monotonic reasoning} is historically speaking younger than \emph{Explanatory Non-Monotonic Reasoning}, yet some of its core principals are already present in the introductory paper of predicate circumscription, i.e. \cite{mccarthy1981circumscription}. Some of the formalisms subsumed by this approach are \emph{Circumscription}, \emph{Closed World Assumption} and \emph{Conditional Logics}.
+In general preferential non-monotonic reasoning is locally non-monotonic, possibly globally monotonic, cumulative and better suited for sceptical reasoning. 
+Furthermore, it is characterised by the notion preference between interpretation, which introduces non-monotonicity as adding new information may result in a shift of preference. This notion of preference can, in its most general form, be captured by the model theoretical notion of \emph{Cumulative Models}, which if restricted properly can be used to capture any preferential formalism on a model theoretic level. Moreover, it is possible to capture the behaviour of cumulative models by imposing certain rules onto an inference relation. Hence, establishing a strong connection between the meta-theoretic analysis of inference relations and the preferential approach to non-monotonic reasoning. In this subsection cumulative models as well as two important restrictions are presented
+(\cite{BOCHMAN2007557,brewka1997nonmonotonic, bochman2005explanatory, kraus1990nonmonotonic}). \\
+
+These cumulative models mentioned above can be defined as follows.
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+$\langle S,l, \prec \rangle$ where, $S$ is a set of states, $l:S \to \powerset(\mathcal{U})$ is a function with $\mathcal{U}$ set of all interpretations and $\prec$ is a strict partial order on $S$ satisfying the smoothness condition.
+\end{mydef} 
+
+with the smoothness condition being 
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+
+$\langle S, l \prec \rangle$ satisfies smoothness condition if $\forall \alpha \in \mathcal{L}$ the set $ \{s \in S \mid \forall m \in l(s)  \; m \models \alpha\}$ is smooth, i.e. every state is either minimal or is in relation to a minimal state.
+\end{mydef}
+ 
+and can be captured on a meta-theoretical level (i.e. system \textbf{C}, see \cite{kraus1990nonmonotonic}). Moreover, the by restricting cumulative models one obtains \emph{preferential models}. That is,
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+
+A cumulative model $\langle S,l, \prec \rangle$ where $|l(s)|=1$, is called preferential model.
+\end{mydef}
+which can also be captured on a meta-theoretical level (i.e. system \textbf{P}, see \cite{kraus1990nonmonotonic}). Lastly, if preference models are further restricted model preference logics can be obtained. The core idea behind them is, to impose a well-founded strict partial order onto all possible interpretations, thus restricting the set of possible interpretations to those minimal with respect to the established preference. Formally, they are constructed as follows.  
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+Model preferential logics is a preference model $W:=\langle S,l, \prec \rangle$, such that $S$ is a subset of all interpretations, i.e. $S \subseteq \mathcal{U}$, $l$ is the identity and $\prec$ is well-founded.
+\end{mydef}
+
+These models are not only more expressive than the others, they are also the most relevant for this text, as if further restricted model preference logic can be used to capture circumscription on a model theoretical level
+(\cite{brewka1997nonmonotonic,BOCHMAN2007557}).
+
+
+\begin{comment}
+
+\subsubsection{Meta-Theoretical Approach}
+
+
+The meta-theoretic approach is characterised by the defining certain properties of inference relation, abstracted from the underlying logic. Some of these properties are presented below.\\
+That is, let $\mathcal{L}$ be the set of all well-formed formulas closed under classical propositional connectives . Let $\models$ is defined as in propositional logic.
+We have for $\varphi, \psi, \chi \in \mathcal{L}$ the following poperties of consequence relation as presented in \cite{kraus1990nonmonotonic} \\
+
+\textbf{Reflexivity:}\\
+Is a notion satisfied by nearly every inference system.
+\begin{prooftree}
+\AxiomC{}
+\AxiomC{}
+\BinaryInfC{$\varphi \skepcon \varphi$}
+\end{prooftree}
+
+
+\textbf{Left Logical Equivalence:} \\
+If two formulas are equivalent given the underlying logic, their consequences ought to be the same. Hence, expressing that consequences should depend on the meaning of a formula and not its form.
+\begin{prooftree}
+\AxiomC{$\models \varphi \leftrightarrow \psi$}
+\AxiomC{$\varphi \skepcon \chi$}
+\BinaryInfC{$\psi \skepcon \chi$}
+\end{prooftree}
+
+\textbf{Right Weakening:}\\
+If $\varphi$ is a plausible consequence of $\chi$, i.e. $\chi \skepcon \varphi$ and given the underlying logic $\psi$ is a logical consequence of $\varphi$, i.e. $\models \varphi \to \psi$ then is is reasonable to require $\psi$ to be also a logical consequence of $\chi$, i.e. $\chi \skepcon \psi$.
+\begin{prooftree}
+\AxiomC{$\models \varphi \to \psi$}
+\AxiomC{$\chi \skepcon \varphi$}
+\BinaryInfC{$\chi \skepcon \psi$}
+\end{prooftree}
+
+\textbf{Cut:}\\
+This rule states that if $\chi$ is the consequence of an extended set of facts $\varphi \wedge \psi$, and $\psi$ is a consequence of the non-extended set of facts, i.e. $\varphi$ , $\chi$ should be a consequence of the non-extended set of facts, i.e. $\varphi$. It was accepted since it does not imply monotonicity and because formalisms such as circumscription already confine to cut.
+\begin{prooftree}
+\AxiomC{$\varphi \wedge \psi \skepcon \chi$}
+\AxiomC{$\varphi \skepcon \psi$}
+\BinaryInfC{$\varphi \skepcon \chi$}
+\end{prooftree}
+
+\textbf{Cautious Monotonicity:}\\
+If $\psi$ and $\chi$ are both plausible consequences of $\varphi$ then it should be possible to extend the original set of facts to $\varphi \wedge \psi$, while still retaining the previous consequence $\chi$. That is, learning $\psi$, if $\psi$ was already a plausible consequence, previous conclusions should not be invalidated. Moreover, this formalisation ensures that the additional formula $\psi$ does not lead to a contradiction of $\varphi$. 
+\begin{prooftree}
+\AxiomC{$\varphi \skepcon \psi$}
+\AxiomC{$\varphi \skepcon \chi$}
+\BinaryInfC{$\varphi \wedge \psi \skepcon \chi$}
+\end{prooftree}
+
+
+\textbf{Or:}\\
+If $\chi$ is separately a plausible consequence of two formulas, then it should also be a plausible consequence of their disjunction. This rule was accepted because it does not imply monotonicity. 
+\begin{prooftree}
+\AxiomC{$\varphi \skepcon \chi$}
+\AxiomC{$\psi \skepcon \chi$}
+\BinaryInfC{$\varphi \vee \psi \skepcon \chi$}
+\end{prooftree}
+
+Given these definitions the system \textbf{C} can be defined as follows.
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+The system \textbf{C} consists of \textbf{Reflexivity}, \textbf{Left Logical Equivalence}, \textbf{Right Weakening}, \textbf{Cut} and \textbf{Cautious Monotonicity} \\
+\end{mydef} 
+
+while the system \textbf{P} can be defined as
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+The system \textbf{C} consists of \textbf{Reflexivity}, \textbf{Left Logical Equivalence}, \textbf{Right Weakening}, \textbf{Cut}, \textbf{Cautious Monotonicity} and \textbf{OR} \\
+\end{mydef} 
+
+\end{comment}
+
+
+\subsection{Explanatory Non-Monotonic Reasoning}
+\emph{Explanatory Non-Monotonic Reasoning} (or Consistency-Based Logics) the older and more 'mainstream' approach to non-monotonic reasoning. Some of the formalisms subsumed by this approach are default logic and modal non-monotonic logic. Moreover, it is also strongly connected with logic programming, as well as abductive and causal reasoning. 
+In general explanatory non-monotonic reasoning is globally non-monotonic, possibly locally monotonic, not cumulative and well suited for credulous reasoning. Being not cumulative makes the formalisation of lemmas difficult, e.g. in default logic it is only possible to express lemmas, if the context of its derivation is accounted for. 
+If contrasted with the preferential approach, it is difficult to formally define the core concept of this approach as it does not have such a clear underlying model theoretic notion. Hence, they will only be discussed informally (\cite{BOCHMAN2007557,brewka1997nonmonotonic,bochman2005explanatory}).\\
+
+Firstly, central to explanatory non-monotonic reasoning is the notion \emph{explanatory closure}, which expresses that any fact holding in a model should be explained by the rules that describe the domain. This is critical, as future inference can invalidate previously made assumptions, thus it may be possible that previous conclusions my loose their justification. The necessity of this principal can be observed in the default logic example below. \\
+
+Secondly, explanatory closure requires that any fact used for inference has to be explained as well, resulting in possible self-referential behaviour. Therefore, many formalisms of this approach use a fixed-point operator to generate a set of all provable sentences, the names of which vary based on the formalism. Here they will be referred as \emph{stable extensions}. A stable extension represents one set of consistent beliefs. Since it is possible to have several consistent, but contradicting sets of beliefs, there are multiple possible stable extensions, see \emph{Nixon-Diamond} in \cite{nonmonoton_stanford2018}, thus explaining the connection 
+with credulous reasoning. Lastly, it has to be noted that \cite{bochman2005explanatory} attempts to create a unifying semantics for capturing all formalisms subsumed by explanatory non-monotonic reasoning by means of describing its inference via a biconsequence relation combined with a four-valued logic. (\cite{BOCHMAN2007557,brewka1997nonmonotonic,bochman2005explanatory})
+
+\section{Specific Formalisms}
+There are a variety of different formalisms that try to capture non-monotonic reasoning, each of which contains a plethora of additional variants. Hence, it is not within the scope of this work to present all formalisms and their variants. Therefore, only two specific formalisms will be discussed. Namely, \emph{Circumscription} and \emph{Default Logic}. On the one hand, circumscription was chosen as an representative for a formalism that can be understood as part of the preferential approach, as well as a formalism that introduces monotonicity by adding additional logic formulas. On the other hand, default logic was chosen, as it can be understood as a formalism adhering to the explanatory approach, as well as a formalism that uses inference rules to obtain non-monotonicity.
+ 
+
+\subsection{Circumscription}
+This variant is called \emph{Predicate Circumscription} and was introduced by \cite{mccarthy1981circumscription}. At its core it can be understood as a method of adding additional formulas to a theory, such that the set of possible interpretations is restricted to those models that are minimal in their extensions of the circumscribed predicate. That is, the circumscribed predicate is only positive, if absolutely necessary. Hence, some notion of preference among models is expressed, thus tying it to the preferential approach of non-monotonic reasoning (\cite{BOCHMAN2007557, brewka1997nonmonotonic}). \\
+This form of circumscription can be defined by the following second-order formula.
+
+\begin{mydef}[\cite{mccarthy1981circumscription}]
+Let $S$ FOL-sentence containing $P(x_1, \dots, x_n)$, short $P(\overline{x})$. Let $S(\Phi)$ replaces $P$ with $\Phi$. \\
+Then the schema
+\begin{equation*}
+\begin{split}
+\forall \Phi \; ((S(\Phi) \wedge  \forall \overline{x} \; (\Phi(\overline{x})\to P(\overline{x}))) \to \forall \overline{x} \; (P(\overline{x}) \to \Phi(\overline{x})))
+\end{split}
+\end{equation*}
+is called the circumscription of $P$.
+\end{mydef} 
+That is, during process of circumscription this formulas ensures that $P$ is minimal with respect to its extensions, by means of adding formulas. Therefore, while circumscription was initially designed on a purely syntactic level, it is possible to capture circumscription on a model theoretic level, by imposing the following restriction onto a model preference logic. 
+\begin{mydef}[\cite{brewka1997nonmonotonic}]
+Let $\langle S,l, \prec \rangle$ be a model preference logic, s.t. 
+\begin{equation*}
+\begin{split}
+s_1 \prec s_2  \textit{  iff  } &l(s_1) \models P(\overline{x}) \textit{  implies  } l(s_2) \models P(\overline{x}) \textit{ and not } l(s_2) \models P(\overline{x}) \textit{ implies } l(s_1) \models P(\overline{x})
+\end{split}
+\end{equation*}
+with $P$ being circumscribed.
+\end{mydef} 
+That is, interpretations are preferred based on their extensions of $P$.\\
+
+Before moving on, it has to be mentioned that in order to model the previously mentioned notion of normality \emph{abnormality theory} was introduced. Herby one specifies abnormality predicates which will be circumscribed, thus minimising abnormalities (\cite{mccarthy1981circumscription}).
+
+In order understand how one may reason with circumscription, a small example is required.
+Hence, $S = Guilty(A) \wedge Guilty(B) \wedge Guilty(C)$ and let $Guilty$ the predicate to be circumscribed. 
+Firstly, how does the restricted form of model preference logic behave. (For sake of simplicity simply pretend that the following interpretations are the only in existence.)  \\
+
+For $x\in \{0,1,2,3\}$ let $\mathcal{I}_x:=(D_{\mathcal{I}_x}, I_{\mathcal{I}_x})$ s.t. $I_{\mathcal{I}_0}(Guilty):=\{\}$, $I_{\mathcal{I}_1}(Guilty):=\{\delta\}$,  $I_{\mathcal{I}_2}(Guilty):=\{\delta, \sigma, \eta\}$ and $I_{\mathcal{I}_3}(Guilty):=\{\delta, \sigma, \eta, \gamma\}$ with $D_{\mathcal{I}_x}:=\{\delta, \sigma, \eta, \gamma\}$.
+Hence based on the size of the extensions of $Guilty$ one obtains $\mathcal{I}_0 \prec \mathcal{I}_1 \prec \mathcal{I}_2 \prec \mathcal{I}_3 $. 
+Now given $S$ the preferred model is $\mathcal{I}_1$, because $\mathcal{I}_0$ is not a model of $S$. If for example $(A \neq B \wedge A \neq C \wedge C \neq B)$ is added, now the preferred model will be $\mathcal{I}_2$.\\
+
+Secondly, the application of the circumscription formula. In this example, let $\Phi$ be $\Phi(x) = (x=A \vee x=B \vee x=C)$, thus by substituting everything into the circumscription formula one obtains.
+\begin{equation*}
+\begin{split}
+&(A=A \vee A=B \vee A=C)\wedge (B=A \vee B=B \vee B=C) \wedge (C=A \vee C=B \vee C=C) \\
+& \wedge \forall \overline{x} \; ((\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C)\to Guilty(\overline{x})))  \to  \forall \overline{x} \; (Guilty(\overline{x})   \to  (\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C))
+\end{split}
+\end{equation*} 
+This equation ensures that there are at most three objects that satisfy the theory, i.e. the set of possible interpretations was restricted to those interpretations having at least one and at most three elements for which $Guilty$ holds. If the same outcome as the model theoretic approach is desired a different $\Phi$ has to be chosen (recall $\forall \Phi$). In order to observe the non-monotonic behaviour of circumscription, one simply has to extend $S$ by adding $Guilty(D)$. By doing so it is no longer possible to derive $\forall \overline{x} \; (Guilty(\overline{x})   \to  (\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C )$, due to $(D=A \vee D=B \vee D=C)$ (\cite{mccarthy1981circumscription}). \\
+
+
+
+\subsection{Default Logic}
+Default Logic, introduced in \cite{reiter1980logic}, is one of the more expressive and popular formalisms of non-monotonic reasoning. At its core, default logic relies on certain inference rules called \emph{defaults}. These defaults can be understood as rules of thumb that enable the reasoner to jump to conclusions given incomplete information. Moreover, reasoning within default logic is done, according to the initial definition, by means of a fixed-point opertion, thus tying it to the explanatory approach of non-monotonic reasoning (\cite{BOCHMAN2007557, ANTONIOU2007517}). \\
+
+Firstly, a default is defined as 
+\begin{mydef}[\cite{reiter1980logic}]
+A default $\delta$ has the form
+\begin{prooftree}
+\AxiomC{$\varphi: \psi_1, \dots, \psi_n$}
+\UnaryInfC{$\chi$}
+\end{prooftree}
+with $\varphi, \chi, \psi_1, \dots, \psi_n$ being closed propositional formulas for $n>0$.
+Moreover, $\varphi$ is called the prerequisite, $\psi_1, \dots, \psi_n$ are the justifications and $\chi$ is the consequent.
+\end{mydef} 
+Moreover, a default containing variables is just a compact representation of the set of defaults containing all its grounded instances. In order to reason within default logic the notion of a default theory and the fixed-point operator required for generating stable extensions have to be introduced. That is,
+\begin{mydef}[\cite{reiter1980logic}]
+$\Delta = (D,W)$ is a default theory. With $W$ a set of predicate formulas and $D$ a set of defaults. For any $S \subseteq \mathcal{L}$ (first order logic), let $\Gamma(S)$ be the smallest set satisfying
+
+\begin{itemize}
+\item D1: $W \subseteq \Gamma(S)$
+\item D2: $Th_{\mathcal{L}}(\Gamma(S))=\Gamma(S)$
+\item D3: if $(\varphi: \psi_1, \dots, \psi_n / \chi) \in D$ and $\varphi \in  \Gamma(S)$ and $\neg \psi_1, \dots, \neg \psi_n \nin S$  then $\chi \in \Gamma(S)$.
+\end{itemize}\end{mydef} 
+That is, any stable extension generated by $\Gamma$ has to include the set of facts $W$, has to be deductively closed, must be maximal with respect to the application of defaults and must not contain any ungrounded beliefs (\cite{brewka1997nonmonotonic}).
+
+In order to understand how one reasons within default logic, two examples are presented. 
+Firstly, given $\Delta:=(W,D)$
+\begin{equation*}
+\begin{split}
+ W:= \{&Murderer(Tweety), Person(Polly),  Murderer(x) \to \neg Innocent(x), Murderer(x) \to  Person(x) \}\\
+ D:=\{&Person(x):Innocent(x)/Innocent(x)\}
+\end{split}
+\end{equation*}
+There are two possible sets to be generated:  \\
+
+$W \cup \{Innocent(Polly), Person(Tweety), \neg Innocent(Tweety)\}$: Here $Innocent(Polly)$ is obtained by applying the default, while the other two are obtained by closing the set deductively. Moreover, due to  $\neg Innocent(Tweety)$ the application of the default is blocked. Since every fact is explained and no additional inferences can be made, a stable extension is obtained.\\
+
+$W \cup \{Innocent(Polly), Person(Tweety), \neg Innocent(Tweety), Innocent(Tweety)\}$: Here \linebreak $Innocent(Polly)$ is obtained by applying the default. Now first $Person(Tweety)$ is derived, thus enabling the application of the default resulting in  $ Innocent(Tweety)$, but now one has to close the set deductively adding $\neg  Innocent(Tweety)$. However, now the default can no longer serve as an explanation for $ Innocent(Tweety)$. Thus it is not a stable set and will be discarded.\\
+
+Secondly, given $\Delta:=(W,D)$
+\begin{equation*}
+\begin{split}
+ W:= \{&Murderer(Tweety), Person(Polly),  Murderer(x) \to  Person(x) \}\\
+ D:=\{&Person(x):Innocent(x)/Innocent(x),  Murderer(x): \neg Innocent(x)/\neg Innocent(x)\}
+\end{split}
+\end{equation*}
+There are two possible sets to be generated: \\
+
+$W \cup \{Innocent(Polly), Person(Tweety), \neg Innocent(Tweety)\}$: Here $Innocent(Polly)$ is obtained by applying the first default and $\neg Innocent(Tweety)$ by applying the second. Furthermore, $Person(Tweety)$ is obtained by deduction. Lastly, due to  $\neg Innocent(Tweety)$ the application of the first default is blocked. Since every fact is explained and no additional inferences can be made, a stable extension is obtained. \\
+
+$W \cup \{Innocent(Polly), Person(Tweety), Innocent(Tweety)\}$: Here after obtaining \linebreak 
+$Person(Tweety)$ by deduction, $Innocent(Polly)$ and $Innocent(Tweety)$ are obtained by applying the first default. Lastly, due to $Innocent(Tweety)$ the application of the  second default is blocked. Since every fact is explained and no additional inferences can be made, a stable extension is obtained. \\
+
+Lastly, it has to be mentioned that this is a good example of credulous reasoning as there are two possible sets of consistent beliefs. If a sceptical point of view should be entertained, one would simply have to take the intersection, thus obtaining $W \cup \{Innocent(Polly), Person(Tweety)\}$ (\cite{ANTONIOU2007517,brewka1997nonmonotonic}).
+
+\section{Applications}
+\subsection{Law}
+Logic and law are tightly interconnected due to the interdisciplinary field of \emph{Artificial Intelligence and Law}. This interconnection is mutually beneficial, as it enables a more formal approach to reasoning with a legal context, while at the same time providing a vast test bed consisting of actual problems and their corresponding solutions for applications in artificial intelligence and logic. Moreover, reasoning within a legal context is divers and can not be reduced to formalisation and automated deduction. That is, there are various different areas of reasoning within a legal context, some of which will be teased below. \\
+
+Firstly, \emph{reasoning with the law} is an area of legal reasoning that is mainly concerned with formalising legal rules and reasoning with them on an axiomatic basis, without questioning the facts or the legal rules. For example, how to resolve conflicts between conflicting legal rules.
+Secondly, \emph{reasoning about the law} is an area that opens up the possibility to reasoning about legal rules, their interpretation, their applicability and validity, while at the same time accepting the facts as a given. For example, how are legal rules to be interpreted? 
+Thirdly, \emph{reasoning about the facts} this area of legal reasoning is concerned with how to reason about facts and how they may be proven. For example, which source is given the context more reliable.
+Fourthly, \emph{reasoning about interactions} this area of legal reasoning is concerned with the dynamic multi-agent environment that arises in legal disputes. One task within this field could be to model how facts are "discovered" during the back and forth of arguments and claims that occur during the dispute. 
+Lastly, \emph{reasoning about legal action} this area is of legal reasoning is concerned with helping an agent to determine the legal status future actions. This area is fairly new and is heavily influenced by autonomous agents. For example, whether driving over a yellow traffic light is legal or not? (\cite{prakken2015law, Prakken2017}) \\
+
+Within \emph{reasoning with the law} several areas of applicability for non-monotonic reasoning exist. Firstly, \emph{rules with exceptions}, i.e. it is common that legal rules contain exception. For example, property damage will be prosecuted \emph{unless} it was acted upon \emph{force majeure}. Here  standard non-monotonic techniques are sufficient that is one could even use abnormality theory or default logic.
+Secondly, \emph{rules with conflicting conclusions}, i.e. it is common that legal rules have conflicting conclusions. Hence, these conflicts have to be resolved. This is accomplished by means of prioritisation based on specificity (\emph{Lex Specialis Derogat Legi Generali}), authority (\emph{Lex Superior Derogat Legi Inferiori}) or recency. In order to express these preferences, rules have to be prioritised, one example of such prioritisation is \emph{preference default logic} (\cite{prakken2015law,Prakken2017, ANTONIOU2007517}).\\
+
+While "traditional" non-monotonic, as presented above, are useful in the case of reasoning with the law as it were an axiomatic system, it is limited with respect to other areas of legal reasoning. This is due to the fact that the central notion in law is not necessary deduction, which is still an major part of non-monotonic reasoning, but argument. Therefore, \emph{Argumentation Theory} is widely applied and of elevated importance when it comes to legal reasoning. Formal argumentation theory is also used in non-monotonic reasoning, e.g. as a semantic for default logic and some logic programs. One example of is Dung's \emph{abstract argumentation theory}, which relies on concepts such as arguments as well as the notion of attack and defeat between arguments, in order to generate extensions. Within law it can be used to capture the argumentation behind whether a law should be applied, e.g. \emph{force majeure} defeats the argument for property damage. Moreover, it can also be used to model legal proof, i.e. which source of information defeat other sources, as well as to model the shifting burden of proof, i.e. in the case of a murder accusation, the accuse has to prove intent, then the defendant has to attack this argument by proving self-defence and so on (\cite{prakken2015law}) \\
+
+Lastly, it has to be mentioned that this is just a surface level investigation of a topic, providing a vast range of possible applications for non-monotonic reasoning and logic in general. Some actual application of non-monotonic formalisms are \emph{normal conditional logic}, \emph{Defeasible Logic}, \emph{Reason-Based Logic} and \emph{logic programming}    (\cite{prakken2015law}).\\
+
+
+\subsection{Other Applications}
+As already eluded non-monotonic reasoning was heavily influenced by problems within the field of artificial intelligence, see the frame problem. Hence, only a few specific applications of non-monotonic reasoning in computer science are discussed. Firstly,\emph{Truth Maintenance Systems} can be seen as one of the first formal approaches trying to capture non-monotonic reasoning, which is closely related to the explanatory approach of non-monotonic reasoning. In fact, default logic can be seen as formalisation of such systems. Secondly, \emph{normal logic programming}, also part of the explanatory approach, uses the concept of negation as failure in order to achieve non-monotonicity and is mostly presented as a formalism for non-monotonic reasoning in itself. Thirdly, as far as databases are concerned one is mostly confronted with a finite universe and unique names, thus the \emph{Closed World Assumption} is especially suitable for the field of \emph{Database Theory}. This allows the answering of queries such as "Does there exists a flight to the moon." with no. (\cite{brewka1997nonmonotonic,BOCHMAN2007557}) \\
+
+However, there are a variety of other field where non-monotonic reasoning could be beneficial. One example of a field where non-monotonic reasoning is useful is,  \emph{cognitive science}, since day human reasoning seems to be defeasible in nature. Combined with the fact that deduction in human reasoning is heavily influenced by biases and context, a strong argument for preferring non-monotonic formalisms over classical logic when attempting formalise parts of human reasoning. McCarthy even claimed that non-monotonicity is essential for intelligent behaviour. One highly interesting result is that it is possible to construct relationships between certain types of neural networks and certain non-monotonic formalisms, thus bringing symbolic and connectionist approaches closer together (\cite{isaac2014logic,evans2002logic}).
+
+Another example is \emph{biology}, a field where categorisation hierarchies with exceptions, e.g. Penguin is a flightless bird, platypus a mammal that lays eggs, are commonly used. Hence, making it necessary to deal with exceptions in a formal manner. This may be achieved by building exception hierarchies based on default logic
+(\cite{ANTONIOU2007517})
+
+\section{Conclusion}
+Non-monotonic reasoning is a diverse and somewhat messy field consisting of various different formalisms with different degrees of material adequacy. While there are two general approaches to non-monotonic reasoning, the distinction between them is somewhat fuzzy. Moreover, given the range of possible applications, it seems to be an important field of study especially since it seems to be a better approximation of human reasoning than classical logic. Lastly, it has to be mentioned that this text is restricted to the classical approaches of non-monotonic reasoning, thus serving only as a small glimpse into the complexity of the field. Yet, hopefully, it provided some context and understanding of how one may achieve non-monotonicity in a formal setting.
+
+
+
+
+
+
+
+
+\begin{comment}
+
+\section{fodder}
+\subsubsection{Semantics of Preferential Non-Monotonic Reasoning}
+All formalisms subsumed under the preferential approach can be understood by means of \emph{preferential models}. These were originally defined in \cite{kraus1990nonmonotonic}, as a model theoretic counterpart to the preferential consequence relation. They can be defined as follows,
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+A preferential model $W$ is a triple $\langle S,l, \prec \rangle$ where $S$ is a set, the elements of which will be called states, $l:S \to \mathcal{U}$ assigns an interpretation to each state and $\prec$ is a strict partial order on $S$ (i.e.  an irreflexive, transitive relation), satisfying the \textbf{smoothness} condition.
+\end{mydef} 
+
+Here the strict partial order is not entirely necessary, however, models fulfilling this condition behave nicer. Moreover, the smoothness condition is mainly required in order to deal with infinite sets of formulas. Lastly, in order to define the smoothness condition the following definitions are required. 
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+Let $P \subseteq U$ be a binary relation on $U$. $P$ is smooth iff $\forall t \in P$, either $\exists s$ minimal in $P$, such that $s \prec t$ or $t$ is minimal in $P$.
+\end{mydef} 
+
+defines smoothness in general, while defines the smoothness condition
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+A triple $\langle S, l \prec \rangle$ satisfies the smoothness condition iff $\forall \alpha \in \mathcal{L}$ the set $\widehat{\alpha}:= \{s \in S \mid \forall m \in l(s) m \models \alpha\}$ is smooth. 
+\end{mydef} 
+
+This condition expresses that for any formula $\alpha$ the set states in which every interpretation $m$ associated to $s$ via $l$ does satisfy $\alpha$ must be smooth. \\
+
+Given this definition one can construct the semantic notion underlying circumscription, i.e. \emph{model preference logic}. 
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+Let $W:=\langle S,l, \prec \rangle$ be a preferential model, such that  
+\end{mydef} 
+
+
+ is a special case of preference models. That is, one simply defines the set of states $S$ as the set of all possible interpretation, defines $l$ as the identity function and defines $\prec$ such that it is well-founded. Preference Models are especially relevant as they beautifully correspond with the preference inference relation defined below \cite{kraus1990nonmonotonic}.
+
+
+As already stated the core concept of this incarnation of non-monotonic reasoning is stating, which models of a theory should be preferred. One method of accomplishing this is by imposing a preference relation upon all possible models. This results in the definition of model preference logic.  
+
+\begin{mydef}[\cite{BOCHMAN2007557, brewka1997nonmonotonic}]
+Let $\mathcal{L}$ be a language and let $\prec$ be a well-founded, i.e. there is no infinite chain of models such as $\ldots \prec \mathcal{I}_3 \prec \mathcal{I}_2 \prec \mathcal{I}_1$, ordering on the set of interpretations. $\mathcal{L}_{\prec}$ is called a model preference logic if the following holds. An interpretation $\mathcal{I}$ is a preferred model of $A$ if it satisfies $A$ and there is no better interpretation $\mathcal{J} \prec \mathcal{I}$ satisfying $A$. $A$ preferentially entails $B$ (written $A   \models_{\prec} B$) iff all preferred models of $A$ satisfy $B$.
+\end{mydef} 
+
+
+Model Preference Logic subsumes both circumscription as well as the closed world assumption.  It is still possible to further abstract this concept, 
+
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+A preferential model $W$ is a triple $\langle S,l, \prec \rangle$ where $S$ is a set, the elements of which will be called states, $l:S \to \mathcal{U}$ assigns an interpretation to each state and $\prec$ is a strict partial order on $S$ (i.e.  an irreflexive, transitive relation), satisfying the \textbf{smoothness} condition.
+\end{mydef} 
+
+
+
+
+
+\subsubsection*{Axiomatisation of Preferential Non-Monotonic Reasoning}
+The idea of studying the deduction process by means of investigating the consequence relation itself, can be traced back to Tarski and Gentzen. While the prior studied the consequence with regard to arbitrary sets, the latter one restricted himself to finite sets. Fortunately, due to compactness the difference between these two approaches is small for monotonic consequence relations. Unfortunately, this does is not the case, if monotonicity is rejected.
+However, since the basis of this subsection is \cite{kraus1990nonmonotonic}, only consequence relations with finite sets are considered.
+In \cite{kraus1990nonmonotonic} several consequence relations are introduced, namely \emph{Cumulative Reasoning, Cumulative Reasoning with Loop, Preferential Reasoning} and \emph{Cumulative Monotonic Reasoning}. However, other systems have been developed, e.g. \emph{Rational Reasoning}. Each of this systems can be characterised by by a certain set of rules, which specify the behaviour of the inference relation. Here the the system \textbf{C} (Cumulative Reasoning) and \textbf{P} (Preferential Reasoning) will be introduced. Before these systems can be formalised, some preliminary definitions must be made, as well as possible properties of inference relations have to be introduced. \\
+
+That is, let $\mathcal{L}$ be the set of all well-formed formulas closed under classical propositional connectives . Let $\models$ is defined as in propositional logic.
+We have for $\varphi, \psi, \chi \in \mathcal{L}$ the following poperties of consequence relation as presented in \cite{kraus1990nonmonotonic} \\
+
+\textbf{Reflexivity:}\\
+Is a notion satisfied by nearly every inference system.
+\begin{prooftree}
+\AxiomC{}
+\AxiomC{}
+\BinaryInfC{$\varphi \skepcon \varphi$}
+\end{prooftree}
+
+
+\textbf{Left Logical Equivalence:} \\
+If two formulas are equivalent given the underlying logic, their consequences ought to be the same. Hence, expressing that consequences should depend on the meaning of a formula and not its form.
+\begin{prooftree}
+\AxiomC{$\models \varphi \leftrightarrow \psi$}
+\AxiomC{$\varphi \skepcon \chi$}
+\BinaryInfC{$\psi \skepcon \chi$}
+\end{prooftree}
+
+\textbf{Right Weakening:}\\
+If $\varphi$ is a plausible consequence of $\chi$, i.e. $\chi \skepcon \varphi$ and given the underlying logic $\psi$ is a logical consequence of $\varphi$, i.e. $\models \varphi \to \psi$ then is is reasonable to require $\psi$ to be also a logical consequence of $\chi$, i.e. $\chi \skepcon \psi$.
+\begin{prooftree}
+\AxiomC{$\models \varphi \to \psi$}
+\AxiomC{$\chi \skepcon \varphi$}
+\BinaryInfC{$\chi \skepcon \psi$}
+\end{prooftree}
+
+\textbf{Cut:}\\
+This rule states that if $\chi$ is the consequence of an extended set of facts $\varphi \wedge \psi$, and $\psi$ is a consequence of the non-extended set of facts, i.e. $\varphi$ , $\chi$ should be a consequence of the non-extended set of facts, i.e. $\varphi$. It was accepted since it does not imply monotonicity and because formalisms such as circumscription already confine to cut.
+\begin{prooftree}
+\AxiomC{$\varphi \wedge \psi \skepcon \chi$}
+\AxiomC{$\varphi \skepcon \psi$}
+\BinaryInfC{$\varphi \skepcon \chi$}
+\end{prooftree}
+
+\textbf{Cautious Monotonicity:}\\
+If $\psi$ and $\chi$ are both plausible consequences of $\varphi$ then it should be possible to extend the original set of facts to $\varphi \wedge \psi$, while still retaining the previous consequence $\chi$. That is, learning $\psi$, if $\psi$ was already a plausible consequence, previous conclusions should not be invalidated. Moreover, this formalisation ensures that the additional formula $\psi$ does not lead to a contradiction of $\varphi$. 
+\begin{prooftree}
+\AxiomC{$\varphi \skepcon \psi$}
+\AxiomC{$\varphi \skepcon \chi$}
+\BinaryInfC{$\varphi \wedge \psi \skepcon \chi$}
+\end{prooftree}
+
+
+\textbf{Or:}\\
+If $\chi$ is separately a plausible consequence of two formulas, then it should also be a plausible consequence of their disjunction. This rule was accepted because it does not imply monotonicity. 
+\begin{prooftree}
+\AxiomC{$\varphi \skepcon \chi$}
+\AxiomC{$\psi \skepcon \chi$}
+\BinaryInfC{$\varphi \vee \psi \skepcon \chi$}
+\end{prooftree}
+
+Given these definitions the system \textbf{C} can be defined as follows.
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+The system \textbf{C} consists of \textbf{Reflexivity}, \textbf{Left Logical Equivalence}, \textbf{Right Weakening}, \textbf{Cut}, \textbf{Cautious Monotonicity} \\
+\end{mydef} 
+
+
+The system \textbf{P} is build upon system \textbf{C} and can be defined as follows.
+
+\begin{mydef}[\cite{kraus1990nonmonotonic}]
+The system \textbf{P} consists of \textbf{Reflexivity}, \textbf{Left Logical Equivalence}, \textbf{Right Weakening}, \textbf{Cut}, \textbf{Cautious Monotonicity} and \textbf{Or} \\
+\end{mydef} 
+
+That is, adding \textbf{Or} to system \textbf{C} will result in \textbf{P}. Frankly, all previously mentioned systems use the consequence relation of cumulative reasoning as a basis upon for constructing their own consequence relation. Moreover, if the underlying logic chosen is classical logic the system \textbf{C} is \emph{Supraclassical}. That is, any inference made with respect to the rules of inference in classical logic, can also be made in \textbf{C} (and its extensions). This can be written concisely as
+\begin{prooftree}
+\AxiomC{$\varphi \vdash \psi$}
+\UnaryInfC{$\varphi \skepcon \psi$}
+\end{prooftree}
+Based on the rules characterising the respective system one can now start to build a connection with the model theoretical notions introduced previously, thus implicitly categorising specific formalisms such as circumscription or the closed world assumption. \cite{kraus1990nonmonotonic}\\
+
+Firstly, it has to be noted that system \textbf{C} is weaker than \textbf{P}. That is, any inference possible by means of $\skepcon_{\textbf{C}}$ can also be made by means of $\skepcon_{\textbf{P}}$. One method of observing this is by looking at the model theoretical notions of model preference logic and preferred models. That is, if the preference relation is well-founded the following can be shown. 
+
+\begin{thm}[\cite{kraus1990nonmonotonic}]
+Let  $\mathcal{L}_{\prec}$ be a preference logic, with $\prec$ being well-founded then $\mathcal{L}_{\prec}$ is \textbf{cumulative}.  
+\end{thm} 
+
+\begin{thm}[\cite{kraus1990nonmonotonic}]
+Let  $\mathcal{L}_{\prec}$ be a preference logic, with $\prec$ being well-founded then $\mathcal{L}_{\prec}$ is \textbf{preferential}.  
+\end{thm} 
+
+However, this is not an equality. That is, there are cumulative / preferential inference relations that do not correspond to a model preference logic.
+However, if one takes the abstraction of model preference logic into account, i.e. if one uses preference models, one can obtain the following \cite{kraus1990nonmonotonic,brewka1997nonmonotonic}.
+
+\begin{thm}[\cite{kraus1990nonmonotonic}]
+A consequence relation is a preferential consequence relation iff it is defined by some
+preferential model.
+\end{thm} 
+
+Hence, system \textbf{P} fully captures preference models. That is, any preference model does fulfil the properties of system \textbf{P} and that in general no additional property can be expressed by preference models, other than \textbf{P}. Moreover, since this does not hold for the specific class of preference models, namely model preference logic, it can be concluded that there are additional properties that can be expressed in general with model preference logic. Therfore, there are certain statements that are valid in model preference logic but not in preferential models \cite{brewka1997nonmonotonic}.
+
+\end{comment}
+
+
+\printbibliography
+
+\end{document}

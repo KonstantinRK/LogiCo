@@ -1,0 +1,650 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{listing}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{bussproofs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+\newcommand{\lto}{\supset}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+
+
+%\newcommand{\imp}[1]{$\supset$}
+
+\begin{document}
+
+
+
+\section*{Problem 3.1}
+\begin{quote}
+Apply the unification algorithm and show the most general unifier of the
+following formulas:
+\begin{enumerate}
+\item $p(f (x), f (y), y)$ and $p(y, z, f (x))$;
+\item $p(g(x, y), g(y, g(z, b)))$ and $p(z, g(a, x))$.
+\end{enumerate}
+Note: $x, y, z$ denote variables, $f, g$ are function symbols, $p$ is a predicate symbol and $a, b$ are constants.
+\end{quote}
+
+\paragraph*{Sub-Problem 3.1.1} Starting with the set of equations $\{ p(f (x), f (y), y)= p(y, z, f (x))\}$
+
+\begin{itemize}
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; p(f (x), f (y), y)= p(y, z, f (x)) \; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+p(f (x), f (y), y)= p(y, z, f (x))
+\end{equation*}
+Apply: $(f (s_1 , \dots , s_n ), f (t_1 , \dots , t_n )) \Rightarrow s_1 = t_1 , \dots , s_n = t_n$
+
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; f (x) = y, \, f (y)=z , \, y=f(x)\; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+f (x) = y
+\end{equation*}
+Apply: $(t, x) \Rightarrow (x,t)$ and subsequently replace $x$ by t in all other equations of $E$.
+
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; \textcolor{gray}{y = f(x)}, \, f (f(x))=z ,\, f(x)=f(x)\; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+f(f(x))=z
+\end{equation*}
+Apply:$(t, x) \Rightarrow (x,t)$ and subsequently replace $x$ by t in all other equations of $E$.
+
+
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; \textcolor{gray}{y = f(x)}, \, \textcolor{gray}{z=f(f(x))} ,\, f(x)=f(x)\; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+f(x)=f(x))
+\end{equation*}
+Apply: $(t, t) \Rightarrow $ remove this equations from $E$.
+
+
+
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; \textcolor{gray}{y = f(x)}, \, \textcolor{gray}{z=f(f(x))}\; \right\rbrace  \\
+\end{split}
+\end{equation*}
+All equations are isolated equation. Terminate and return 
+\begin{equation*}
+\begin{split}
+\Theta := \left\lbrace  \; y \mapsto f(x), \, z \mapsto f(f(x))\; \right\rbrace  \\
+\end{split}
+\end{equation*}
+\end{itemize}
+
+Finally, to be sure whether the substitution is actually a unifying substitution  
+\begin{equation*}
+\begin{split}
+E \Theta = \left\lbrace  p(f (x), f (f(x)), f(x))= p(f(x), f(f(x)), f (x))  \right\rbrace 
+\end{split}
+\end{equation*}
+
+
+
+\paragraph*{Sub-Problem 3.1.2} Starting with the set of equations $\{ p(g(x, y), g(y, g(z, b))) =p(z, g(a, x)) \}$
+
+\begin{itemize}
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; p(g(x, y), g(y, g(z, b))) =p(z, g(a, x))  \; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+p(g(x, y), g(y, g(z, b))) =p(z, g(a, x)) 
+\end{equation*}
+Apply: $(f (s_1 , \dots , s_n ), f (t_1 , \dots , t_n )) \Rightarrow s_1 = t_1 , \dots , s_n = t_n$
+
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; g(x, y) = z, \, g(y, g(z, b)) = g(a,x) \; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+g(x, y) = z
+\end{equation*}
+Apply: $(t, x) \Rightarrow (x,t)$ and subsequently replace $x$ by t in all other equations of $E$.
+
+\item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; \textcolor{gray}{z = g(x, y)}, \, g(y, g(g(x, y), b)) = g(a,x)  \; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+g(y, g(g(x, y), b)) = g(a,x)
+\end{equation*}
+Apply: $(f (s_1 , \dots , s_n ), f (t_1 , \dots , t_n )) \Rightarrow s_1 = t_1 , \dots , s_n = t_n$
+
+ \item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; \textcolor{gray}{z = g(x, y)},\,  y=a,\, g(g(x,y), b)=x \; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+y=a
+\end{equation*}
+Apply: $(x, t) \Rightarrow $ replace $x$ by t in all other equations of $E$.
+
+ \item The set of equations is:
+\begin{equation*}
+\begin{split}
+\left\lbrace  \; \textcolor{gray}{z = g(x, y)},\,  \textcolor{gray}{y=a} ,\, g(g(x,a)), b)=x \; \right\rbrace  \\
+\end{split}
+\end{equation*}
+There exists a non-isolated equation: 
+\begin{equation*}
+g(g(x,a)), b)=x
+\end{equation*}
+Apply: $(t, x) \Rightarrow (x, t)$ and observe that $x$ occurs in $t$. 
+
+Halt with failure.
+\end{itemize}
+
+
+\section*{Problem 3.2}
+\begin{quote}
+Consider an ordering $\succ$ on ground non-equality atoms that is total and well-
+founded. We denote the literal ordering induced by $\succ$ also by $\succ$. Let $C$ and $D$ be ground clauses without equality literals. Let A and B respectively denote the maximal atoms of $C$ and $D$ wrt $\succ$.
+Assume that $A$ and $B$ are syntactically the same atoms. Assume also that $A$ occurs negatively in $C$ but
+only positively in $D$. Show that $C \succ_{bag} D$.
+\end{quote}
+
+
+Firstly, we know that for a strict ordering $>$ over $X$, a bag extension $>_{bag}$ is defined as the smallest transitive relation satisfying 
+\begin{align*}
+& \{x,y_1, \dots, y_n\} >_{bag} \{x_1, \dots, x_m, y_1, \dots , y_n\} && if \; \forall i \in \{1, \dots, m\}: x>x_i & 
+\end{align*}
+
+
+Secondly, we know that $\succ$ is total and well-founded over ground non-equality atoms. Moreover, we know that the extension of such an ordering is also total and well-founded, and satisfies $\neg p \succ p$ as well as if $p \succ q$ then $\neg p \succ p \succ \neg q \succ q$.
+
+Thirdly, we know that a clause can be considered as a bag of literals, i.e.
+\begin{align*}
+& C=\{\neg A, \overline{x}, \overline{y} \} &&  D=\{A, \overline{z}, \overline{y} \} & 
+\end{align*}
+(Note: $\overline{a} = (a_i)_{i \in I}$ for some $I \subset \mathbb{N}$)
+Since, $A$ is the maximal atom in the bag, any atom must be smaller than or syntactically equal to $A$. Given the extension of $\succ$ to literals, it follows that $\neg A$ is a maximal literal. As for  $D$, since $A$ is a maximal atom and only occurs positively in $D$. It follows, by the extension of the ordering to literals, that $\forall l \in \overline{z} \cup \overline{y}$ either $l = A$ (syntactically) or $A \succ l$. 
+
+
+Fourthly, given the fact that $\forall l \in \overline{x} \cup \overline{y}  \;\neg A \succ l$, it follows that
+\begin{equation*}
+\{\neg A, \overline{y}\} \succ_{bag} \{\overline{x}, \overline{y}\}
+\end{equation*}
+and especially 
+\begin{equation*}
+\{\neg A, \overline{y}\} \succ_{bag} \{A, \overline{x}, \overline{y}\}
+\end{equation*}
+Moreover, it is clearly the case that the ordering of the bags $\{\neg A, \overline{y}\}$ and $\{\neg A,\overline{x}, \overline{y}\}$ is based on the structure of $\overline{x}$. That is, if $\overline{x}$ is empty, they are the same bags. Otherwise, it must be the case that 
+\begin{equation*}
+\{\neg A, \overline{x}, \overline{y}\} \succ_{bag} \{ \neg A,\overline{y}\}
+\end{equation*}
+That is, apart from the elements in $\overline{x}$ both bags share the same literals.
+Now, since $\forall l \in D \; \neg A \succ l$, this holds especially for $\neg A \succ A$ and $\forall l \in \overline{z} \; \neg A \succ l$. Hence, 
+\begin{equation*}
+\{\neg A, \overline{y}\} \succ_{bag} \{ A, \overline{z}, \overline{y}\}
+\end{equation*}
+with due to transitivity leads to 
+\begin{equation*}
+\{\neg A, \overline{x}, \overline{y}\} \succ_{bag} \{ A, \overline{z}, \overline{y}\}
+\end{equation*}
+
+
+\section*{Problem 3.3}
+\begin{quote}
+Let $\Sigma$ be a signature containing only function symbols such that $\Sigma$ contains
+at least one constant. Let $\gg$ be a precedence relation on $\Sigma$ and $w : \Sigma \to \mathbb{N}$ be a weight function
+compatible with $\gg$. Consider the (ground) Knuth-Bendix order $\succ_{KB}$ induced by $\gg$ and $w$ on the set
+of ground terms of $\Sigma$. Describe the set of ground terms that have the minimal weight wrt $\succ_{KB}$.
+\end{quote}
+
+Some notational clarifications. Let $\overline{a} =(a_i)_{i \in \{1, \dots n\}}$ if $n$ it is clear from the context, e.g. as input for a function of arity $n$.
+\\
+
+Firstly, we know that there exists at least one constant $c$. Hence, we know that there exists a minimal constant. Assume without loss of generality that one of those minimal constant is $c_{min}$.  Since it is possible for constant symbols to have the same weight let 
+\begin{equation*}
+\Gamma_C := \{c \mid c \in \mathit{FS}_0 \;  w(c)=w(c_{min}) \}
+\end{equation*}
+
+
+Secondly, we need to show the statement, for any $k> 1$ and an arbitrary tuple of terms $\overline{a}$ it follows that $\forall f \in \mathit{FS}_k \forall a_i \in \overline{a} \;| f(\overline{a}) |> |a_i|$. 
+This follows from the fact that the input to $f$ must contain at least two constant symbols, and the fact that $w$ is compatible with $\gg$, requiring $\forall c \in \mathit{FS}_0 \; w(c)>0$.  That is, $|f(\overline{a})|= w(f) + \sum_{a_i \in \overline{a}} |a_i| > w(c_1) + w(c_2)$ where $c_1, c_2$ are constants in $a_1, a_2 \in \overline{a}$.  If one wants to be precise this would require induction. \\
+
+Thirdly, we need to show the statement, for an arbitrary term $a$ it follows that $\forall f \in \mathit{FS}_1 \; w(f)>0  \Leftrightarrow |f(a)| > |a|$. 
+If $w(f)>0$ then $|f(a)|=w(f) + |a| > |a|$. If $ |f(a)| > |a|$ then $|f(a)|=w(f) + w(a) > w(a)$ requires $w(f) > 0$. \\
+
+Fourthly, we need to show the statement, for an arbitrary term $a$ and for an $n > 0$ it follows that $\forall f \in \mathit{FS}_1 \; w(f)=0  \Leftrightarrow |f^n(a)| = |a|$.  Clearly, $|f(a)|=n \cdot w(f)+ |a| = |a|$. \\
+
+
+From the second statement, it is clearly the case that all non-unary functions are excluded from the set of ground terms with minimal weight.
+From the third statement, one can conclude that the set of minimal ground terms, can not contain terms with a function symbol of a weight greater 0.
+Furthermore, since $w$ is consistent with $\gg$ we know just one single function symbol can satisfy this condition. Henceforth, let $f_{min}$ be this unique function symbol with $w(f_{min})=0$. Moreover, from the fourth statement if follows that one can have arbitrary iterations of this function symbol $f_{min}$, while at the same time retaining the same weight as the term to which this sequence of functions symbols is applied to. Moreover, with the weight of the $f_{min}^k(a)$ being the same as the weight of $a$, it clearly follows that any term of the form $f_{min}^k(a)$ can only be minimal if and only if $a$ has minimal weight to begin with. Those, insights are sufficient enough to define the set 
+\begin{equation*}
+\Gamma_F:= \{f_{min}^k(c) \mid  c \in \Gamma_C  \land k > 0\}
+\end{equation*}
+
+
+In the final step of the characterisation, a case distinction is required. If $f_{min}$ does not exists, given the reasoning above, there can not be a term with a function symbol of arity greater that 0 in the set of weight minimal ground terms, i.e. only the weight minimal constant symbols are permitted. Otherwise, arbitrary applications of $f_{min}$ to constant symbols of minimal weight are permitted as well. That is,
+\begin{align*}
+&\Gamma := \Gamma_C \cup \Gamma_F&& \textit{if } \exists f_{min} \in \mathit{FS}_1 f_{min}=0& \\
+&\Gamma := \Gamma_C && otw.0
+\end{align*}
+
+
+
+%I am some what confused by the exercise. This is due to the fact that the notion of consistency is only defined with respect to the KBO in the non-ground case.
+%Moreover, in the next sentence there is talk about the ground KBO.  Hence, I can only hope that my interpretation of the exercise is correct.
+%
+%Let $\Gamma$ be the set of minimal ground terms wrt. $\succ_{KB}$. 
+%
+%Firstly, we know that there exists at least one constant $c$. Hence, we know that there exists a minimal constant. Assume with out loss of generality that $c_{min}$ is this constant.  We know that all other constants must have either a higher weight or a greater precedence than $c$,  i.e.  $\forall a \in \mathit{FS}_0 \; a \neq c \Rightarrow (|a| > |c_{min}| \lor (|a|=|c_{min}| \land a \gg c_{min}))$.  \\
+%
+%
+%Secondly, we know that any term $g^k(\overline{a})$ for $g \in \mathit{FS}_n$ and $\overline{a}:=(a_i)_{i \in \{1, \dots, n\} }$ such that $w(g)>0$, must be greater wrt to the KBO than any $a_i$ individually. This is due to the fact that, $|f^k(\overline{a})|:= k \cdot |f| + \sum_{i=1}^n |a_i|$.  Hence, we can conclude that if $w(g)>0$ no term of the form  $g^k(\overline{a})$  can be in $\Gamma$. That is, $w(g)>0 \Rightarrow \forall i \in \{1, \dots, n\} g^k(\overline{a}) \succ_{KB} a_i$.  \\
+%
+%Thirdly, consider a function $f$ such that $w(f)=0$. Clearly, for any term $f^k(\overline{a})$ where $f \in \mathit{FS}_n$ and $\overline{a}:=(a_i)_{i \in \{1, \dots, n\} }$, it follows that $|f^k(\overline{a})| = \sum_{i=1}^n |a_i|$. Moreover, given the definition of "compatible with $\gg$" we know that there can only be one unary function of this kind can exists and that this function must have the greatest precedence for all elements in the signature. \\
+%
+%
+%To summarise the observations above, we consider two cases.
+%In case one we assume that $\forall f \in \mathit{FS}_{>0}$ it holds that $w(f)>0$.
+%The second observation indicates that if for all functions $f \in \mathit{FS}_{>0}$ it holds that $w(f)>0$ then $\Gamma \cup  \mathit{FS}_0= \Gamma$. 
+%Moreover, if this is the case we know from the first observation that  $\forall a \in \mathit{FS}_0 \; a \neq c \Rightarrow a \succ_{KB} c_{min}))$.  Hence, it follows that $\Gamma := \{c_{min}\}$.
+%
+%In case two we assume that there exists an $f_{min}$ such that $w(f)=0$. Here we are again faced with two cases. That is, if $f_{min} \in \mathit{FS}_{>1}$ then we know that $f_{min}$ has at least arity two. Hence, $|f^k(\overline{a})| =  \sum_{i=1}^n |a_i| > max_{ i \in \{1, \dots, n\} } (|\overline{a}|)$, due to the fact that the weight of every constant symbol has to be greater than $0$. Therefore, we can conclude, by similar reasoning as in the previous case that $\Gamma := \{c_{min}\}$. Finally, the case $f_{min} \in \mathit{FS}_{1}$. We know that for a term $a$, $f_{min}(a)=a$ holds. Hence, $\Gamma$ would of the form $\Gamma := \{f_{min}(c_{min}), c_{min}\}$ for all such function symbols. However, we  know that only one such function can exists. Moreover, this function symbol  must have the highest precedence order. 
+%
+%To conclude. The set of all minimal ground terms with respect to $\succ_{KB}$ is defined as 
+%\begin{equation*}
+%\begin{split}
+%\Gamma := &\{c \mid  \forall a \in \mathit{FS}_0 \; a \neq c \Rightarrow (|a| > |c_{min}| \lor (|a|=|c_{min}| \land a \gg c_{min}))\} \cup \\
+%& \{ f(c) \mid (\forall f \in \mathit{FS}_1 w(f)=0) \land  \forall a \in \mathit{FS}_0 \; a \neq c \Rightarrow (|a| > |c_{min}| \lor (|a|=|c_{min}| \land a \gg c_{min}))\}
+%\end{split}
+%\end{equation*} 
+%which as stated previously amounts to either $\Gamma := \{c_{min}\}$ or $\Gamma := \{f_{min}(c_{min}), c_{min}\}$.
+
+\section*{Problem 3.4}
+\begin{quote}
+Consider the following set $S$ of clauses:
+\begin{equation*}
+\begin{split}
+&\neg p(z, a) \lor \neg p(z, x) \lor \neg p(x, z), \\
+&p(y, a) \lor p(y, f (y)), \\
+&p(w, a) \lor p(f (w), w)
+\end{split}
+\end{equation*}
+where $p$ is a predicate symbol, $f$ is a function symbol, $x, y, z, w$ are variables and $a$ is a constant. Give a refutation proof of $S$ by using the non-ground binary resolution inference system $\mathbb{BR}$. For each
+newly derived clause, label the clauses from which it was derived by which inference rule and indicate most general unifiers.
+\end{quote}
+
+The required numbering is given in the summary below. The reasoning behind those inferences, however, is presented beforehand.
+First, we need to specify a precedence ordering 
+\begin{equation*}
+f \gg p \gg a  \gg w  \gg x \gg y \gg z
+\end{equation*}
+and a weight function $w$ that is compatible with the precedence ordering. In this case let $w$ be the constant function $1$.
+
+
+Consider the clause $\neg p(z, a) \lor \neg p(z, x) \lor \neg p(x, z)$ and the clause $p(y, a) \lor p(y, f (y))$. In the prior, only negative literals exist. Hence, given the fact that our selection function is well-behaved we can choose an arbitrary negative literal or have to choose all maximal  positive literals. In this case $\neg p(x, z)$ is chosen at random. As for the latter, given the fact that $\#(y,p(y, f(y)))=2 \geq 1=\#(y,p(y, a))$ and $|p(y,f(y))|=1+1+1+1=4 \geq  3= 1+1+1 = | p(y, a)|$ it follows that $p(y,f(y)) \succ_{KB} p(y,a)$. Hence,
+\begin{prooftree}
+\AxiomC{$\neg p(z, a) \lor \neg p(z, x) \lor \underline{\neg p(x, z)} $}
+ \AxiomC{$p(y, a) \lor \underline{p(y, f (y))}$}
+ \RightLabel{\scriptsize BR}
+\BinaryInfC{$(\neg p(z, a) \lor \neg p(z, x) \lor p(y, a))\{z \mapsto f(y), x \mapsto y \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\neg p(f(y), a) \lor \neg p(f(y), y) \lor p(y, a)$}
+\end{prooftree}
+(Note: The last step is not part of the calculus, it sole purpose is to make the substitution with the mgu more explicit.)
+
+Consider the clause $\neg p(f(y), a) \lor \neg p(f(y), y) \lor p(y, a)$ and the clause $p(w, a) \lor p(f (w), w)$. In the prior, some negative literals exists. Now, given the fact that our selection function is well-behaved we can choose an arbitrary negative literal or have to choose all maximal  positive literals, the literal  $\neg p(f(y), y)$ is chosen at random. As for the latter, given the fact that $\#(w,p(f(w), w))=2 \geq 1=\#(w,p(w, a))$ and $|p(f(w),w)|=1+1+1+1=4 \geq  3=1+1+1 = | p(w, a)|$ it follows that $p(f(w),w) \succ_{KB} p(w,a)$. Hence,
+\begin{prooftree}
+\AxiomC{$\neg p(f(y), a) \lor  \underline{\neg p(f(y), y)} \lor p(y, a)$}
+ \AxiomC{$p(w, a) \lor  \underline{p(f (w), w)}$}
+ \RightLabel{\scriptsize BR}
+\BinaryInfC{$(\neg p(f(y), a)  \lor p(y, a)  \lor p(w, a))\{w \mapsto  y \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\neg p(f(y), a)  \lor p(y, a)  \lor p(y, a)$}
+\end{prooftree}
+
+The resulting clause can be reduced, by positive factoring. That is, in this case the selection function chooses all maximal positive literals. 
+Since, both literals are syntactically identical they are incomparable with respect to the KBO. Moreover, being the only two positive literals, it follows that they are maximal. 
+\begin{prooftree}
+\AxiomC{$\neg p(f(y), a)  \lor  \underline{p(y, a)}  \lor \underline{ p(y, a)}$}
+ \RightLabel{\scriptsize Fact}
+\UnaryInfC{$\neg p(f(y), a)  \lor p(y, a)$}
+\end{prooftree}
+
+Consider the clause $\neg p(f(y), a)  \lor p(y, a)$ and the clause $p(w, a) \lor p(f (w), w)$. In the prior, some negative literals exists. Now, given the fact that our selection function is well-behaved we can choose an arbitrary negative literal or have to choose all maximal  positive literals, the literal  $\neg p(f(y), a)$ is chosen at random. As for the latter, given the fact that $\#(w,p(f(w), w))=2 \geq 1=\#(w,p(w, a))$ and $|p(f(w),w)|=1+1+1+1=4 \geq  3=1+1+1 = | p(w, a)|$ it follows that $p(f(w),w) \succ_{KB} p(w,a)$. Hence,
+\begin{prooftree}
+\AxiomC{$\underline{\neg p(f(y), a) } \lor p(y, a)$}
+ \AxiomC{$p(w, a) \lor  \underline{p(f (w), w)}$}
+ \RightLabel{\scriptsize BR}
+\BinaryInfC{$(p(y, a) \lor p(w, a))\{w \mapsto  a, y \mapsto a \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$p(a, a) \lor p(a, a)$}
+\end{prooftree}
+
+
+The resulting clause can be reduced, by positive factoring. That is, in this case the selection function chooses all maximal positive literals. 
+Since, both literals are syntactically identical they are incomparable with respect to the KBO. Moreover, being the only two positive literals, it follows that they are maximal. 
+\begin{prooftree}
+\AxiomC{$ \underline{p(a, a) }  \lor \underline{ p(a, a)} $}
+ \RightLabel{\scriptsize Fact}
+\UnaryInfC{$p(a, a) $}
+\end{prooftree}
+
+
+The clause $\neg p(z, a) \lor \neg p(z, x) \lor \neg p(x, z)$ can be reduced, by negative factoring. That is, in this case the selection function chooses two negative literals.
+
+\begin{prooftree}
+\AxiomC{$\neg p(z, a) \lor  \underline{\neg p(z, x)} \lor  \underline{\neg p(x, z)}$}
+ \RightLabel{\scriptsize Fact}
+\UnaryInfC{$(\neg p(z, a) \lor  \neg p(z, x)) \{z \mapsto  x \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\neg p(x, a) \lor  \neg p(x, x)$}
+\end{prooftree}
+
+The clause $\neg p(x, a) \lor  \neg p(x, x)$ can be reduced, by negative factoring. That is, in this case the selection function chooses two negative literals.
+
+\begin{prooftree}
+\AxiomC{$ \underline{\neg p(x, a)} \lor  \underline{\neg p(x, x)}$}
+ \RightLabel{\scriptsize Fact}
+\UnaryInfC{$(\neg p(x, a)) \{x \mapsto  a\}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\neg p(a, a)$}
+\end{prooftree}
+
+
+Consider the clause $ \neg p(a, a)$ and the clause $ p(a, a)$. Since they are the only literals in the clause no other literals could be selected.
+\begin{prooftree}
+\AxiomC{$\underline{ \neg p(a, a) } $}
+ \AxiomC{$  \underline{  p(a, a)}$}
+ \RightLabel{\scriptsize BR}
+\BinaryInfC{$(\Box)\{\; \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\Box$}
+\end{prooftree}
+
+
+To summarise.
+\begin{align*}
+& (1) &&\neg p(z, a) \lor \neg p(z, x) \lor \neg p(x, z) && &\\
+& (2) &&p(y, a) \lor p(y, f (y)) & & &\\
+& (3) &&p(w, a) \lor p(f (w), w) & & &\\
+& (1),(2) \stackrel{BR}{\Longrightarrow} (4) && \neg p(f(y), a) \lor \neg p(f(y), y) \lor p(y, a) &&  \{z \mapsto f(y), x \mapsto y \}  & \\
+& (4),(3) \stackrel{BR}{\Longrightarrow} (5) && \neg p(f(y), a)  \lor p(y, a)  \lor p(y, a) &&  \{w \mapsto y \}  & \\
+& (5) \stackrel{Fact.}{\Longrightarrow} (6) && \neg p(f(y), a)  \lor p(y, a) &&  \{ \}  & \\
+& (6),(3) \stackrel{BR}{\Longrightarrow} (7) &&p(a, a) \lor p(a, a) &&  \{w \mapsto  a, y \mapsto a \} &  \\
+& (7) \stackrel{Fact.}{\Longrightarrow} (8) && p(a, a)  &&  \{ \}  & \\
+& (1) \stackrel{Fact.}{\Longrightarrow} (9) && \neg p(x, a) \lor  \neg p(x, x)  &&   \{z \mapsto  x \} & \\
+& (9) \stackrel{Fact.}{\Longrightarrow} (10) && \neg p(a, a)  &&  \{ x \mapsto a\}  & \\
+& (10),(7) \stackrel{BR}{\Longrightarrow} (11) &&\Box &&  \{ \} & \\
+\end{align*}
+\section*{Problem 3.5}
+\begin{quote}
+Consider the KBO ordering $\succ$ generated by the precedence $f \gg a \gg b \gg c$
+and the weight function that assigns weight $1$ to each symbol from $\{f, a, b, c\}$. Let $\sigma$ be a well-behaved selection function w.r.t. $\succ$. Consider the set $S$ of ground formulas:
+\begin{equation*}
+\begin{split}
+&a = b \lor a = c, \quad f (a) \neq f (b), \quad  b = c
+\end{split}
+\end{equation*}
+Apply saturation on $S$ using an inference process based on the ground superposition calculus $\mathbb{SUP}_{\succ, \sigma}$
+(including the inference rules of ground binary resolution with selection).
+Show that $S$ is unsatisfiable by finding a refutation of $S$ such that during saturation only $4$ new clauses
+are generated. Give details on what literals are selected and which terms are maximal.
+\end{quote}
+
+Consider the clause $a = b \lor a = c$. We have $|a = b|=1+1 = 2 = 1+1 = |a = c|$, but since $b \gg c$ it follows that $b \succ_{KB} c$ and therefore $a = b  \succ_{KB}  a = c$. Moreover, the orientation of the equalities is already correct, due to the fact that $b \gg c$. Hence, 
+
+\begin{prooftree}
+\AxiomC{$\underline{a = b} \lor a = c$}
+ \RightLabel{\scriptsize (EF)}
+\UnaryInfC{$a=b \lor b \neq c$}
+\end{prooftree}
+
+Consider the clause $a=b \lor b \neq c$ and the clause. $f (a) \neq f (b)$. We have $|a = b|=1+1 = 2 = 1+1 = |b \neq c|$, but since $a \gg b$ it follows that $a \succ_{KB} b$ and therefore $a = b  \succ_{KB} b \neq c$. Above all, since $a=b$ is the only positive literal it is automatically the maximal literal. Moreover, the orientation of the equality follows directly from $a \succ_{KB} b$.
+Similarly, we have  $|f(a)|=1+1 = 2 = 1+1 = |f(b)|$, but since $a \gg b$ it follows that $a \succ_{KB} b$ and therefore $f(a)  \succ_{KB} f(b)$. Hence, 
+
+\begin{prooftree}
+\AxiomC{$\underline{a = b} \lor b \neq c$}
+\AxiomC{$\underline{f(a) \neq f(b)}$}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$f(b) \neq f(b) \lor b \neq c$}
+\end{prooftree}
+
+In the resulting clause $f(b) \neq f(b) \lor b \neq c$ we have $|f(b) \neq f(b)| > |b \neq c|$.  With $f(b)$ and $f(b)$ being incomparable and $b \succ_{KB} c$. Hence,
+\begin{prooftree}
+\AxiomC{$\underline{f(b) \neq f(b)} \lor b \neq c$}
+ \RightLabel{\scriptsize (ER)}
+\UnaryInfC{$b \neq c$}
+\end{prooftree}
+
+Lastly, consider the clauses $b \neq c$ and $b = c$. The direction of the equality and inequality already satisfies the required condition, due to $b \gg c$. Moreover, being the only literals in their respective clauses, it follows that only those can be selected.
+\begin{prooftree}
+\AxiomC{$\underline{ b \neq c}$}
+\AxiomC{$\underline{ b = c}$}
+ \RightLabel{\scriptsize (BR)}
+\BinaryInfC{$\Box$}
+\end{prooftree}
+
+\section*{Problem 3.6}
+\begin{quote}
+Consider the group theory axiomatisation used in the lecture. Prove that the
+group’s left identity element $e$ is also a right identity.
+\begin{itemize}
+\item  Formalize the problem in \texttt{TPTP} and solve it using \texttt{Vampire}, by running \texttt{Vampire} with the
+additional option specification \texttt{--avatar off} . Provide your \texttt{TPTP} encoding and \texttt{Vampire} output.
+\item Explain the superposition reasoning part of the \texttt{Vampire} proof by detailing the superposition inferences, generated clauses and mgu (if any) in the \texttt{Vampire} poof.
+\end{itemize}
+\end{quote}
+
+
+The program encoding is 
+\texttt{
+\begin{tabbing}
+fof(left\_identity,axiom, ! [X] : mult(e,X) = X). \\
+fof(left\_inverse,axiom,! [X] : mult(inverse(X),X) = e).\\
+fof(associativity,axiom,! [X,Y,Z] : mult(mult(X,Y),Z) = mult(X,mult(Y,Z))).\\
+fof(right\_identity,conjecture,! [X] : mult(X,e) = X).
+\end{tabbing}}
+and the output of the vampire solver is
+\texttt{
+\begin{tabbing}
+\% Refutation found. Thanks to Tanya!\\
+\% SZS status Theorem for group\\
+\% SZS output start Proof for group\\
+1. ! [X0] : mult(e,X0) = X0 [input]\\
+2. ! [X0] : e = mult(inverse(X0),X0) [input]\\
+3. ! [X0,X1,X2] : mult(X0,mult(X1,X2)) = mult(mult(X0,X1),X2) [input]\\
+4. ! [X0] : mult(X0,e) = X0 [input]\\
+5. ~! [X0] : mult(X0,e) = X0 [negated conjecture 4]\\
+6. ? [X0] : mult(X0,e) != X0 [ennf transformation 5]\\
+7. ? [X0] : mult(X0,e) != X0 => mult(sK0,e) != sK0 [choice axiom]\\
+8. mult(sK0,e) != sK0 [skolemisation 6,7]\\
+9. mult(e,X0) = X0 [cnf transformation 1]\\
+10. e = mult(inverse(X0),X0) [cnf transformation 2]\\
+11. mult(X0,mult(X1,X2)) = mult(mult(X0,X1),X2) [cnf transformation 3]\\
+12. mult(sK0,e) != sK0 [cnf transformation 8]\\
+14. mult(e,X3) = mult(inverse(X2),mult(X2,X3)) [superposition 11,10]\\
+16. mult(inverse(X2),mult(X2,X3)) = X3 [forward demodulation 14,9]\\
+20. mult(inverse(inverse(X1)),e) = X1 [superposition 16,10]\\
+22. mult(X5,X6) = mult(inverse(inverse(X5)),X6) [superposition 16,16]\\
+33. mult(X3,e) = X3 [superposition 22,20]\\
+53. sK0 != sK0 [superposition 12,33]\\
+54. \$false [trivial inequality removal 53]\\
+\\
+\% SZS output end Proof for group\\
+\% ------------------------------\\
+\% Version: Vampire 4.2.2 (commit e1949dd on 2017-12-14 18:39:21 +0000)\\
+\% Termination reason: Refutation\\
+\% Memory used [KB]: 383\\
+\% Time elapsed: 0.019 s\\
+\% ------------------------------\\
+\% ------------------------------
+\end{tabbing}}
+with the following superposition steps
+\texttt{
+\begin{tabbing}
+14. mult(e,X3) = mult(inverse(X2),mult(X2,X3)) [superposition 11,10]\\
+20. mult(inverse(inverse(X1)),e) = X1 [superposition 16,10]\\
+22. mult(X5,X6) = mult(inverse(inverse(X5)),X6) [superposition 16,16]\\
+33. mult(X3,e) = X3 [superposition 22,20]\\
+53. sK0 != sK0 [superposition 12,33]\\
+\end{tabbing}}
+
+which will be investigated in the subsequent list. However, first a small discussion, regarding resolvent of variable disjointed variants. 
+As far as I am aware, was it not specified that the calculus allows for  or requires the creation of variable disjointed variants before unification.  
+However, after some time I came to the conclusion that this is necessary, if one considers the solver output to be correct. As an example of the necessity of considering variable disjointed variants consider the first and third superposition. Additionally, it is the lifting lemma which requires clauses with no shared variables, which served as a weak justification of my actions.
+
+\begin{itemize}
+\item \texttt{mult(e,X3) = mult(inverse(X2),mult(X2,X3)) [superposition 11,10]}\\
+The formula $\cdot \; (e, x_3) = \cdot \, (\iota(x_2), \,\cdot\,(x_2 , x_3))$ is obtained by applying the superposition rule to formula (10), i.e $e =\;\cdot\,(\iota(x_0), x_0)$ and formula (11), i.e. $\cdot\, (x_0 , \,\cdot\, (x_1 , x_2)) = \,\cdot\, (\,\cdot\, (x_0 , x_1), x_2)$, both of which are the axioms. That is, after creating a variable disjointed variant one obtains the inference
+\begin{prooftree}
+\AxiomC{$\cdot\,(\iota(x_0), x_0)=e$}
+\AxiomC{$\cdot\, (\,\cdot\, (x_1 , x_2), x_3) = \cdot\, (x_1 , \,\cdot\, (x_2 , x_3)) $}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$(\cdot \; (e, x_3) = \cdot \, (x_1, \,\cdot\,(x_2 , x_3)))\{x_0 \mapsto x_2, x_1 \mapsto \iota(x_2)\}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\cdot \; (e, x_3) = \cdot \, (\iota(x_2), \,\cdot\,(x_2 , x_3))$}
+\end{prooftree}
+
+Where the mgu of $\cdot\,(\iota(x_0), x_0)$ and $\cdot\, (x_1 , x_2)$ is $\Theta := \{x_0 \mapsto x_2, x_1 \mapsto \iota(x_2)\}$.
+That is, $(\cdot\,(\iota(x_0), x_0))\Theta = (\cdot\,(\iota(x_2), x_2))$ and $(\cdot\, (x_1 , x_2))\Theta = (\cdot\, (\iota(x_2) , x_2))$ leading to $(\cdot \; (e, x_3) = \cdot \, (x_1, \,\cdot\,(x_2 , x_3)))\Theta = (\cdot \; (e, x_3) = \cdot \, (\iota(x_2), \,\cdot\,(x_2 , x_3)))$.
+
+(Note: Here my reasoning why it was necessary to create variable disjointed clauses. Firstly, with $(e, x_3)$ being part of the result it is required that $\cdot\,(\iota(x_0), x_0)$ has to be unified with some term in $\cdot\, (x_0 , \,\cdot\, (x_1 , x_2)) = \,\cdot\, (\,\cdot\, (x_0 , x_1), x_2)$.  Now given the structure  of $\cdot \; (e, x_3) = \cdot \, (\iota(x_2), \,\cdot\,(x_2 , x_3))$ the only possible case for unification is to unify $\cdot\,(\iota(x_0), x_0)$ and $\cdot\, (x_0 , x_1)$, which without variable renaming is an impossibility.)
+
+
+
+\item \texttt{mult(inverse(inverse(X1)),e) = X1 [superposition 16,10]}\\
+The formula $\cdot \,(\iota(\iota(x_1)),e)=x_1$ is obtained by applying the superposition rule to formula (10), i.e $e =\;\cdot\,(\iota(x_0), x_0)$ and formula (16), i.e. $\cdot \, (\iota(x_2), \, \cdot \, (x_2, x_3))=x_3$. That is, 
+\begin{prooftree}
+\AxiomC{$\cdot\,(\iota(x_0), x_0) = e$}
+\AxiomC{$\cdot \, (\iota(x_2), \, \cdot \, (x_2, x_3))=x_3$}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$(\cdot \,(\iota(x_2),e)=x_3)\{x_0 \mapsto x_1, x_2 \mapsto \iota(x_1), x_3 \mapsto x_1\}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\cdot \,(\iota(\iota(x_1)),e)=x_1$}
+\end{prooftree}
+Where the mgu of $\cdot\,(\iota(x_0), x_0)$ and $\cdot \, (x_2, x_3)$ is $\Theta := \{x_0 \mapsto x_1, x_2 \mapsto \iota(x_1), x_3 \mapsto x_1\}$.
+That is, $(\cdot\,(\iota(x_0), x_0))\Theta = (\cdot\,(\iota(x_1), x_1))$ and $(\cdot \, (x_2, x_3)))\Theta = (\cdot \, (\iota(x_1), x_1))=x_1)$ leading to $(\cdot \,(\iota(x_2),e)=x_3)\Theta = (\cdot \,(\iota(\iota(x_1)),e)=x_1)$.
+
+
+
+
+\item \texttt{mult(X5,X6) = mult(inverse(inverse(X5)),X6) [superposition 16,16]}\\
+The formula $\cdot \,(x_5, x_6) = \cdot \, (\iota(\iota(x_5)),x_6)$ is obtained by applying the superposition rule to formula (16), i.e $\cdot \, (\iota(x_2), \, \cdot \, (x_2, x_3))=x_3$ and formula (16), i.e. $\cdot \, (\iota(x_2), \, \cdot \, (x_2, x_3))=x_3$. That is,  after creating a variable disjointed variant one obtains the inference
+\begin{prooftree}
+\AxiomC{$\cdot \, (\iota(x_0), \, \cdot \, (x_0, x_1))=x_1$}
+\AxiomC{$\cdot \, (\iota(x_2), \, \cdot \, (x_2, x_3))=x_3$}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$(\cdot \, (\iota(x_2), x_1)=x_3)\{x_0 \mapsto x_5 , x_1 \mapsto x_6, x_2 \mapsto \iota(x_5), x_3 \mapsto \cdot \, (x_5, x_6) \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\cdot \, (\iota(\iota(x_5)), x_6)=\cdot \, (x_5, x_6)$}
+\end{prooftree}
+Where the mgu of $\cdot \, (\iota(x_0), \, \cdot \, (x_0, x_1))$ and $\cdot \, (x_2, x_3)$ is $\Theta := \{x_0 \mapsto x_5 , x_1 \mapsto x_6, x_2 \mapsto \iota(x_5), x_3 \mapsto \cdot \, (x_5, x_6) \}$. That is, $(\cdot \, (\iota(x_0), \, \cdot \, (x_0, x_1)))\Theta = (\cdot \, (\iota(x_5), \, \cdot \, (x_5, x_6)))$ and $(\cdot \, (x_2, x_3))\Theta = (\cdot \, (\iota(x_5), (x_5, x_6) ))$, leading to $(\cdot \, (\iota(x_2), x_1)=x_3) \Theta = (\cdot \, (\iota(\iota(x_5)), x_6)=\cdot \, (x_5, x_6))$.
+
+(Note: Again unfortunately I had to make the variables in those two clauses disjointed. Since both terms are equal, any substitution would result again in two equal terms. Preventing the inference as provided by the solver.)
+
+
+\item \texttt{mult(X3,e) = X3 [superposition 22,20]}\\
+The formula $\cdot \,(x_3,e) =x_3$ is obtained by applying the superposition rule to formula (20), i.e $\cdot \,(\iota(\iota(x_1)),e)=x_1$ and formula (22), i.e. $\cdot \,(x_5, x_6) = \cdot \, (\iota(\iota(x_5)),x_6)$. That is, 
+\begin{prooftree}
+\AxiomC{$\cdot \,(\iota(\iota(x_1)),e)=x_1$}
+\AxiomC{$\cdot \, (\iota(\iota(x_5)),x_6) = \cdot \,(x_5, x_6) $}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$(x_1 = \cdot \,(x_5,x_6) )\{x_1 \mapsto x_3 , x_5 \mapsto x_3, x_6 \mapsto e \}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$x_3 = \cdot \,(x_3,e)$}
+\end{prooftree}
+Where the mgu of $\cdot \,(\iota(\iota(x_1)),e)$ and $\cdot \, (\iota(\iota(x_5)),x_6)$ is $\Theta := \{x_1 \mapsto x_3 , x_5 \mapsto x_3, x_6 \mapsto e\}$. That is, $(\cdot \,(\iota(\iota(x_1)),e))\Theta = (\cdot \,(\iota(\iota(x_3)),e))$ and $(\cdot \, (\iota(\iota(x_5)),x_6))\Theta = (\cdot \, (\iota(\iota(x_3)),e))$, leading to $(x_1 = \cdot \,(x_5,x_6)) \Theta = (x_3 = \cdot \,(x_3,e))$.
+
+\item \texttt{sK0 != sK0 [superposition 12,33]}\\
+The formula $s_{k_0} \neq s_{k_0}$ is obtained by applying the superposition rule to formula (12), i.e $\cdot \, (s_{k_0}, e) \neq s_{k_0}$ and formula (33), i.e. $\cdot \,(x_3,e) =x_3$. That is, 
+\begin{prooftree}
+\AxiomC{$\cdot \,(x_3,e) =x_3$}
+\AxiomC{$\cdot \, (s_{k_0}, e) \neq s_{k_0}$}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$(x_3  \neq s_{k_0} )\{x_3 \mapsto s_{k_0}\}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$s_{k_0} \neq s_{k_0}$}
+\end{prooftree}
+Where the mgu of $\cdot \,(x_3,e) $ and $\cdot \, (s_{k_0}, e)$ is $\Theta := \{x_3 \mapsto s_{k_0}\}$. That is, $(\cdot \,(x_3,e))\Theta = (\cdot \, (s_{k_0}, e) )$ and $(\cdot \, (s_{k_0}, e) )\Theta = (\cdot \, (s_{k_0}, e) )$, leading to $(x_3  \neq s_{k_0} ) \Theta = (s_{k_0} \neq s_{k_0})$.
+\end{itemize}
+
+
+In the following, two inferences  seem to be part of the inference system as introduced in the lecture. 
+
+\begin{itemize}
+\item \texttt{mult(inverse(X2),mult(X2,X3)) = X3 [forward demodulation 14,9]}\\
+The formula $\cdot \, (\iota (x_2), \cdot (x_2, x_3)) = x_3$ is obtained by applying the forward demodulation rule to formula (9), i.e $\cdot \, (e,x_0) = X_0$ and formula (14), i.e. $\cdot \; (e, x_3) = \cdot \, (\iota(x_2), \,\cdot\,(x_2 , x_3))$. That is, 
+\begin{prooftree}
+\AxiomC{$\cdot \, (e,x_0) = X_0$}
+\AxiomC{$ \cdot \, (\iota(x_2), \,\cdot\,(x_2 , x_3)) = \cdot \; (e, x_3) $}
+ \RightLabel{\scriptsize (Sup)}
+\BinaryInfC{$(\cdot \, (\iota (x_2), \cdot (x_2, x_3)) = x_0)\{x_0 \mapsto x_3\}$}
+ \RightLabel{\scriptsize \textit{sub.}}
+\UnaryInfC{$\cdot \, (\iota (x_2), \cdot (x_2, x_3)) = x_3$}
+\end{prooftree}
+Where the mgu of $\cdot \, (e,x_0) $ and $\cdot \, (e,x_3)$ is $\Theta := \{x_0 \mapsto x_3\}$. Leading to $(\cdot \, (\iota (x_2), \cdot (x_2, x_3)) = x_0 ) \Theta = (\cdot \, (\iota (x_2), \cdot (x_2, x_3)) = x_3)$ after the substitution.
+
+
+\item \texttt{\$false [trivial inequality removal 53]}\\
+Given the fact that "trivial inequality removal" is not an inference that was formally introduced in the lecture. The only possible method known capable of explaining this inference is  "Equality Resolution". That is,
+\begin{prooftree}
+\AxiomC{$s_{k_0} \neq s_{k_0}$}
+ \RightLabel{\scriptsize (ER)}
+\UnaryInfC{$\Box$}
+\end{prooftree}
+\end{itemize}
+
+Apart from that, most other generated clauses are either the result of skolemisation  (8) , some normal form transformations (6,9,10,11,12) and the negation of the input conjecture (5). The only, remaining step is the one resulting in clause (7). In fact this is not an inference, but rather an axiom expressing that since there exists an element satisfying the statement, one can introduce a fresh skolem constant to remove the existential quantification.
+\end{document}

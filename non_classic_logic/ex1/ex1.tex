@@ -1,0 +1,765 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+%opening
+
+
+%\newcommand{\imp}[1]{$\supset$}
+
+\begin{document}
+
+%\maketitle
+
+\section*{Exercise 1}
+\begin{quote}
+Explain (in your own words!) the paradoxes of material implication.
+Make your sources explicit!
+\end{quote}
+There are several paradoxes of material implication. With one of the primary issues being that material implication is insufficient to capture the nuances of natural language. That is, while it sometimes captures the meaning of an if-then sentence, there are other times during which it fails. Consider the examples.
+
+\begin{quote}
+If the lecture starts early, then I'm a monkey's uncle.
+\end{quote}
+
+as well as 
+
+\begin{quote}
+If the earth is flat, then the moon is made of cheese.
+\end{quote}
+
+The prior statement, expresses sarcasm and is well within the bounds of material implication. Since, the consequence is always false, the impossibility of the premise is expressed. Hence, the semantics of material implication behaves as desired. However, as for the latter, given the normal use of if-then sentences, one would expect that if the earth is not flat, no information about the composition of the moon can be gained. That is, from a false premise one would naturally classify the status of its corresponding consequence as unknown (or at least as false). Similarly, if we were to somehow observe that the moon is in fact made of cheese, it seems unreasonable to always assume that the statement hods. However, according to the semantics of material implication, in both cases, the sentence would be true. That is, the implication will evaluate to true, if its consequence is true or its premise is a falsehood. Moreover, related to the notion explosion of consequences, i.e. from a contradiction everything can be derived.  Para-consistent logics are one approach for alleviating this behaviour. 
+%However, this issue also arises when considering the opposite. That is, if it is known that there exists no proof that god exists, then the earth must be flat. Which again is fairly counter intuitive from a natural language point of view. 
+%If there is no proof of god one may 
+Moreover, because of the truth functionality of material implication, its truth value must be a result of the truth value of its consequence and of its premise. However, in natural reasoning one would also consider their content. Simply consider the examples above. Relevance Logic is one approach for alleviating such an behaviour. 
+To summarise the paradox of material implication is mostly concerned with its non-intuitive relation to an if-then statement as used by people on a daily bases. This, counter intuitive nature, is mainly attributed to the fact that given a false premise the statement is always true, as well as to the fact that the same holds for a true consequent.   
+\cite{evans2002logic,ox,peter,wiki}
+
+
+\section*{Exercise 2}
+
+\begin{quote}
+Consider the following statement S, that we will assume to be true: If god doesn’t exist then it is not the case that if I pray to god then
+she will answer my prayers.
+This has the logical form $\neg G \supset \neg ( P \supset A)$. I don't pray to god means that $P$ is false. But if $P$ is false then $P \supset A$ is true and therefore $ \neg ( P \supset A)$ is false. Since we assume $S$ to be true, $\neg G$ has also to be false and thus $G$ ('God exists') is true.
+Explain what exactly is wrong here?
+\end{quote}
+
+In this statement two instances of the paradox of material implication occur. Firstly, a false antecedent  validates the implication, regardless of its consequence. Hence, $P$ evaluates to false, thus $P \supset A$ evaluates to true. Therefore, $\neg ( P \supset A)$ evaluates to false. This is, somewhat counter intuitive, as one would expect this statement to be true in the cases; I pray to god and she answers; I dont pray to god and she answers. As well as, the other being either false of unknown. Hence, the second paradox of material implication, is actually desired in this case. However, in the big implication one could consider this statement to be true in the case God does not exists and she does not answer to the prayer I made. Because god could be agnostic towards my actions, and because she can only answer if she exists. Hence, the issue with the big implication can be attributed to the case that a true consequent validate the statement.
+
+
+\section*{Exercise 3}
+\begin{quote}
+Clarify the following notions for propositional CL:
+tautology, model, interpretation, (un)satisfiability, consequence. (Be aware of different terminology – specify your source(s)!
+\end{quote}
+
+
+As defined in the lecture. An interpretation in propositional classical logic is a mapping from propositional variables into the set of truth values, i.e. $\mathcal{I}: PV \mapsto \{0,1\}$.
+The evaluation function associated, maps formulas from $\mathcal{L}^0$ into the same set of truth values, i.e. $v_{\mathcal{I}}:\mathcal{L}^0 \mapsto \{0,1\}$. This evaluation is induced by the interpretation and the truth table semantics of the logical connectives in the language. The definition from this lecture, can be extended by the one in \cite{LoCo}.
+
+\begin{mydef}
+A function $\mathcal{I}:PV \mapsto \{0,1\}$ is called an interpretation in classical propositional logic, iff the induces evaluation function $v_{\mathcal{I}}:\mathcal{L}^0 \mapsto \{0,1\}$ adheres to the truth table semantics of its logical connectives and constants. That is,
+\begin{itemize}
+\item $v_{\mathcal{I}}(\bot):=0$
+\item $v_{\mathcal{I}}(\neg \varphi):= 1 \;\mathit{ iff } \;v_{\mathcal{I}}(\varphi)=0$
+\item $v_{\mathcal{I}}(\varphi \land \psi):=min(v_{\mathcal{I}}(\varphi),v_{\mathcal{I}}(\psi))$
+\item $v_{\mathcal{I}}(\varphi \land \psi):=max(v_{\mathcal{I}}(\varphi),v_{\mathcal{I}}(\psi))$
+\item $v_{\mathcal{I}}(\varphi \supset \psi):=0 \;\mathit{ iff }\; v_{\mathcal{I}}(\varphi)=1 \;\mathit{ and }\; v_{\mathcal{I}}(\psi)=0$
+\end{itemize}
+\end{mydef}
+
+
+From there satisfiability is defined as 
+\begin{mydef}
+The formula $\varphi \in \mathcal{L}^0$ is called satisfiable, iff there exists some interpretation $\mathcal{I}$ such that $v_{\mathcal{I}}(\varphi)=1$. This is, sometimes written as $\mathcal{I} \models \varphi$.
+\end{mydef}
+
+From there it follows that
+
+\begin{mydef}
+The formula $\varphi \in \mathcal{L}^0$ is called unsatisfiable, iff there exists no interpretation $\mathcal{I}$ such that $v_{\mathcal{I}}(\varphi)=1$. This is, sometimes written as $\nvDash \varphi$.
+\end{mydef}
+
+
+
+\begin{mydef}
+The formula $\varphi \in \mathcal{L}^0$ is called valid, iff all interpretations satisfy $\varphi$, i.e.  for an arbitrary $\mathcal{I}$  $v_{\mathcal{I}}(\varphi)=1$ holds. This is, sometimes written as $\models \varphi$.
+\end{mydef}
+
+
+
+
+Given the concept of interpretation and satisfiability the notion of model can be approached.
+Again relying on \cite{LoCo}.
+
+\begin{mydef}
+In propositional classical logic, given a formula $\varphi \in \mathcal{L}^0$, an interpretation $\mathcal{I}$ is called a model of $\varphi$ iff $\mathcal{I} \models \varphi$.
+\end{mydef}
+
+In \cite{audi1999cambridge} the following general description of logical consequence is given.
+
+\begin{quote}
+A proposition C is said to follow logically from, or to be a logical consequence of, propositions $P_1, P_2,  \dots$, if it must be the case that, on the assumption that $P_1, P_2, \dots, P_n$ are all true, the proposition $C$ is true as well. [\dots]
+The logical consequence relation is often written using the symbol $\models$ [\dots]. Thus to indicate that $C$ is a logical consequence of $P_1, P_2, \dots, P_n$, we would write:
+\begin{equation*}
+P_1, P_2, \dots, P_n \models C
+\end{equation*}
+\end{quote}
+
+In \cite{seplogicalconsequence} a distinction between \emph{model-theoretic logical consequence} and \emph{proof-theoretic logical consequence} is discusses. With the former being defined as 
+
+\begin{quote}
+[\dots] define logical consequence as preservation of truth over models: an argument is valid if in any model in which the premises are true (or in any interpretation of the premises according to which they are true), the conclusion is true too.
+\end{quote}
+
+and the latter is described as
+
+\begin{quote}
+[\dots] proof-centered approach to logical consequence, the validity of an argument amounts to there being a proof of the conclusions from the premises.
+\end{quote}
+
+The description of \emph{model-theoretic logical consequence} bridges the gap between the description of logical consequence and the definition of \emph{tautological implication} in \cite{enderton2001mathematical}. 
+
+\begin{quote}
+$\Sigma$ tautologically implies $\tau$ (written $\Sigma \models \tau$) iff every truth assignment for the sentence symbols in $\Sigma$ and $\tau$ satisfies every member of $\Sigma$ also satisfies $\tau$.
+\end{quote}
+
+Hence, those three description may be compiled into 
+ 
+\begin{mydef}
+Let $\varphi \in \mathcal{L}^0$ and let $\Gamma \subseteq \mathcal{L}^0$, then $\varphi$ is a logical consequence of $\Gamma$ (in propositional classical logic), written as $\Gamma \models \varphi$, iff every interpretation $\mathcal{I}$ that satisfies every member of $\Gamma$ also satisfies $\varphi$.
+\end{mydef}
+That is, if every interpretation $\mathcal{I}$ for which $\forall \psi \in \Gamma \; \mathcal{I}\models \psi$ it follows that $\mathcal{I} \models \varphi$ then and only then $\Gamma \models \varphi$.
+
+From there, one can draw again upon \cite{enderton2001mathematical} to find a formalisation the notion of 
+tautology.
+
+\begin{quote}
+[\dots] $\emptyset \models \tau$ iff every truth assignment (for the sentence symbols in $\tau$) satisfies $\tau$. In this case we say that $\tau$ is a tautology (written $\models \tau$).
+\end{quote}
+
+That is, for $\varphi \in \mathcal{L}^0$ being the consequence of the empty set $\emptyset \models \varphi$ it must be case that $\varphi$ is satisfied under every possible interpretation. This is because every interpretation satisfies the empty set. Moreover, this corresponds with the definition of validity provided in the slides. Thus in propositional classical logic one may conclude that $\emptyset \models \varphi$ iff $\varphi$ is valid. Hence, leading to
+
+ 
+\begin{mydef}
+In propositional classical logic a formula $\varphi \in \mathcal{L}^0$ is a tautology iff it is valid. 
+\end{mydef}
+
+Moreover, \cite{LoCo} supports this definition. Moreover, this is not the only notion of tautology. According to Wikipedia, the notion of validity and tautology do not align in FOL. However, this is not will not be discussed as the concern resides upon propositional logic \cite{wikiT}.
+
+%
+%A  formula $\varphi$ is a \emph{tautology} if it is valid. That is, for all interpretations $\mathcal{I}$ it holds that $v_{\mathcal{I}}(\varphi)=1$, i.e. for all $\mathcal{I}$ $\mathcal{I} \models \varphi$
+%\end{itemize}
+%
+% tautologically implies τ (written  |= τ) iff every truth assignment for the sentence symbols in  and τ that satisfies every member of  also satisfies τ .
+%
+%
+%∅ |= τ iff every truth assignment (for the sentence symbols in τ ) satisfies τ . In this case we say that τ is a tautology (written |= τ ).
+%
+%
+%Another special case is that in which no truth assignment satisfies every member of . Then for any τ, it is vacuously true that  |= τ. For example,
+%
+%Ifissingleton{σ},thenwewrite“σ |=τ”inplaceof“{σ}|=τ.”If both σ |= τ and τ |= σ , then σ and τ are said to be tautologically equiv- alent
+
+\section*{Exercise 4}
+\begin{quote}
+Show that the satisfiability problem for the fragment of propositional CL without $\neg$ and $\bot$ ('positive fragment') is trivial, whereas the validity problem is still coNP-complete.
+\end{quote}
+
+
+Let $\mathcal{L}:= FORM^0$ and let $\mathcal{L}_{|+}$ be the set of formulas over $\mathcal{L}$ containing no $\bot$ and not formula $\neg \varphi \in \mathcal{L}$.
+
+
+Firstly, it has to shown that there exists an interpretation $\mathcal{I}$ such that for all $\varphi \in \mathcal{L}_{|+}$ it holds that $v_{\mathcal{I}}(\varphi)=1$ (i.e. $\mathcal{I} \models \varphi$). For this purposes consider the interpretation $\mathcal{I}_1$ with the constant interpretation function $v_{\mathcal{I}_1}$ mapping all propositional atoms to $1$, i.e. for all propositional atoms $p$ it holds that $v_{\mathcal{I}_1}(p)=1$. 
+
+
+Moreover, let $n$ be a measure of the length of a formula. That is, let $n: \mathcal{L} \to \mathbb{N}$ be $n(p)=0$ for a propositional atom $p$. 
+Continuing inductively $n(\varphi \land \psi)=n(\varphi \lor \psi)= n(\varphi \supset \psi):= n(\varphi) + n(\psi) + 1$ and $n(\neg \varphi):= n(\varphi)+1$. Lastly, let $n_{|+}$ be $n$ restricted to the domain of $\mathcal{L}_{|+}$
+
+
+Proceeding by induction. Consider the induction hypothesis "if $n(\varphi)=k$ then $\mathcal{I}_1 \models \varphi$". For $n_{|+}(\varphi)=0$ it follows that $\varphi=p$, thus the claim follows by definition of $\mathcal{I}_1$. Now consider $n_{|+}(\varphi)=k+1$. By checking the cases
+\begin{itemize}
+\item Case $\varphi= \psi \land \phi$: Since $n_{|+}(\psi)\leq k$ and $n_{|+}(\phi)\leq k$,the IH can be applied, i.e. $\mathcal{I}_1 \models \psi$ and $\mathcal{I}_1 \models \phi$ by semantics of $\land$ the claim follows.
+\item Case $\varphi= \psi \lor \phi$: Analogue to the previous one. Since $n_{|+}(\psi)\leq k$ and $n_{|+}(\phi)\leq k$,the IH can be applied, i.e. $\mathcal{I}_1 \models \psi$ and $\mathcal{I}_1 \models \phi$ by semantics of $\lor$ the claim follows. In this case either would be sufficient.
+\item Case $\varphi= \psi \supset \phi$: Analogue to the first one. Since $n_{|+}(\psi)\leq k$ and $n_{|+}(\phi)\leq k$,the IH can be applied, i.e. $\mathcal{I}_1 \models \psi$ and $\mathcal{I}_1 \models \phi$ by semantics of $\supset$ the claim follows, i.e. if both sides of an implication evaluate to true the whole implication evaluates to true.
+\end{itemize}
+Hence, it can be concluded that $\mathcal{I}_1$ satisfies every formula in $\mathcal{L}_{|+}$.
+
+
+The aim is to show $coNP-comp$ of $\models \varphi$ for $\varphi \in \mathcal{L}$. This must be split into two arguments. 
+Firstly, $coNP$-membership. Since, $\mathcal{L}_{|+} \subset \mathcal{L}$ and since the same semantics are considered, it is clear that establishing validity of a formula from $\mathcal{L}_{|+}$, can be done by relying on the same procedure that is used for establishing validity of a formula from $\mathcal{L}$.
+Hence, membership follows.
+
+
+Secondly, $coNP$-hardness. To that end, it is assumed that there exists an algorithm $\mathcal{A}^+$ which computes validity of a formula $\varphi \in \mathcal{L}_{|+}$ with below $coNP$ complexity. Given this an algorithm $\mathcal{A}$ shall be constructed, which takes a $coNP$-hard problem transforms it in polynomial time into an input for $\mathcal{A}^+$ and returns $0$ or $1$ accordingly. 
+
+%That is, let $\tau: \mathcal{L} \to \mathcal{L}_{|+}$ be a polynomial time transformation such that.
+%\begin{equation*}
+%\models \varphi \iff \models \tau(\varphi) 
+%\end{equation*} 
+
+Important remark, transforming a formula into CNF may lead to an exponential blow-up. Hence, a naive transformation from a formula $\varphi \in \mathcal{L}$ one of its corresponding conjunctive normal forms $\varphi^{CNF} \in \mathcal{L}$ is not a feasible approach with respect to polynomial reduction. Hence, the method for constructing a CNF within linear time are only equisatifiable (i.e. satisfiability  preserving). One of such methods is the Tseytin transformation, let its corresponding operator be $\tau$ \cite{wikiCNF}. 
+
+
+While, technically there should be a reduction from validity of $\varphi \in \mathcal{L}$ to validity of $\varphi^+ \in \mathcal{L}_{|+}$, this is cumbersome (as several attempts on my part have shown). Fortunately, there is a variety of $NP$ problems, with their complement being in $coNP$. One of such is $SAT$. That is, for $\varphi \in \mathcal{L}$ with the form
+\begin{equation*}
+\varphi=  \bigwedge_{c \in C(\varphi)}   (\bigvee_{l \in L(c)} l )
+\end{equation*}
+with $C(\psi)$ being set of clauses in $\psi$, $C^+(\psi)$ the clauses without preceding negation, $C^-(\psi)$ the clauses with preceding negation, $L(c)$ for $c \in C(\psi)$ being the set of literals in the respective clause and $A(c)$ being used for atoms the set of atoms. 
+Since the interest resides on the complement of SAT, the problem at hand is 
+\begin{equation*}
+\nvDash \varphi
+\end{equation*}
+That is, for all interpretations $\mathcal{I}$ it holds that $\mathcal{I} \nvDash \varphi$.
+Which is equivalent to
+\begin{equation*}
+\models \neg \varphi 
+\end{equation*}
+Hence, by DeMorgan 
+\begin{equation*}
+\neg\varphi = \bigvee_{c \in C(\varphi)}   (\neg \bigvee_{l \in L(c)} l )
+\end{equation*}
+
+%
+%Consider the following chain of transformations. Take $\varphi \in \mathcal{L}$.
+%Assume $\models \varphi$. Hence, $\nvDash \neg \varphi$, that is, $\neg \varphi$ is unsatisfiable. Since, $\tau$ preserves satisfiability, it follows $\nvDash \tau(\neg \varphi)$. Moreover, this is equal to $\models \neg \tau(\neg \varphi)$. To summarise, if $\varphi$ is a tautology, the following equivalences hold.
+%\begin{equation*}
+%\models \varphi \iff \nvDash \neg \varphi \iff \nvDash \tau(\neg \varphi) \iff \models \neg \tau(\neg \varphi)
+%\end{equation*}
+%Now consider the following. It $\tau(\neg \varphi)$ is in CNF, and was obtained in poly-time. Hence, by negation the following form can be obtained in polynomial time as well.
+%\begin{equation*}
+%\bigvee_{c \in C(\neg \tau(\neg \varphi))}   (\neg \bigvee_{l \in L(c)} l )
+%\end{equation*}
+%with $C(\psi)$ being set of clauses in $\psi$ and $L(c)$ for $c \in C(\psi)$ being the set of literals in the respective clause as well as $A(c)$ being used for atoms the set of atoms.
+
+From there apply the following transformations. For $c \in C(\neg \varphi)$ let 
+\begin{equation*}
+\lambda_1(c):=
+\begin{cases}
+\bigvee_{a \in  A(c), a \neq \bot}  a  &\quad \mathit{iff}\; c \neq (\bot)\\
+\neg \top &\quad otw.
+\end{cases}
+\end{equation*}
+as well as,
+
+\begin{equation*}
+\lambda_2(c):=
+\begin{cases}
+\neg (\bigwedge_{a \in  A(c)}  a) &\quad \mathit{iff}\; \forall l \in L(c) \; l=\neg a\\
+c &\quad otw.
+\end{cases}
+\end{equation*}
+
+and 
+
+
+\begin{equation*}
+\lambda_3(c):=
+\begin{cases}
+\bigwedge_{l \in  L(c), l=\neg a}  a \supset \bigvee_{l \in  L(c), l= a} a &\quad \mathit{iff}\; c \neq \bigwedge_{a \in  A(c)} a\\
+c &\quad otw.
+\end{cases}
+\end{equation*}
+
+Hence, constructing the formula  
+
+\begin{equation*}
+\varphi' := \bigvee_{c \in C(\varphi)}   (\neg \lambda_3(\lambda_2(\lambda_1(c))) )
+\end{equation*}
+It is easy to see that no clause in $\varphi'$ contains $\neg$ or $\bot$. Moreover, those are equivalence transformations. The first one by the semantic of $\lor$, the second by DeMorgan and the third by semantics of $\supset$ and DeMorgan. From here are two cases. Case 1. If there exists a clause $c$ in $\varphi'$ such that $\dots \lor \neg \neg c \lor \dots$. Then there exists at least one non-negated clause, i.e. $C^+(\varphi')\neq \emptyset$. Case 2. All clauses are negated. Thus prompting the definition
+
+\begin{equation*}
+\lambda_4(\varphi'):=
+\begin{cases}
+(\bigwedge_{c \in C^-(\varphi')}  c) \supset (\bigvee_{c \in C^+(\varphi')} c) &\quad \mathit{iff}\; C^+(\varphi')\neq \emptyset \\
+\neg (\bigvee_{c \in C^-(\varphi')} c) \lor p  &\quad otw.
+\end{cases}
+\end{equation*}
+for some fresh $p$.
+Since, every clause was already positive by virtue of $\lambda_1$ to $\lambda_3$, and since the output of $\lambda_4$ removes the negation on the clause level, it must be in $\mathcal{L}_{|+}$. Moreover, the first case is an equivalence preserving operation. Thus, consider Case 2. Take a formula $\psi$ such that 
+$\nvDash \varphi \iff \models \neg \varphi \lor p$ with $p$ fresh. If $\nvDash \varphi$ then $\models \neg \varphi$ by semantics of $\lor$ the assignment of $p$ is inconsequential. Hence, $\models \neg \varphi \lor p$. If there exists an interpretation $\mathcal{I}$ such that $\mathcal{I}\models \varphi$ then $\mathcal{I} \nvDash \neg \varphi$ now by setting $v_{\mathcal{I}}(p)=0$ (recall $p$ is fresh) it follows $\mathcal{I} \nvDash \neg \varphi \lor p$. Hence, the operation in case 2 is save as well.
+
+Having described the transformation, one can compile those into a single operator $\tau$.
+
+
+
+Let $\varphi \in \mathcal{L}$ be a suitable input for SAT, i.e. $\varphi$ in CNF.
+Then 
+\begin{equation*}
+\nvDash \varphi \iff \models \tau(\neg \varphi)
+\end{equation*}
+with 
+\begin{equation*}
+\begin{split}
+\tau(\neg \varphi)&:= \lambda_4(\bigvee_{c \in C(\varphi)}  (\neg \lambda_3(\lambda_2(\lambda_1(c))) ))
+\\
+&=
+\begin{cases}
+(\bigwedge_{c \in C^-(\psi)}  c) \supset (\bigvee_{c \in C^+(\psi)} c) &\quad \mathit{iff}\; C^+(\psi)\neq \emptyset \\
+\neg (\bigvee_{c \in C^-(\varphi')} c) \lor p  &\quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+
+
+As argued above $\tau(\neg \varphi) \in \mathcal{L}_{|+}$, with its transformations being obviously in polynomial time. Moreover, since each step was an equivalence transformation the claim follows as well. 
+Given this, by using this transformation and the assumption that validity on $\mathcal{L}_{|+}$ is below $coNP$, and given the fact that the complement of $SAT$ is $coNP$-complete a contradiction arises. Thus $\mathcal{A}^+$ does not exist.
+
+%
+%
+%
+%
+%Thereby, allowing for the transformation to
+%
+%\begin{equation*}
+%(\bigvee_{c \in C^-(\varphi')} \neg c) \lor (\bigvee_{c \in C^+(\varphi')}  c)  \mapsto (\bigwedge_{c \in C^-(\varphi')}  c) \supset (\bigvee_{c \in C^+(\varphi')}  c)
+%\end{equation*}
+%Hence, $\varphi^+ \in \mathcal{L}_{|+}$. 
+%Note in the special case that there are no negated clauses, one is already done and $\varphi^+ \in \mathcal{L}_{|+}$. 
+%
+%Case 2. All clauses are negated. Hence, prompting the following form
+%\begin{equation*}
+%(\bigvee_{c \in C^-(\varphi')} \neg c)   \mapsto \neg (\psi^+):= (\bigvee_{c \in C^-(\varphi')} \neg c) 
+%\end{equation*}
+%It is easy to see that $\psi^+ \in \mathcal{L}_{|+}$. Now extend this to 
+%\begin{equation*}
+%\end{equation*}
+%for some fresh $p$.
+%
+%%Case 2. $\nvDash \varphi$. Hence, its negation is a tautology, thus case 1. can be applied to  $\models \neg \varphi$.
+%%Case 3. After testing for Case 1 and Case 2 
+%
+%
+%Let $\mathcal{A}$ be defined as such.
+%\begin{enumerate}
+%\item $\neg \sigma(\neg \varphi)$
+%\end{enumerate}
+%
+%
+%
+%Let $\varphi \in \mathcal{L}$ let $\tau$ be defined by the following algorithm
+%\begin{enumerate}
+%\item Compute $\neg \sigma(\neg \varphi)$ and $\neg \sigma(\varphi)$
+%\item Bring both into the form $\neg c_1 \lor \dots \lor \neg c_n$
+%%\neg (l_{11} \lor \dots l_{1k_1}) \lor \dots \neg (l_{n1} \lor \dots \lor l_{mk_m})$.
+%\item For each clause $c_i$ perform the operation $(l_{i1} \lor \bot \lor \dots \lor l_{ik_i}) \mapsto (l_{i1} \lor \dots \lor l_{ik_i})$ exhaustively. Where $l_{ij}$ is a literal.  
+%\item For each clause $c_i$ 
+%\item For each clause $c_i$ perform the operation $(\neg a_{i1} \lor \neg a_{i2} \lor \dots \lor a_{ik_{i-1}} \lor a_{ik_i}) \mapsto (a_{i1} \land a_{i2} \land \dots a_{ij}) \supset a_{i_{j+1}} \lor a_{ik_{i-1}} \lor a_{ik_i})$. Where $a_{ij}$ is an atom. (Note: for the sake of convenience, the atoms were relabelled)  
+%
+%\end{enumerate}
+%
+
+
+
+
+\section*{Exercise 5}
+\begin{quote}
+Present a formal definition of $FORM^1$ and define $free(F)$ (set of free variables occurring in the formula $F$), accordingly.
+\end{quote}
+
+Give a formal definition of the language $\mathcal{L}^1=FORM^1$. This definition as an amalgamation of 
+\cite{LoCo}, \cite{kbs} and \cite{comp}.
+
+\begin{mydef}
+A signature  $\Sigma:=(PS,FS,CS,a_P,a_F)$ consists of 
+\begin{itemize}
+\item a set of predicate symbols $PS$
+\item a set of function symbols $FS$
+\item a set of constant symbols $CS$
+\item a function $a_P:PS \to \mathbb{N}$ specifying the arity of a predicate symbol
+\item a function $a_F:FS \to \mathbb{N}$ specifying the arity of a function symbol
+\end{itemize}
+\end{mydef}
+
+(Note: Constant symbols are function symbols of arity 0)
+
+
+From there the first level of FOL can be constructed.
+
+\begin{mydef}
+Let $\Sigma$ be a signature and let $Var$ be a set of variables.
+Then the set $\mathit{TERM}(\Sigma,Var)$ is the minimum $Y$ set such that
+\begin{itemize}
+\item $Var \subseteq Y$;
+\item $CS \subseteq Y$;
+\item $t_1,\dots,t_n \in Y$ and $f \in FS$ such that $a_F(f)=n$ then $f(t_1,\dots,t_n)\in Y$.
+\end{itemize}
+\end{mydef}
+
+Then using those terms one obtains
+
+\begin{mydef}
+Let $\Sigma$ be a signature and let $Var$ be a set of variables. 
+Then the set $\mathcal{L}_{\Sigma}	^1$ is the minimum $X$ set such that
+\begin{itemize}
+\item $\bot \in X$;
+\item $t_1,\dots,t_n \in TERM(\Sigma,Var)$ and $P \in PS$ such that $a_P(P)=n$ then $P(t_1,\dots,t_n)\in X$;
+\item $\varphi \in X$ implies $(\neg \varphi) \in X$;
+\item $\varphi, \psi \in X$ implies $(\varphi \land \psi),(\varphi \lor \psi),(\varphi \supset \psi) \in X$;
+\item $\varphi \in X$ implies $((\forall x) \varphi),((\exists  x) \varphi) \in X$;
+\end{itemize}
+\end{mydef}
+Not if the signature is not important, the index can be dropped.
+
+In a similar inductive fashion the function $\textit{free}$ can be defined. Starting with the terms
+
+\begin{mydef}
+Given a signature $\Sigma$ and a set of variables $Var$, let $free:TERMS(\Sigma,Var) \to Var$ such that for $t \in TERMS(\Sigma,Var)$
+\begin{itemize}
+\item $free(t):=\{t\}$ if $t\in Var$;
+\item $free(t):=\{\}$ if $t\in CS$;
+\item $free(t):= \bigcup_{i \in \{1,\dots,n\}} free(t_i)$, if $t=f(t_1,\dots,t_n)$ with $f \in FS$ such that $a_F(f)=n$.
+\end{itemize}
+\end{mydef}
+
+Secondly, on the level of formulas. 
+
+\begin{mydef}
+Given a signature $\Sigma$ and a set of variables $Var$, let $free:\mathcal{L}_{\Sigma}^1 \to Var$ such that for $\varphi \in \mathcal{L}_{\Sigma}^1$
+\begin{itemize}
+\item $free(\varphi)=\{\}$ if $\varphi=\bot$;
+\item $free(\varphi):= \bigcup_{i \in \{1,\dots,n\}} free(t_i)$, if $\varphi=P(t_1,\dots,t_n)$ with $P \in PS$ such that $a_P(P)=n$.
+\item $free(\varphi)=free(\psi)$ if $\varphi=(\neg \psi)$;
+\item $free(\varphi)=free(\psi) \cup free(\chi)$ if $\varphi \in \{(\psi \land \chi),(\psi \lor \chi),(\psi \supset \chi)\}$;
+\item $free(\varphi)=free(\psi) \setminus \{x\}$ if $\varphi \in \{(\forall x) \psi),((\exists  x) \psi)\}$;
+\end{itemize}
+\end{mydef}
+
+
+\section*{Exercise 6}
+\begin{quote}
+Present a formal definition of the evaluation function $v_I$ , that assigns a truth value in $I$ to every formula $F$.
+\end{quote}
+
+The task is to present a formal definition of the evaluation function $v_{\mathcal{I}}$, that assigns a truth value in $\mathcal{I}$ to every formula $\varphi$. This definition is an amalgamation of 
+\cite{LoCo}, \cite{kbs}.
+
+Starting with the definition of interpretation from the lecture.
+ 
+\begin{mydef}
+Given a signature $\Sigma$ and a set of variables $Var$, an interpretation in classical first-order logic is a tuple $\mathcal{I}:=(D, I, d)$ where
+\begin{itemize}
+\item $D$ is a non empty set, called domain or universe.
+\item $I$ is a mapping 
+\begin{itemize}
+\item $I(c) \in D$ for all $c \in CS$;
+\item $I(f):D^n \to D$ for $f \in FS$ with $a_F(f)=n$;
+\item $I(P):D^n \to \{0,1\}$ for $P \in PS$ with $a_P(P)=n$;
+\end{itemize}
+\item $d$ is a variable assignment such that $d:Var \to D$;
+\end{itemize}
+\end{mydef}
+
+Again the definition of the evaluation function $v_{\mathcal{I}}$ is split based on the two strata of first-order logic.
+
+
+
+\begin{mydef}
+Given a signature $\Sigma$ and a set of variables $Var$ and an interpretation $\mathcal{I}$, then the evaluation function $v_{\mathcal{I}}$ is defined such that for $t \in TERMS(\Sigma,Var)$
+\begin{itemize}
+\item $v_{\mathcal{I}}(t):=d(t)$ if $t\in Var$;
+\item $v_{\mathcal{I}}(t):=I(t)$ if $t\in CS$;
+\item $v_{\mathcal{I}}(t):= I(f)(v_{\mathcal{I}}(t_1),\dots,v_{\mathcal{I}}(t_n))$, if $t=f(t_1,\dots,t_n)$ with $f \in FS$ such that $a_F(f)=n$.
+\end{itemize}
+\end{mydef}
+
+Secondly, on the level of formulas. 
+
+\begin{mydef}
+Given a signature $\Sigma$ and a set of variables $Var$, let $free:\mathcal{L}_{\Sigma}^1 \to Var$ such that for $\varphi \in \mathcal{L}_{\Sigma}^1$
+\begin{itemize}
+\item if $\varphi=\bot$, $v_{\mathcal{I}}(\varphi):=0$;
+\item  if $\varphi=P(t_1,\dots,t_n)$ with $P \in PS$ such that $a_P(P)=n$; $v_{\mathcal{I}}(\varphi):= I(P)(v_{\mathcal{I}}(t_1),\dots,v_{\mathcal{I}}(t_n))$;
+\item if $\varphi=\neg \psi$, $v_{\mathcal{I}}(\varphi):= 1 \;\mathit{ iff } \;v_{\mathcal{I}}(\psi)=0$;
+\item if $\varphi=\psi \land \chi$, $v_{\mathcal{I}}(\varphi):=\min(v_{\mathcal{I}}(\psi),v_{\mathcal{I}}(\chi))$
+\item if $\varphi=\psi \lor \chi$, $v_{\mathcal{I}}(\varphi):=\max(v_{\mathcal{I}}(\psi),v_{\mathcal{I}}(\chi))$
+\item if $\varphi=\psi \supset \chi$, $v_{\mathcal{I}}(\varphi)=v_{\mathcal{I}}(\psi) \implies v_{\mathcal{I}}(\chi):=0 \;\mathit{ iff }\; v_{\mathcal{I}}(\psi)=1 \;\mathit{ and }\; v_{\mathcal{I}}(\chi)=0$
+\item if $\varphi=\forall x \psi$, $v_{\mathcal{I}}(\varphi):= \min\{ v_{\mathcal{I}[a/x]}(\psi) \mid \forall a \in D \}$
+\item if $\varphi=\exists x \psi$, $v_{\mathcal{I}}(\varphi):= \max\{ v_{\mathcal{I}[a/x]}(\psi) \mid \forall a \in D \}$
+\end{itemize}
+Where $\mathcal{I}[a/x]:=(D,I,d[a/x])$ and $d[a/x]:=d\cup \{(x,a)\}$
+
+\end{mydef}
+
+
+\section*{Exercise 7}
+\begin{quote}
+Let $G:= (P(x) \supset P(f(x,y)))$. Find models and counter-models, wherever possible, for each of the following formulas: 
+\begin{equation*}
+\forall x \forall  y G,\exists x \exists  y G,\forall x \exists  y G,\exists x \forall  y G,\exists y \forall  x G
+\end{equation*}
+\end{quote}
+
+Let $G:= (P(x) \supset P(f(x,y)))$. For this exercise $\mathcal{I}$ will be the counter-model of a respective formula and $\mathcal{J}$ its actual model.
+\begin{itemize}
+\item $\forall x \forall  y (P(x) \supset P(f(x,y)))$. 
+
+Consider $\mathcal{I}:=(\{a,b\}, I, \{\})$, where $I(P):=\{a\}$ and $I(f)(x,y)=b$ for all $x,y \in D$.
+Hence,
+\begin{equation*}
+\begin{split}
+v_{\mathcal{I}}(\forall x \forall  &y (P(x) \supset P(f(x,y)))) \\
+&=\min \{v_{\mathcal{I}[a/x]}( \forall  y (P(x) \supset P(f(x,y))))  \mid  p \in D\}\\
+&=\min \{\min \{v_{\mathcal{I}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+\end{split}
+\end{equation*}
+Consider the case $p=a$ and $q=b$.
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{I}[a/x][b/y]}(P(x) \supset P(f(x,y)))\\ 
+&=v_{\mathcal{I}[a/x][b/y]}(P(x)) \implies v_{\mathcal{I}[a/x][b/y]}(P(f(x,y)) \\
+&=I(P)(d[a/x][b/y](x)) \implies I(P)(v_{\mathcal{I}[a/x][b/y]}(f(x,y))) \\
+&=I(P)(a) \implies I(P)(v_{\mathcal{I}[a/x][b/y]}(f(x,y)) \\
+&=I(P)(a) \implies I(P)(I(f)(d[a/x][b/y](x),d[a/x][b/y](y))) \\
+&=I(P)(a) \implies I(P)(I(f)(a,b)) = I(P)(a) \implies I(P)(b) = \\
+&= 1 \implies 0 = 0
+\end{split}
+\end{equation*}
+Hence, 
+\begin{equation*}
+\begin{split}
+v_{\mathcal{I}}(\forall x \forall  &y (P(x) \supset P(f(x,y)))) \\
+&=\min \{\min \{v_{\mathcal{I}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} =0\\
+\end{split}
+\end{equation*}
+
+
+
+Consider $\mathcal{J}:=(\{a\}, J, \{\})$, where $I(P):=\{\}$ and $I(f)(x,y)=a$ for all $x,y \in D$.
+Hence,
+\begin{equation*}
+\begin{split}
+v_{\mathcal{J}}(\forall x \forall  &y (P(x) \supset P(f(x,y)))) \\
+&=\min \{v_{\mathcal{J}[p/x]}( \forall  y (P(x) \supset P(f(x,y))))  \mid  p \in D\}\\
+&=\min \{\min \{v_{\mathcal{J}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+\end{split}
+\end{equation*}
+Consider the only case $p=a$ and $q=a$.
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{J}[a/x][a/y]}(P(x) \supset P(f(x,y)))\\ 
+&=v_{\mathcal{J}[a/x][a/y]}(P(x)) \implies v_{\mathcal{J}[a/x][a/y]}(P(f(x,y)) \\
+&=J(P)(d[a/x][a/y](x)) \implies J(P)(v_{\mathcal{J}[a/x][a/y]}(f(x,y))) \\
+&=J(P)(a) \implies J(P)(v_{\mathcal{J}[a/x][a/y]}(f(x,y)) \\
+&=J(P)(a) \implies J(P)(J(f)(d[a/x][a/y](x),d[a/x][a/y](y))) \\
+&=J(P)(a) \implies J(P)(J(f)(a,b)) = J(P)(a) \implies J(P)(a) = \\
+&= 0 \implies 0 = 1
+\end{split}
+\end{equation*}
+Hence, 
+\begin{equation*}
+\begin{split}
+v_{\mathcal{J}}(\forall x \forall  &y (P(x) \supset P(f(x,y)))) \\
+&=\min \{\min \{v_{\mathcal{J}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+&=\min \{\min \{ I(P)(a) \implies I(P)(a)\} \}=\min \{\min \{ 1\} \} = 1\\
+\end{split}
+\end{equation*}
+
+\item $\exists x \exists  y (P(x) \supset P(f(x,y)))$. 
+This formula is valid. Hence, no counter model can be found. Assume $\mathcal{I} \nvDash \exists x \exists  y (P(x) \supset P(f(x,y)))$, i.e. $v_{\mathcal{I}}(\exists x \exists  y (P(x) \supset P(f(x,y))))=0$. To that end it must be that for every $a \in D$ and for every $b \in D$ $v_{\mathcal{I}[a/x][b/y]}(P(x) \supset P(f(x,y)))=0$. This can only be the case if $v_{\mathcal{I}[a/x][b/y]}(P(x))=1$ and $v_{\mathcal{I}[a/x][b/y]}(P(f(x,y)))=0$. Hence, implying that there exists an element $I(f)(a,b)=c$ such that $I(P)(c)=0$. However, now consider $v_{\mathcal{I}[c/x][b/y]}(P(x) \supset P(f(x,y)))=1$ for any element $b\in D$. Hence, $v_{\mathcal{I}}(\exists x \exists  y (P(x) \supset P(f(x,y))))=1$.
+
+
+
+Consider $\mathcal{J}:=(\{a\}, J, \{\})$, where $I(P):=\{\}$ and $I(f)(x,y)=a$ for all $x,y \in D$.
+Here the same argument as in  $\forall x \forall  y (P(x) \supset P(f(x,y)))$ can be applied. As $\min \{\min \{ 1 \} \} = \max \{\max \{ 1 \} \} = 1 $
+
+%
+%Consider $\mathcal{J}:=(\{a\}, J, \{\})$, where $I(P):=\{\}$ and $I(f)(x,y)=a$ for all $x,y \in D$.
+%Hence,
+%\begin{equation*}
+%\begin{split}
+%v_{\mathcal{J}}(\exists x \exists  &y (P(x) \supset P(f(x,y)))) \\
+%&=\max \{v_{\mathcal{J}[p/x]}( \exists  y (P(x) \supset P(f(x,y))))  \mid  p \in D\}\\
+%&=\max \{\max \{v_{\mathcal{J}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+%\end{split}
+%\end{equation*}
+%Consider the only case $p=a$ and $q=a$.
+%\begin{equation*}
+%\begin{split}
+%&v_{\mathcal{J}[a/x][a/y]}(P(x) \supset P(f(x,y)))\\ 
+%&=J(P)(a) \implies J(P)(J(f)(a,b)) = J(P)(a) \implies J(P)(a) = \\
+%&= 0 \implies 0 = 1
+%\end{split}
+%\end{equation*}
+%Hence, 
+%\begin{equation*}
+%\begin{split}
+%v_{\mathcal{J}}(\forall x \forall  &y (P(x) \supset P(f(x,y)))) = 1 \\
+%\end{split}
+%\end{equation*}
+%
+
+
+\item $\forall x \exists  y (P(x) \supset P(f(x,y)))$. 
+
+Consider $\mathcal{I}:=(\{a,b\}, I, \{\})$, where $I(P):=\{a\}$ and $I(f)(x,y)=b$ for all $x,y \in D$.
+Hence,
+\begin{equation*}
+\begin{split}
+v_{\mathcal{I}}(\forall x \exists  &y (P(x) \supset P(f(x,y)))) \\
+&=\min \{v_{\mathcal{I}[p/x]}( \exists  y (P(x) \supset P(f(x,y))))  \mid  p \in D\}\\
+&=\min \{\max \{v_{\mathcal{I}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+\end{split}
+\end{equation*}
+Consider the case $p=a$ and $q=b$.
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{I}[a/x][b/y]}(P(x) \supset P(f(x,y)))\\ 
+&=I(P)(a) \implies I(P)(I(f)(a,b)) = I(P)(a) \implies I(P)(b) = \\
+&= 1 \implies 0 = 0
+\end{split}
+\end{equation*}
+For the case $p=a$ and $q=a$ the same holds, because $I(f)$ maps always to $b$.
+Hence, for the case $p=a$ it follows that
+\begin{equation*}
+\begin{split}
+v_{\mathcal{I}[a/x]}( \exists  y (P(x) \supset P(f(x,y)))) = \max \{ 0,0 \} = 0 \\
+\end{split}
+\end{equation*}
+Therefore,
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{I}}(\forall x \exists  y (P(x) \supset P(f(x,y)))) =0\\
+\end{split}
+\end{equation*}
+
+
+
+Consider $\mathcal{J}:=(\{a\}, J, \{\})$, where $I(P):=\{\}$ and $I(f)(x,y)=a$ for all $x,y \in D$.
+Here the same argument as in  $\forall x \forall  y (P(x) \supset P(f(x,y)))$ can be applied. As $\min \{\min \{ 1 \} \} = \min \{\max \{ 1 \} \} = 1 $
+%Hence,
+%\begin{equation*}
+%\begin{split}
+%v_{\mathcal{J}}(\forall x \exists  &y (P(x) \supset P(f(x,y)))) \\
+%&=\min \{v_{\mathcal{J}[a/x]}( \exists  y (P(x) \supset P(f(x,y))))  \mid  p \in D\}\\
+%&=\min \{\max \{v_{\mathcal{J}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+%\end{split}
+%\end{equation*}
+%Consider the only case $p=a$ and $q=a$.
+%\begin{equation*}
+%\begin{split}
+%&v_{\mathcal{J}[a/x][a/y]}(P(x) \supset P(f(x,y)))\\ 
+%&=v_{\mathcal{J}[a/x][a/y]}(P(x)) \implies v_{\mathcal{J}[a/x][a/y]}(P(f(x,y)) \\
+%&=J(P)(d[a/x][a/y](x)) \implies J(P)(v_{\mathcal{J}[a/x][a/y]}(f(x,y))) \\
+%&=J(P)(a) \implies J(P)(v_{\mathcal{J}[a/x][a/y]}(f(x,y)) \\
+%&=J(P)(a) \implies J(P)(J(f)(d[a/x][a/y](x),d[a/x][a/y](y))) \\
+%&=J(P)(a) \implies J(P)(J(f)(a,b)) = J(P)(a) \implies J(P)(a) = \\
+%&= 0 \implies 0 = 1
+%\end{split}
+%\end{equation*}
+%Hence, 
+%\begin{equation*}
+%\begin{split}
+%v_{\mathcal{J}}(\forall x \exists  &y (P(x) \supset P(f(x,y)))) \\
+%&=\min \{\max \{v_{\mathcal{J}[p/x][q/y]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+%&= v_{\mathcal{J}[a/x][a/y]}(P(x) \supset P(f(x,y))) = 1\\
+%\end{split}
+%\end{equation*}
+
+
+\item  $\exists x \forall  y (P(x) \supset P(f(x,y)))$
+This formula is valid. Hence, no counter model can be found. Assume $\mathcal{I} \nvDash \exists x \forall  y (P(x) \supset P(f(x,y)))$, i.e. $v_{\mathcal{I}}(\exists x \forall  y (P(x) \supset P(f(x,y))))=0$. To that end it must be that for every $a \in D$ there exists always an $b \in D$ for which $v_{\mathcal{I}[a/x][b/y]}(P(x) \supset P(f(x,y)))=0$. This can only be the case if $v_{\mathcal{I}[a/x][b/y]}(P(x))=1$ and $v_{\mathcal{I}[a/x][b/y]}(P(f(x,y)))=0$. Hence, implying that there exists an element $I(f)(a,b)=c$ such that $I(P)(c)=0$. However, now consider $v_{\mathcal{I}[c/x][b/y]}(P(x) \supset P(f(x,y)))=1$ for any element $b\in D$. Hence, $v_{\mathcal{I}}(\exists x \forall  y (P(x) \supset P(f(x,y))))=1$.
+
+%This can only be the case, if there exists an $p$ such that $v_{\mathcal{I}[p/x]}(P(p))=1$, but no $q$ such that $v_{\mathcal{I}[p/x][q/y]}(P(f(p,q)))=1$. Hence, there must be at least one $r\in D$ such that $I(P)(r)=0$, as $I(f)$ has to map into the domain. However, if such an $r$ exists,  $v_{\mathcal{I}[r/x][a/y]}(P(x) \supset P(f(x,y)))=1$ for an arbitrary $a \in D$. Hence, the claim follows.
+
+Consider $\mathcal{J}:=(\{a\}, J, \{\})$, where $I(P):=\{\}$ and $I(f)(x,y)=a$ for all $x,y \in D$.
+Here the same argument as in  $\forall x \forall  y (P(x) \supset P(f(x,y)))$ can be applied. As $\min \{\min \{ 1 \} \} = \max \{\min \{ 1 \} \} = 1 $
+
+
+\item  $\exists y \forall  x (P(x) \supset P(f(x,y)))$
+
+Consider $\mathcal{I}:=(\{a,b\}, I, \{\})$, where $I(P):=\{a\}$ and $I(f)(x,y)=b$ for all $x,y \in D$.
+Hence,
+\begin{equation*}
+\begin{split}
+v_{\mathcal{I}}(\exists y \forall  &x (P(x) \supset P(f(x,y)))) \\
+&=\max \{v_{\mathcal{I}[p/y]}( \forall  x (P(x) \supset P(f(x,y))))  \mid  p \in D\}\\
+&=\max \{\min \{v_{\mathcal{I}[p/y][q/x]}((P(x) \supset P(f(x,y))))  \mid  q \in D\} \mid  p \in D\} \\
+\end{split}
+\end{equation*}
+For the case $p=a$ and its subcases $q=a$ and $q=b$ the same argument as  already seen in $\forall x \exists  y (P(x) \supset P(f(x,y)))$ can be made.
+Consider the case $p=b$ and $q=a$.
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{I}[b/y][a/x]}(P(x) \supset P(f(x,y)))\\ 
+&=I(P)(a) \implies I(P)(I(f)(a,b)) = I(P)(a) \implies I(P)(b) = \\
+&= 1 \implies 0 = 0
+\end{split}
+\end{equation*}
+For the case, $p=b$ and $q=b$.
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{I}[b/y][b/x]}(P(x) \supset P(f(x,y)))\\ 
+&=I(P)(b) \implies I(P)(I(f)(b,b)) = I(P)(b) \implies I(P)(b) = \\
+&= 0 \implies 0 = 1
+\end{split}
+\end{equation*}
+
+Hence, for the case $p=b$ it follows that
+\begin{equation*}
+\begin{split}
+v_{\mathcal{I}[b/y]}( \forall  x (P(x) \supset P(f(x,y)))) = \min \{ 0,1 \} = 0 \\
+\end{split}
+\end{equation*}
+Therefore,
+\begin{equation*}
+\begin{split}
+&v_{\mathcal{I}}( \exists  y \forall x (P(x) \supset P(f(x,y))))= \max \{ 0,0 \} =0\\
+\end{split}
+\end{equation*}
+
+
+Consider $\mathcal{J}:=(\{a\}, J, \{\})$, where $I(P):=\{\}$ and $I(f)(x,y)=a$ for all $x,y \in D$.
+Here the same argument as in  $\forall x \forall  y (P(x) \supset P(f(x,y)))$ can be applied. As $\min \{\min \{ 1 \} \} = \max \{\max \{ 1 \} \} = 1 $
+
+\end{itemize}
+
+
+\section*{Exercise 8}
+\begin{quote}
+Explain how soundness and completeness relates syntax and semantics (in particular in case of ‘follows’ vs. ‘derivable’).
+\end{quote}
+
+The notion of soundness and completeness links syntax and semantic. Hence, by proxy it is the bridge between a poof-theoretic and model-theoretic approach to logic.
+
+That is, in its most general form. Let $\vdash_X$ be a derivability relation of some proof system $X$. Moreover, let $\models_{\mathcal{X}}$ be a semantic consequence relation. Both live over the same language $\mathcal{L}$. 
+
+Firstly, weak soundness.
+\begin{mydef}
+One speaks of weak soundness, iff for any $\varphi \in \mathcal{L}$ theoremhood of $\varphi$ implies the validity of $\varphi$. That is, iff  $\vdash_X \varphi$ implies $\vDash_{\mathcal{X}} \varphi$
+\end{mydef}
+and weak completeness.
+\begin{mydef}
+One speaks of weak completeness, iff for any $\varphi \in \mathcal{L}$ validity of $\varphi$ implies the theoremhood of $\varphi$. That is, iff  $\vDash_{\mathcal{X}} \varphi$ implies $\vdash_X \varphi$
+\end{mydef}
+
+
+Secondly, soundness.
+\begin{mydef}
+One speaks of soundness, iff a formula $\varphi \in \mathcal{L}$ is derivable from a set of premises $\Gamma \subseteq \mathcal{L}$, then $\varphi$ must be the logical consequence of $\Gamma$. That is, iff   $\Gamma \vdash_X \varphi$ implies $\Gamma \vDash_{\mathcal{X}} \varphi$
+\end{mydef}
+and completeness.
+
+\begin{mydef}
+One speaks of completeness, iff a formula $\varphi \in \mathcal{L}$ is the logical consequence of a set of premises $\Gamma \subseteq \mathcal{L}$, then it must be derivable from $\Gamma$ as well. That is, iff  $\Gamma \vDash_{\mathcal{X}} \varphi$ implies $ \Gamma \vdash_X \varphi$
+\end{mydef}
+That is, a system is sound iff everything that is derivable (syntactic) from a set of premises must follow (semantic) from those premises. Moreover, a system is complete iff everything that follows from a set of premises must be derivable from those premises. 
+
+\bibliographystyle{plain}
+\bibliography{bib}
+
+\end{document}

@@ -1,0 +1,884 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{bussproofs}
+\usepackage{rotating}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+%opening\\
+
+
+
+\newcommand{\lto}{\supset}
+\newcommand{\liff}{\leftrightarrow}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\tall}[1]{\left[ #1 \right]}
+\newcommand{\tsome}[1]{\left\langle  #1 \right\rangle}
+
+\newcommand{\eall}{\mathbf{K}}
+\newcommand{\esome}{\mathbf{P}}
+\newcommand{\edisp}{\mathbf{S}}
+\newcommand{\edist}{\mathbf{D}}
+\newcommand{\egen}{\mathbf{E}}
+\newcommand{\ecom}{\mathbf{C}}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+\newcommand{\derives}{\vdash}
+\newcommand{\nderives}{\nvdash}
+
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+\begin{document}
+
+%\maketitle
+
+%\begin{prooftree}
+%\tiny
+%	\AxiomC{$[\exists u \forall x \forall y (u(x) < y \lor u(x)=y)]$}
+%	
+%	\AxiomC{$[ \forall x \forall y (u(x) < y \lor u(x)=y)]$}
+%	\AxiomC{$[( \forall x \forall y (f(x) < y \lor f(x)=y)) \to \forall x f(x) = 0]$}
+%	\RightLabel{\scriptsize($\to_E$)}
+%	\BinaryInfC{$\forall x f(x) = 0$}
+%\RightLabel{\scriptsize($\exists_E^!$)}
+%\BinaryInfC{$\forall x f(x) = 0$}
+%\end{prooftree}
+
+
+
+
+\section*{Exercise 2.2}
+\begin{quote}
+In this exercise we work in a language which contains a single binary predicate
+symbol $E$ and two constant symbols $c$ and $d$. The structures of this language are (finite or
+infinite) graphs with two designated vertices, a source $c$ and a sink $d$. A path is a finite list of vertices connected by edges. The length of a path is the number of edges it contains.
+Show that:
+
+\begin{enumerate}
+\item  For every $k \in \mathbb{N}$ the graphs containing a path of length k from c to d are definable by a
+first-order sentence.
+\item The graphs which do contain a path from $c$ to $d$,
+\begin{enumerate}
+\item are not first-order definable.
+\item are definable by a second-order sentence.
+\end{enumerate}
+\item The graphs which do not contain a path from $c$ to $d$
+\begin{enumerate}
+\item are not definable by a first-order sentence.
+\item are first-order definable.
+\item are definable by a second-order sentence.
+\end{enumerate}
+\end{enumerate}
+\end{quote}
+
+We fix $I(c)=c^{\mathcal{I}}$ and $I(d)=d^{\mathcal{I}}$. 
+
+\begin{enumerate}
+\item  For every $k \in \mathbb{N}$ the graphs containing a path of length k from c to d are definable by a
+first-order sentence. \\
+
+Consider the following sentence.
+\begin{equation*}
+C_k := \exists x_1  \dots \exists x_{k-1} \left(  E(c,x_1) \land \bigwedge_{i=1}^{k-2} E(x_i, x_{i+1}) \land E(x_{k-1}, d) \right) 
+\end{equation*}
+
+Clearly, this sentence can only be true if there exists at least one list of length $k$ of the form $E^{\mathcal{I}}(c^{\mathcal{I}},x^{\mathcal{I}}_1), \dots E^{\mathcal{I}}(x^{\mathcal{I}}_{k-1},d^{\mathcal{I}})$ where the end point of the prior edge is the starting point of the latter, which is precisely the definition of a path.
+
+\item The graphs which do contain a path from $c$ to $d$,
+\begin{enumerate}
+\item are not first-order definable. \\
+
+Assume that this is the case. Hence, there exists a set of first order sentences $C$ (in this language) that is true if and only if there exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Let $D_k :=  \{\neg C_i \forall  0 \leq i \leq k \} $. 
+%Clearly, $D_k$ expresses that there can not be a path between $c$ and $d$ that is of length smaller or equal $k$ (see below). Now consider the following set of sentences.
+\begin{equation*}
+C_{\omega} :=  D \cup P = \{\neg C_k  \mid \forall k \geq 0 \} \cup C
+\end{equation*}
+Consider the finite subset $X_k \underset{fin.}{\subset} C_{\omega}$ 
+of the form $X_k = D' \cup C'$ with $C' \underset{fin.}{\subset} C$ and $D' \underset{fin.}{\subset} D$. Clearly, since $X_k$ is finite, there exists a maximal $k$ such that $D' \subseteq D_k$. Thus any model with a path greater $k$ can satisfy $D'$. That is, consider the following interpretation $\mathcal{G}:=\langle V, I \rangle$ such that $V=\{v_i \mid  0 \leq i \leq k+1\}$ such that $c^{\mathcal{I}}=v_0$, $d^{\mathcal{I}}=(v_{k+1})$ and $I(E):=\{(v_i, v_{i+1}) \mid 0 \leq i \leq k\}$.  Since there exists a path in $\mathcal{G}$ it follows by assumption that $\mathcal{G} \models C$ and thus especially $\mathcal{G} \models C'$. Hence, $\mathcal{G}$ satisfies $X_k$. Since this can be done for arbitrary $k$, one can conclude that any finite subset of $C_{\omega}$ is satisfiable. Hence, by compactness one obtains that there exists a model $\mathcal{G}_{\omega}$ that satisfies $C_{\omega}$. Clearly, it is impossible that there exists a finite path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$ in $\mathcal{G}_{\omega}$, i.e. otherwise there exists a $k$ such that a $C_k$ is violated thus $D$ would not be satisfied by the structure. However, since $\mathcal{G}_{\omega}\models C$, by assumption, there must exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Hence, one arrives at a contradiction. \\
+
+\item are definable by a second-order sentence.\\
+
+The intent is to formalise reachability, with respect to $E^{\mathcal{I}}$. That is, there exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$, if and only if, every set that contains the transitive closure of $E^{\mathcal{I}}$ contains the element $(c^{\mathcal{I}}, d^{\mathcal{I}})$.
+That is, consider the following formulas
+\begin{equation*}
+\begin{split}
+&R_{\subseteq}(X,Y):= \forall x \forall y (X(x,y) \to Y(x,y)) \\
+&R_{\to}(X) := \forall x \forall y \forall z (X(x,y) \to X(y,z) \to X(x,z)) \\
+\end{split}
+\end{equation*}
+The first formula forces that $X^{\mathcal{I}}$ is a sub-relation of $Y^{\mathcal{I}}$, i.e. if $(x,y) \in X^{\mathcal{I}}$ then it must be the case that $(x,y) \in Y^{\mathcal{I}}$ and therefore $X^{\mathcal{I}} \subseteq Y^{\mathcal{I}}$. The second formula requires the input binary relation $X^{\mathcal{I}}$ to be transitive. Using those two one can now construct the following sentence.
+\begin{equation*}
+\begin{split}
+C := \forall X (R_{\subseteq}(E,Y) \to R_{\to}(X) \to R(c,d))
+\end{split}
+\end{equation*}
+That is, $C$ requires that if an relation $R^{\mathcal{I}}$ that contains $E^{\mathcal{I}} \subseteq R^{\mathcal{I}}$ is also transitive closed then it must contain $(c^{\mathcal{I}},d^{\mathcal{I}})$. 
+What remains to show is that this formula forces the required behaviour. \\
+
+Consider a structure $\mathcal{G}$, show that $\mathcal{G} \models C$ if and only if there exists a path in $\mathcal{G}$ from $c$ to $d$. Assume that there exists a path from $c^I$ to $d^I$. Then it must be the case that $(c^I,d^I)$ is in the transitive closure of $E^{\mathcal{I}}$, i.e. $E^{\mathcal{I}^*}$. Now, take an relation $R^{\mathcal{I}} \subset D^2$ such that $E^{\mathcal{I}} \subseteq R^{\mathcal{I}}$ and that $R^{\mathcal{I}}$ is closed transitively. Clearly, $E^{\mathcal{I}^* }\subseteq R^{\mathcal{I}}$ and therefore $(c^I, d^I) \in R^{\mathcal{I}}$. On the other hand, assume that there does not exists a path from $c^I$ to $d^I$. Then it must be the case that $(c^I, d^I) \nin I(E)^*$. However, due to the fact that $E^{\mathcal{I}} \subseteq E^{\mathcal{I}^*}$ and that $E^{\mathcal{I}^*}$ is closed transitively by definition, it follows that one has found a relation that invalidates the sentence $C$.
+
+\end{enumerate}
+
+\item The graphs which do not contain a path from $c$ to $d$
+\begin{enumerate}
+\item are not definable by a first-order sentence. \\
+
+Assume there exists such a sentence. Let this sentence be called $S$. Since $S$ expresses that there does not exists a path from $c$ to $d$ it follows that its negation $\neg S$ expresses that there does exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. However, consider the following set of sentences $\{\neg S\}$. Clearly, this set of sentences can only be satisfied if there exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$ in the respective structure. However, this would imply that the graphs which do contain a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$, are first-order definable. Which clearly contradicts the statement made above.
+
+\item are first-order definable.\\
+
+Recall that the sentence
+\begin{equation*}
+C_k := \exists x_1  \dots \exists x_{k-1} \left(  E(c,x_1) \land \bigwedge_{i=1}^{k-2} E(x_i, x_{i+1}) \land E(x_{k-1}, d) \right) 
+\end{equation*}
+expresses that there exists a path of length $k$ from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Hence, its negation
+\begin{equation*}
+\neg C_k = \forall x_1  \dots \forall x_{k-1} \left(  \neg E(c,x_1) \lor \bigvee_{i=1}^{k-2} \neg E(x_i, x_{i+1}) \lor \neg E(x_{k-1}, d) \right) 
+\end{equation*}
+expresses that no path of length $k$ exits from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Consider the following set of sentences 
+\begin{equation*}
+D_k := \{\neg C_i \mid \forall 0 \leq i \leq k \}
+\end{equation*}
+A structure $\mathcal{G}$ such that $\mathcal{G} \models D_k$, can not have a path of length $1, 2, \dots k$ from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Therefore a structure $\mathcal{G}'$ that satisfies
+\begin{equation*}
+D :=  \{ D_k \mid \forall k \geq 0 \}
+\end{equation*}
+can not have a path of any finite length $k$ from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. That is, for any $k$ there exists a $D_k \subseteq D$ that prevents due to $\mathcal{G}' \models D_k$ the existence of a path smaller that $k$ (from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$). However, since a path has to be finite it follows that if a structure satisfies $D$ it can not have a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$.\\
+
+\item are definable by a second-order sentence.
+In a previous exercise it was already shown that the graphs which do contain a path from $c$ to $d$, are definable by a second-order sentence. Hence, its negation can only be true if the satisfying structure does not contain a path from $c$ to $d$. That is, 
+\begin{equation*}
+\begin{split}
+\neg C = \exists X ( R_{\subseteq}(E,Y) \land R_{\to}(X) \land \neg R(c,d))
+\end{split}
+\end{equation*}
+
+\end{enumerate}
+\end{enumerate}
+
+
+
+
+
+\section*{Exercise 3.2}
+\begin{quote}
+We have defined $\bot$ and $\neg$ as simply typed expressions. Analogously to these,
+define binary disjunction $\lor$, binary conjunction $\land$, logical equivalence $\liff$ and the existential quantifier $\exists_{\tau}$ as simply typed expression. Give type derivations and show that the semantics has the expected behaviour.
+\end{quote}
+
+Note: To increase readability, there are references to previously made statements. That is, 
+if in the derivation $\neg$ is used, only an reference to the original derivation of the operator will be given. Similarly, $\land$ will be referenced by a derivation that occurs after the derivation of $\land$. Moreover, the same holds for the demonstration of the desired semantic behaviour. That is, once it was show that the term for $\land$ has the desired semantics, its semantics will be used directly in future demonstrations.
+
+\begin{prooftree}
+\small
+
+	\AxiomC{ $\lto \; : \; o \to o \to o $}
+
+	\AxiomC{\scriptsize $(\mathit{see\; script)} $}
+	\noLine
+	\UnaryInfC{ $\lambda x^o . \lto \, x^o \; \bot \; : \; o \to o $}
+	\dashedLine
+	\UnaryInfC{ $\neg \; : \; o \to o $}
+		
+	\AxiomC{ $x^o \; : \; o $}
+	\BinaryInfC{$  \neg x^o \; : \;  o $}
+	
+	\BinaryInfC{$ \lto \, \neg x^o \; : \; o \to o $}
+
+	\AxiomC{$y^o \; : \; o $}
+
+\BinaryInfC{$ \lto \, ( \neg x^o) \; y^o \; : \; o $}
+\UnaryInfC{$ \lambda y^{o} . \lto \, ( \neg x^o) \; y^o \; : \; o \to o$}
+\UnaryInfC{$\lambda x^{o} \lambda y^{o} . \lto \, ( \neg x^o) \; y^o \; : \; o \to o \to o$}
+\dashedLine
+\UnaryInfC{ $\lor \; : \;  o \to o \to o$}
+\end{prooftree}
+
+\begin{align*}
+I(\lor)(a,b)& = (I \cup \{ x^o \mapsto a, y^o \mapsto b\})(\lto \, ( \neg x^o) \; y^o)  \\
+& = I'(\lto \, ( \neg x^o) \; y^o)  \\
+& = I'(\lto) (I'( \neg x^o), I'(y^o))  \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(\neg x^o)=\text{false} \sor  I'(y^o)=\text{true} \\
+\text{false} & \quad otw.\\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(x^o)=\text{true} \sor  I'(y^o)=\text{true} \\
+\text{false} & \quad otw.\\
+\end{cases}
+\end{align*}
+
+\begin{prooftree}
+\small
+
+	\AxiomC{$\neg \; : \; o \to o $}
+
+	\AxiomC{$\lto \; : \; o \to o  \to o$}
+	\AxiomC{$x^o \; : \; o  $}
+	\BinaryInfC{ $\lto \,  x^o \; : \; o \to o$}
+
+	\AxiomC{\scriptsize $(\mathit{see\; script)} $}
+	\noLine
+	\UnaryInfC{ $\lambda x^o . \lto \, x^o \; \bot \; : \; o \to o $}
+	\dashedLine
+	\UnaryInfC{ $\neg \; : \; o \to o $}
+		
+	\AxiomC{ $y^o \; : \; o $}
+	\BinaryInfC{$  \neg y^o \; : \;  o $}
+	
+	\BinaryInfC{$ \lto \,  x^o \; ( \neg y^o) \; : \; o \to o $}
+
+
+
+\BinaryInfC{$\neg \; (\lto \,  x^o \; ( \neg y^o)) \; : \; o $}
+\UnaryInfC{$ \lambda y^{o} . \neg \; (\lto \,  x^o \; ( \neg y^o)) \; : \; o \to o$}
+\UnaryInfC{$\lambda x^{o} \lambda y^{o} . \neg \; (\lto \,  x^o \; ( \neg y^o)) \; : \; o \to o \to o$}
+\dashedLine
+\UnaryInfC{ $\land \; : \;  o \to o \to o$}
+\end{prooftree}
+\begin{align*}
+I(\land)(a,b)& = (I \cup \{ x^o \mapsto a, y^o \mapsto b\})( \neg \; (\lto \,  x^o \; ( \neg y^o)))  \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(\lto \,  x^o \; ( \neg y^o)) = \text{false} \\
+\text{false} & \quad \mathit{if}\, I'(\lto \,  x^o \; ( \neg y^o)) = \text{true}  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\,  \sneg (I'(x^o)=\text{false} \sand  I'(\neg y^o)=\text{true}) \\
+\text{false} & \quad \mathit{if}\, I'(x^o)=\text{false} \sor  I'(\neg y^o)=\text{true}  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(x^o)=\text{true} \sand  I'(y^o)=\text{true} \\
+\text{false} & \quad \mathit{if}\, I'(x^o)=\text{false} \sor  I'(y^o)=\text{false}  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(x^o)=\text{true} \sand  I'(y^o)=\text{true} \\
+\text{false} & \quad otw.  \\
+\end{cases} \\
+\end{align*}
+
+\begin{prooftree}
+\small
+
+
+	\AxiomC{\scriptsize $(\mathit{see\; above)} $}
+	\noLine
+	\UnaryInfC{ $\land \; : \; o \to o \to o$}
+
+		\AxiomC{$\lto^o \; : \; o \to o \to o  $}
+		\AxiomC{$x^o \; : \; o  $}
+
+		\BinaryInfC{$ \lto \,  x^o  \; : \; o $}
+		
+		\AxiomC{$y^o \; : \; o$}
+	\BinaryInfC{$ \lto \,  x^o \;  y^o \; : \; o $}
+
+\BinaryInfC{$\land \, (\lto \,  x^o \;  y^o) \; : \; o \to o $}
+
+		\AxiomC{$\lto^o \; : \; o \to o \to o  $}
+		\AxiomC{$y^o \; : \; o  $}
+
+		\BinaryInfC{$ \lto \,  y^o  \; : \; o $}
+		
+		\AxiomC{$x^o \; : \; o$}
+	\BinaryInfC{$ \lto \,  y^o \;  x^o \; : \; o $}
+
+\BinaryInfC{$\land \, (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o) \; : \; o $}
+\UnaryInfC{$\lambda y^{o} . \land \,  (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o) \; : \; o \to o $}
+\UnaryInfC{$\lambda x^{o} \lambda y^{o} . \land \, (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o) \; : \; o \to o \to o$}
+\dashedLine
+\UnaryInfC{ $\liff \; : \; o \to o \to o$}
+\end{prooftree}
+\begin{align*}
+I(\liff)(a,b)& = (I \cup \{ x^o \mapsto a, y^o \mapsto b\})( \land \, (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o))  \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(\lto \,  x^o \;  y^o) \sand I'(\lto \,  y^o \;  x^o)\\
+\text{false} & \quad otw.  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad  \mathit{if}\, (I'(x^o)=\text{false} \sor  I'(y^o)=\text{true}) \sand (I'(y^o)=\text{false} \sor  I'(x^o)=\text{true}) \\
+\text{false} & \quad otw.  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad  \mathit{if}\, (I'(x^o)=\text{false} \sand  I'(y^o)=\text{false}) \sor (I'(x^o)=\text{true} \sand  I'(x^o)=\text{true}) \\
+\text{false} & \quad otw.  \\
+\end{cases} \\
+\end{align*}
+
+
+\begin{prooftree}
+\small
+
+	\AxiomC{$\neg \; : \; o \to o $}
+	
+		\AxiomC{$\forall_{\tau} \; : \; (\tau \to o) \to o $}
+		
+	\AxiomC{\scriptsize $(\mathit{see\; script)} $}
+	\noLine
+	\UnaryInfC{ $\lambda x^o . \lto \, x^o \; \bot \; : \; o \to o $}
+	\dashedLine
+	\UnaryInfC{ $\neg \; : \; o \to o $}
+		
+	\AxiomC{ $x^o \; : \; o $}
+	\BinaryInfC{$  \neg x^o \; : \;  o $}
+		
+	\BinaryInfC{$\forall_{\tau} \neg x^{\tau \to o} \; : \; o $}
+
+\BinaryInfC{$\neg \, (\forall_{\tau} \neg x^{\tau \to o}) \; : \; o$}
+\UnaryInfC{$\lambda x^{\tau \to o} . \neg \, (\forall_{\tau} \neg x^{\tau \to o}) \; : \; (\tau \to o) \to o$}
+\dashedLine
+\UnaryInfC{ $\exists_{\tau} \; : \;  (\tau \to o) \to o$}
+\end{prooftree}
+
+\begin{align*}
+I(\exists_{\tau})(\varphi)& = (I \cup \{ x^{\tau \to o}\mapsto \varphi\})( \neg \, (\forall_{\tau} x^{\tau \to o}))  \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, \sneg (I'(\varphi(m))=\text{true} \text{ for all } m \in D_{\tau}) \\
+\text{false} & \quad otw.  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(\neg \varphi(m))=\text{false} \text{ for some } m \in D_{\tau} \\
+\text{false} & \quad otw.  \\
+\end{cases} \\
+& = \begin{cases}
+\text{true} & \quad \mathit{if}\, I'(\varphi(m))=\text{true} \text{ for some } m \in D_{\tau} \\
+\text{false} & \quad otw.  \\
+\end{cases}
+\end{align*}
+
+\section*{Exercise 3.4}
+\begin{quote}
+Show that the following formulas are provable in $\mathbf{NK}_{\omega}$ for arbitrary types $\tau, \sigma$: 
+\begin{enumerate}
+\item \textit{reflexivity:} $\forall x^{\tau} x =_{\tau} x$
+\item \textit{symmetry:} $\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto y =_{\tau} x)$
+\item \textit{transitivity:}  $\forall x^{\tau} \forall y^{\tau} \forall z^{\tau} (x =_{\tau} y \lto y =_{\tau} z \lto x =_{\tau} z)$
+\item \textit{compatibility:} $\forall f^{\tau \to \sigma} \forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto fx =_{\sigma} fy)$
+\end{enumerate}
+\end{quote}
+
+
+
+
+\begin{prooftree}
+\small
+
+\AxiomC{ $[ P^{\tau \to o} a^{\tau} ]^1$}
+\RightLabel{\tiny($\lto_I^1$)}
+\UnaryInfC{$ P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} a^{\tau} $}
+
+
+\AxiomC{ $[ P^{\tau \to o} a^{\tau} ]^1$}
+\RightLabel{\tiny($\lto_I^1$)}
+\UnaryInfC{$ P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} a^{\tau} $}
+
+
+\BinaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} a^{\tau}) \land (P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} a^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; a^{\tau})$}
+\RightLabel{\tiny($=_{\alpha \beta}$)}
+\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  a^{\tau}$}
+\RightLabel{\tiny($Def.$)}
+\UnaryInfC{$ a^{\tau} =_{\tau} a^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$\forall x^{\tau} x =_{\tau} x$}
+\end{prooftree}
+
+
+
+\begin{changemargin}{-1cm}{-1cm}
+\begin{prooftree}
+\small
+
+\AxiomC{ $[a =_{\tau} b]^1$}
+\RightLabel{\tiny($Def.$)}
+\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+\RightLabel{\tiny($=_{\alpha \beta}$)}
+\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+\RightLabel{\tiny($\forall_E$)}
+\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} b^{\tau} $}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+\RightLabel{\tiny($\land_E$)}
+\UnaryInfC{$ P^{\tau \to o} b^{\tau} \lto P^{\tau \to o} a^{\tau} $}
+
+\AxiomC{ $[a =_{\tau} b]^1$}
+\RightLabel{\tiny($Def.$)}
+\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+\RightLabel{\tiny($=_{\alpha \beta}$)}
+\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+\RightLabel{\tiny($\forall_E$)}
+\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} b^{\tau} $}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+\RightLabel{\tiny($\land_E$)}
+\UnaryInfC{$ P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau} $}
+
+
+\RightLabel{\tiny($\land_I$)}
+\BinaryInfC{$ (P^{\tau \to o} b^{\tau} \lto P^{\tau \to o} a^{\tau}) \land (P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}) $}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ P^{\tau \to o} b^{\tau} \liff P^{\tau \to o} a^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; b^{\tau} \liff Y \; a^{\tau})$}
+\RightLabel{\tiny($=_{\alpha \beta}$)}
+\UnaryInfC{$ (\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; b^{\tau} \;  a^{\tau}$}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ b^{\tau} =_{\tau} a^{\tau}$}
+\RightLabel{\tiny($\lto_I^1$)}
+\UnaryInfC{$a^{\tau} =_{\tau} b^{\tau} \lto b^{\tau} =_{\tau} a^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall y^{\tau} (a^{\tau} =_{\tau} y \lto y =_{\tau} a^{\tau})$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto y =_{\tau} x)$}
+\end{prooftree}
+\end{changemargin}
+
+
+
+\begin{prooftree}
+\small
+\AxiomC{ $(a)$}
+\noLine
+\UnaryInfC{ $P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} c^{\tau}$}
+
+\AxiomC{ $(b)$}
+\noLine
+\UnaryInfC{ $P^{\tau \to o} c^{\tau} \lto P^{\tau \to o} a^{\tau}$}
+
+
+
+\RightLabel{\tiny($\land_I$)}
+\BinaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} c^{\tau}) \land (P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} c^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; c^{\tau})$}
+\RightLabel{\tiny($=_{\alpha \beta}$)}
+\UnaryInfC{$ (\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  c^{\tau}$}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ a^{\tau} =_{\tau} c^{\tau}$}
+\RightLabel{\tiny($\lto_I^2$)}
+\UnaryInfC{$  b^{\tau} =_{\tau} c^{\tau}\lto a^{\tau} =_{\tau} c^{\tau}$}
+\RightLabel{\tiny($\lto_I^1$)}
+\UnaryInfC{$ a^{\tau} =_{\tau}  b^{\tau} \lto  b^{\tau} =_{\tau} c^{\tau}\lto a^{\tau} =_{\tau} c^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall z^{\tau} (a^{\tau} =_{\tau}  b^{\tau} \lto  b^{\tau} =_{\tau} z \lto a^{\tau} =_{\tau} z)$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall y^{\tau} \forall z^{\tau} (a^{\tau} =_{\tau} y \lto y =_{\tau} z \lto a^{\tau} =_{\tau} z)$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} \forall z^{\tau} (x =_{\tau} y \lto y =_{\tau} z \lto x =_{\tau} z)$}
+\end{prooftree}
+
+
+\begin{changemargin}{-2cm}{-2cm}
+\begin{prooftree}
+\scriptsize
+
+	\AxiomC{ $[b =_{\tau} c]^2$}
+	\LeftLabel{\tiny($Def.$)}
+	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; b^{\tau} \;  c^{\tau}$}
+	\LeftLabel{\tiny($=_{\alpha \beta}$)}
+	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; b^{\tau} \liff Y \; c^{\tau}) $}
+	\LeftLabel{\tiny($\forall_E$)}
+	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \liff P^{\tau \to o} c^{\tau}$}
+	\LeftLabel{\tiny($Def.$)}
+	\UnaryInfC{ $(P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} c^{\tau}) \land (P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} b^{\tau})$}
+	\LeftLabel{\tiny($\land_E$)}
+	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} c^{\tau}$}
+
+
+	\AxiomC{ $[a =_{\tau} b]^1$}
+	\RightLabel{\tiny($Def.$)}
+	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+	\RightLabel{\tiny($=_{\alpha \beta}$)}
+	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+	\RightLabel{\tiny($\forall_E$)}
+	\UnaryInfC{ $P^{\tau \to o} a^{\tau}  \liff P^{\tau \to o} b^{\tau}$}
+	\RightLabel{\tiny($Def.$)}
+	\UnaryInfC{ $(P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau})$}
+	\RightLabel{\tiny($\land_E$)}
+	\UnaryInfC{ $P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}$}
+
+
+	\AxiomC{ $[P^{\tau \to o} a^{\tau}]^{3a}$}
+
+
+\RightLabel{\tiny($\lto_E$)}
+\BinaryInfC{ $P^{\tau \to o} b^{\tau}$}
+\RightLabel{\tiny($\to_E$)}
+\BinaryInfC{ $P^{\tau \to o} c^{\tau}$}
+\RightLabel{\tiny($\lto_{3a}$)}
+\UnaryInfC{ $(a)$}
+\end{prooftree}
+\end{changemargin}
+
+
+
+\begin{changemargin}{-2cm}{-2cm}
+\begin{prooftree}
+\scriptsize
+
+	\AxiomC{ $[a =_{\tau} b]^1$}
+	\LeftLabel{\tiny($Def.$)}
+	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+	\LeftLabel{\tiny($=_{\alpha \beta}$)}
+	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+	\LeftLabel{\tiny($\forall_E$)}
+	\UnaryInfC{ $P^{\tau \to o} a^{\tau}  \liff P^{\tau \to o} b^{\tau}$}
+	\LeftLabel{\tiny($Def.$)}
+	\UnaryInfC{ $(P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau})$}
+	\LeftLabel{\tiny($\land_E$)}
+	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau}$}
+
+
+	\AxiomC{ $[b =_{\tau} c]^2$}
+	\RightLabel{\tiny($Def.$)}
+	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; b^{\tau} \;  c^{\tau}$}
+	\RightLabel{\tiny($=_{\alpha \beta}$)}
+	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; b^{\tau} \liff Y \; c^{\tau}) $}
+	\RightLabel{\tiny($\forall_E$)}
+	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \liff P^{\tau \to o} c^{\tau}$}
+	\RightLabel{\tiny($Def.$)}
+	\UnaryInfC{ $(P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} c^{\tau}) \land (P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} b^{\tau})$}
+	\RightLabel{\tiny($\land_E$)}
+	\UnaryInfC{ $P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} b^{\tau}$}
+
+
+	\AxiomC{ $[P^{\tau \to o} c^{\tau}]^{3b}$}
+
+
+\RightLabel{\tiny($\lto_E$)}
+\BinaryInfC{ $P^{\tau \to o} b^{\tau}$}
+\RightLabel{\tiny($\to_E$)}
+\BinaryInfC{ $P^{\tau \to o} a^{\tau}$}
+\RightLabel{\tiny($\lto_{3b}$)}
+\UnaryInfC{ $(b)$}
+\end{prooftree}
+\end{changemargin}
+
+
+
+\begin{prooftree}
+\small
+\AxiomC{ $[a =_{\tau} b]^1$}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ (\lambda x^{\tau} \lambda y^{\tau} .\forall Y^{\tau \to o} (Y \; x \liff Y \; y )) \; a^{\tau } \; b^{\tau }$}
+\RightLabel{\tiny($=_{\alpha\beta}$)}
+\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau }\liff Y \; b^{\tau} )$}
+\RightLabel{\tiny($\forall_E$)}
+\UnaryInfC{$ (\lambda x^{\tau }. P^{\sigma \to o}  (g^{\tau \to \sigma} x) )  \; a^{\tau }\liff (\lambda x^{\tau }. P^{\sigma \to o}  (g^{\tau \to \sigma} x) )  \; b^{\tau} $}
+\RightLabel{\tiny($=_{\alpha\beta}$)}
+\UnaryInfC{$ P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \liff P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) $}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$ \forall Y^{\sigma \to o} (Y (g^{\tau \to \sigma} a^{\tau }) \liff Y (g^{\tau \to \sigma}  b^{\tau})) $}
+\RightLabel{\tiny($=_{\alpha \beta}$)}
+\UnaryInfC{$(\lambda x^{\sigma} \lambda y^{\sigma} . \forall Y^{\sigma \to o} (Y x \liff Y y)) \; (g^{\tau \to \sigma} a^{\tau })   \; (g^{\tau \to \sigma}  b^{\tau})$}
+\RightLabel{\tiny($Def.$)}
+\dashedLine
+\UnaryInfC{$ g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+\RightLabel{\tiny($\lto_I^1$)}
+\UnaryInfC{$a^{\tau }=_{\tau}  b^{\tau} \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$\forall y^{\tau} (a^{\tau }=_{\tau} y \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma} y)$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto g^{\tau \to \sigma} x =_{\sigma} g^{\tau \to \sigma} y)$}
+\RightLabel{\tiny($\forall_I$)}
+\UnaryInfC{$\forall f^{\tau \to \sigma} \forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto fx =_{\sigma} fy)$}
+\end{prooftree}
+
+
+\section*{Exercise ?.4}
+\begin{quote}
+The set $\mathtt{fML}$ of formulae of (propositional) modal logic is defined as
+follows where $\mathcal{PV}$ is a countably infinite set of propositional variables.
+\begin{equation*}
+\mathtt{fML} ::= \bot \mid p \in \mathcal{PV} \mid \mathtt{ML} \to \mathtt{ML} \mid \all \mathtt{ML}
+\end{equation*}
+
+A Kripke frame is a pair $(W, R)$ where $W$ is a non-empty set and $R$ is
+a binary relation on $W$. A Kripke model is a pair $(F, V )$ where $F$ is a
+Kripke frame and $V$ is a valuation mapping each $p \in \mathcal{PV}$ to $ V(p) \subseteq W$.
+
+The satisfaction of a formula $A$ on a Kripke model $((W, R), V )$ at $x \in
+W$ (denoted $((W, R), V ), x  \models A)$ is defined inductively on the structure
+of $A$ as follows. (NB. its negation is denoted $((W, R), V ), x \nmodels A$).
+\begin{equation*}
+\begin{split}
+&(F, V ), x \models \bot \text{ never} \\
+&(F, V ), x \models p \text{ iff } x \in V(p)\\
+&(F, V ), x \models  A \to B \text{ iff }  (F, V ), x \nmodels A \text{ or } (F, V ), x \models B\\
+&(F, V ), x \models \all A \text{ iff } (F, V ), y \models A \text{ for every } y \text{ such that } Rxy\\
+\end{split}
+\end{equation*}
+It is well-known that the set $\Gamma$ of modal formulae (defined below) is
+exactly the set of theorems of the normal modal logic $\mathbf{K}$.
+\begin{equation*}
+\{ A \mid ((W, R), V ), x \models A \text{ for every Kripke model } ((W, R), V ) \text{ and } x \in W \}
+\end{equation*}
+Demonstrate that this is a second-order logic with respect to the semantics in Section 2 of the lecture notes. The modal logic $\mathbf{K}$ (and hence $\Lambda$) has a finite axiomatisation. How is this compatible with the “incompleteness of second-order logic” result that we established in
+class?
+\end{quote}
+
+Consider the translation $\tau : \mathtt{fML} \to \mathcal{L}$, where $\mathcal{L}$ is the set of second order formulas over the signature $\Sigma := \langle R/2 \rangle$, i.e. a signature with a single two-ary predicate, such that
+\begin{equation*}
+\begin{split}
+&\tau(\bot)[x] := \bot \\
+&\tau(p)[x] := P(x) \; \text{for } p \in \mathcal{PV} \\
+&\tau(\neg \varphi)[x] := \neg \tau(\varphi)[x] \\
+&\tau(\varphi \land \psi)[x]:= \tau(\varphi)[x]\land \tau(\psi)[x] \\
+&\tau(\varphi \lor \psi)[x]:= \tau(\varphi)[x]\lor \tau(\psi)[x] \\
+&\tau(\varphi \to \psi)[x] := \tau(\varphi)[x]\to \tau(\psi)[x] \\
+&\tau(\all \varphi)[x] := \forall y (R(x,y) \to \tau(\varphi))[y] \; \text{ with } y \text{ fresh}
+\end{split}
+\end{equation*}
+where $[x]$ indicates that $x$ is the only free variable in the formula. 
+(In general let $[x_1 ,\dots,x_m , P_1 \dots P_n]$ indicate the free variables in a formula.)
+
+
+Using $\tau$ one can define the mapping  $\tau^*: \mathtt{fML} \to \mathcal{L}$ which maps an arbitrary formula $\varphi \in \mathtt{fML} $ to the formula $ \tau^c(\varphi) \in \mathcal{L}$. With 
+\begin{equation*}
+\begin{split}
+\tau^c(\varphi) :=\forall P_1 \dots \forall P_n \forall x_1 \dots \forall x_m\tau(\varphi[x_1, \dots ,x_m, P_1 ,\dots , P_n])
+\end{split}
+\end{equation*}
+That is, $\tau^c$ is simply the universal closure of $\tau$, for the free variables $x_1, \dots, x_m$ and the free second order monadic variables $P_1 ,\dots , P_n $. 
+First, notice that there can only be one free variable in $\varphi$. That is, in modal logic one starts to evaluate starting from a specific world and a world transition only happens via $\all$, which given the translations only introduces bound variables. Hence, 
+\begin{equation*}
+\begin{split}
+\tau^c(\varphi) :=\forall P_1 \dots \forall P_n \forall x \; \tau(\varphi)[x, P_1 ,\dots , P_n]
+\end{split}
+\end{equation*}
+Alternatively, one can view $s$ as free variable and only consider the following mapping
+\begin{equation*}
+\begin{split}
+\tau^o(\varphi)[x] :=\forall P_1 \dots \forall P_n  \; \tau(\varphi)[x, P_1 ,\dots , P_n]
+\end{split}
+\end{equation*}
+Note: For the sake of readability free predicate variables are suppressed if not required.
+
+I choose to pursuit the proof on basis of $\tau^o$, due to the fact that for example in $\mathbf{S5}$ there is a difference between local and global consequence, with local being stronger that global. (I took course in Dynamic Epistemic Logic)
+Hence, to avoid pitfalls I choose to focus on the local case and then argue for the global one. Even though, I would conjecture that in this case there is probably no difference. 
+
+
+In modal logic one often speaks of frames. That is, one abstracts away from the variable assignment of a model and speaks only of the underlying structure that is, for a model $\mathcal{M}:=\langle W, R , V\rangle$ the corresponding frame is $\mathcal{M}:=\langle W, R \rangle$. If a formula holds for every model over a specific $W$ and a corresponding $R$, then this formula will hold in a frame. Since $\mathbf{K}$ consists of formulas that hold in arbitrary models one can restate its definition as the set
+\begin{equation*}
+\{ A \mid \mathcal{F}, s \models A \text{ for every Kripke frame } \mathcal{F} \text{ and } s \in W \}
+\end{equation*}
+Furthermore, since it has to hold in every state it follows that this is the same as
+\begin{equation*}
+\{ A \mid \mathcal{F}\models A \text{ for every Kripke frame } \mathcal{F} \}
+\end{equation*}
+
+Moreover, we observe that for a frame $\mathcal{F}:=\langle W, R\rangle$ there exists a standard second order structure $\mathcal{I}_{\mathcal{F}}:=\langle D, I\rangle$, where $I$ maps the symbol $R$ to the relation of the frame, i.e. $I(R):=R$. And vice versa. 
+Hence, if not explicitly required I will not distinguish between those two and will write $\mathbb{F} \models_{K} \varphi$ for the inference in modal logic, and will write $\mathbb{F} \models \varphi$ for the inference $\mathcal{I}_{\mathcal{F}} \models \varphi$ in second order logic. \\
+Similarly, for a model $\mathcal{M}:=\langle W, R, V\rangle$ of a frame $\mathcal{F}:=\langle W, R\rangle$. This frame has a corresponding interpretation $\mathcal{I}_{\mathcal{F}}$. Now using $V:= \{p_1 \mapsto S_1, \dots, p_n \mapsto S_n,\}$ where $S_1, \dots S_n \subseteq W$, one can construct an appropriate variable assignment $\{P_1 \mapsto V(p_1), \dots, P_n \mapsto V(p_n)\}$ with witch to extend $\mathcal{I}_{\mathcal{F}}$ to construct $\mathcal{I}_{\mathcal{M}} := \mathcal{I}_{\mathcal{F}} \cup \{P_1 \mapsto V(p_1), \dots, P_n \mapsto V(p_n)\}$. Clearly, this works in the other direction as well. Moreover, as above if clear, the same name will reference both structure.
+
+
+
+The aim is to show that for a formula $\varphi \in \mathtt{fML} $ and for an arbitrary $\mathcal{F}$ and arbitrary $s \in W$
+\begin{equation*}
+\begin{split}
+\mathcal{F} ,s\models_{K} \varphi \iff \mathcal{F} \cup \{ x \mapsto s\}  \models \tau^c(\varphi)[x]
+\end{split}
+\end{equation*}
+
+To do this it will first be shown by induction on a formula $\varphi \in \mathtt{fML} $, that 
+\begin{equation*}
+\begin{split}
+\mathcal{M} ,s\models_{K} \varphi \iff \mathcal{M} \cup \{x \mapsto s\} \models \tau(\varphi)[x]
+\end{split}
+\end{equation*}
+
+%Using this it is to be shown that for all $\varphi \in \mathtt{fML} $
+%\begin{equation*}
+%\begin{split}
+%\models_{\mathbf{K}} \varphi \iff \models_{SO} \tau^*(\varphi)
+%\end{split}
+%\end{equation*}
+%That is, one wants to show that one can simply use second order semantics to reason in the modal logic $\mathbf{K}$.
+%This statement can be shown by induction on the structure of the formula $\varphi$. 
+
+\paragraph*{IB:}
+Let $\varphi \in \mathtt{fML} $. There are two base cases to consider.
+\begin{itemize}
+\item if $\varphi = \bot$. $\mathcal{F} ,s\models_{K} \bot$ can never be the case. Similarly, no structure in SOL models $\tau(\bot)= \bot$.
+
+\item if $\varphi = p$. Starting from $\mathcal{M} ,s\models_{K} p $, which is equivalent to  $s \in V(p)$. By construction $\tau(P)[x]=P(x)$ and $I(P)=V(p)$. Hence, $s \in I(P)$ and from $I(x) = s$ it follows that $I(x) \in I(P)$. Which by semantics is $\mathcal{M} \cup \{x \mapsto s\} \models P(x)$, which is the same as $\mathcal{M} \cup \{x \mapsto s\} \models \tau(p)[x]$.
+\end{itemize}
+
+\paragraph*{IS:}
+Let $\varphi \in \mathtt{fML} $. There are two base cases to consider.
+\begin{itemize}
+\item $\varphi = \neg \psi$: Start from $\mathcal{M} ,s \models_{K} \neg \psi $. By semantics $\mathcal{M} ,s \nmodels_{K}  \psi $. By IH $\mathcal{M} \cup \{ x \mapsto s\} \nmodels  \tau(\psi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models  \neg \tau(\psi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models  \tau(\neg \psi)[x] $.
+
+
+\item $\varphi = \psi \land \chi$: Start from $\mathcal{M} ,s \models_{K}  \psi \land \chi $. By semantics $\mathcal{M} ,s \models_{K}  \psi  \sand \mathcal{M} ,s \models_{K}  \chi$. By IH $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \sand \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\chi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \land \tau(\chi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi \land \chi )[x] $.
+
+\item $\varphi = \psi \lor \chi$: Start from $\mathcal{M} ,s \models_{K}  \psi \lor \chi $. By semantics $\mathcal{M} ,s \models_{K}  \psi  \sor \mathcal{M} ,s \models_{K}  \chi$. By IH $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \sor \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\chi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \lor \tau(\chi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi \lor \chi )[x] $.
+
+
+\item $\varphi = \psi \to \chi$: Start from $\mathcal{M} ,s \models_{K}  \psi \to \chi $. By semantics $\mathcal{M} ,s \models_{K}  \psi  \sto \mathcal{M} ,s \models_{K}  \chi$. By IH $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \sto \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\chi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \to \tau(\chi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi \to \chi )[x] $.
+
+
+\item $\varphi = \all \psi$: Start from $\mathcal{M} ,s \models_{K} \all \psi $. By semantics $\forall t (R(s,t) \sto \mathcal{M} ,t \models_{K}  \psi )$. By IH $\forall t (R(s,t)\sto \mathcal{M} \cup \{ y \mapsto t\} \models  \tau(\psi)[y] )$. By semantics  (definition of $\mathcal{M}=\mathcal{I}_{\mathcal{M}}$), $\forall t ( \mathcal{M} \cup \{ x \mapsto s, y \mapsto t\} \models R(x,y) \to  \tau(\psi)[y] )$. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \forall y ( R(x,y) \to  \tau(\psi)[y] )$. By definition  $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\all \psi)[x]$.
+\end{itemize}
+
+Using this consider the statement $\mathcal{M} \models_{K} \varphi $ for any $\varphi \in \mathtt{fML} $. This is the same as $\forall s \mathcal{M},s \models_{K} \varphi $. Which by the above observation is equal to $\forall s \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\varphi)[x]$. Which incidentally is the semantics of $\mathcal{M}  \models \forall s \; \tau(\varphi) $. Hence,
+\begin{equation*}
+\begin{split}
+\mathcal{M} \models_{K} \varphi \iff\mathcal{M}  \models \forall x\; \tau(\varphi) 
+\end{split}
+\end{equation*}
+
+Using this consider the statement $\mathcal{F} ,s\models_{K} \varphi $ for any $\varphi \in \mathtt{fML} $. This is the same as for all $V$, $ \langle \mathcal{F}, V \rangle , s \models_{K} \varphi $. That is, $\mathcal{M} , s \models_{K} \varphi $ for some model of the frame $\mathcal{F}$. Now this is the same as $\mathcal{M} \cup \{x \mapsto s\} \models \tau(\varphi)[x]$, which is the same as for all $V$, $\mathcal{F} \cup \{x \mapsto s,P_1 \mapsto V(p_1), \dots, P_n \mapsto V(p_n)\} \models \tau(\varphi)[x,P_1 ,\dots , P_n]$. Which by semantics is $\mathcal{F} \cup \{x \mapsto s\} \models \forall P_1 \dots \forall P_n \; \tau(\varphi)[x,P_1 ,\dots , P_n]$, i.e. since variable assignment for $p$ is simply a subset of $W$, thus one iterates over all of them to obtain all possible variable assignments. Hence,
+\begin{equation*}
+\begin{split}
+\mathcal{F},s \models_{K} \varphi \iff \mathcal{F} \cup \{x \mapsto s\} \models \forall P_1 \dots \forall P_n \; \tau(\varphi)[x,P_1 ,\dots , P_n]
+\iff \mathcal{F} \cup \{x \mapsto s\} \models \tau^o(\varphi)[x]
+\end{split}
+\end{equation*}
+
+By similar reasoning as above and by quantifier shift 
+
+\begin{equation*}
+\begin{split}
+\mathcal{F} \models_{K} \varphi \iff \mathcal{F} \models \forall P_1 \dots \forall P_n \forall x \; \tau(\varphi)[x,P_1 ,\dots , P_n]
+\iff \mathcal{F} \models \tau^c(\varphi)
+\end{split}
+\end{equation*}
+
+Hence,  one obtains 
+
+\begin{equation*}
+\{ \varphi \mid \mathcal{F}\models \varphi \text{ for every Kripke frame } \mathcal{F} \} =
+\{ \varphi \mid \mathcal{F}\models \varphi \text{ for every structure }  \mathcal{F} \} 
+\end{equation*}
+
+
+
+\begin{quote}
+The modal logic $\mathbf{K}$ (and hence $\Lambda$) has a finite axiomatisation. How is this compatible with the “incompleteness of second-order logic” result that we established in
+class?
+\end{quote}
+
+
+My conjecture would be, due to the fact that the language one operates over is just a fragment of full second order logic. That is, $\mathcal{L} \subset \mathcal{L}_{SO}$. Similar to the fact that $\mathcal{L}_{FO} \subset \mathcal{L}_{SO}$, meaning that one can use second order semantics to evaluate first order formulas, which are a fragment of the second order logic, and if one does so one regains completeness. Hence, in a similar vain if one investigates the transformation used, the only form of second order quantification is over sets. 
+Hence, one deals with an MSO fragment of SOL. According to Daniel Leivant's Higher Order Logic from the course literature, MSO without function symbols is decidable. Similarly, in van Benthem  the same (similar) is stated, that is that monadic second order  predicate logic is decidable. This would explain that $\mathbf{K}$ is finitely axiomatiasible. Moreover, one would have a program that establishes if a formula is in $\mathbf{K}$, taking this as a proof system would result in completeness. HOWEVER. Functions can be encoded as relations, and I am unsure if the presence of the relation symbol $R$ results in a loss of this decidability. 
+%\begin{itemize}
+%\item $\varphi =  p$.  Firstly, $\tau^*(p)=\forall R \forall \forall s \tau(p) = \forall R \forall P \forall s P(s)$. Assume $\models_{\mathbf{K}}  p$. Hence, it is known that for any model $\mathcal{M}:=\langle W, R, V\rangle$ it must be the case that $\mathcal{M} \models p$, which is  a shorthand for $\forall S \in W \; \mathcal{M} , s \models_{\mathbf{K}} p$. By semantics of $\models_{\mathbf{K}}$, this is the same as $\forall S \in W \; s \in V_{\mathcal{M}}(p)$. Moreover, since this formula has to hold in every model it follows that, it has to hold for every variable assignment of $p$
+%\begin{equation*}
+%\begin{split}
+%\forall V_{\mathcal{M}}(p) \subseteq W_{\mathcal{M}}(p) \forall s \in W_{\mathcal{M}} \; s \in V(p)
+%\end{split}
+%\end{equation*}
+%Moreover, since dealing with an arbitrary model, one can go even further, and state that $p$ has to hold in every set of worlds with an arbitrary relation and an arbitrary variable assignment. Hence, one obtains that 
+%\begin{equation*}
+%\begin{split}
+%\models_{\mathbf{K}}  p \iff \forall W \forall R \subseteq W^2 \forall V(p) \subseteq W \forall s \in W \; s \in V(p)
+%\end{split}
+%\end{equation*}
+%(Note: The left side is a statement on the meta level)
+%Furthermore, it clearly does not matter how the set $V(p)$ is called. Hence, using th
+%
+%Now since only the variable assignment fro $p$ is relevant this is the same as 
+%\begin{equation*}
+%\begin{split}
+%\forall W_{\mathcal{M}} \forall R_{\mathcal{M}} \forall V_{\mathcal{M}}(p) \forall s \in W \; s \in V(p)
+%\end{split}
+%\end{equation*}
+%That is, one can treat $V_{\mathcal{M}}(p) $ as a predicate where $s$ holds. 
+%\begin{equation*}
+%\begin{split}
+%\forall W_{\mathcal{M}} \forall R_{\mathcal{M}} \forall V_{\mathcal{M}}(p) \forall s \in W \; s \in I(P)
+%\end{split}
+%\end{equation*}
+%\end{itemize}
+
+\end{document}
+
+
+%
+%
+%\begin{prooftree}
+%\small
+%\AxiomC{\scriptsize $(a)$}
+%\noLine
+%\UnaryInfC{$P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \lto P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau})$}
+%\AxiomC{\scriptsize $(b)$}
+%\noLine
+%\UnaryInfC{$P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) \lto P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) $}
+%\RightLabel{\tiny($\land_I$)}
+%\BinaryInfC{$ (P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \lto P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}))  \land   (P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) \lto P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau })  )$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \liff P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) $}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall Y^{\sigma \to o} (Y (g^{\tau \to \sigma} a^{\tau }) \liff Y (g^{\tau \to \sigma}  b^{\tau})) $}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$(\lambda x^{\sigma} \lambda y^{\sigma} . \forall Y^{\sigma \to o} (Y x \liff Y y)) \; (g^{\tau \to \sigma} a^{\tau })   \; (g^{\tau \to \sigma}  b^{\tau})$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$a^{\tau }=_{\tau}  b^{\tau} \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall y^{\tau} (a^{\tau }=_{\tau} y \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma} y)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto g^{\tau \to \sigma} x =_{\sigma} g^{\tau \to \sigma} y)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall f^{\tau \to \sigma} \forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto fx =_{\sigma} fy)$}
+%\end{prooftree}
+%
+%\begin{prooftree}
+%\small
+%\AxiomC{\scriptsize $a^{\tau} =_{\tau} b^{\tau}$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$(\lambda x^{\tau} \lambda y^{\tau} . \forall Y^{ \tau \to o} (Y \; x \lto Y \;  y) \; a^{\tau} \; b^{\tau}$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$\forall Y^{ \tau \to o} (Y \; a^{\tau} \lto Y \;  b^{\tau})$}
+%\RightLabel{\tiny($\forall_E$)}
+%\UnaryInfC{$(\lambda x^{\tau}. P^{\sigma \to o}  (g^{\tau \to \sigma} x)) \; a^{\tau} \lto (\lambda x^{\tau}. P^{\sigma \to o}  (g^{\tau \to \sigma} x))\;  b^{\tau}$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \lto P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau})$}
+%\end{prooftree}

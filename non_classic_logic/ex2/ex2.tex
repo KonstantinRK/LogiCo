@@ -1,0 +1,557 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{bussproofs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+%opening
+
+
+\newcommand{\lto}{\supset}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+\begin{document}
+
+%\maketitle
+
+\section*{Note}
+\textbf{Missing Exercises:}
+\begin{itemize}
+\item \textbf{Exercise 12}
+\item \textbf{Exercise 14}
+\item \textbf{Exercise 15}
+\item \textbf{Exercise 16} Equation $\all (A \lto B) \lto (\all A \lto \all B)$
+\item \textbf{Exercise 20}
+\end{itemize}
+
+\section*{Exercise 9}
+\begin{quote}
+Derive the above in detail from $\some = \neg \all \neg $ and from the semantics for $\all F$ and $\neg F$ classical (first order) reasoning (at the meta-level), indicating at each step what is used.
+\end{quote}
+
+Let $\varphi$ be a formula, $\mathcal{M}$ be an arbitrary Kripke model. and $w$ an arbitrary world. Given the syntactic definition of $\some$, the formula $\some \varphi$ can be rewritten as such
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\some \varphi, w) \stackrel{syntax}{=} v_{\mathcal{M}}(\neg \all \neg \varphi,w)
+\end{split}
+\end{equation*}
+
+One has to switch onto a semantic level.
+
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \; \mathit{not} \; (v_{\mathcal{M}}(\all \neg \varphi, w)=1) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+iff
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \; \mathit{not} \; (\forall u ( wRu  \Rightarrow (v_{\mathcal{M}}(\neg \varphi, u)=1))) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+iff
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \; \mathit{not} \; (\forall u ( wRu  \Rightarrow (not \; (v_{\mathcal{M}}(\varphi, u)=1)))) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+If something does not hold for all elements, then there exists an element for which its negation holds. Therefore, 
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \;  \exists u (not \; ( wRu  \Rightarrow (not \; (v_{\mathcal{M}}(\varphi, u)=1)))) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+Since reasoning on the meta level is classic, one can rewrite $A \Rightarrow B$ as $(not \; A) \; or \; B$. That is, an implication is always satisfied, except if $A$ holds and $B$ does not. Hence,
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \;  \exists u (not \; ( (not \; wRu) \; or \; (not \; (v_{\mathcal{M}}(\varphi, u)=1)))) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+Again, reasoning on the meta-level is done with respect to classical logic, allowing the appeal to the semantic form of the DeMorgan laws. That is, if a disjunction $A \; or \; B$ does not hold. Then $(not \; A) \; and \; (not \; B)$ must be the case, and vice versa. 
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \;  \exists u  ( (not \; (not \; wRu)) \; and \; (not \;(not \; (v_{\mathcal{M}}(\varphi, u)=1)))) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+Now consider the fact that (in classical logic) by negating an already negated assertion one obtains the original assertion.
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\neg \all \neg \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \;  \exists u  (  wRu \; and \;  (v_{\mathcal{M}}(\varphi, u)=1)) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+Lastly, by using the syntactic definition of $\some$ one obtains
+\begin{equation*}
+\begin{split}
+v_{\mathcal{M}}(\some \varphi, w)=
+\begin{cases}
+1 & \quad \mathit{if}  \;  \exists u  (  wRu \; and \;  (v_{\mathcal{M}}(\varphi, u)=1)) \\
+0 & \quad otw.
+\end{cases}
+\end{split}
+\end{equation*}
+
+\section*{Exercise 11}
+\begin{quote}
+Find Kripke models in which the following formulas are true in some world. If possible also find Kripke models in which the formulas are true in every world.
+(Try to use as few worlds as possible.)
+\begin{itemize}
+\item $\some p \land \some \all p \land \neg \all p$
+\item $p \land \all p \land \neg \some p$
+\item $(p \lto q) \land \some (p \land \neg q)$
+\item $\neg p \land \some \some p \land \neg \all \some p \land \some \all  \neg p$
+\end{itemize}
+\end{quote}
+
+\begin{itemize}
+\item $\some p \land \some \all p \land \neg \all p$. Consider $\mathcal{M}:=\langle \{s,t\}, \{(s,s),(s,t)\}, V\rangle$ such that $V(p):=\{t\}$. Now consider
+\begin{equation*}
+\begin{split}
+&\mathcal{M}, s \models \some p \land \some \all p \land \neg \all p  \iff \\
+&\mathcal{M}, s \models \some p \sand \mathcal{M}, s \models \some \all p \sand \mathcal{M}, s \models \neg \all p \iff \\
+&(\exists u \; sRu \sand \mathcal{M}, u \models  p) \sand \\
+&( \exists u \; sRu \sand (\forall w \; uRw \sto \mathcal{M}, w \models  p)) \sand \\
+&\sneg (\forall u \; sRu \sto \mathcal{M}, u \models p)
+\end{split}
+\end{equation*}
+For $(\exists u \; (sRu \sand \mathcal{M}, u \models  p))$ consider $u$ to be $t$, then $sRt$ and $\mathcal{M}, u \models  p$ because $t \in V(p)$. For $( \exists u \; (sRu \sand (\forall w \; uRw \sto \mathcal{M}, w \models  p)))$  consider $u$ to be $t$. Clearly, $sRt$ and since $t$ is a terminal state $(\forall w \; uRw \sto \mathcal{M}, w \models  p)$ is vacuously true. Lastly, from $\sneg (\forall u \; sRu \sto \mathcal{M}, u \models p)$ one obtains $ (\exists u \; sRu \sand( \sneg \mathcal{M}, u \models p))$. Consider $u$ to be $s$ and since $s \notin V(p)$ it follows that $\mathcal{M}, s \nvDash p$, satisfying the last part of the conjunction. 
+
+Moreover, assume $\mathcal{N}$, such that for all $s \in W$ $\mathcal{N},s \models \some p \land \some \all p \land \neg \all p$. According to $\some \all p $ there $\exists$ a state $a$ such that $\forall w$ reachable from $a$, i.e. $aRw$ it must be that $w \in V(p)$. That is, $\mathcal{N},a \models \all p$. However, this is directly in contradiction with $\mathcal{N},a \models  \neg \all p$. Hence, $\mathcal{N}$ can not exist.
+
+Lastly, there can not be a model where $|W|\leq 1$, as there must be a state where $p$ holds and one where $\neg p$ holds. Having only one state this is not possible.
+
+\item $p \land \all p \land \neg \some p$. Consider $\mathcal{M}:=\langle \{s\}, \{\}, V\}\rangle$ such that $V(p):=\{s\}$. Now consider
+\begin{equation*}
+\begin{split}
+&\mathcal{M}, s \models p \land \all p \land \neg \some p \iff \\
+&\mathcal{M}, s \models p \sand  \\
+&\forall u \; (sRu \sto \mathcal{M}, u \models p \sand ) \\
+&\sneg( \exists u \;( sRu \sand \mathcal{M}, u \models p))
+\end{split}
+\end{equation*}
+The fist part of the conjunction holds because $s \in V(p)$. The second part is vacuously true due to $R=\{\}$. The third part is equivalent to  $\forall u \; ((\sneg sRu) \sor (\sneg \mathcal{M}, u \models p))$ which again is vacuously true due to $sRu$ constantly evaluating to false. 
+
+
+Obviously, the whole formula holds in all worlds. Moreover, since $W>0$  by definition, this model is minimal.
+
+
+\item $(p \lto q) \land \some (p \land \neg q)$. Consider $\mathcal{M}:=\langle \{s,t\}, \{(s,t)\}, V\}\rangle$ such that $V(p):=\{t\}$. Now consider
+\begin{equation*}
+\begin{split}
+&\mathcal{M}, s \models (p \lto q) \land \some (p \land \neg q)  \iff \\
+&\mathcal{M}, s \models (p \lto q) \sand  \\
+&\exists u \; (sRu \sand \mathcal{M}, u \models (p \land \neg q)) \iff \\
+&\mathcal{M}, s \models p \sto \mathcal{M}, s \models q \sand  \\
+& \exists u \; (sRu \sand (\mathcal{M}, u \models p \sand (\sneg \mathcal{M}, u \models q))) \\
+\end{split}
+\end{equation*}
+Since $s \notin V(p)$ it follows that $\mathcal{M}, s \nmodels p $, thus by semantics of material implication, the first part of the conjunction holds. As for the second part. Consider $u$ to be $t$. Because $t\in V(p)$ and $t \notin V(q)$ it follows that  $\mathcal{M}, t \models p$ and $\mathcal{M}, t \nmodels q $. Thereby, satisfying the second part of the conjunction.
+
+Moreover, assume there exists a model $\mathcal{N}$ such that the formula holds in every state. Let $s$ be an arbitrary state. The statement $\mathcal{N}, s \models \some (p \land \neg q)$ demands the existence of a state $a$ such that $\mathcal{N}, a \models (p \land \neg q)$. However, this requires  $\mathcal{N}, a \nmodels (p \lto q)$. Hence, by contradiction, $\mathcal{N}$ does not exist.
+
+
+Lastly, there can not be a model where $|W|\leq 1$, as otherwise $p \land \neg q$ and $p \lto q$
+must hold in the same state, which as established above can not be the case.
+
+\item $\neg p \land \some \some p \land \neg \all \some p \land \some \all  \neg p$. Consider $\mathcal{M}:=\langle \{s,t\}, \{(s,t),(s,s)\}, V\}\rangle$ such that $V(p):=\{t\}$. Now consider
+\begin{equation*}
+\begin{split}
+&\mathcal{M}, s \models \neg p \land \some \some p \land \neg \all \some p \land \some \all  \neg p \iff \\
+&\mathcal{M}, s \nmodels p \sand \\
+&\exists u \; sRu \sand (\exists w \; uRw \sand \mathcal{M}, w \models  p) \sand \\
+&\sneg ( \forall u \; sRu \sto (\exists w \; uRw \sand \mathcal{M}, w \models p)) \sand  \\
+&\exists u \; sRu \sand (\forall w \; uRw \sto \mathcal{M}, w \nmodels  p)
+\end{split}
+\end{equation*}
+Since $s \notin V(p)$ it follows that $\mathcal{M}, s \nmodels p $ satisfying the first part of the conjunction. Let $u$ be $s$ and let $w$ be $t$. Clearly $sRs$ and $sRt$. Moreover, since $t \in V(p)$ $\mathcal{M},t\models p$. Hence, satisfying the second part. After some transformation on the meta-level one obtains 
+\begin{equation*}
+\begin{split}
+\exists u \; sRu \sand (\forall w \; \sneg uRw \sor \mathcal{M}, w \nmodels p))
+\end{split}
+\end{equation*}
+Consider $u$ to be $s$. Since, $sRt$ and $\mathcal{M}, w \models p$. Neither $\sneg uRw$ nor $\mathcal{M}, t \nmodels p$ hold. Hence, by the semantics of $\forall$, the third conjunct is satisfied. 
+%Consider $u$ to be $s$. Since $s \notin V(p)$ implies $\mathcal{M},s \nmodels p$ and since $t$ is only related to itself, $\forall w \; \sneg uRw \sor \mathcal{M}, w \nmodels p$ holds. Hence, the third conjunct is satisfied. 
+The last part of the conjunction is satisfied as well. This is because, $sRt$ and because $t$ is terminal. Making $\mathcal{M}, t \models \all \neg p$, hold trivially.
+
+Lastly, assume there exists a model $\mathcal{N}$ such that the formula holds in every state. Let $s$ be an arbitrary state. The statement $\mathcal{N}, s \models \some \some p $ demands the existence of a state $a$ such that $\mathcal{N}, a \models p$. However, this requires  $\mathcal{N}, a \nmodels  \neg p$. Hence, the assumption of $\mathcal{N}$ is contradicted. Moreover, there can not be a model where $|W|\leq 1$, as otherwise $p$ and $\neg p$ must hold in the same state.
+
+\end{itemize}
+
+%
+%\section*{Exercise 12}
+%\begin{quote}
+%Find 3-5 further (interesting) examples of modal formulas with one schematic variable that are valid in F, above, such that removal of some (which?) accessibilities leads to invalidity.
+%\end{quote}
+%The frame in question is $\mathcal{F}:=\langle \{r,t\}, \{(r,r),(s,s)\}\rangle$
+%\begin{itemize}
+%\item $\all p \lto \all \all p$. Take an arbitrary state $s \in W$. Now consider
+%\begin{equation*}
+%\begin{split}
+%&\mathcal{F}, s \models \all p \lto \all \all p \iff \\
+%&(\forall u \; sRu \sto \mathcal{F}, u \models p) \sto (\forall u \; sRu \sto (\forall w \; uRw \sto \mathcal{F}, w \models p)) \iff \\
+%\end{split}
+%\end{equation*}
+%Consider 
+%
+%
+%\item $\neg \all p \lto \all \neg \all p$
+%\item $\neg (\all p \land \all \neg p)$
+%\item $(\some p \land \all(p \lto \all p)) \lto p$
+%\end{itemize}
+
+
+
+\section*{Exercise 13}
+\begin{quote}
+Show that the intersection of two logics is also a logic. What about unions of logics?
+\end{quote}
+Let $\mathcal{L}$ be a logic and $X \subseteq \mathcal{L}$. Firstly, it has to be established that the closure of $X$, written as $\overline{X}$, is also a subset of $\mathcal{L}$, i.e. $X \subseteq \mathcal{L} \sto \overline{X}\subseteq \mathcal{L}$. Assume the contrary, i.e. $\exists \varphi \in \overline{X}$ and $\varphi \notin \mathcal{L}$. However, by definition this can not be the case.
+
+Let $\mathcal{L}_1$ and $\mathcal{L}_2$ be two logics and let $\mathcal{L}_{\cap} = \mathcal{L}_1 \cap \mathcal{L}_2$.  
+%Assume $\mathcal{L}^*$ to be not a logic. That is, $\exists \varphi \in \overline{\mathcal{L}^*} \setminus \mathcal{L}^*$. 
+Clearly $\mathcal{L}_{\cap} \subseteq \overline{\mathcal{L}_{\cap}} \subseteq \mathcal{L}_x$ for $x \in \{1,2\}$. That is, $\mathcal{L}_{\cap}$ is a subset of $\mathcal{L}_1$ and of $\mathcal{L}_{2}$. Moreover, as already established. If both $\mathcal{L}_1$ and $\mathcal{L}_{2}$ contain $\mathcal{L}_{\cap}$, then they must contain $\overline{\mathcal{L}_{\cap}}$. Hence, $\overline{\mathcal{L}_{\cap}}=\mathcal{L}_1 \cap \mathcal{L}_2$. Therefore, $\mathcal{L}_{\cap} = \overline{\mathcal{L}_{\cap}}$. \\
+
+
+Let $\mathcal{L}_1:=\overline{\{a \land b\}}$ and $\mathcal{L}_2:=\overline{\{a \lor b\}}$. The atom $b$ does not occur in either logic. Because, in both cases the only closure operation applicable is substitution. That is, there is no implication where (MP) could be applied. Consider $\mathcal{L}_{\cup}:= \mathcal{L}_1 \cup \mathcal{L}_2$. Moreover, it can be observed that $\varphi \in \mathcal{L}_{\cup}$ is of the form
+\begin{equation*}
+\varphi = \begin{cases}
+\bigwedge_{i} \psi_i  & \quad \mathit{if} \varphi \in \mathcal{L}_1 \\
+\bigvee_{i} \psi_i & \quad \mathit{if} \varphi \in \mathcal{L}_2 \\
+\end{cases}
+\end{equation*}
+with $\psi_i$ being some formula from the respective logic. 
+Lastly, by substitution, $\overline{\mathcal{L}_{\cup}}$ contains $a \lor (a \land b)$. Hence, $\mathcal{L}_{\cup}$ does not satisfy the closure condition and is not considered a logic.
+
+
+%\section*{Exercise 15}
+%\begin{quote}
+%The set of formulas that are valid in a particular Kripke frame do always form a logic that extends CL.
+%Prove this fact.
+%\end{quote}
+
+
+
+\section*{Exercise 16}
+\begin{quote}
+\begin{itemize}
+\item $\some (A \land B) \lto \some  A$
+\item $\some \neg A \lto  \neg \all  A$
+\item $\all (A \land B) \lto (\all A \land \all B) $
+\item $\all (A \lto B) \lto (\all A \lto \all B) $
+\end{itemize}
+Prove these facts.
+\end{quote}
+
+\begin{itemize}
+\item $\some (\varphi \land \psi) \lto \some  \varphi$. Let $\mathcal{F}$ be a Kripke frame such that 
+\begin{equation*}
+\mathcal{F} \nmodels \some (\varphi \land \psi) \lto \some  \varphi
+\end{equation*}
+This corresponds to  
+\begin{equation*}
+\sneg (\mathcal{F} \models \some (\varphi \land \psi) \sto  \mathcal{F} \models \some  \varphi)
+\end{equation*}
+By reasoning on the semantic level one can transform this statement into 
+\begin{equation*}
+\begin{split}
+&\sneg ((\sneg \mathcal{F} \models \some (\varphi \land \psi)) \sor  \mathcal{F} \models \some  \varphi) \iff \\
+&\mathcal{F} \models \some (\varphi \land \psi) \sand  \sneg \mathcal{F} \models \some  \varphi 
+\end{split}
+\end{equation*}
+Moreover, $\mathcal{F} \models \chi$ is equivalent to for all $w \in W \; \mathcal{F},w \models \chi$. Hence, consider an arbitrary $s \in W$.
+\begin{equation*}
+\begin{split}
+&\mathcal{F},s \models \some (\varphi \land \psi) \sand  \sneg \mathcal{F},s \models \some  \varphi \iff\\
+& \exists u \; sRu \sand \mathcal{F},u \models (\varphi \land \psi) \sand  \\
+&\sneg (\exists u \; sRu \sand \mathcal{F},u \models \varphi) \iff  \\
+& \exists u \; sRu \sand (\mathcal{F},u \models \varphi \sand \mathcal{F},u \models \psi) \sand  \\
+& (\forall u \; \sneg sRu \sor  not \mathcal{F},u \models \varphi)
+\end{split}
+\end{equation*}
+Hence, from $\mathcal{F},s \models \some (\varphi \land \psi)$ one obtains the existence of a state $u$ reachable from s, where $\mathcal{F},u \models \varphi$. However, $\sneg \mathcal{F},s \models \some  \varphi$ requires that all states are not reachable from $s$ or have to reject $\varphi$. That is, for every state $u$ reachable from $s$, $\mathcal{F},u \nmodels \varphi$. Thus $\mathcal{F}$ can not exists. Hence, $\some (\varphi \land \psi) \lto \some  \varphi$ holds for every frame.
+
+
+\item $\some \neg \varphi \lto  \neg \all  \varphi$. Consider an arbitrary frame $\mathcal{F}$. Starting with the semantic evaluation. Let $s \in W$ be an arbitrary world.
+\begin{equation*}
+\begin{split}
+&\mathcal{F},s \models \some \neg \varphi \lto  \neg \all  \varphi \iff \\
+& (\exists u \; sRu \sand \sneg \mathcal{F},u \models \varphi k)\sto (\sneg (\forall u \; sRu \sto \mathcal{F},u \models \varphi)) \iff \\
+& (\exists u \; sRu \sand \sneg \mathcal{F},u \models \varphi )\sto (\exists u \;  sRu \sand \sneg \mathcal{F},u \models \varphi) 
+\end{split}
+\end{equation*} 
+Thus, given the semantics of implication, it is known that an assertion implies itself. Moreover, by choosing an arbitrary frame, one can conclude that the formula $\some \neg \varphi \lto  \neg \all  \varphi$ holds in arbitrary frames.
+
+
+\item $\all (\varphi \land \psi) \lto (\all \varphi \land \all \psi)$. Consider an frame $\mathcal{F}$ such that 
+\begin{equation*}
+\begin{split}
+\mathcal{F} \models \all (\varphi \land \psi)
+\end{split}
+\end{equation*} 
+Let $s \in W$ be an arbitrary world. 
+\begin{equation*}
+\begin{split}
+&\mathcal{F},s \models \all (\varphi \land \psi) \iff  \\
+&\forall u \; ( \sneg sRu) \sor (\mathcal{F},u \models \varphi \sand \mathcal{F},u \models \psi) \\
+\end{split}
+\end{equation*} 
+Now, using the semantic notion of the classical tautology of distributivity to reason on the meta level, one obtains 
+
+\begin{equation*}
+\begin{split}
+&\forall u \; (( \sneg sRu \lor \mathcal{F},u \models \varphi) \sand ( \sneg sRu \lor \mathcal{F},u \models \psi))  \\
+\end{split}
+\end{equation*}
+Moreover, in this case one can safely distribute $\forall$. That is,
+\begin{equation*}
+\begin{split}
+&\forall u \; ( \sneg sRu \lor \mathcal{F},u \models \varphi) \sand \forall u \; ( \sneg sRu \lor \mathcal{F},u \models \psi)  \iff \\
+&\forall u \; (  sRu \lto \mathcal{F},u \models \varphi) \sand \forall u \; ( sRu \lto \mathcal{F},u \models \psi)  \\
+\end{split}
+\end{equation*}
+Now, by condensing the semantic notions described above back into the corresponding syntactic form one obtains.
+\begin{equation*}
+\begin{split}
+\mathcal{F},s \models (\all \varphi \land \all \psi)
+\end{split}
+\end{equation*}
+Hence, if $\all (\varphi \land \psi)$ holds in a frame, then $(\all \varphi \land \all \psi)$ must hold as well. Therefore, $\all (\varphi \land \psi) \lto (\all \varphi \land \all \psi)$ holds in any frame.
+
+%
+%\item $\all (\varphi \lto \psi) \lto (\all \varphi \lto \all \psi)$ Consider an frame $\mathcal{F}$ such that 
+%\begin{equation*}
+%\begin{split}
+%\mathcal{F} \models \all (\varphi \lto \psi)
+%\end{split}
+%\end{equation*} 
+%Let $s \in W$ be an arbitrary world. 
+%\begin{equation*}
+%\begin{split}
+%&\mathcal{F},s \models \all (\varphi \lto \psi) \iff  \\
+%&\forall u \; ( \sneg sRu) \sor (\mathcal{F},u \models \varphi \sto \mathcal{F},u \models \psi) \iff  \\
+%&\forall u \; ( \sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi \sor \mathcal{F},u \models \psi)
+%\end{split}
+%\end{equation*} 
+%Consider the fact that $\chi$ is equivalent to $\chi \sor \chi$. Moreover, since it is known that $\sor$ adheres to commutativity and associativity. One obtains
+%
+%
+%%Now, from classical logic, it is known that $\chi$ is equivalent to $1 \sand \chi$, i.e. an conjunction can be extended by assertions that always evaluate to true. Furthermore, . Moreover, every tautology evaluates always to $1$. That is, consider $\chi \sor \neg \chi$. Furthermore, having a disjunction where at least one part evaluates always to true, allows for arbitrary extensions of the disjunction, while retaining the evaluation. Hence, one obtains
+%\begin{equation*}
+%\begin{split}
+%&\forall u \; ((\sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi ) \sor (\mathcal{F},u \models \psi)) \iff \\
+%&\forall u \; ((\sneg sRu) \sor (\sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi ) \sor (\mathcal{F},u \models \psi)) \iff \\
+%&\forall u \; ((\sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi ) \sor (\sneg sRu) \sor  (\mathcal{F},u \models \psi)) \\
+%&\forall u \; ((1 \sand \sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi ) \sor (\mathcal{F},u \models \psi))) \iff \\
+%&\forall u \; ((sRu \sor \sneg sRu) \sand \\
+%&((\sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi ) \sor (\mathcal{F},u \models \psi))) \iff \\
+%&\forall u \; ((sRu \sor (\sneg sRu) \sor \mathcal{F}, s \models \psi) \\
+%&\sand ((\sneg sRu) \sor (\sneg \mathcal{F},u \models \varphi ) \sor (\mathcal{F},u \models \psi))) \\
+%\end{split}
+%\end{equation*} 
+%By using the semantic notion of distributivity, one can factor this statement into 
+%\begin{equation*}
+%\begin{split}
+%&\forall u \; ((sRu \sand (\sneg \mathcal{F},u \models \varphi )) \sor (\sneg sRu \sor \mathcal{F},u \models \psi )) \iff \\
+%&\forall u \; (\sneg (\sneg sRu \sor  \mathcal{F},u \models \varphi ) \sor (\sneg sRu \sor \mathcal{F},u \models \psi )) \iff \\
+%&\forall u \; (\sneg (sRu \sto  \mathcal{F},u \models \varphi ) \sor (sRu \sto \mathcal{F},u \models \psi )) \iff \\
+%&\forall u \; (sRu \sto  \mathcal{F},u \models \varphi ) \sto (sRu \sto \mathcal{F},u \models \psi ))\\
+%\end{split}
+%\end{equation*} 
+%Now consider the classical first order validity $\forall x (P(x) \lto Q(x)) \lto (\forall x P(x) \lto \forall x  Q(x)))$. That is, assume there exists an interpretation $\mathcal{I}$ such that  $\mathcal{I}\nmodels \forall x (P(x) \lto Q(x)) \lto (\forall x P(x) \lto \forall x  Q(x)))$. To that extend it must be that $\forall x (P(x) \lto Q(x)) $ must hold under $\mathcal{I}$ and $(\forall x P(x) \lto \forall x  Q(x))$ does not. If there exists a $c$ in the domain such that $v_{\mathcal{I}}(P(c))=0$ it would follow that $\mathcal{I} \models (\forall x P(x) \lto \forall x  Q(x))$. Hence, $\mathcal{I} \models \forall x P(x)$. However, now in order to satisfy the premise of the big implication, it must be that $\mathcal{I} \models \forall x Q(x)$. Hence, allowing the conclusion that $\mathcal{I}$ can not exist. Using this reasoning on the meta-level. One obtains
+%\begin{equation*}
+%\begin{split}
+%&\forall u \; (sRu \sto  \mathcal{F},u \models \varphi ) \sto (sRu \sto \mathcal{F},u \models \psi )) \implies\\
+%&\forall u \; (sRu \sto  \mathcal{F},u \models \varphi ) \sto  \forall u \; (sRu \sto \mathcal{F},u \models \psi ))
+%\end{split}
+%\end{equation*} 
+%Now translating the semantic notion described above, back into syntax one obtains
+%\begin{equation*}
+%\begin{split}
+%\mathcal{F},s \models \all \varphi \lto \all \psi
+%\end{split}
+%\end{equation*}
+%Hence, by a similar argument to the previous point, one can conclude $\all (\varphi \lto \psi) \lto (\all \varphi \lto \all \psi)$ holds in arbitrary frames.
+\end{itemize}
+
+\section*{Exercise 17}
+\begin{quote}
+Which of the above implicative formulas can/cannot be inverted? Provide either a proof or a counter-example in each case.
+\end{quote}
+\begin{itemize}
+\item $\some  \varphi \lto \some (\varphi \land \psi)$. Consider the Kripke model $\mathcal{M}:=\langle \{s,t\}, \{(s,t)\}, V \rangle$ such that $V(\varphi):=\{t\}$. Clearly 
+\begin{equation*}
+\begin{split}
+&\mathcal{M},s \models \some  \varphi \iff \\
+&\exists u \; sRu \sand \mathcal{M},u \models  \varphi  \\
+\end{split}
+\end{equation*} 
+holds, due to $t \in V(\varphi)$. However,  
+\begin{equation*}
+\begin{split}
+&\mathcal{M},s \models \some  (\varphi \land \psi) \iff \\
+&\exists u \; sRu \sand (\mathcal{M},u \models  \varphi \sand \mathcal{M},u \models  \psi ) \\
+\end{split}
+\end{equation*} 
+can not hold. That is, $\mathcal{M},u \nmodels  \psi$, because $t \notin V(\psi)$.
+
+
+
+\item $ \neg \all  \varphi \lto  \some \neg \varphi $ As established in the previous exercise 
+\begin{equation*}
+\begin{split}
+&\mathcal{F},s \models \some \neg \varphi \lto  \neg \all  \varphi \iff \\
+& (\exists u \; sRu \sand \sneg \mathcal{F},u \models \varphi )\sto (\exists u \;  sRu \sand \sneg \mathcal{F},u \models \varphi)
+\end{split}
+\end{equation*} 
+Hence, allowing the conclusion 
+\begin{equation*}
+\begin{split}
+& (\exists u \; sRu \sand \sneg \mathcal{F},u \models \varphi )\sto (\exists u \;  sRu \sand \sneg \mathcal{F},u \models \varphi) \iff \\
+&\mathcal{F},s \models  \neg \all  \varphi \lto \some \neg \varphi\\
+\end{split}
+\end{equation*} 
+Hence, $ \neg \all  \varphi \lto  \some \neg \varphi $ holds in arbitrary frames.
+
+
+\item $(\all \varphi \land \all \psi)  \lto  \all (\varphi \land \psi)$. By observing the proof in the exercise above, one observe that every transformation made was bidirectional. Hence, from $\mathcal{F} \models  \all (\varphi \land \psi)$ one can trace the arguments back to $\mathcal{F} \models  (\all \varphi \land \all \psi)$.  Therefore, $(\all \varphi \land \all \psi)  \lto  \all (\varphi \land \psi)$ holds in every frame.
+
+\item $(\all \varphi \lto \all \psi) \lto \all (\varphi \lto \psi)$. In contrast to the previous formula, there are Kripke models where this formula does not hold. Consider $\mathcal{M}:=\langle \{r,s,t\}, \{(s,r),(s,t)\}, V\rangle$ where $V(\varphi):=\{r\}$ and $V(\psi):=\{\}$. Now, one can observe
+\begin{equation*}
+\begin{split}
+& \mathcal{M}, s \models \all \varphi \lto \all \psi \iff \\
+& (\forall u \; sRu \sto \mathcal{M}, u \models \varphi) \sto (\forall u \; sRu \sto \mathcal{M}, u \models \psi) \\
+\end{split}
+\end{equation*} 
+Clearly, the premise of the implication evaluates to false. That is, consider $u$ to be $t$ as a world reachable from $s$ where $\mathcal{M}, t \nmodels \varphi$. Hence, by the semantics of implication in classical logic, the whole statement holds. Hence, given the assumption that the whole formula holds, it must be that 
+\begin{equation*}
+\begin{split}
+&\mathcal{M}, s \models (\all \varphi \lto \all \psi) \lto \all (\varphi \lto \psi) \iff \\
+& 1 \sto (\forall u \; sRu \sto (\mathcal{M}, u \models \varphi \sto \mathcal{M}, u \models \psi)
+\end{split}
+\end{equation*} 
+Now, try to evaluate the right part of the implication at state $r$. Firstly, $r$ is reachable from $s$. Secondly, $\mathcal{M}, r \models \varphi$ as well as  $\mathcal{M}, r \nmodels \psi$ by construction. 
+Therefore, $\mathcal{M}, r \nmodels \varphi \lto \psi$. Hence, $\mathcal{M}, s \nmodels (\all \varphi \lto \all \psi) \lto \all (\varphi \lto \psi)$.
+\end{itemize}
+
+
+\section*{Exercise 18}
+\begin{quote}
+For any Kripke interpretation $\mathcal{M}$:
+\begin{itemize}
+\item If $\mathcal{M} \models A$ then $\mathcal{M} \models \all A$
+\end{itemize}
+It follows, that also for all frames $\mathcal{F}$:
+\begin{itemize}
+\item If $\mathcal{F} \models A$ then $\mathcal{F} \models \all A$
+\end{itemize}
+\end{quote}
+
+Firstly, let $\mathcal{M}$ be an arbitrary Kripke interpretation and $\varphi$ a formula. Given $\mathcal{M} \models \varphi$ actually expresses, for all $w \in W \; \mathcal{M},w \models \varphi$. Consider an arbitrary state $s$. By assumption $\mathcal{M},s \models \varphi$. If $s$ is a terminal state, then $\mathcal{M} \models \all \varphi$. Otherwise let $t$ be an arbitrary state satisfying $sRt$.
+By assumption $\mathcal{M},t \models \varphi$. However, since this holds for an arbitrary state it follows that $\forall u \; sRu \sto \mathcal{M}, u \models \varphi$. However, this is precisely the semantics of $\mathcal{M}, s \models \all \varphi$. Moreover, since $s$ was chosen arbitrarily, $\mathcal{M}\models \all \varphi$ follows. Furthermore, at no point in the proof the variable assignment $V$ was used. Hence, the same result holds for arbitrary frames $\mathcal{F}:=\langle W,R \rangle$.
+
+\section*{Exercise 19}
+\begin{quote}
+Prove the soundness of $\mathbf{K}$ (using mentioned facts).
+\end{quote}
+
+This can be done by induction on the length of the proof. To that end, consider the induction hypothesis, a proof in $\mathbf{K}$ of length $n$ is sound.
+
+\begin{itemize}
+\item Induction base, i.e.\ $n=0$. Since, the system described on the slides does not include reasoning from a theory $\Gamma$, it suffices to show that the axioms of $\mathbf{K}$ are valid. Hence, let $\mathcal{F}$ be an arbitrary frame and $s \in W$ be an arbitrary state. Let $\varphi$ be an axiom of $\mathbf{K}$.
+\begin{enumerate}
+\item Case: $\varphi$ is a tautology in classical logic. It holds that $\mathcal{F},s\models \varphi$, because the semantic of the connectives $\land, \lor, \lto$ and $\neg$ is the same as in classical logic.
+\item Case: $\varphi= \all (\psi \lto \chi) \lto (\all \psi \lto \all \chi)$. For a proof of its validity in arbitrary frames consult exercise 16.
+\end{enumerate}
+\item Induction step, i.e.\ $n=m+1$. Let $\varphi$ be a formula with a proof of length $m+1$ in $\mathbf{K}$. Within the system, there are two derivation rules. Hence, the last step in the derivation of $\varphi$ is either an application of \emph{(MP)} or \emph{(NC)} (necessitation).
+\begin{enumerate}
+\item Case: (MP). If the last step of derivation is (MP) then the proof is of the form
+     \begin{prooftree}
+        
+              \AxiomC{$\vdots$}
+              \noLine
+              \UnaryInfC{$\psi$}
+                   \AxiomC{$\vdots$}
+                   \noLine
+                   \UnaryInfC{$\psi \lto \varphi$}
+              \RightLabel{\scriptsize(MP)}
+              \BinaryInfC{$\varphi$}
+     \end{prooftree}
+Clearly, $\psi$ and $\psi \lto \varphi$ have a derivation of length $\leq m$. Hence, by induction hypothesis, one can conclude that for an arbitrary frame $\mathcal{F}$,  $\mathcal{F} \models \psi $ and $\mathcal{F} \models \psi \lto \varphi$ hold. Now consider for an arbitrary $s\in W$
+\begin{equation*}
+\begin{split}
+&\mathcal{F}, s \models  \psi \sand \mathcal{F}, s \models  \psi \lto \varphi  \iff \\
+&\mathcal{F}, s \models  \psi \sand (\mathcal{F}, s \models  \psi \sto \mathcal{F}, s \models \varphi) 
+\end{split}
+\end{equation*} 
+Hence, by the semantics of implication one can conclude $\mathcal{F}, s \models \varphi$, i.e. $\mathcal{F}, s \models  \psi$ and $\mathcal{F}, s \nmodels  \psi$ can not hold at the same time. Lastly, because $s$ arbitrary, it follows $\mathcal{F}\models \varphi$. Thus, (MP) is sound.
+
+\item Case: (NC). If the last step of derivation is (NC) then $\varphi = \all \psi$ and the proof has the form
+     \begin{prooftree}
+              \AxiomC{$\vdots$}
+              \noLine
+              \UnaryInfC{$\psi$}
+              \RightLabel{\scriptsize(MP)}
+              \UnaryInfC{$\all \psi$}
+     \end{prooftree}
+Again, the derivation of $\psi$ is smaller than $m+1$, thus by induction hypothesis it is a sound derivation. Thereby, for an arbitrary frame $\mathcal{F}$, $\mathcal{F}\models \psi$ holds, meaning that $\psi$ holds in every state. Picking an arbitrary state $s \in W$. Obviously, $\mathcal{F},s\models \psi$. Moreover, since $\psi$ holds in every state, it holds in particular in any state reachable from $s$ (if $s$ is terminal, $\all \psi$ holds vacuously). Hence,
+\begin{equation*}
+\begin{split}
+&\forall u \; sRu \sto \mathcal{F},u \models \psi \iff \\
+& \mathcal{F},s \models \all \psi
+\end{split}
+\end{equation*}
+Since $s$ arbitrary $\mathcal{F}\models \all \psi$. Hence, the soundness of (NC) is demonstrated.
+\end{enumerate} 
+\end{itemize}
+Hence, one can conclude that $\mathbf{K}$ is sound.
+
+
+
+
+
+\end{document}

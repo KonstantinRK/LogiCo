@@ -1,0 +1,701 @@
+\documentclass[usenames,dvipsnames, 8pt]{beamer}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{import}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{bussproofs}
+%\usepackage{MnSymbol}
+\usepackage{stmaryrd}
+\usepackage{adjustbox}
+\usepackage{fancybox}
+\usepackage{tikz}
+%\usepackage{stmaryrd}
+
+\usepackage{comment}
+
+%\usepackage[square]{natbib}
+
+\usepackage[utf8]{inputenc}
+
+
+%\usepackage[backend=biber, style=authoryear]{biblatex}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{mydef}[thm]{Definition}
+
+\newcommand\altfootnote[1]{%
+  \tikz[remember picture,overlay]
+  \draw (current page.south west) +(1in + \oddsidemargin,0.5em)
+  node[anchor=south west,inner sep=0pt]{\parbox{\textwidth}{%
+      \rlap{\rule{10em}{0.4pt}}\raggedright\scriptsize#1}};}
+
+\newcommand{\myfootnote}[1]{
+    \renewcommand{\thefootnote}{}
+    \footnotetext{\hspace{-4pt}\scriptsize#1}
+    \renewcommand{\thefootnote}{\arabic{footnote}}
+}
+
+\newcommand*{\skepcon}{\ensuremath{\mathrel{\medvert\mskip-5.7mu\clipbox{1 0 0 0}{$\sim$}}}}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\setbeamercolor{alerted text}{ fg=Maroon , bg= Maroon }
+\setbeamertemplate{itemize items}{\bullet}
+
+\makeatletter
+\setlength{\metropolis@titleseparator@linewidth}{1.5pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{1.5pt}
+\setlength{\metropolis@progressinheadfoot@linewidth}{1.5pt}
+\makeatother
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\let\liff\leftrightarrow
+\let\lif\to
+\let\lneg\neg
+\let\lbot\bot
+\let\ltop\top
+
+\title{Non-Monotonic Reasoning}
+\subtitle{Complexity Results for Non-Monotonic Logics}
+% \date{\today}
+\date{}
+\author{XX}
+% \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+
+
+
+%\bibliographystyle{unsrtnat}
+%\addbibresource{seminar_logic.bib}
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\begin{frame}{Goal}
+\metroset{block=fill}
+\begin{block}{What are we doing here?}
+\textit{Showing tight complexity bounds for a set of nonmonotonic logics}
+\end{block}
+\end{frame}
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[subsubsectionstyle=hide]
+\end{frame}
+
+
+
+
+\section{Introduction}
+
+
+
+\subsection{Core Concepts}
+
+\begin{frame}{Core Concepts}
+\metroset{block=fill}
+\begin{block}{Definition: Fixed Point}
+For a set $\Sigma$ of premisses, $\Delta \subseteq \Sigma$ is stable under the operator $\Gamma$ iff
+\begin{equation*}
+\Gamma(\Delta) = \Delta
+\end{equation*}
+\end{block}
+
+\begin{block}{Definition: Consequence}
+For $\Delta \subseteq  \mathcal{L}$ we have 
+\begin{equation*}
+cons(\Delta):=\{\phi \mid \Delta \models \phi\}
+\end{equation*} 
+\end{block}
+
+\begin{block}{Definition: Notation}
+For $\Delta \subseteq  \mathcal{L}$ and and an unary operator $\Theta$:
+\begin{itemize}
+\item $\Theta(\Delta):= \{\Theta\phi \mid \phi \in \Delta\}$
+\item $\overline{\Delta} := \mathcal{L} \setminus \Delta$
+\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+
+\begin{frame}{Complexity Concepts: Definitions}
+\metroset{block=fill}
+\begin{block}{Definition: Oracle}
+Let $\phi$ be an oracle (program) that solves all problems in $\Phi$ in unit-time.
+Then $p \in \Theta^\phi$ is a problem solvable in $\Theta$ given the oracle $\phi$.
+\end{block}
+
+\begin{block}{Definition: Polynomial Hierarchy}
+For $k = 0$:
+\begin{equation*}
+\Delta_0^P = \Sigma_0^P = \Pi_0^P = P
+\end{equation*}
+For $k \geq 0$:
+\begin{equation*}
+\Delta_{k+1}^P = P^{ \Sigma_k^P}, \quad \Sigma_{k+1}^P = NP^{\Sigma_k^P}, \quad \Pi_{k+1}^P = co\Sigma_{k+1}^P =co NP^{\Sigma_k^P}
+\end{equation*}
+\end{block}
+Examples: $SAT \in \Sigma^P_1$, $QBF_{2,\exists} \in \Sigma_2^P$
+\end{frame}
+
+
+
+\begin{frame}{Complexity Concepts: Polynomial Hierarchy}
+\metroset{block=fill}
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {draw,minimum size=0.05em, draw=white!80, }}
+  \tikzset{edge/.style = {->,- = latex'}}
+
+	\node[vertex] (D1) at (2,0) {\small $\Delta_0^P = \Sigma_0^P = \Pi_0^P = \Delta_1^P = P $};
+	\node[vertex] (S1) at (0,1) {\small  $\Sigma_1^P=NP^{\Sigma_0^P}=NP^{P}$};
+	\node[vertex] (P1) at (4,1) {\small $\Pi_1^P=co NP^{\Sigma_0^P}=co NP^{P}$};
+	
+	\node[vertex] (D2) at (2,2) {\small $\Delta_2^P = P^{\Sigma_1^P}=P^{NP}$};
+	\node[vertex] (S2) at (0,3) {\small  $\Sigma_2^P=NP^{\Sigma_1^P}=NP^{NP}$};
+	\node[vertex] (P2) at (4,3) {\small $\Pi_2^P=co NP^{\Sigma_1^P}=co NP^{NP}$};
+	
+	\node[vertex] (D3) at (2,4) {\small $\Delta_3^P = P^{\Sigma_2^P}=P^{NP^{NP}}$};
+	\node[vertex] (S3) at (0,5) {\small  $\Sigma_3^P=NP^{\Sigma_2^P}=NP^{NP^{NP}}$};
+	\node[vertex] (P3) at (4,5) {\small $\Pi_3^P=co NP^{\Sigma_2^P}=co NP^{NP^{NP}}$};
+	
+	\node[vertex] (D4) at (2,6) {\small $\cdots$};
+	\node[vertex] (S4) at (0,6) {};
+	\node[vertex] (P4) at (4,6) {};
+	
+    \foreach \from/\to in {D1/S1,D1/P1,S1/D2,P1/D2,D2/S2,D2/P2,S2/D3,P2/D3,D3/S3,D3/P3,S3/D4,P3/D4,
+    S1/S2,S2/S3,P1/P2,P2/P3}
+    \path[->](\from) edge node [above]{} (\to);
+   
+    \path[-](S3) edge node [above]{} (S4);
+    \path[-](P3) edge node [above]{} (P4);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+
+
+\begin{frame}{Complexity Concepts: $QBF_{2,\exists}$}
+\metroset{block=fill}
+
+\begin{block}{Definition: $QBF_{2,\exists}$}
+For $Q \in QBF_{2,\exists}$ ($QBF :=$ Quantified Boolean Formulas)
+\begin{equation*}
+Q := \exists p_1 \dots p_n \forall q_1 \dots \forall q_m \; E
+\end{equation*}
+where $E$ is a propositional formula, $I := \{1,\dots ,n\}$ and $(p_i)_{i \in I}, (q_i)_{i \in I}$ are families of mutually distinct propositional variables, i.e. $\nu(x)^{\mathcal{I}} \in \{\mathbf{True},\mathbf{False}\}$ for $x$ propositional variable.
+\end{block}
+
+\begin{block}{Definition: $QBF_{2,\exists}$ - Validity}
+$Q \in QBF_{2,\exists}$ is valid $\iff \exists$ variable assignment $\nu$ fixing $(p_i)_{i \in I} \; \forall \sigma \supset \nu$ $E$ is true.
+\end{block}
+\end{frame}
+
+
+\subsection{Overview}
+\begin{frame}{Questions}
+\metroset{block=fill}
+
+\textbf{Logics}
+\begin{itemize}[label={-}]
+\item<1-| alert@2> Default Logic (Reiter),
+\item<1-| alert@2> Autoepistemic Logic (Moore),
+\item<1-> nonmonotonic logic $N$ (Marek and Truszczy\'nski) and 
+\item<1-> nonmonotonic logic (McDermott and Doyle). 
+\end{itemize}
+
+\begin{block}{Definition: Three  decision Problems}
+Let $\phi$ be a formula and $\Sigma$ a set of premisses
+\begin{itemize}
+\item \textbf{existence:} $\exists \Delta \supseteq \Sigma : \Delta \textit{ is a fixed-point}$
+\item \textbf{brave/credulous reasoning:} $\exists \Delta \textit{ stable-extension} : \phi \in \Delta$ 
+\item \textbf{cautious/sceptical reasoning:} $\forall \Delta \textit{ stable-extension} : \phi \in \Delta$ 
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Spoilers}
+\metroset{block=fill}
+\begin{table}
+\begin{tabular}{l | l l l}
+Complexity Results& 			existence & brave & cautious \\ 
+\hline
+
+Default Logic &					$\Sigma_2^P$\uncover<2->{\textit{-comp.}} & $\Sigma_2^P$\uncover<2->{\textit{-comp.}} & $\Pi_2^P$\uncover<2->{\textit{-comp.}}\\
+Autoepistemic Logic &			$\Sigma_2^P$\uncover<2->{\textit{-comp.}} & $\Sigma_2^P$\uncover<2->{\textit{-comp.}} & $\Pi_2^P$\uncover<2->{\textit{-comp.}} \\
+nonmonotonic logic $N$  & 		\alt<2>{$\Sigma_2^P$}{?}\uncover<2->{\textit{-comp.}} & \alt<2>{$\Sigma_2^P$}{?}\uncover<2->{\textit{-comp.}} & \alt<2>{$\Pi_2^P$}{?}\uncover<2->{\textit{-comp.}} \\
+nonmonotonic logic & 			$\Sigma_2^P$\uncover<2->{\textit{-comp.}} & $\Sigma_2^P$\uncover<2->{\textit{-comp.}} & $\Pi_2^P$\uncover<2->{\textit{-comp.}} \\
+\hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+\section{Default Logic}
+\subsection{Definitions}
+
+
+\begin{frame}{Default Logic: Definitions}
+\metroset{block=fill}
+\begin{block}{Definition: Default}
+A \emph{default} is
+\begin{equation*}
+\frac{\alpha:\beta_1, \beta_2, \dots , \beta_n}{\omega}
+\end{equation*}
+(with $\alpha, \beta_1, \beta_2, \dots , \beta_n, \omega$ propositional sentences) is satisfied by a deductively closed set of sentences $\Phi$, if 
+\begin{equation*}
+\alpha \in \Phi \land \beta_1, \beta_2, \dots , \beta_n \textit{ consistent with } \Phi \implies \omega \in \Phi
+\end{equation*}
+A default is called
+\begin{itemize}[label={$-$}]
+\item normal $:\iff \frac{\alpha:\omega}{\omega}$;
+\item semi-normal $:\iff \frac{\alpha:(\gamma \land \omega)}{\omega}$.
+\end{itemize}
+\end{block}
+
+
+
+\begin{block}{Definition: Propositional Default Theory}
+A \emph{propositional default theory} is a pair $\langle W, D\rangle$ where 
+$W$ is a finite set of propositional sentences and $D$ a set of defaults.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Default Logic: Definitions}
+\metroset{block=fill}
+\begin{block}{Definition: Extension}
+Let $\langle W, D\rangle$ be a default theory, let $S$ be a set of propositional formulas. Then $\Gamma(S)$ is the smallest set satisfying:
+\begin{itemize}[label={$\bullet$}]
+\item $W \subseteq \Gamma(S)$,
+\item $\Gamma(S)$ deductively closed,
+\item 
+\begin{equation*}
+\frac{\alpha:\beta_1, \beta_2, \dots , \beta_n}{\omega} \;\land \; \alpha\in\Gamma(S) \; \land \; \lneg\beta_1, \lneg\beta_2, \dots , \lneg\beta_n \nin S \implies \omega \in \Gamma(S)
+\end{equation*}.
+\end{itemize} 
+\end{block}
+Informally: A default extension of $\langle W, D\rangle$ is a grounded minimal deductively closed set of propositional formulas containing $W$ and satisfying all defaults in $D$.
+\end{frame}
+
+\begin{frame}{Default Logic: Finite Characterisation}
+\metroset{block=fill}
+\begin{block}{Definition: Generating Defaults}
+Let $E$ be an extension of the propositional default theory $\mathcal{T}=\langle W,D\rangle$.
+The set of generating defaults for $E$ respect to $\mathcal{T}$ is
+\begin{equation*}
+GD(E,\mathcal{T}) := \left\lbrace \frac{\alpha:\beta_1, \beta_2, \dots , \beta_n}{\omega} \in D \, \middle\mid  \,\alpha \in E \land \lneg\beta_1, \lneg\beta_2, \dots , \lneg\beta_n \nin E \right\rbrace
+\end{equation*} 
+\end{block}
+\begin{block}{Definition: Consequence}
+Let $D$ be a set of default then 
+\begin{equation*}
+CONSEQUENTS(D):= \left\lbrace  \omega \, \middle\mid  \, \frac{\alpha:\beta_1, \beta_2, \dots , \beta_n}{\omega} \in D \right\rbrace 
+\end{equation*}
+\end{block}
+\begin{block}{Proposition: Finite Characterisation of Extension}
+Let $E$ be an extension of a default theory $\mathcal{T}=\langle W,D\rangle$. Then
+\begin{equation*}
+E=cons(W \cup CONSEQUENTS(GD(E,\mathcal{T})))
+\end{equation*}
+\end{block}
+\end{frame}
+
+\subsection{Main Result}
+
+\begin{frame}{Default Logic: Main Result}
+\metroset{block=fill}
+
+\begin{block}{Theorem: Existence}
+Deciding whether a propositional default theory $\langle W, D \rangle$ has an extension is $\Sigma_2^P\textit{-complete}$. (Note: the problem remains $\Sigma_2^P\textit{-complete}$ even if restricted to semi-normal default theories.) 
+\end{block}
+\textbf{Proof} of $\Sigma_2^P$: 
+
+It can be shown that \textbf{existence} in default logic can be reduced to a $\Sigma_2^P$ problem in nonmonotonic logic $N$
+
+
+\textbf{Proof} of $\Sigma_2^P\text{-hard}$:
+
+Proof by reduction to from $QBF_{2,\exists}$ to \textbf{existence} in default logic. \\
+Let $Q:= \exists p_1 \dots p_n \forall q_1 \dots \forall q_m \; E$ be transformed in polynomial time into the default theory $\langle W, D\rangle$ where $W:=\emptyset$
+\begin{equation*}
+D:=\left\lbrace \frac{\top:p_1}{p_1},  \frac{\top:\lneg p_1}{\lneg p_1}, \dots, \frac{\top:p_n}{p_n},  \frac{\top:\lneg p_n}{\lneg p_n}, \frac{\top:\lneg E}{\bot}\right\rbrace
+\end{equation*}
+
+Show
+\begin{equation*}
+Q \text{ valid } \iff \langle W, D\rangle \text{ has an extension }
+\end{equation*}
+\end{frame}
+
+
+
+\begin{frame}{Default Logic: Main Result - Proof "$\Longleftarrow$"}
+\metroset{block=fill}
+Assume $\langle W, D\rangle$ has an extension $\Delta$.
+\begin{itemize}[label = {$\bullet$}]
+\item $\forall i \in I$ either $p_i \in \Delta$ or $\lneg p_i \in \Delta$
+\item Show $\Delta \models E$.
+\begin{itemize}[label={$-$}]
+\item $W$ is consistent
+\item thus, $\Delta$ must be consistent as
+\begin{itemize}[label={$>$}]
+\item from $\Delta = \mathcal{L}$
+\item we obtain $\Gamma(\Delta)= \Gamma(\mathcal{L})=cons(W)  \neq \Delta$.
+\end{itemize}
+\item Since $\bot \nin \Delta$ and $\frac{\top:\lneg E}{\bot}\in D$ it must be that $\lneg (\lneg E) \in \Delta$.
+\end{itemize}
+\item By combining $\Delta = cons(\{p_i \mid p_i \in \Delta\} \cup \{\lneg p_i \mid \lneg p_i \in \Delta\})$ 
+\item with $\Delta \models E$
+\item we obtain $\{p_i \mid p_i \in \Delta\} \cup \{\lneg p_i \mid \lneg p_i \in \Delta\} \models E$.
+\item Hence, $Q$ is valid.
+\end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Default Logic: Main Result - Proof "$\Longrightarrow$"}
+\metroset{block=fill}
+Assume $Q$ is valid.
+\begin{itemize}[label = {$\bullet$}]
+\item $\exists$ variable assignment $\nu$ fixing $(p_i)_{i\in I}$ s.t. $\forall \sigma \supset \nu$ $E$ is true.
+\item Let $\Delta = cons(\{p_i \mid \nu(p_i) = \mathbf{True}\}\cup \{\neg p_i \mid \nu(p_i)) = \mathbf{False}\}$)
+\item Hence, $\Delta \models E$, 
+\item from which $E \in cons(\Delta)$ follows.
+\item $\Gamma(\Delta)\subseteq\Delta$ since
+\begin{itemize}[label={$-$}]
+\item $\emptyset \subseteq \Delta$,
+\item $\Delta$ is deductively closed and 
+\item $\forall d \in D: d$ satisfied implies $\omega \in \Delta$.
+\end{itemize}
+\item $\Delta \subseteq \Gamma(\Delta)$ since
+\begin{itemize}[label={$-$}]
+\item $p_i \in \Delta \iff p_i \in \Gamma(\Delta)$ and
+\item $\lneg p_i \in \Delta \iff \lneg p_i \in \Gamma(\Delta)$.
+\end{itemize}
+\item Obviously $\Gamma(\Delta)\subseteq\Delta$ and $\Delta \subseteq \Gamma(\Delta)$ implies $\Delta = \Gamma(\Delta)$.
+\item Therefore, $\Delta$ extension of $\langle W, D \rangle$.
+\end{itemize}
+\end{frame}
+
+
+
+\subsection{Auxiliary Results}
+
+\begin{frame}{Default Logic: Auxiliary Results - Brave Reasoning}
+\metroset{block=fill}
+\begin{block}{Theorem: Brave Reasoning}
+Deciding whether a formula $\phi$ is an element of some extension of a propositional default theory $\langle W, D \rangle$ is $\Sigma_2^P\textit{-complete}$ (even for normal default theory)
+\end{block}
+
+\textbf{Proof} (Idea) of $\Sigma_2^P\text{-hard}$:
+
+Let $Q:= \exists p_1 \dots p_n \forall q_1 \dots \forall q_m \; E$ be transformed in polynomial time into a default theory $\langle W, D\rangle$ such that $W:=\emptyset$
+\begin{equation*}
+D:=\left\lbrace \frac{\top:p_1}{p_1},  \frac{\top:\lneg p_1}{\lneg p_1}, \dots, \frac{\top:p_n}{p_n},  \frac{\top:\lneg p_n}{\lneg p_n}\right\rbrace
+\end{equation*}
+\begin{itemize}[label = {$\bullet$}]
+\item $\exists$ bijective mapping $f: \{\text{truth value assignments}\} \to \{\text{extensions of } \langle \emptyset, D \rangle\}$ 
+\item Hence, $Q$ valid  $\iff$ $\exists$ extension $\Delta$ of $\langle \emptyset, D\rangle$ such that $E \in \Delta$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Default Logic: Auxiliary Results - Cautious Reasoning}
+\metroset{block=fill}
+\begin{block}{Theorem: Cautious Reasoning}
+Deciding whether a formula $\phi$ is an element of all extensions of a propositional default theory $\langle W, D \rangle$ is $\Pi_2^P\textit{-complete}$ (even for normal default theory)
+\end{block}
+
+\textbf{Proof} (Idea) of $\Pi_2^P\text{-hard}$:
+
+Let $Q:= \exists p_1 \dots p_n \forall q_1 \dots \forall q_m \; E$ be transformed in polynomial time into a default theory $\langle W, D\rangle$ such that $W:=\emptyset$
+\begin{equation*}
+D:=\left\lbrace \frac{\top:p_1}{p_1},  \frac{\top:\lneg p_1}{\lneg p_1}, \dots, \frac{\top:p_n}{p_n},  \frac{\top:\lneg p_n}{\lneg p_n}, \frac{\top:\lneg E}{\lneg E}\right\rbrace
+\end{equation*}
+\begin{itemize}[label = {$\bullet$}]
+\item $Q$ not valid $\iff$ $\lneg E$ belongs to each extension of $\langle \emptyset, D \rangle$.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Default Logic: Auxiliary Results - nonmonotonic logic $N$}
+\metroset{block=fill}
+\begin{block}{Corollary: Reasoning in nonmonotonic logic $N$}
+Given a set of premisses $\Sigma$ and $\phi \in \mathcal{L}$ (language of auto-epistemic logic) 
+\begin{itemize}[label = {$\bullet$}]
+\item \textbf{existence} is $\Sigma_2^P\textit{-hard}$ ($\Sigma_2^P\textit{-complete}$)
+\item \textbf{brave reasoning} for $\phi$ is $\Sigma_2^P\textit{-hard}$ ($\Sigma_2^P\textit{-complete}$)
+\item \textbf{cautious reasoning} for $\phi$ is $\Pi_2^P\textit{-hard}$ ($\Pi_2^P\textit{-complete}$)
+\end{itemize}
+\end{block}
+
+\textbf{Proof} (Idea):
+
+It can be shown that \textbf{existence} in default logic can be reduced to a $\Sigma_2^P$ problem in nonmonotonic logic $N$. Hence, it is a fragment of nonmonotonic logic $N$, i.e. hardness carries over.
+\end{frame}
+
+
+\section{Autoepistemic Logic}
+\subsection{Definitions}
+
+
+\begin{frame}{Autoepistemic Logic: Definitions}
+\metroset{block=fill}
+\begin{block}{Definition: Language $\mathcal{L}_{ae}$}
+The language of autoepistemic logic $\mathcal{L}_{ae}$ consists of the language of the classic propositional calculus $\mathcal{L}$ with the syntactic operators $\lneg, \land ,\lor, \lif, \liff, \lbot, \ltop$ augmented with the "introspective" operator $L$ (i.e. intuitively $L\phi$ means $\phi$ \emph{is believed}).
+\end{block}
+
+\begin{block}{Definition: Semantics}
+A propositional interpretation is extended by regarding $L\phi$ as atomic formula. Every non-atomic formula obtains its truth value by classic truth recursion. \\
+
+The classical consequence relation on $\mathcal{L}$ is extended to $\mathcal{L}_{ae}$, such that for $\Sigma \subseteq \mathcal{L}_{ae}$ and $\phi  \in \mathcal{L}_{ae} $
+\begin{equation*}
+\Sigma \models \phi \iff \forall \mathcal{I} : \mathcal{I} \models \Sigma \Rightarrow \mathcal{I} \models \phi
+\end{equation*}
+\end{block}
+
+\begin{block}{Definition: Stable Expansion}
+$\Delta$ is a \emph{stable expansion} of  $\Sigma$  $\iff$ $\Delta = cons(\Sigma \cup L(\Delta) \cup \neg L(\overline{\Delta}))$
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Autoepistemic Logic: Finite Characterisation}
+\metroset{block=fill}
+
+
+\begin{block}{Definition: Lbase}
+An $Lbase$ is the set $Lbase(\Sigma):= Sf^L(\Sigma) \cup \neg Sf^L(\Sigma)$ where $Sf^L(\Sigma)$ is the set of sub-formulas of each formula $\phi \in \Sigma$ of the form $L \phi $, i.e.  $Sf^L(\Sigma):=\{L \phi \in Sf(\Sigma)\}$.
+
+\end{block}
+
+
+\begin{block}{Definition: $\Sigma\text{-full}$}
+For a set of premises $\Sigma$ a set $\Lambda \subseteq Lbase(\Sigma)$ is $\Sigma\text{-full}$ iff $\forall L\phi \in Sf^L(\Sigma):$
+\begin{equation*}
+\Sigma \cup \Lambda \models \phi \iff L\phi \in \Lambda \quad \land  \quad \Sigma \cup \Lambda \nmodels  \phi \iff \lneg L\phi \in \Lambda
+\end{equation*}
+\end{block}
+
+\begin{block}{Proposition: Correspondence}
+For each set of premises $\Sigma$ there is a one-to-one correspondence between the stable expansions of $\Sigma$  and the $\Sigma\text{-full}$ sets.
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Autoepistemic Logic: Finite Characterisation}
+\metroset{block=fill}
+
+\begin{block}{Definition: Kernel}
+For the expansion $E=:SE_{\Sigma}(\Lambda)$, with E corresponding the $\Sigma\text{-full}$ set $\Lambda$ we have
+\begin{equation*}
+\Lambda = Lbase(\Sigma) \cap (\{L\phi \in E\} \cup \{\lneg L\phi \nin E\})
+\end{equation*}
+With $\Lambda$ being the kernel of $SE_{\Sigma}(\Lambda)$
+\end{block}
+
+\begin{block}{Proposition: Membership}
+Let $\Sigma$ be a set of premises, $\Lambda$ is a $\Sigma\textit{-full}$ set
+and $\phi \in \mathcal{L}_{ae}$. Then $\phi \in SE_{\Sigma}(\Lambda) \iff \Theta \models \phi$
+where
+\begin{equation*}
+\Theta := \Sigma \cup  \Lambda \cup \{L\psi \mid L\psi \in Sf^q(\phi) \land \psi \in SE_{\Sigma}(\Lambda)\} \cup \{\lneg L\psi \mid L\psi \in Sf^q(\phi) \land \psi \nin SE_{\Sigma}(\Lambda)\}
+\end{equation*}
+and $Sf^q$ are all subformulas except that formulas of the form $L\phi$ do not have further subformulas.
+\end{block}
+
+\end{frame}
+
+
+\subsection{Main Result}
+\begin{frame}{Autoepistemic Logic: Main Result}
+\metroset{block=fill}
+\begin{block}{Theorem: Existence}
+Deciding whether a set of premises $\Sigma$ has a stable expansion is $\Sigma_2^P$ complete.
+\end{block}
+
+\textbf{Proof} of $\Sigma_2^P$: 
+
+Was previously shown.
+
+
+\textbf{Proof} of $\Sigma_2^P\text{-hard}$:
+
+Proof by reduction to from $QBF_{2,\exists}$ to \textbf{existence} in autoepistemic logic. \\
+Let $Q:= \exists p_1 \dots p_n \forall q_1 \dots \forall q_m \; E$ be transformed in polynomial time into a set of autoepistemic formulas 
+\begin{equation*}
+\Sigma:=\{p_1 \liff Lp_1, \dots, p_n \liff Lp_n, LE\}
+\end{equation*}
+Show
+\begin{equation*}
+Q \text{ valid } \iff \Sigma \text{ has a stable expansion }
+\end{equation*}
+
+
+\end{frame}
+
+
+\begin{frame}{Autoepistemic Logic: Main Result - Proof "$\Longleftarrow$"}
+\metroset{block=fill}
+Assume $\Delta$ is a stable expansion of $\Sigma$.
+\begin{itemize}[label = {$\bullet$}]
+\item Firstly, check that $\Delta$ is consistent, i.e. $\Delta \neq \mathcal{L}_{ae}$.
+\begin{itemize}[label={-}]
+\item  Assume $\Delta = \mathcal{L}_{ae}$ 
+\item thus, $\overline{\Delta}=\emptyset$ 
+\item leading to $cons(\Sigma \cup L(\Delta) \cup \neg L(\emptyset)) = cons(\Sigma \cup L(\Delta) )$ 
+\item Consider $\mathcal{I}$ such that $\forall x \in atoms(\mathcal{L}_{ae}): \nu^{\mathcal{I}}(x)=True$
+\begin{itemize}[label={$>$}]
+\item $\Sigma$ is consistent,
+\item $L(\Delta)$ is consistent, leading to
+\item $\Sigma \cup L(\Delta)$ is consistent
+\end{itemize}
+\item Now since by definition $cons(\Sigma \cup L(\Delta))= \{\phi \mid \Sigma \cup L(\Delta) \models \phi\}$ and $\Sigma \cup L(\Delta)$ it follows that
+\item $cons(\Sigma \cup L(\Delta))$ is consistent. 
+\item $\lightning$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Autoepistemic Logic: Main Result - Proof "$\Longleftarrow$"}
+\metroset{block=fill}
+Assume $\Delta$ is a stable expansion of $\Sigma$.
+\begin{itemize}[label = {$\bullet$}]
+\item We have $\Sigma \subset \Delta$
+\item and $p_i \in \Delta$ or $\lneg p_i \in \Delta$
+\begin{itemize}[label={$-$}]
+\item we know either $Lp_i \in \Delta$ or $\lneg Lp_i \in \Delta$
+\item by $p_i \liff Lp_i \in \Sigma \subset \Delta$ and by closure under consequence
+\item $p_i \in \Delta$ or $\lneg p_i \in \Delta$.
+\end{itemize}
+\item We know $\Lambda=\{Lp_i \mid Lp_i \in \Delta\} \cup \{\neg Lp_i \mid \neg Lp_i \in \Delta\} \cup \{LE\}$ 
+\item From $LE\in\Delta$ we get $E\in\Delta$
+\item By Proposition "Membership" we get $\Sigma \cup \Lambda \models E$
+\item $q_i \nin \Sigma \cup \Lambda$ 
+\item Hence, truth value of $Q$ sole depends on $p_i$'s 
+\item Therefore, $Q$ is valid.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Autoepistemic Logic: Main Result - Proof "$\Longrightarrow$"}
+\metroset{block=fill}
+Assume $Q$ is valid.
+\begin{itemize}[label = {$\bullet$}]
+\item $\exists$ variable assignment $\nu$ fixing $(p_i)_{i\in I}$ s.t. $\forall \sigma \supset \nu$ $E$ is true.
+\item Consider $\Lambda = \{Lp_i \mid \nu(p_i)=\mathbf{True}\} \cup \{\neg Lp_i \mid \nu(p_i)=\mathbf{False}\} \cup \{LE\}$
+\item Claim $\Lambda$ is $\Sigma\textit{-full}$
+\begin{itemize}[label={$-$}]
+\item $Sf^L(\Sigma)=\{Lp_i\mid \forall i \in I\} \cup \{LE\}$
+\item $\forall i \in I \; p_i \liff Lp_i$ implies 
+\begin{itemize}[label={$>$}]
+\item $Lp_i \in \Lambda \iff \Sigma \cup \Lambda \models p_i$
+\item $\lneg Lp_i \in \Lambda \iff \Sigma \cup \Lambda \nmodels p_i$
+\end{itemize}
+\item notice $\Sigma \cup \Lambda \models E$
+\item thus, $\Lambda$ is $\Sigma\textit{-full}$.
+\end{itemize} 
+\item We have at least one $\Sigma\textit{-full}$ set.
+\item There must be at least one stable expansion of $\Sigma$.
+\end{itemize}
+\end{frame}
+
+
+\subsection{Auxiliary Results}
+
+\begin{frame}{Autoepistemic Logic: Auxiliary Results - Brave Reasoning}
+\metroset{block=fill}
+
+\begin{block}{Theorem: Brave Reasoning}
+The problem of deciding whether a formula $\phi$ belongs to at least one stable expansion of a set of premises $\Sigma$ is $\Sigma_2^P\textit{-complete}$.
+\end{block}
+
+\textbf{Proof} (Idea) of $\Sigma_2^P\textit{-hard}$:
+\begin{itemize}[label = {$\bullet$}]
+\item Any stable expansion $\Delta$ is closed under logical inference.
+\item Hence, $\top \in \Delta$
+\item Therefore, $\Sigma$ has a stable expansion $\iff$ $\exists \Delta \text{ stable expansion of } \Sigma \;\top \in \Delta$
+\item Thus  $\Sigma$ has a stable expansion $\leq_P$ brave reasoning
+\item We obtain, Brave reasoning is $\Sigma_2^P\textit{-hard}$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Autoepistemic Logic: Auxiliary Results - Cautious Reasoning}
+\metroset{block=fill}
+
+\begin{block}{Theorem: Cautious Reasoning}
+The problem of deciding whether a formula $\phi$ belongs to at all stable expansion of a set of premises $\Sigma$ is $\Pi_2^P\textit{-complete}$.
+\end{block}
+
+\textbf{Proof} (Idea) for $\Pi_2^P\textit{-hard}$:
+\begin{itemize}[label = {$\bullet$}]
+\item $\Sigma$ has a stable expansion $\iff$ $\exists \Delta \text{ stable expansion of } \Sigma \;\top \in \Delta$
+\item $\Sigma$ has a no stable expansion $\iff$ $\forall \Delta \text{ stable expansion of } \Sigma \; \bot \in \Delta$
+\item $\Sigma$ has a no stable expansion $\leq_P$ cautious reasoning
+\item  $\Sigma$ has a no stable expansion in $\Pi_2^P\text{-complete}$ (complement) 
+\item cautious reasoning in $\Pi_2^P\textit{-hard}$
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Autoepistemic Logic: Auxiliary Results - Consistency}
+\metroset{block=fill}
+
+\begin{block}{Corollary: Consistent Stable Expansion}
+Deciding whether a set of premises $\Sigma$ has a consistent stable expansion is $\Sigma_2^P\text{-complete}$ .
+\end{block}
+
+\textbf{Proof} (Idea):
+
+We made sure that $\Delta \neq \mathcal{L}_{ae}$
+
+
+\begin{block}{Theorem: Consistent Brave Reasoning}
+The problem of deciding whether a formula $\phi$ belongs to at least one consistent stable expansion of a set of premises $\Sigma$ is $\Sigma_2^P\textit{-complete}$.
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Bye! Have a good night!}
+
+
+\begin{block}{}
+\begin{center}
+\huge
+\textbf{Thank you for your attention!}
+\end{center} 
+\end{block}
+\end{frame}
+\end{document}

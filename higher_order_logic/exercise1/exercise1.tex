@@ -1,0 +1,1982 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{bussproofs}
+\usepackage{rotating}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+
+\newcommand{\lto}{\supset}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\tall}[1]{\left[ #1 \right]}
+\newcommand{\tsome}[1]{\left\langle  #1 \right\rangle}
+
+\newcommand{\eall}{\mathbf{K}}
+\newcommand{\esome}{\mathbf{P}}
+\newcommand{\edisp}{\mathbf{S}}
+\newcommand{\edist}{\mathbf{D}}
+\newcommand{\egen}{\mathbf{E}}
+\newcommand{\ecom}{\mathbf{C}}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+\newcommand{\derives}{\vdash}
+\newcommand{\nderives}{\nvdash}
+
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+\begin{document}
+
+%\maketitle
+
+%I had general discussions with most of the members of the group (though especially with Hanna and Pamina). However, those discussions were not particularly in depth. Most of the time those revolved around clarification and sharing of possible pitfalls, e.g. clarification about which rules to be demonstrated in exercise 5 or that there the variables are an issue in the induction.  
+\section*{Exercise 1}
+\begin{quote}
+Exercise 1.7 (page 6)\\
+Two structures $(D_1, I_1)$ and $(D_2, I_2)$ in the same language $\mathcal{L}$ are called isomorphic, often written as $(D_1, I_1) \simeq (D_2, I_2)$, if there is a bijection $\psi: D_1 \to D_2$ s.t.
+\begin{enumerate}
+\item $\psi(I_1(c))=I_2(c)$,
+\item $\psi(I_1(f)(m_1, \dots, m_n))=I_2(f)(\psi(m_1), \dots, \psi(m_n)))$ for all $m_1,\dots, m_n \in D_1$, and 
+\item $(m_1, \dots, m_n) \in I_1(P)$ iff $(\psi(m_1), \dots, \psi(m_n)) \in I_2(P)$ for all $m_1,\dots, m_n \in D_1$.
+\end{enumerate}
+The theory of a structure $\mathcal{S}$ is defined as $Th(\mathcal{S})= \{ A \; \mathit{sentence} \; \mid \mathcal{S} \models A \}$. $S_1$ and $S_2$ are called
+elementarily equivalent if $Th(\mathcal{S}_1)=Th(\mathcal{S}_2)$. \\
+
+(a) Show that two isomorphic structures are elementarily equivalent.
+Hint: first show $\psi(I_1(t))=I_2(t)$ by induction on the term structure of $t$ and then $(a)$ by
+induction on formula structure.\\
+
+The language of arithmetic is $\mathcal{L}_{\mathbb{N}}=\{0/0, s/1, +/2, \cdot/2, </2\}$. The standard model of arithmetic
+is the $\mathcal{L}_{\mathbb{N}}$-structure $\mathcal{N}=(\mathbb{N},I)$ where $I$ is the obvious standard-interpretation of the symbols in $\mathcal{L}_{\mathbb{N}}$. \\
+
+ (b) Show that there is a structure which is elementary equivalent but not isomorphic to $\mathcal{N}$.
+Hint: Add a new constant symbol $c$ to $\mathcal{L}_{\mathbb{N}}$, successively force $c$ to be larger than each natural number and apply the compactness theorem. \\
+
+A structure as in $(b)$ is called non-standard model of arithmetic.
+\end{quote}
+
+
+Firstly, some clarifications $\overline{x}=(x_i)_{i \in \{0,\dots,n \}}$ is the notation for a family of variable symbols. In analogue for terms $\overline{t}$ and elements of an domain $\overline{m}$. Moreover, given the definition in the script, there is not distinct variable assignment. That is, for a structure $\mathcal{M}:= \langle M , \mathcal{I}\rangle$ the interpretation function can be understood as $\mathcal{I} := I \cup \Delta$ where $\Delta:= \{\overline{x} \mapsto \overline{m}\}$ is responsible for the assignment of domain elements to variable symbols. That is, this is merely used to make the free variable assignment explicit.
+Moreover, for a term $t$ and a formula $\varphi$, the notation $t[\overline{x}]$ and $\varphi[\overline{x}]$ are used to make the free variables explicit. Lastly, let $(\tau \circ \Delta )$ be $\{\overline{x} \mapsto \overline{\tau(m)}\}$.\\
+
+
+
+Starting by an induction on the structure of terms.
+\paragraph*{IH:} Let $t[\overline{x}]$ be a term, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\overline{x} \mapsto \overline{m_1}\}$ be an extension of $I_1$. Then 
+\begin{equation*}
+\tau((I_1 \cup \Delta_1)(t[\overline{x}]))= (I_2 \cup (\tau \circ \Delta))(t[\overline{x}])
+\end{equation*}
+
+\paragraph*{IB:}
+\begin{itemize}[leftmargin=*]
+\item $t[\overline{x}]= c$. Starting from $\tau((I_1 \cup \Delta_1)(c)$, by definition of $I_1$ the constant symbol $c$ will be mapped to an element $m_1 \in M_1$ resulting in $\tau(m_1)=m_2$. By  definition of $\tau$ one obtains $\tau(m_1)=m_2=I_2(c)$. Since, $c$ is a constant symbol it follows that $I_2(c) = (I_2\cup (\tau \circ \Delta_1))(c)$.\\
+
+\item $t[\overline{x}]= x$. Starting from $\tau((I_1 \cup \Delta_1)(x))$, by definition of $\mathcal{I}_1$ the variable symbol $x$ will be mapped to an element $m_1 \in M_1$ by an assignment in $\Delta_1$ (otherwise $\mathcal{I}_1$ would not be an interpretation). That is, $\{x \mapsto m_1\} \subseteq \Delta_1$. Resulting in $\tau((I_1 \cup \Delta_1)(x)) = \tau((I_1 \cup \{x \mapsto m_1\})(x))= \tau(m_1)= m_2 = (I_2 \cup \{x \mapsto m_2\})(x) =  (I_2 \cup \{x \mapsto \tau(m_1)\})(x) = (I_2 \cup (\tau \circ \Delta_1))(x)$.
+\end{itemize}
+\paragraph*{IS:}
+\begin{itemize}[leftmargin=*]
+\item $t[\overline{x}]=f(\overline{t})[\overline{x}]$. Starting from $\tau((I_1 \cup \Delta_1)(f(\overline{t})[\overline{x}]))$ which is just a shorthand for 
+\begin{equation*}
+\tau((I_1 \cup \Delta_1)(f(t_1[\overline{x}_1], \dots, t_n[\overline{x}_n])).
+\end{equation*} 
+By definition of $I_1$ one obtains 
+\begin{equation*}
+\tau(I_1(f)(\mathcal{I}_1(t_1[\overline{x}_1]), \dots, \mathcal{I}_1(t_n[\overline{x}_n]))).
+\end{equation*} 
+By definition of $\tau$ one obtains 
+\begin{equation*}
+I_2(f)(\tau(\mathcal{I}_1(t_1[\overline{x}_1])), \dots, \tau(\mathcal{I}_1(t_n[\overline{x}_n])))).
+\end{equation*}
+ By IH it follows that $\forall i \in \{1,\dots ,n\}$,
+\begin{equation*}
+\tau(\mathcal{I}_1(t_i[\overline{x}_i])) = \mathcal{I}_2(t_i[\overline{x}_i])) = (I_2\cup (\tau \circ \Delta_1))(t_i[\overline{x}_i])).
+\end{equation*}
+Moreover, since the interpretation of $f$ is not influenced by the part of the interpretation responsible for free variable assignment it follows that 
+\begin{equation*}
+\mathcal{I}_2(f)(\mathcal{I}_2(t_1[\overline{x}_1]), \dots, \mathcal{I}_2(t_n[\overline{x}_n]))),
+\end{equation*}
+which by definition of the interpretation is 
+\begin{equation*}
+\mathcal{I}_2(f(t_1[\overline{x}_1], \dots, t_n[\overline{x}_n]))= (I_2 \cup (\tau \circ \Delta))(f(t_1, \dots, t_n)[\overline{x}]).
+\end{equation*}\\
+
+\end{itemize}
+
+From here an induction over the structure of formulas in warranted.
+
+
+\paragraph*{IH:} Let $\varphi[\overline{x}]$ be a second-order formula, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\overline{x} \mapsto \overline{m_1}\}$ be an arbitrary extension of $I_1$. Then 
+\begin{equation*}
+\langle M_1, (I_1 \cup \Delta_1) \rangle \models \varphi[\overline{x}] \iff \langle M_2, (I_2 \cup (\tau \circ \Delta)) \rangle \models \varphi[\overline{x}]
+\end{equation*}
+
+\paragraph*{IB:}
+Note $\overline{X}$ is here clearly empty.
+\begin{itemize}[leftmargin=*]
+\item $\varphi[\overline{x}]= P(\overline{t})[\overline{x}]$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models P(\overline{t})[\overline{x}] $, which by semantics is $(I_1 \cup \Delta_1)(P(\overline{t})[\overline{x}])$. This is equivalent to 
+\begin{equation*}
+(I_1 \cup \Delta_1)(P(t_1[\overline{x}_1], \dots , t_n[\overline{x}_n]).
+\end{equation*}
+By the definition of the interpretation function this is equivalent to 
+\begin{equation*}
+(I_1 \cup \Delta_1)(P)(\mathcal{I}_1(t_1[\overline{x}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n])).
+\end{equation*}
+Due to the fact that for the assignment of the predicate symbol $P$ is independent of the assignments in $\Delta_1$ one obtains,
+\begin{equation*}
+I_1(P)(\mathcal{I}_1(t_1[\overline{x}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n]))),
+\end{equation*}
+which is simply another depiction of the statement
+\begin{equation*}
+(\mathcal{I}_1(t_1[\overline{x}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n])) \in (I_1)(P).
+\end{equation*}
+Now by the definition of $\tau$ one obtains 
+\begin{equation*}
+(\tau(\mathcal{I}_1(t_1[\overline{x}_1])), \dots , \tau(\mathcal{I}_1(t_n[\overline{x}_n]))) \in (I_2)(P).
+\end{equation*}
+Now, given the fact that $t_1, \dots , t_n$ are terms and by the observation above, i.e. $\forall i \in \{1,\dots n\}\; \mathcal{I}_1(t_i[\overline{x}_i])) = (I_2 \cup (\tau \circ \Delta_1))(t_i[\overline{x}_i])) = \mathcal{I}_2(t_i[\overline{x}_i])$, this is the same as 
+\begin{equation*}
+(\mathcal{I}_2(t_1[\overline{x}_1]), \dots , \mathcal{I}_2(t_n[\overline{x}_n])) \in (I_2)(P).
+\end{equation*}
+Again by the fact that the interpretation of the symbol $P$ is not influenced by $\Delta_1$ and by rewriting the term one obtains  
+\begin{equation*}
+(\mathcal{I}_2)(P)(\mathcal{I}_2(t_1[\overline{x}_1]), \dots , \mathcal{I}_2(t_n[\overline{x}_n]))).
+\end{equation*}
+By the definition of the interpretation it thus follows 
+\begin{equation*}
+\mathcal{I}_2(P(t_1[\overline{x}_1], \dots , t_n[\overline{x}_n]))
+\end{equation*}
+which finally leads to $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \models  P(\overline{t})[\overline{x}]$.\\
+
+\item  $\varphi[\overline{x}]= \bot$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \nmodels \bot $. In the set notation $(I_1\cup \Delta_1)(\bot )=I_1(\bot )= \{\}$, which means given the definition of $\tau$ that $\tau(I_1(\bot))=I_2(\bot) = \{\}$, which leads to $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \nmodels \bot$, as no element can be in the empty set. \\
+
+
+\item  $\varphi[\overline{x}]= (t_1[\overline{x}_1] = t_2[\overline{x}_2])$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models t_1[\overline{x}_1] = t_2[\overline{x}_2] $, which by semantics is $(I_1 \cup \Delta_1)(t_1[\overline{x}_1]) = (I_1 \cup \Delta_1)(t_2[\overline{x}_2]) $. Since those are terms, it follows by the observation above that $(I_2 \cup (\tau \circ \Delta_1))(t_1[\overline{x}_1]) = (I_2 \cup (\tau \circ \Delta_1))(t_2[\overline{x}_2])$, which by semantics is $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \models t_1[\overline{x}_1] = t_2[\overline{x}_2] $.\\
+
+
+\end{itemize}
+
+
+\paragraph*{IS:}
+\begin{itemize}[leftmargin=*]
+\item $\varphi[\overline{x}] = \neg  \psi[\overline{x}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \neg  \psi[\overline{x}]$, which by semantics is $\langle M_1, \mathcal{I}_1 \rangle \nmodels \psi[\overline{x}]$. By IH it follows that $\langle M_2, (\tau \circ \Delta_1) \rangle \nmodels \psi[\overline{x}]$ and by semantics one obtains $\langle M_2, (\tau \circ \Delta_1) \rangle \models \neg \psi[\overline{x}]$.\\
+
+
+\item $\varphi[\overline{x}] = \psi[\overline{x}_{\psi}] \land \chi[\overline{x}_{\chi}]$:
+Starting from 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \land \chi[\overline{x}_{\chi}],
+\end{equation*}
+which by semantics is 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \sand \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}].
+\end{equation*}
+By IH it follows that  
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \sand\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}]
+\end{equation*}
+and by semantics one obtains 
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \land \chi[\overline{x}_{\chi}].
+\end{equation*}\\
+ 
+
+\item $\varphi[\overline{x}] = \psi[\overline{x}_{\psi}] \lor \chi[\overline{x}_{\chi}]$:
+Starting from 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \lor \chi[\overline{x}_{\chi}],
+\end{equation*}
+which by semantics is 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \sor \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}].
+\end{equation*}
+By IH it follows that  
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \sor\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}]
+\end{equation*}
+and by semantics one obtains 
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \lor \chi[\overline{x}_{\chi}].
+\end{equation*}\\
+
+\item $\varphi[\overline{x}] = \psi[\overline{x}_{\psi}] \to \chi[\overline{x}_{\chi}]$:
+Starting from 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \to \chi[\overline{x}_{\chi}],
+\end{equation*}
+which by semantics is 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \sto \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}].
+\end{equation*}
+By IH it follows that  
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \sto\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}]
+\end{equation*}
+and by semantics one obtains 
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \to \chi[\overline{x}_{\chi}].
+\end{equation*}\\
+
+
+\item  $\varphi[\overline{x}] = (\forall x \, \psi)[\overline{x}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\forall x \, \psi)[\overline{x}]$. By semantics  
+\begin{equation*}
+\forall m \in M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{x \mapsto m\}) \rangle \models \psi[\overline{x},x]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\forall m_1 \in M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\forall m_1 \in M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{x \mapsto m_1\})) \rangle \models \psi[\overline{x},x].
+\end{equation*} 
+Moreover, with $\{x \mapsto m_1\}$ mapping a variable symbol to an element in $M_1$ and with $\tau$ mapping from $M_1$ to $M_2$, the composition of those assignments results in 
+\begin{equation*}
+\forall m_1 \in M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{x \mapsto \tau (m_1)\}) \rangle \models \psi[\overline{x},x].
+\end{equation*}
+Due to the fact that $\tau$ is bijective this is equal to 
+\begin{equation*}
+\forall m_2 \in M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{x \mapsto m_2 \} \rangle \models \psi[\overline{x},x],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \forall x \, \psi[\overline{x}]$. \\
+
+
+\item  $\varphi[\overline{x}] = (\exists x \, \psi)[\overline{x}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\exists x \, \psi)[\overline{x}]$. By semantics  
+\begin{equation*}
+\exists m \in M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{x \mapsto m\}) \rangle \models \psi[\overline{x},x]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\exists m_1 \in M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\exists m_1 \in M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{x \mapsto m_1\})) \rangle \models \psi[\overline{x},x].
+\end{equation*} 
+Moreover, with $\{x \mapsto m_1\}$ mapping a variable symbol to an element in $M_1$ and with $\tau$ mapping from $M_1$ to $M_2$, the composition of those assignments results in 
+\begin{equation*}
+\exists m_1 \in M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{x \mapsto \tau (m_1)\}) \rangle \models \psi[\overline{x},x].
+\end{equation*}
+Due to the fact that $\tau$ is bijective this is equal to 
+\begin{equation*}
+\exists m_2 \in M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{x \mapsto m_2 \} \rangle \models \psi[\overline{x},x],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \exists x \, \psi[\overline{x}]$. \\
+
+
+
+\end{itemize}
+
+
+
+%
+%
+%
+%Starting by an induction on the structure of terms.
+%\paragraph*{IH:} Let $t[\overline{x}]$ be a term, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\overline{x} \mapsto \overline{m_1}\}$ be an extension of $I_1$. Then 
+%\begin{equation*}
+%\tau((I_1 \cup \Delta_1)(t[\overline{x}]))= (I_2 \cup (\tau \circ \Delta))(t[\overline{x}])
+%\end{equation*}
+%\paragraph*{IB:}
+%\begin{itemize}[leftmargin=*]
+%\item $t[\overline{x}]= c$. Starting from $\tau((I_1 \cup \Delta_1)(c)$, by definition of $I_1$ the constant symbol $c$ will be mapped to an element $m_1 \in M_1$ resulting in $\tau(m_1)=m_2$. By  definition of $\tau$ one obtains $\tau(m_1)=m_2=I_2(c)$. Since, $c$ is a constant symbol it follows that $I_2(c) = (I_2\cup (\tau \circ \Delta_1))(c)$.
+%
+%\item $t[\overline{x}]= x$. Starting from $\tau((I_1 \cup \Delta_1)(x)$, by definition of $\mathcal{I}_1$ the variable symbol $x$ will be mapped to an element $m_1 \in M_1$ by an assignment in $\Delta_1$ (otherwise $\mathcal{I}_1$ would not be an interpretation). That is, $\{x \mapsto m_1\} \subseteq \Delta_1$. Resulting in $\tau((I_1 \cup \Delta_1)(x) = \tau((I_1 \cup \{x \mapsto m_1\})(x)= \tau(m_1)= m_2 = (I_2 \cup \{x \mapsto m_2\})(x) =  (I_2 \cup \{x \mapsto \tau(m_1)\})(x) = (I_2 \cup (\tau \circ \Delta_1))(x)$.
+%\end{itemize}
+%\paragraph*{IS:} The only case to consider is $t[\overline{x}]=f(\overline{t})[\overline{x}]$. Starting from $\tau((I_1 \cup \Delta_1)(f(\overline{t})[\overline{x}]) )= \tau((I_1 \cup \Delta_1)(f(t_1, \dots, t_n)[\overline{x}]))=\tau((I_1 \cup \Delta_1)(f(t_1[\overline{x}_1], \dots, t_n[\overline{x}_n])))$. By definition of $I_1$ one obtains $\tau((I_1(f)(\mathcal{I}_1(t_1[\overline{x}_1]), \dots, \mathcal{I}_1(t_n[\overline{x}_n])))$. By definition of $\tau$ one obtains $I_2(f)(\tau(\mathcal{I}_1(t_1[\overline{x}_1])), \dots, \tau(\mathcal{I}_1(t_n[\overline{x}_n])))$. By IH it follows that $\forall i \in \{1,\dots ,n\}$, $\tau(\mathcal{I}_1(t_i[\overline{x}_i])) = \mathcal{I}_2(t_i[\overline{x}_i]) = (I_2\cup (\tau \circ \Delta_1))(t_i[\overline{x}_i])$. Moreover, since the interpretation of $f$ is not influenced by the part of the interpretation responsible for free variable assignment it follows that $\mathcal{I}_2(f)(\mathcal{I}_2(t_1[\overline{x}_1]), \dots, \mathcal{I}_2(t_n[\overline{x}_n]))$, which by definition of the interpretation is $\mathcal{I}_2(f(t_1[\overline{x}_1], \dots, t_n[\overline{x}_n]))= (I_2 \cup (\tau \circ \Delta))(f(t_1[\overline{x}_1], \dots, t_n[\overline{x}_n]))$.\\
+%
+%
+%
+%From here an induction over the structure of formulas in warranted.
+%
+%
+%\paragraph*{IH:} Let $\varphi[\overline{x}]$ be a formula, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\overline{x} \mapsto \overline{m_1}\}$ be an arbitrary extension of $I_1$ assigning free variables to elements of the domain. Then 
+%\begin{equation*}
+%\langle M_1, (I_1 \cup \Delta_1) \rangle \models \varphi[\overline{x}] \iff \langle M_2, (I_2 \cup (\tau \circ \Delta)) \rangle \models \varphi[\overline{x}]
+%\end{equation*}
+%
+%\paragraph*{IB:}
+%\begin{itemize}[leftmargin=*]
+%\item $\varphi[\overline{x}]= P(\overline{t})[\overline{x}]$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models P(\overline{t})[\overline{x}] $, which by semantics is $(I_1 \cup \Delta_1)(P(\overline{t})[\overline{x}])$. This is equivalent to $(I_1 \cup \Delta_1)(P(t_1[\overline{x}_1], \dots , t_n[\overline{x}_n])$. By the definition of the interpretation function this is equivalent to $(I_1 \cup \Delta_1)(P)(\mathcal{I}_1(t_1[\overline{x}_1], \dots , \mathcal{I}_1(t_n[\overline{x}_n]))$. Due to the fact that for the assignment of the predicate symbol $P$ is independent of the assignments in $\Delta_1$ one obtains, $(I_1)(P)(\mathcal{I}_1(t_1[\overline{x}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n])))$, which is simply another depiction of the statement
+%$(\mathcal{I}_1(t_1[\overline{x}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n])) \in (I_1)(P)$. Now by the definition of $\tau$ one obtains $(\tau(\mathcal{I}_1(t_1[\overline{x}_1])), \dots , \tau(\mathcal{I}_1(t_n[\overline{x}_n]))) \in (I_1)(P)$. Now, given the fact that $t_1, \dots , t_n$ are terms and by the observation above, i.e. $\forall i \in \{1,\dots n\}\; \mathcal{I}_1(t_i[\overline{x}_i])) = (I_2 \cup (\tau \circ \Delta_1))(t_i[\overline{x}_i])) = \mathcal{I}_2(t_i[\overline{x}_i])$, this is the same as $(\mathcal{I}_2(t_1[\overline{x}_1]), \dots , \mathcal{I}_2(t_n[\overline{x}_n])) \in (I_2)(P)$. Again by the fact that the interpretation of the symbol $P$ is not influenced by $\Delta_1$ and by rewriting the term one obtains  $(\mathcal{I}_2)(P)(\mathcal{I}_2(t_1[\overline{x}_1]), \dots , \mathcal{I}_2(t_n[\overline{x}_n])))$. By the definition of the interpretation it thus follows $\mathcal{I}_2(P(t_1[\overline{x}_1], \dots , t_n[\overline{x}_n]))$ which finally leads to $\mathcal{I}_2(P(\overline{t})[\overline{x}])$.
+%
+%\item  $\varphi[\overline{x}]= \bot$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \bot $, which by semantics is $(I_1 \cup \Delta_1)(\bot)$, since there are no free variables this is equivalent to $I_1(\bot)$. In the set notation $\bot = \{\}$, which means given the definition of $\tau$ that $\tau(I_1(\bot))=I_2(\bot) = \{\}$, which is equivalent to $(I_1 \cup (\tau \circ \Delta_1))(\bot)$.
+%
+%
+%\item  $\varphi[\overline{x}]= (t_1[\overline{x}_1] = t_2[\overline{x}_2])$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models t_1[\overline{x}_1] = t_2[\overline{x}_2] $, which by semantics is $(I_1 \cup \Delta_1)(t_1[\overline{x}_1]) = (I_1 \cup \Delta_1)(t_2[\overline{x}_2]) $. Since those are terms, it follows by the observation above that $(I_2 \cup (\tau \circ \Delta_1))(t_1[\overline{x}_1]) = (I_2 \cup (\tau \circ \Delta_1))(t_2[\overline{x}_2])$, which by semantics is $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \models t_1[\overline{x}_1] = t_2[\overline{x}_2] $.
+%\end{itemize}
+%
+%
+%\paragraph*{IS:}
+%\begin{itemize}[leftmargin=*]
+%\item $\varphi[\overline{x}] = \neg  \psi[\overline{x}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \neg  \psi[\overline{x}]$, which by semantics is $\langle M_1, \mathcal{I}_1 \rangle \nmodels \psi[\overline{x}]$. By IH it follows that $\langle M_2, (\tau \circ \Delta_1) \rangle \nmodels \psi[\overline{x}]$ and by semantics one obtains $\langle M_2, (\tau \circ \Delta_1) \rangle \models \neg \psi[\overline{x}]$.
+%\item $\varphi[\overline{x}] = \psi[\overline{x}_{\psi}] \land \chi[\overline{x}_{\chi}]$:
+%Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \land \chi[\overline{x}_{\chi}]$, which by semantics is $\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \sand \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}]$. By IH it follows that  $\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \sand\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}]$ and by semantics one obtains $\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \land \chi[\overline{x}_{\chi}]$. 
+%
+%\item  $\varphi[\overline{x}] = \psi[\overline{x}_{\psi}] \lor \chi[\overline{x}_{\chi}]$: 
+%Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \lor \chi[\overline{x}_{\chi}]$, which by semantics is $\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \sor \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}]$. By IH it follows that  $\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \sor \langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}]$ and by semantics one obtains $\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \lor \chi[\overline{x}_{\chi}]$. 
+%
+%
+%\item  $\varphi[\overline{x}] = \psi[\overline{x}_{\psi}] \to \chi[\overline{x}_{\chi}]$: 
+%Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \to \chi[\overline{x}_{\chi}]$, which by semantics is $\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}] \sto \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}]$. By IH it follows that  $\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \sto \langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}]$ and by semantics one obtains $\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}] \to \chi[\overline{x}_{\chi}]$. 
+%
+%
+%\item  $\varphi[\overline{x}] = (\forall x \, \psi)[\overline{x}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\forall x \, \psi)[\overline{x}]$, which by semantics is $\forall m _1\in M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x]$ which is clearly the same as $\forall m_1 \in M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x]$. Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows, $\forall m_1 \in M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{x \mapsto m_1\})) \rangle \models \psi[\overline{x},x]$. Moreover, with $\{x \mapsto m_1\}$ mapping a variable symbol to an element in $M_1$ and with $\tau$ mapping from $M_1$ to $M_2$, the composition of those assignments results in $\forall m_1 \in M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{x \mapsto \tau (m_1)\}) \rangle \models \psi[\overline{x},x]$. Due to the fact that $\tau$ is bijective this is equal to $\forall m_2 \in M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{x \mapsto m_2 \} \rangle \models \psi[\overline{x},x]$, which by semantics is equal to  $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \forall x \, \psi[\overline{x}]$
+%
+%\item $\varphi = (\exists x \; \psi)[\overline{x}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\exists x \, \psi)[\overline{x}]$, which by semantics is $\exists m \in M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{x \mapsto m\}) \rangle \models \psi[\overline{x},x]$ which is clearly the same as $\exists m_1 \in M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x]$. Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows, $\exists m_1 \in M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{x \mapsto m_1\})) \rangle \models \psi[\overline{x},x]$. Moreover, with $\{x \mapsto m_1\}$ mapping a variable symbol to an element in $M_1$ and with $\tau$ mapping from $M_1$ to $M_2$, the composition of those assignments results in $\exists m_1 \in M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{x \mapsto \tau (m_1)\}) \rangle \models \psi[\overline{x},x]$. Due to the fact that $\tau$ is bijective this is equal to $\exists m_2 \in M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{x \mapsto m_2 \} \rangle \models \psi[\overline{x},x]$, which by semantics is equal to  $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \exists x \, \psi[\overline{x}]$
+%\end{itemize}
+Clearly, the case for sentence is merely a special case of the previous proposition. That is,
+let $\varphi$ be a sentence, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\}$ be an arbitrary extension of $I_1$ assigning free variables to elements of the domain. Then by the proposition above 
+\begin{equation*}
+\langle M_1, (I_1 \cup \Delta_1) \rangle \models \varphi \iff \langle M_2, (I_2 \cup (\tau \circ \Delta_1)) \rangle \models \varphi
+\end{equation*} 
+which is the same as
+\begin{equation*}
+\langle M_1, I_1 \rangle \models \varphi \iff \langle M_2, I_2 \rangle \models \varphi
+\end{equation*} 
+
+Finally, given the fact that for all sentences $ \varphi \in \mathcal{L} \; \mathcal{M}_1 \models \varphi \Leftrightarrow \mathcal{M}_2 \models \varphi$. 
+Therefore, clearly $Th(\mathcal{M}_1)= \{\psi \mid \mathcal{M}_1\models  \psi \}=  \{\psi \mid \mathcal{M}_2\models  \psi \} =Th(\mathcal{M}_2)$.\\
+
+
+(b) Show that there is a structure which is elementary equivalent but not isomorphic to $\mathcal{N}$. As suggested in the hint, we start by adding an additional constant $\underline{\omega}$ to the language $\mathcal{L}_{\mathbb{N}}$ to obtain $\mathcal{L}_{\omega}$.  Moreover, let $Q$ be the theory of minimal arithmetic and let $\Gamma := Th(\mathcal{N})$, clearly $Q \subseteq \Gamma$. From there we construct the theory $\Gamma_{\omega}$ as follows 
+\begin{equation*}
+\Gamma_{\omega}:= \Gamma \cup \{ s^k(0)< \underline{\omega} \mid 0\leq k\}
+\end{equation*}
+Building upon the fact that $\mathcal{N} \models \Gamma$, we know that any finite subset of $\Gamma$ can be satisfied by $\mathcal{N}$. Hence,  Moreover, take any $T \subseteq_{fin} \Gamma_{\omega}$, clearly $T$ has the form $T = \Gamma' \cup  \{ s^k(0)< \underline{\omega} \mid k \in \{k_1,\dots, k_n\} \subseteq_{fin} \mathbb{N}\}$ for $\Gamma'\subseteq_{fin} \Gamma$. As already established $\Gamma'$ can be satisfied. Moreover, lets $\mathcal{N}_m$ be the model where $\underline{\omega}$ is interpreted such that $I(\underline{\omega}):= I(s^{m+1}(0))$, with $m = \max(k_1,\dots, k_n)$. Therefore, both $\Gamma'$ and $\{ s^k(0)< \underline{\omega} \mid k \in \{k_1,\dots, k_n\} \subseteq_{fin} \mathbb{N}\}$ are satisfied by $\mathcal{N}_m$. That is, for an arbitrary $m$ such a model can be found. Now, given the compactness theorem it follows that $\Gamma_{\omega}$ has a model. Let the model be called $\mathcal{N}_{\omega}$, and let $\omega:= I_{\omega}(\underline{\omega})$. Moreover, due $\mathcal{N}_{\omega} \models \Gamma_{\omega}$ and $\Gamma \subset \Gamma_{\omega}$, one obtains $\mathcal{N}_{\omega} \models \Gamma$. Furthermore, by removing the mapping $\{\underline{\omega} \mapsto\omega\}$ from $I_{\omega}$, the language can be restricted to $\mathcal{L}_{\mathbb{N}}$. Note that $\omega$ and its successors still remain in $N_{\omega}$. \\
+
+We show that $\mathcal{N} \nsimeq \mathcal{N}_{\omega}$.  Let $\tau: N \to N_{\omega}$ be an isomorphism between $\mathcal{N}$ and $\mathcal{N}_{\omega}$. Since $\tau$ is  an isomorphism, it must conform with the predicate $<_{\mathcal{N}} := I(<)$. Clearly, it must be the case that $\tau(I(0))= I_{\omega}(0)$. Moreover, this forces $\tau(I(s^k(0)))= I_{\omega}(s^k(0))$ (to be precise an this can be shown by a straight forward induction). Now, there must be an $n \in M$ such that $\tau(n) = \omega$. By definition $n = I(s^n(0))$ and by the observation above $\tau(I(s^n(0))) = I_{\omega}(s^n(0))$ implying that $  \omega = I_{\omega}(s^n(0)) $. which due to the fact that $ (I_{\omega}(s^n(0)),I_{\omega}(s^{n+1}(0))) \in I_{\omega}(<)$ would imply that $\mathcal{N}_{\omega}$ can not be a model of $\Gamma_{\omega}$. Hence, we conclude that this isomorphism can not exists.\\
+
+To conclude the proof of the statement (b) it remains to show that $Th(\mathcal{N})=Th(\mathcal{N}_{\omega})$. It is known that $Th(\mathcal{N})$ is consistent and complete. Now if there would be a sentence $\varphi$ in the language $\mathcal{L}_{\mathbb{N}}$ such that $\varphi \in Th(\mathcal{N}_{\omega})$ and $\varphi \nin Th(\mathcal{N})$ this would mean that $\mathcal{N} \models \neg \varphi$ due to completeness. However, together with consistency this contradicts the fact that it was already shown that $Th(\mathcal{N}_{\omega})\models Th(\mathcal{N})$. Thus one obtains $Th(\mathcal{N})=Th(\mathcal{N}_{\omega})$.
+
+
+\section*{Exercise 2}
+\begin{quote}
+Exercise 1.8 (page 6)\\
+A theory $T$ is called countably categorical if, whenever $\mathcal{S}_1$ and $\mathcal{S}_2$ are countably infinite models of $T$, then $\mathcal{S}_1$ and $\mathcal{S}_2$ are isomorphic.
+A theory $T$ is called complete if, for every sentence $A$ either $T \derives A$ or $ T \derives \neg A $.
+Show that a countably categorical theory without finite models is complete.
+\end{quote}
+
+Let $T$ be a countably categorical theory without finite models and let $\overline{\mathcal{L}}$ be the set of sentences.\\
+
+If $T$ is not consistent, then $T$ bust be complete, i.e. every sentence $\varphi \in \overline{\mathcal{L}}$ can be derived from $\bot$. Hence, from now on only consistent theories are considered. \\
+
+Assume $T$ is not complete. Hence, $\exists \varphi \in \overline{\mathcal{L}}\; T\nderives \varphi \sand T \nderives \neg \varphi$. Therefore, both $T':=T \cup \{\varphi\}$ and $T'':=T \cup \{\neg \varphi\}$ remain consistent.\footnote{Assume that $\psi \in T$ and $\neg \psi \in T'$. Hence, it must be the case that $T \cup \{\varphi\}\derives \neg \psi$. By the deduction theorem it thus follows that $T \derives \varphi \to \neg \psi$. However, since $\varphi \to \neg \psi = \neg \varphi \lor \neg \psi = \neg \psi \lor \neg \varphi  = \psi \to \neg \varphi$. This contradicts the assumption that $\psi \in T$ and $\neg \psi \in T$ hold at the same time. The same argument holds for $T''$
+} 
+If they are consistent, then clearly there exists $\mathcal{M}_1$ and $\mathcal{M}_2$ such that $\mathcal{M}_1 \models T'$ and $\mathcal{M}_2 \models T''$. Moreover, as every theory that has a model, must have a countable model one obtains $\mathcal{M}_1$ and $\mathcal{M}_2$ are countable. Furthermore, any models satisfying $T'$ and $T''$ must satisfy $T$, forcing this model to be infinite. Therefore, $\mathcal{M}_1$ and $\mathcal{M}_2$ are both countably infinite models satisfying $T$. Now given the knowledge that $T$ is countably categorical, the two countably infinite models $\mathcal{M}_1$ and $\mathcal{M}_2$ must be isomorphic, i.e. $\mathcal{M}_1 \simeq \mathcal{M}_2$. Hence, by the previous exercise it must therefore be the case that $Th(\mathcal{M}_1)= Th(\mathcal{M}_2)$. However, by construction $\varphi \in Th(\mathcal{M}_1)$ and $\neg \varphi \in Th(\mathcal{M}_2)$, which is clearly a contradiction.
+
+\section*{Exercise 3}
+\begin{quote}
+Exercise 2.4 (page 14) \\
+Show that $\forall X \forall Y (X\subseteq Y \to X \leq Y) $ is valid by giving a proof in \textbf{NK2}. Show that  $\forall X \forall Y ( X \leq Y  \to X\subseteq Y) $ is not valid by specifying a counterexample.
+\end{quote}
+
+Starting with the counter example for $\forall X \forall Y ( X \leq Y  \to X\subseteq Y) $. 
+That is, consider the following standard structure $\mathcal{M}:= \langle \{a,b\}, I\rangle$ and move the sentence to a semantic level. However, before this can be done the formula has to be expanded. Hence, from 
+$\forall X \forall Y ( X \leq Y  \to X\subseteq Y) $ given 
+\begin{equation*}
+\begin{split}
+X \leq Y \equiv \exists u \forall x \in X \exists y \in Y (u(x)=y)& \equiv \exists u \forall x \exists y  (x \in X \to( y\in Y \land (u(x)=y))) \\
+&\equiv  \exists u \forall x \exists y  (X(x) \to( Y(y) \land(u(x)=y)))
+\end{split}
+\end{equation*}
+and
+\begin{equation*}
+X \subseteq Y \equiv \forall x (x\in X \to x \in Y) \equiv \forall x (X(x) \to Y(x))
+\end{equation*}
+one obtains 
+\begin{equation*}
+\forall X \forall Y (\exists u \forall x \exists y  (X(x) \to( Y(y) \land (u(x)=y)))  \to\forall x (X(x) \to Y(x)) ).
+\end{equation*}
+Now one obtains
+\begin{equation*}
+\scriptsize
+\begin{split}
+&\langle M, I\rangle \models \forall X \forall Y (\exists u \forall x \exists y  (X(x) \to( Y(y) \land (u(x)=y)))  \to\forall x (X(x) \to Y(x)) ) \\
+&\forall P \subseteq M^{ar(X)}\; \langle M, I\cup \{X \mapsto P\}\rangle \models \forall Y (\exists u \forall x \exists y  (X(x) \to( Y(y) \land (u(x)=y)))  \to\forall x (X(x) \to Y(x)) ) \\
+&\forall P \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)}\;\langle M, I\cup \{X \mapsto P, Y \mapsto Q\}\rangle \models \exists u \forall x \exists y  (X(x) \to( Y(y) \land (u(x)=y)))  \to\forall x (X(x) \to Y(x))\\
+\end{split}
+\end{equation*}
+First the antecedent
+\begin{equation*}
+\scriptsize
+\begin{split}
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)}\\
+&\langle M, I\cup \{X \mapsto P, Y \mapsto Q\}\rangle  \models \exists u \forall x \exists y  (X(x) \to( Y(y) \land (u(x)=y)))\\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \exists f : M^{ar(f)}\to M \\
+&\langle M, I\cup \{X \mapsto P, Y \mapsto Q, u \mapsto f\}\rangle  \models  \forall x \exists y  (X(x) \to( Y(y) \land (u(x)=y)))\\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \exists f : M^{ar(f)}\to M \forall m_1 \in M\\
+&\langle M, I\cup \{x \mapsto m_1 , X \mapsto P, Y \mapsto Q, u \mapsto f\}\rangle  \models  \exists y  (X(x) \to( Y(y) \land (u(x)=y)))\\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \exists f : M^{ar(f)}\to M \forall m_1 \in M \exists m_2 \in M\\
+&\langle M, I\cup \{x \mapsto m_1 ,y \mapsto m_2 , X \mapsto P, Y \mapsto Q, u \mapsto f\}\rangle  \models  X(x) \to( Y(y) \land (u(x)=y))\\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \exists f : M^{ar(f)}\to M \forall m_1 \in M \exists m_2 \in M\\
+&\langle M, I\cup \Delta_1 \rangle  \models  X(x) \sto \langle M, I\cup \Delta_1 \rangle  \models ( Y(y) \land (u(x)=y)\\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \exists f : M^{ar(f)}\to M \forall m_1 \in M \exists m_2 \in M\\
+&\langle M, I\cup \Delta_1 \rangle  \models  X(x) \sto (\langle M, I\cup \Delta_1 \rangle  \models Y(y) \sand \langle M, I\cup \Delta_1 \rangle  \models  u(x)=y)\\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \exists f : M^{ar(f)}\to M \forall m_1 \in M \exists m_2 \in M\\
+&\langle M, I\cup \Delta_1 \rangle  \models  X(x) \sto (\langle M, I\cup \Delta_1 \rangle  \models Y(y) \sand (I\cup \Delta_1)(u)((I\cup \Delta_1)(x))= (I\cup \Delta_1)(y)\\
+\end{split}
+\end{equation*}
+Secondly the consequence
+\begin{equation*}
+\scriptsize
+\begin{split}
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)}\\
+&\langle M, I\cup \{X \mapsto P, Y \mapsto Q\}\rangle  \models \forall x (X(x) \to Y(x)) \\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \forall m_3 \in M\\
+&\langle M, I\cup \{X \mapsto P, Y \mapsto Q, x\mapsto m_3\}\rangle  \models X(x) \to Y(x) \\
+\forall P& \subseteq M^{ar(X)} \forall Q \subseteq M^{ar(Y)} \forall m_3 \in M\\
+&\langle M, I\cup \Delta_2 \rangle  \models X(x) \sto \langle M, I\cup \Delta_2 \rangle  \models Y(x) \\
+\end{split}
+\end{equation*}
+Consider $P:=\{a\}$ and $Q:=\{b\}$. For the antecedent.
+Clearly there exists a function $f:=\{(a,b)\}$ such that 
+\begin{itemize}
+\item for $m_1=a$ one can find $b$ as $m_2$ in order to satisfy $f(a)=b$, i.e. $(P(a) \sto ( Q(b) \sand (f(a)=b)))$
+\item for $m_1=b$ the statement $(P(a) \sto ( Q(b) \sand (f(a)=b)))$ holds trivially by the semantics of $\to$.
+\end{itemize}
+Hence, for $P$ and $Q$ the antecedent holds. However, for the consequence consider $m_3 = a$. 
+Clearly, $P(a)$ holds however, $Q(a)$ does not.  
+\\
+
+Moving on towards the natural deduction proof.
+
+
+\begin{prooftree}
+	\AxiomC{$[X_0(a)]^2$}
+	\AxiomC{$[\forall x (X_0(x) \to Y_0(x))]^1$}
+	\RightLabel{\scriptsize($\forall_E$)}
+	\UnaryInfC{$X_0(a) \to Y_0(a)$}
+	\RightLabel{\scriptsize($\to_E$)}
+	\BinaryInfC{$Y_0(a)$}
+	
+
+	\AxiomC{$[a=a]$}
+	\dashedLine
+	\UnaryInfC{$(\lambda z.z)(a)=a)$}
+	
+\RightLabel{\scriptsize($\land_I$)}
+\BinaryInfC{$Y_0(a) \land (\lambda z.z)(a)=a$}
+\RightLabel{\scriptsize($\exists_I$)}
+\UnaryInfC{$\exists y (Y_0(y) \land (\lambda z.z)(y)=a)$}
+\RightLabel{\scriptsize($\to_I^2$)}
+\UnaryInfC{$X_0(a) \to (\exists y (Y_0(y) \land (\lambda z.z)(y)=a))$}
+\RightLabel{\scriptsize($\forall_I$)}
+\UnaryInfC{$\forall x (X_0(x) \to (\exists y (Y_0(y) \land (\lambda z.z)(y)=x)))$}
+\RightLabel{\scriptsize($\exists_I$)}
+\UnaryInfC{$\exists u \forall x (X_0(x) \to (\exists y (Y_0(y) \land u(y)=x)))$}
+\RightLabel{\scriptsize($\to_I^1$)}
+\UnaryInfC{$\forall x(X_0(x) \to Y_0(x)) \to \exists u \forall x (X_0(x) \to (\exists y (Y_0(y) \land u(y)=x)))$}
+\RightLabel{\scriptsize($\forall_I$)}
+\UnaryInfC{$\forall Y (\forall x(X_0(x) \to Y(x)) \to \exists u \forall x (X_0(x) \to (\exists y (Y(y) \land u(y)=x))))$}
+\RightLabel{\scriptsize($\forall_I$)}
+\UnaryInfC{$\forall X \forall Y (\forall x(X(x) \to Y(x)) \to \exists u \forall x (X(x) \to (\exists y (Y(y) \land u(y)=x))))$}
+\end{prooftree}
+
+\section*{Exercise 4}
+\begin{quote}
+Give the proof of Proposition 2.3 (page 16). \\
+if $\mathcal{M}_1 \simeq \mathcal{M}_2$ and $ A$ is a second-order sentence, then $\mathcal{M}_1 \models A$ iff $\mathcal{M}_2 \models A$.
+\end{quote}
+
+Firstly, some clarifications $\overline{x}=(x_i)_{i \in \{0,\dots,n \}}$ is the notation for a family of variable symbols. In analogue for terms $\overline{t}$ and elements of an domain $\overline{m}$. Moreover, given the definition in the script, there is not distinct variable assignment. That is, for a structure $\mathcal{M}:= \langle M , \mathcal{I}\rangle$ the interpretation function can be understood as $\mathcal{I} := I \cup \Delta$ where $\Delta:= \{\overline{x} \mapsto \overline{m}, \overline{X} \mapsto \overline{P},\overline{u} \mapsto \overline{f}\}$ is responsible for the assignment of domain elements (as well as sets and functions) to variable symbols. That is, this is merely used to make the free variable assignment explicit.
+Moreover, for a term $t$ and a formula $\varphi$, the notation $t[\overline{x},\overline{X},\overline{u}]$ and $\varphi[\overline{x},\overline{X},\overline{u}]$ are used to make the free variables explicit. Moreover, in the subsequent proof it will be shown that given an interpretation $\mathcal{I}_1$ with an arbitrary assignment of variable symbols $\Delta_1$, it is possible to find a suitable assignment of variables $\Delta_2$ for an to $I_1$ isomorphic structure $I_2$. And vice versa. This variable assignment will be constructed by using the isomorphism $\tau: M_1 \to M_2$.
+Firstly, for any subset $X_1 \subseteq M_1$ one can find a subset $X_2 \subseteq M_2$ such that
+ $X_2=\{ \tau(x) \mid \forall x \in X_1 \}$. The same holds for subsets of $M_1^n$. 
+Moreover, with $\tau$ being bijective the same holds for $\tau^{-1}$ in the other direction as well. Furthermore, for a set $X$, let $g:=X^f$ indicate that $X$ is just the set definition of the function $g$ (if permitted by the underlying set). Similarly let $X^P$ indicate that $X$ is just the set definition of the predicate $Q$. Meaning for every function and every predicate over the initial domain there exists a copy created by $\tau$ over the other domain. Hence, allowing for  the syntactic sugar
+\begin{equation*}
+\begin{split}
+&\tau(f):= \{(\tau(m_{1}) , \dots ,\tau( m_{n}), \tau(m)) \mid f(m_{1} , \dots , m_{n})=m\}^{f}\\
+&\tau(P):= \{(\tau(m_{1}) , \dots ,\tau( m_{n})) \mid (m_{1} , \dots , m_{n}) \in P\}^{P}\\
+\end{split}
+\end{equation*}
+Lastly, the notation $(\tau \circ \Delta)$ will be similar as in the previous exercise the variable extension of the interpretation $I_2$ and is defined as $(\tau \circ \Delta):=\{\overline{x} \mapsto \overline{\tau(m)}, \overline{X} \mapsto \overline{\tau(P)},\overline{u} \mapsto \overline{\tau(f)}\}$, where $\overline{m}, \overline{P}$ and $\overline{f}$ live over $M_1$.\\
+
+Starting by an induction on the structure of terms.
+\paragraph*{IH:} Let $t[\overline{x},\overline{u}]$ be a term, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\overline{x} \mapsto \overline{m_1}, \overline{X} \mapsto \overline{R}, \overline{u} \mapsto \overline{f_1}\}$ be an extension of $I_1$. Then 
+\begin{equation*}
+\tau((I_1 \cup \Delta_1)(t[\overline{x},\overline{u}]))= (I_2 \cup (\tau \circ \Delta))(t[\overline{x},\overline{u}])
+\end{equation*}
+
+\paragraph*{IB:}
+\begin{itemize}[leftmargin=*]
+\item $t[\overline{x},\overline{u}]= c$. Starting from $\tau((I_1 \cup \Delta_1)(c)$, by definition of $I_1$ the constant symbol $c$ will be mapped to an element $m_1 \in M_1$ resulting in $\tau(m_1)=m_2$. By  definition of $\tau$ one obtains $\tau(m_1)=m_2=I_2(c)$. Since, $c$ is a constant symbol it follows that $I_2(c) = (I_2\cup (\tau \circ \Delta_1))(c)$.\\
+
+\item $t[\overline{x},\overline{u}]= x$. Starting from $\tau((I_1 \cup \Delta_1)(x))$, by definition of $\mathcal{I}_1$ the variable symbol $x$ will be mapped to an element $m_1 \in M_1$ by an assignment in $\Delta_1$ (otherwise $\mathcal{I}_1$ would not be an interpretation). That is, $\{x \mapsto m_1\} \subseteq \Delta_1$. Resulting in $\tau((I_1 \cup \Delta_1)(x)) = \tau((I_1 \cup \{x \mapsto m_1\})(x))= \tau(m_1)= m_2 = (I_2 \cup \{x \mapsto m_2\})(x) =  (I_2 \cup \{x \mapsto \tau(m_1)\})(x) = (I_2 \cup (\tau \circ \Delta_1))(x)$.
+\end{itemize}
+\paragraph*{IS:}
+\begin{itemize}[leftmargin=*]
+\item $t[\overline{x},\overline{u}]=f(\overline{t})[\overline{x},\overline{u}]$. Starting from $\tau((I_1 \cup \Delta_1)(f(\overline{t})[\overline{x},\overline{u}]))$ which is just a shorthand for 
+\begin{equation*}
+\tau((I_1 \cup \Delta_1)(f(t_1[\overline{x}_1,\overline{u}_1], \dots, t_n[\overline{x}_n,\overline{u}_n])).
+\end{equation*} 
+By definition of $I_1$ one obtains 
+\begin{equation*}
+\tau(I_1(f)(\mathcal{I}_1(t_1[\overline{x}_1,\overline{u}_1]), \dots, \mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n]))).
+\end{equation*} 
+By definition of $\tau$ one obtains 
+\begin{equation*}
+I_2(f)(\tau(\mathcal{I}_1(t_1[\overline{x}_1,\overline{u}_1])), \dots, \tau(\mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n])))).
+\end{equation*}
+ By IH it follows that $\forall i \in \{1,\dots ,n\}$,
+\begin{equation*}
+\tau(\mathcal{I}_1(t_i[\overline{x}_i,\overline{u}_i])) = \mathcal{I}_2(t_i[\overline{x}_i,\overline{u}_i])) = (I_2\cup (\tau \circ \Delta_1))(t_i[\overline{x}_i,\overline{u}_i])).
+\end{equation*}
+Moreover, since the interpretation of $f$ is not influenced by the part of the interpretation responsible for free variable assignment it follows that 
+\begin{equation*}
+\mathcal{I}_2(f)(\mathcal{I}_2(t_1[\overline{x}_1,\overline{u}_1]), \dots, \mathcal{I}_2(t_n[\overline{x}_n,\overline{u}_n]))),
+\end{equation*}
+which by definition of the interpretation is 
+\begin{equation*}
+\mathcal{I}_2(f(t_1[\overline{x}_1,\overline{u}_1], \dots, t_n[\overline{x}_n,\overline{u}_n]))= (I_2 \cup (\tau \circ \Delta))(f(t_1, \dots, t_n)[\overline{x},\overline{u}]).
+\end{equation*}\\
+
+\item  $t[\overline{x},\overline{u}]=u(\overline{t})[\overline{x},\overline{u}]$. Starting from $\tau((I_1 \cup \Delta_1)(u(\overline{t})[\overline{x},\overline{u}])$ which is simply 
+\begin{equation*}
+\tau((I_1 \cup \Delta_1)(u(t_1[\overline{x}_1,\overline{u}_1], \dots, t_n[\overline{x}_n,\overline{u}_n])).
+\end{equation*}
+By the definition of an interpretation one obtains 
+\begin{equation*}
+\tau((I_1 \cup \Delta_1)(u)(\mathcal{I}_1(t_1[\overline{x}_1,\overline{u}_1]), \dots, \mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n]))).
+\end{equation*}
+Since this formula is interpreted it must be the case that $\{u \mapsto f_1\} \subseteq \Delta_1$.
+Hence, one obtains 
+\begin{equation*}
+\tau((I_1 \cup \{u \mapsto f_1\})(u)(\mathcal{I}_1(t_1[\overline{x}_1,\overline{u}_1]), \dots, \mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n])))
+\end{equation*}
+and subsequently 
+\begin{equation*}
+\tau(f_1(\mathcal{I}_1(t_1[\overline{x}_1,\overline{u}_1]), \dots, \mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n]))) = \tau(f_1(m_{1_1} , \dots , m_{1_n})) = \tau(m_1).
+\end{equation*}
+Hence, $\tau \circ f_1 : M_1^n \to M_2$. However, since $\tau$ is isomorphic therefore it can be used to find a copy of $f_1$ in $M_2$. Hence, on has to find a function $f_2$ that given the copies of $m_{1_1} , \dots , m_{1_n}$ in $M_2$ the function maps to the copy of $m_1$, i.e. $f_2(\tau(m_{1_1}) , \dots , \tau(m_{1_n}))=\tau(m_1)$. Since for every subset in $X \subseteq M_1^n$ one has $\tau(X) \subseteq M_2^n$ and for every subset in $X \subseteq M_2^n$ one has $\tau^{-1}(X) \subseteq M_1^n$ it is the function $\tau(f_1)$ that satisfies those requirements. As a reminder 
+\begin{equation*}
+\begin{split}
+f_2=\tau(f_1):&=\tau(\{(m_{1_1} , \dots , m_{1_n}, m_1) \mid f_1(m_{1_1} , \dots , m_{1_n})=m_1\}^{f})\\
+&=\{(\tau(m_{1_1}) , \dots , \tau(m_{1_n}),\tau(m_1)) \mid f_1(m_{1_1} , \dots , m_{1_n})=m_1\}^{f}.
+\end{split}
+\end{equation*}
+Resulting in $\tau(f_1(m_{1_1} , \dots , m_{1_n})) = f_2(\tau(m_{1_1}) , \dots , \tau(m_{1_n}))=\tau(m_1)$. From $f_2(\tau(\mathcal{I}_1(t_1[\overline{x}_1,\overline{u}_1])) , \dots , \tau(\mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n])))$ and by IH this amounts to
+\begin{equation*}
+f_2(\mathcal{I}_2(t_1[\overline{x}_1,\overline{u}_1]) , \dots , \mathcal{I}_2(t_n[\overline{x}_n,\overline{u}_n] )).
+\end{equation*}
+Furthermore, one obtains 
+ \begin{equation*}
+\begin{split}
+(I_2 \cup \{u \mapsto& f_2\})(u)(\mathcal{I}_2(t_1[\overline{x}_1,\overline{u}_1]) , \dots , \mathcal{I}_2(t_n[\overline{x}_n,\overline{u}_n] )) \\
+&= (I_2 \cup \{u \mapsto \tau(f_1)\})(u)(\mathcal{I}_2(t_1[\overline{x}_1,\overline{u}_1]) , \dots , \mathcal{I}_2(t_n[\overline{x}_n,\overline{u}_n] )) \\
+\end{split}
+\end{equation*}
+Given the definition of $(\tau \circ \Delta)$ this results in 
+ \begin{equation*}
+\begin{split}
+(I_2 \cup (\tau \circ \Delta ))(u)(\mathcal{I}_2(t_1[\overline{x}_1,\overline{u}_1]) , \dots , \mathcal{I}_2(t_n[\overline{x}_n,\overline{u}_n] )) \\
+\end{split}
+\end{equation*}
+which by semantics is $\mathcal{I}_2(u(\overline{t})[\overline{x},\overline{u}])$.
+\\
+\end{itemize}
+
+From here an induction over the structure of formulas in warranted.
+
+
+\paragraph*{IH:} Let $\varphi[\overline{x}, \overline{X}, \overline{u}]$ be a second-order formula, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\overline{x} \mapsto \overline{m_1},\overline{X} \mapsto \overline{P_1},\overline{u} \mapsto \overline{f_1}\}$ be an arbitrary extension of $I_1$. Then 
+\begin{equation*}
+\langle M_1, (I_1 \cup \Delta_1) \rangle \models \varphi[\overline{x}, \overline{X}, \overline{u}] \iff \langle M_2, (I_2 \cup (\tau \circ \Delta)) \rangle \models \varphi[\overline{x}, \overline{X}, \overline{u}]
+\end{equation*}
+
+\paragraph*{IB:}
+Note $\overline{X}$ is here clearly empty.
+\begin{itemize}[leftmargin=*]
+\item $\varphi[\overline{x}, \overline{X},\overline{u}]= P(\overline{t})[\overline{x}, \overline{X}, \overline{u}]$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models P(\overline{t})[\overline{x},  \overline{u}] $, which by semantics is $(I_1 \cup \Delta_1)(P(\overline{t})[\overline{x}, \overline{u}])$. This is equivalent to 
+\begin{equation*}
+(I_1 \cup \Delta_1)(P(t_1[\overline{x}_1, \overline{u}_1], \dots , t_n[\overline{x}_n,  \overline{u}_n])).
+\end{equation*}
+By the definition of the interpretation function this is equivalent to 
+\begin{equation*}
+(I_1 \cup \Delta_1)(P)(\mathcal{I}_1(t_1[\overline{x}_1,  \overline{u}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n, \overline{u}_n])).
+\end{equation*}
+Due to the fact that for the assignment of the predicate symbol $P$ is independent of the assignments in $\Delta_1$ one obtains,
+\begin{equation*}
+I_1(P)(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n,  \overline{u}_n]))),
+\end{equation*}
+which is simply another depiction of the statement
+\begin{equation*}
+(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n,  \overline{u}_n])) \in (I_1)(P).
+\end{equation*}
+Now by the definition of $\tau$ one obtains 
+\begin{equation*}
+(\tau(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1])), \dots , \tau(\mathcal{I}_1(t_n[\overline{x}_n,  \overline{u}_n]))) \in (I_2)(P).
+\end{equation*}
+Now, given the fact that $t_1, \dots , t_n$ are terms and by the observation above, i.e. $\forall i \in \{1,\dots n\}\; \mathcal{I}_1(t_i[\overline{x}_i,  \overline{u}_i])) = (I_2 \cup (\tau \circ \Delta_1))(t_i[\overline{x}_i, \overline{u}_i])) = \mathcal{I}_2(t_i[\overline{x}_i, \overline{X}_i, \overline{u}_i])$, this is the same as 
+\begin{equation*}
+(\mathcal{I}_2(t_1[\overline{x}_1, \overline{u}_1]), \dots , \mathcal{I}_2(t_n[\overline{x}_n,  \overline{u}_n])) \in (I_2)(P).
+\end{equation*}
+Again by the fact that the interpretation of the symbol $P$ is not influenced by $\Delta_1$ and by rewriting the term one obtains  
+\begin{equation*}
+(\mathcal{I}_2)(P)(\mathcal{I}_2(t_1[\overline{x}_1,  \overline{u}_1]), \dots , \mathcal{I}_2(t_n[\overline{x}_n, \overline{u}_n]))).
+\end{equation*}
+By the definition of the interpretation it thus follows 
+\begin{equation*}
+\mathcal{I}_2(P(t_1[\overline{x}_1,  \overline{u}_1], \dots , t_n[\overline{x}_n,\overline{u}_2]))
+\end{equation*}
+which finally leads to $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \models  P(\overline{t})[\overline{x}, \overline{u}]$.\\
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}]= \bot$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \nmodels \bot $. In the set notation $(I_1\cup \Delta_1)(\bot )=I_1(\bot )= \{\}$, which means given the definition of $\tau$ that $\tau(I_1(\bot))=I_2(\bot) = \{\}$, which leads to $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \nmodels \bot$, as no element can be in the empty set. \\
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}]= (t_1[\overline{x}_1, \overline{u}_1] = t_2[\overline{x}_2, \overline{u}_2])$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models t_1[\overline{x}_1, \overline{u}_1] = t_2[\overline{x}_2, \overline{u}_2] $, which by semantics is $(I_1 \cup \Delta_1)(t_1[\overline{x}_1,  \overline{u}_1]) = (I_1 \cup \Delta_1)(t_2[\overline{x}_2,  \overline{u}_2]) $. Since those are terms, it follows by the observation above that $(I_2 \cup (\tau \circ \Delta_1))(t_1[\overline{x}_1,  \overline{u}_1]) = (I_2 \cup (\tau \circ \Delta_1))(t_2[\overline{x}_2, \overline{u}_2])$, which by semantics is $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \models t_1[\overline{x}_1, \overline{u}_1] = t_2[\overline{x}_2, \overline{u}_2] $.\\
+
+\item $\varphi[\overline{x}, \overline{u}]= X(\overline{t})[\overline{x}, \overline{u}]$. Starting from $\langle M_1, \mathcal{I}_1 \rangle \models X(\overline{t})[\overline{x}, \overline{u}] $, which by semantics is $(I_1 \cup \Delta_1)(P(\overline{t})[\overline{x}, \overline{u}])$. This is equivalent to 
+\begin{equation*}
+(I_1 \cup \Delta_1)(X(t_1[\overline{x}_1, \overline{u}_1], \dots , t_n[\overline{x}_n, \overline{u}_n]).)
+\end{equation*}
+By the definition of the interpretation function this is equivalent to 
+\begin{equation*}
+(I_1 \cup \Delta_1)(X)(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n, \overline{u}_n])).
+\end{equation*}
+Due to the fact that for the assignment of the predicate variable symbol $X$ it must be the case that $\{X \mapsto P\} \subseteq \Delta_1$ one obtains,
+\begin{equation*}
+(I_1 \cup \{X \mapsto P\})(X)(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1], \dots , \mathcal{I}_1(t_n[\overline{x}_n, \overline{u}_n])).
+\end{equation*}
+which is simply another depiction of the statement
+\begin{equation*}
+(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n, \overline{u}_n])) \in (I_1 \cup \{X \mapsto P\})(X)
+\end{equation*}
+and subsequently of
+\begin{equation*}
+(\mathcal{I}_1(t_1[\overline{x}_1, \overline{u}_1]), \dots , \mathcal{I}_1(t_n[\overline{x}_n, \overline{u}_n])) \in P.
+\end{equation*}
+Now, given the fact that $t_1, \dots , t_n$ are terms and by the observation above, i.e. $\forall i \in \{1,\dots n\}\; \mathcal{I}_1(t_i[\overline{x}_i, \overline{u}_i])) = (I_2 \cup (\tau \circ \Delta_1))(t_i[\overline{x}_i, \overline{X}_i, \overline{u}_i])) = \mathcal{I}_2(t_i[\overline{x}_i,  \overline{u}_i])$. Moreover, since for every subset in $X \subseteq M_1^n$ one has $\tau(X) \subseteq M_2^n$ and for every subset in $X \subseteq M_2^n$ one has $\tau^{-1}(X) \subseteq M_1^n$ it is the predicate $\tau(P)$ that fulfils the desired requirements. Hence, one obtains
+\begin{equation*}
+(\tau(\mathcal{I}_1(t_1[\overline{x}_1,  \overline{u}_1])), \dots , \tau(\mathcal{I}_1(t_n[\overline{x}_n,\overline{u}_n]))) \in \tau(P)
+\end{equation*}
+which is logically equivalent to the previous one. Leading to 
+\begin{equation*}
+(\mathcal{I}_2(t_1[\overline{x}_1, \overline{u}_1])), \dots , \mathcal{I}_2(t_n[\overline{x}_n,  \overline{u}_n])) \in  (I_2 \cup \{X \to \tau(P)\})(X)
+\end{equation*}
+and finally by the definition of $(\tau \circ \Delta)$ to 
+\begin{equation*}
+(\mathcal{I}_2(t_1[\overline{x}_1, \overline{u}_1])), \dots , \mathcal{I}_2(t_n[\overline{x}_n, \overline{u}_n])) \in  (I_2 \cup (\tau \circ \Delta))(X)
+\end{equation*}
+By the definition of the interpretation it thus follows 
+\begin{equation*}
+\mathcal{I}_2(P(t_1[\overline{x}_1,\overline{u}_1], \dots , t_n[\overline{x}_n,\overline{u}_n]))
+\end{equation*}
+which finally leads to $\langle M_2, I_2 \cup (\tau \circ \Delta_1) \rangle \models  P(\overline{t})[\overline{x}, \overline{u}]$.\\
+
+
+
+\end{itemize}
+
+
+\paragraph*{IS:}
+\begin{itemize}[leftmargin=*]
+\item $\varphi[\overline{x}, \overline{X}, \overline{u}] = \neg  \psi[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models \neg  \psi[\overline{x}, \overline{X}, \overline{u}]$, which by semantics is $\langle M_1, \mathcal{I}_1 \rangle \nmodels \psi[\overline{x}, \overline{X}, \overline{u}]$. By IH it follows that $\langle M_2, (\tau \circ \Delta_1) \rangle \nmodels \psi[\overline{x}, \overline{X}, \overline{u}]$ and by semantics one obtains $\langle M_2, (\tau \circ \Delta_1) \rangle \models \neg \psi[\overline{x}, \overline{X}, \overline{u}]$.\\
+
+
+\item $\varphi[\overline{x}, \overline{X}, \overline{u}] = \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \land \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}]$:
+Starting from 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \land \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}],
+\end{equation*}
+which by semantics is 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sand \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}].
+\end{equation*}
+By IH it follows that  
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sand\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}]
+\end{equation*}
+and by semantics one obtains 
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \land \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}].
+\end{equation*}\\
+ 
+
+\item $\varphi[\overline{x}, \overline{X}, \overline{u}] = \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \lor \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}]$: 
+Starting from 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \lor \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}],
+\end{equation*}
+which by semantics is 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sor \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}].
+\end{equation*}
+By IH it follows that  
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sor\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}]
+\end{equation*}
+and by semantics one obtains 
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \lor \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}].
+\end{equation*}\\
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \to \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}]$: 
+Starting from 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \to \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}],
+\end{equation*}
+which by semantics is 
+\begin{equation*}
+\langle M_1, \mathcal{I}_1 \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sto \langle M_1, \mathcal{I}_1 \rangle \models \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}].
+\end{equation*}
+By IH it follows that  
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sto\langle M_2, (\tau \circ \Delta_1) \rangle \models \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}]
+\end{equation*}
+and by semantics one obtains 
+\begin{equation*}
+\langle M_2, (\tau \circ \Delta_1) \rangle \models \psi[\overline{x}_{\psi}, \overline{X}_{\psi}, \overline{u}_{\psi}] \sto \chi[\overline{x}_{\chi}, \overline{X}_{\chi}, \overline{u}_{\chi}].
+\end{equation*}\\
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = (\forall x \, \psi)[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\forall x \, \psi)[\overline{x}, \overline{X}, \overline{u}]$. By semantics  
+\begin{equation*}
+\forall m \in M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{x \mapsto m\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\forall m_1 \in M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\forall m_1 \in M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{x \mapsto m_1\})) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}].
+\end{equation*} 
+Moreover, with $\{x \mapsto m_1\}$ mapping a variable symbol to an element in $M_1$ and with $\tau$ mapping from $M_1$ to $M_2$, the composition of those assignments results in 
+\begin{equation*}
+\forall m_1 \in M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{x \mapsto \tau (m_1)\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}].
+\end{equation*}
+Due to the fact that $\tau$ is bijective this is equal to 
+\begin{equation*}
+\forall m_2 \in M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{x \mapsto m_2 \} \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \forall x \, \psi[\overline{x}, \overline{X}, \overline{u}]$. \\
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = (\exists x \, \psi)[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\exists x \, \psi)[\overline{x}, \overline{X}, \overline{u}]$. By semantics  
+\begin{equation*}
+\exists m \in M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{x \mapsto m\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\exists m_1 \in M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{x \mapsto m_1\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\exists m_1 \in M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{x \mapsto m_1\})) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}].
+\end{equation*} 
+Moreover, with $\{x \mapsto m_1\}$ mapping a variable symbol to an element in $M_1$ and with $\tau$ mapping from $M_1$ to $M_2$, the composition of those assignments results in 
+\begin{equation*}
+\exists m_1 \in M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{x \mapsto \tau (m_1)\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}].
+\end{equation*}
+Due to the fact that $\tau$ is bijective this is equal to 
+\begin{equation*}
+\exists m_2 \in M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{x \mapsto m_2 \} \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \exists x \, \psi[\overline{x}, \overline{X}, \overline{u}]$. \\
+
+
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = (\forall X \, \psi)[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\forall X \, \psi)[\overline{x}, \overline{X}, \overline{u}]$. By semantics  
+\begin{equation*}
+\forall P_1 \subseteq M_1^{ar(X)} \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{X \mapsto P_1\}) \rangle \models \psi[\overline{x}, \overline{X}, X, \overline{u}]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\forall P_1 \subseteq M_1^{ar(X)} \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{X \mapsto P_1\}) \rangle \models \psi[\overline{x},x, \overline{X}, X, \overline{u}].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\forall  P_1 \subseteq M_1^{ar(X)} \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{X \mapsto P_1\})) \rangle \models \psi[\overline{x}, \overline{X},X, \overline{u}].
+\end{equation*} 
+This is the same as 
+\begin{equation*}
+\forall  P_1 \subseteq M_1^{ar(X)} \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{X \mapsto \tau (P_1)\}) \rangle \models \psi[\overline{x}, \overline{X}, X, \overline{u}].
+\end{equation*}
+Due to the fact a predicate can be understood as a set and the fact that for every subset in $X \subseteq M_1^n$ one has $\tau(X) \subseteq M_2^n$ and for every subset in $X \subseteq M_2^n$ one has $\tau^{-1}(X) \subseteq M_1^n$ 
+\begin{equation*}
+\forall  P_2 \subseteq M_2^{ar(X)}\;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{X \mapsto P_2 \} \rangle \models \psi[\overline{x}, \overline{X},X, \overline{u}],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \forall X \, \psi[\overline{x}, \overline{X}, \overline{u}]$. \\
+
+
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = (\exists X \, \psi)[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\exists X \, \psi)[\overline{x}, \overline{X}, \overline{u}]$. By semantics  
+\begin{equation*}
+\exists P_1 \subseteq M_1^{ar(X)} \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{X \mapsto P_1\}) \rangle \models \psi[\overline{x}, \overline{X}, X, \overline{u}]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\exists P_1 \subseteq M_1^{ar(X)} \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{X \mapsto P_1\}) \rangle \models \psi[\overline{x},x, \overline{X}, X, \overline{u}].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\exists  P_1 \subseteq M_1^{ar(X)} \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{X \mapsto P_1\})) \rangle \models \psi[\overline{x}, \overline{X},X, \overline{u}].
+\end{equation*} 
+This is the same as 
+\begin{equation*}
+\exists  P_1 \subseteq M_1^{ar(X)} \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{X \mapsto \tau (P_1)\}) \rangle \models \psi[\overline{x}, \overline{X}, X, \overline{u}].
+\end{equation*}
+Due to the fact a predicate can be understood as a set and the fact that for every subset in $X \subseteq M_1^n$ one has $\tau(X) \subseteq M_2^n$ and for every subset in $X \subseteq M_2^n$ one has $\tau^{-1}(X) \subseteq M_1^n$ 
+\begin{equation*}
+\exists  P_2 \subseteq M_2^{ar(X)}\;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{X \mapsto P_2 \} \rangle \models \psi[\overline{x}, \overline{X},X, \overline{u}],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \exists X \, \psi[\overline{x}, \overline{X}, \overline{u}]$. \\
+
+
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = (\forall u \, \psi)[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\forall u \, \psi)[\overline{x}, \overline{X}, \overline{u}]$. By semantics  
+\begin{equation*}
+\forall f_1 : M_1^{ar(u)} \to M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{u \mapsto f_1\}) \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\forall f_1 : M_1^{ar(u)} \to M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{u \mapsto f_1\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}, u].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\forall   f_1 : M_1^{ar(u)} \to M_1 \;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{u \mapsto f_1\})) \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u].
+\end{equation*} 
+This is the same as 
+\begin{equation*}
+\forall  f_1 : M_1^{ar(u)} \to M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{u \mapsto \tau(f_1)\}) \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u].
+\end{equation*}
+Due to the observation that $\tau((I_1 \cup \Delta_1)(u))=(I_2 \cup (\tau \circ \Delta))(u)=\tau(f_1)=f_2$ and due to the fact that $\tau$ is bijective one obtains \footnote{That is, for every function over $M_1$ one can find through $\tau$ a function in $M_2$ that behaves virtually the same and the other way round. Alternatively think of the fact a function can be understood as a predicate and the fact that for every subset in $X \subseteq M_1^n$ one has $\tau(X) \subseteq M_2^n$ and for every subset in $X \subseteq M_2^n$ one has $\tau^{-1}(X) \subseteq M_1^n$ }
+\begin{equation*}
+\forall  f_2 : M_2^{ar(u)} \to M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{u \mapsto f_2 \} \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u],
+\end{equation*}
+By semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \forall u \, \psi[\overline{x}, \overline{X}, \overline{u}]$. \\
+
+
+
+\item  $\varphi[\overline{x}, \overline{X}, \overline{u}] = (\exists u \, \psi)[\overline{x}, \overline{X}, \overline{u}]$: Starting from $\langle M_1, \mathcal{I}_1 \rangle \models (\exists u \, \psi)[\overline{x}, \overline{X}, \overline{u}]$. By semantics  
+\begin{equation*}
+\exists f_1 : M_1^{ar(u)} \to M_1 \; \langle M_1 , ((I_1 \cup \Delta_1) \cup \{u \mapsto f_1\}) \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u]
+\end{equation*}
+which is clearly the same as
+\begin{equation*}
+\exists f_1 : M_1^{ar(u)} \to M_1 \; \langle M_1 , I_1 \cup (\Delta_1 \cup \{u \mapsto f_1\}) \rangle \models \psi[\overline{x},x, \overline{X}, \overline{u}, u].
+\end{equation*}
+Consider the fact that the IH was formulated for arbitrary extension assigning free variables it follows,
+ \begin{equation*}
+\exists   f_1 : M_1^{ar(u)} \to M_1\;  \langle M_2 , I_2 \cup (\tau \circ (\Delta_1 \cup \{u \mapsto f_1\})) \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u].
+\end{equation*} 
+This is the same as 
+\begin{equation*}
+\exists  f_1 : M_1^{ar(u)} \to M_1 \;  \langle M_2 , I_2 \cup ((\tau \circ \Delta_1) \cup \{u \mapsto \tau(f_1)\}) \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u].
+\end{equation*}
+Due to the observation that $\tau((I_1 \cup \Delta_1)(u))=(I_2 \cup (\tau \circ \Delta))(u)=\tau(f_1)=f_2$ and due to the fact that $\tau$ is bijective one obtains
+\begin{equation*}
+\exists  f_2 : M_2^{ar(u)} \to M_2 \;  \langle M_2 , (I_2 \cup (\tau \circ \Delta_1)) \cup \{u \mapsto f_2 \} \rangle \models \psi[\overline{x}, \overline{X}, \overline{u}, u],
+\end{equation*}
+which by semantics is equal to $\langle M_2 , I_2 \cup (\tau \circ \Delta_1)\rangle \models \exists u \, \psi[\overline{x}, \overline{X}, \overline{u}]$. \\
+
+
+\end{itemize}
+
+
+Clearly, the case for sentence is merely a special case of the previous proposition. That is,
+let $\varphi$ be a second order sentence, let $\mathcal{M}_1 := \langle M_1, I_1\rangle$ and let $\mathcal{M}_2 := \langle M_2, I_2\rangle$ such that there exists an isomorphic function $\tau : M_1 \to M_2$ and let $\Delta_1:= \{\}$ be an arbitrary extension of $I_1$ assigning free variables to elements of the domain. Then by the proposition above 
+\begin{equation*}
+\langle M_1, (I_1 \cup \Delta_1) \rangle \models \varphi \iff \langle M_2, (I_2 \cup (\tau \circ \Delta_1)) \rangle \models \varphi
+\end{equation*} 
+which is the same as
+\begin{equation*}
+\langle M_1, I_1 \rangle \models \varphi \iff \langle M_2, I_2 \rangle \models \varphi
+\end{equation*} 
+
+%Here the proof from exercise 1 will be extended.
+%
+%Let $\mathcal{M}_1$ and $\mathcal{M}_2$ be two structures such that $\mathcal{M}_1 \simeq \mathcal{M}_2$. Hence, there exists an isomorphic function $\Phi: M_1 \to M_2$. \\
+%
+%
+%Induction on the structure of terms.
+%\begin{itemize}
+%\item \textbf{IH:} for all terms $t$, $\Phi (I_1(t))= I_2(t)$.
+%\item \textbf{IB:} Here by definition for any constant $c$ it must be the case that $\Phi(I_1(c))=I_2(c)$. Similarly, for variables $\Phi(I_1(x))=I_2(x)$. 
+%\item \textbf{IS:} Let $t$ be a term, 
+%\begin{itemize}
+%\item if $t=f(m_1, \dots, m_n)$, then by definition \\$\Phi(I_1(f)(I_1(m_1), \dots, I_1(m_n)))=I_2(f)(\Phi(I_1(m_1)), \dots, \Phi(I_1(m_2))))$ and by \textit{IH}, $\Phi(I_1(m_1))=I_2(m_1), \dots ,\Phi(I_1(m_n))=I_2(m_n)$.\\
+%\item if $t=u(m_1, \dots, m_n)$, then by definition \\$\Phi(I_1(u)(I_1(m_1), \dots, I_1(m_n)))=I_2(u)(\Phi(I_1(m_1)), \dots, \Phi(I_1(m_2))))$ and by \textit{IH}, $\Phi(I_1(m_1))=I_2(m_1), \dots ,\Phi(I_1(m_n))=I_2(m_n)$, this holds due to the fact that the isomorphism must be preserved for any function over the domain. That is, due to the fact that $u$ is a function variable symbol and the way the interpretation function is defined, this is essentially the same case as above.
+%\end{itemize}
+%\end{itemize} 
+%
+%The statement, for all formulas $\varphi(\overline{x}, \overline{X}, \overline{u}) \in \mathcal{L}_{SO}$, and any extension $\Delta := \{\overline{x} \mapsto \overline{m}, \overline{X} \mapsto \overline{R}, \overline{u} \mapsto \overline{g}\}$,   $\langle M_1, I_1 \cup \Delta \rangle\models \varphi(\overline{x}, \overline{X}, \overline{u}) \iff   \langle M_2, (\Phi \circ I_1) \cup (\Phi \circ\Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$ will be shown by structural induction of formulas. However, it is sufficient to show that $\langle M_1, I_1 \cup \Delta \rangle\models \varphi(\overline{x}, \overline{X}, \overline{u}) \iff \langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$. This is due to the fact that one can consider $I_1$ as a set of assignments assigning function
+%
+%\textbf{IH:} for all formulas $\varphi(\overline{x}, \overline{X}, \overline{u}) \in \mathcal{L}_{SO}$, and any extension $\Delta := \{\overline{x} \mapsto \overline{m}, \overline{X} \mapsto \overline{R}, \overline{u} \mapsto \overline{g}\}$, $\langle M_1, I_1 \cup \Delta \rangle\models \varphi(\overline{x}, \overline{X}, \overline{u}) \iff \langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$.\\
+%
+%%\item $\mathbf{IH_2}$:  $\langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u}) \iff \langle M_2, (\Phi \circ I_1) \cup (\Phi \circ\Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$.
+%%\end{itemize}
+%%\footnote{Note, because $I_2$ is merely an isomorphic copy of $I_1$ in $M_2$, this is the same as $\mathcal{M}_1 \models \varphi \iff \mathcal{M}_2 \models \varphi$. Hence, if readability is enhanced, this  }
+%\textbf{IB:} The base cases to consider are
+%\begin{itemize}
+%\item if $\varphi = P(m_1, \dots, m_n)$ for any predicate $P$. 
+%Starting from $\langle M_1, I_1 \rangle \models P(m_1, \dots, m_n)$ if and only if $(I_1(m_1), \dots, I_1(m_n)) \in I_1(P)$. Then by definition $(I_1(m_1), \dots, I_1(m_n)) \in I_1(P)$ iff $(\Phi(I_1(m_1)), \dots, \Phi(I_1(m_n))) \in I_2(P)$. Moreover, due to the statement above an $m_1 ,\dots ,m_n $ being terms, $\Phi(I_1(m_1))=I_2(m_1), \dots ,\Phi(I_1(m_n))=I_2(m_n)$, thus resulting in $(I_2(m_1),  \dots,  I_2(m_n)) \in I_2(P)$, which is $\langle M_2, I_2 \rangle \models P(m_1, \dots, m_n)$. Hence, $I_1(\varphi)=I_2(\varphi)$. Moreover, that by definition of an interpretation all constant, function and free variable symbols in $\varphi$ are already assigned. Hence, $\Delta$ is empty, and therefore $\Phi((I_1 \cup \Delta)(\varphi)) = \Phi(I_1(\varphi))= (\Phi \circ I_1)(\varphi)$, leads to $\langle M_1, I_1 \cup \Delta \rangle\models P(m_1, \dots, m_n) \iff \langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models P(m_1, \dots, m_n)$.
+%
+% 
+%\item if $\varphi := \bot$. Starting from $\mathcal{M}_1 \nmodels \bot$ if and only if $ I_1(\bot)=\{\}$. Given the isomorphism it is therefore required that $\Phi(\{\})=\{\}=I_2(\bot)$. Again $\Delta$ is empty. Hence, by the same argument as above one obtains $\langle M_1, I_1 \cup \Delta \rangle\models\bot\iff \langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models \bot$.
+% 
+%\item if $\varphi = m_1 = m_2$ (Note the second equality is part of the language). Starting from $\mathcal{M}_1 \models m_1 = m_2$. Since $m_1$ and $m_2$ are terms it follows by the previous observation $\Phi(I_1(m_1)) = I_2(m_1)$ and $\Phi(I_1(m_1)) = I_2(m_1)$. As $\mathcal{M}_1 \models m_1 = m_2$ is equivalent to $I_1(m_1)=I_1(m_2)$, one obtains through $\Phi(I_1(m_1))=\Phi(I_1(m_2))$ that $I_2(m_1)=I_2(m_2)$. Again $\Delta$ is empty. Hence, by the same argument as above one obtains $\langle M_1, I_1 \cup \Delta \rangle\models m_1 = m_2 \iff \langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models  m_1 = m_2$.
+%
+%\item if $\varphi = X(m_1, \dots, m_n)$ for any predicate variable $X$. 
+%Starting from $\langle M_1, I_1 \rangle \models P(m_1, \dots, m_n)$ if and only if $(I_1(m_1), \dots, I_1(m_n)) \in I_1(P)$. Then by definition $(I_1(m_1), \dots, I_1(m_n)) \in I_1(P)$ iff $(\Phi(I_1(m_1)), \dots, \Phi(I_1(m_n))) \in I_2(P)$. Moreover, due to the statement above an $m_1 ,\dots ,m_n $ being terms, $\Phi(I_1(m_1))=I_2(m_1), \dots ,\Phi(I_1(m_n))=I_2(m_n)$, thus resulting in $(I_2(m_1),  \dots,  I_2(m_n)) \in I_2(P)$, which is $\langle M_2, I_2 \rangle \models P(m_1, \dots, m_n)$. Hence, $I_1(\varphi)=I_2(\varphi)$. Due to the fact that no designated variable assignment function exists, this is essentially the same case as for the predicate symbols. Again $\Delta$ is empty. Hence, by the same argument as above one obtains $\langle M_1, I_1 \cup \Delta \rangle\models X(m_1, \dots, m_n) \iff \langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models  X(m_1, \dots, m_n)$.
+%\end{itemize}
+%
+%
+%\textbf{IS:}  Let $\varphi(\overline{x}, \overline{X}, \overline{u})$ be a formula in $\mathcal{L}_{SO}$
+%\begin{itemize}
+%\item $\varphi(\overline{x}, \overline{X}, \overline{u}) := \neg  \psi(\overline{x}, \overline{X}, \overline{u})$: Starting from $\langle M_1, I_1\cup \Delta \rangle \models  \neg  \psi(\overline{x}, \overline{X}, \overline{u})$. By semantics of $\neg$, one obtains $\langle M_1, I_1\cup \Delta \rangle \nmodels  \psi(\overline{x}, \overline{X}, \overline{u})$, by IH if follows $\langle M_2, \Phi \circ (I_1\cup \Delta) \rangle \nmodels \psi(\overline{x}, \overline{X}, \overline{u})$ and by the semantics $\langle M_2, \Phi \circ (I_1\cup \Delta) \rangle \models \neg \psi(\overline{x}, \overline{X}, \overline{u})$ .
+%
+%
+%\item $\varphi := \psi \land \chi$: Starting from $\mathcal{M}_1 \models  \psi \land \chi$. By semantics of $\land$, one obtains $\mathcal{M}_1 \models  \psi \sand \mathcal{M}_1 \models  \chi$, by IH it follows $\mathcal{M}_2 \models  \psi \sand \mathcal{M}_2 \models  \chi$ and by the semantics $\mathcal{M}_2 \models  \psi  \land  \chi$.
+%\item $\varphi := \psi \lor \chi$: Starting from $\mathcal{M}_1 \models  \psi \lor \chi$. By semantics of $\lor$, one obtains $\mathcal{M}_1 \models  \psi \sor \mathcal{M}_1 \models  \chi$, by IH it follows $\mathcal{M}_2 \models  \psi \sor \mathcal{M}_2 \models  \chi$ and by the semantics $\mathcal{M}_2 \models  \psi  \lor  \chi$.
+%\item $\varphi := \psi \to \chi$: Starting from $\mathcal{M}_1 \models  \psi \to \chi$. By semantics of $\to$, one obtains $\mathcal{M}_1 \models  \psi \sto \mathcal{M}_1 \models  \chi$, by IH it follows $\mathcal{M}_2 \models  \psi \sto \mathcal{M}_2 \models  \chi$ and by the semantics $\mathcal{M}_2 \models  \psi  \to  \chi$.
+%\item $\varphi := \forall x \, \psi$: Starting from  $\mathcal{M}_1 \models   \forall x \, \psi$, which is the same as $\langle M_1,  I_1\rangle \models   \forall x \, \psi$. By semantics of $\forall$, one obtains  $\forall m \in M_1 \; \langle M_1 , I_1 \cup \{x \mapsto m\} \rangle \models \psi$.  By the IH this leads to $\forall m \in M_1 \; \langle M_2 , (\Phi \circ (I_1 \cup \{x \mapsto m\})) \rangle \models \psi$ leading to $\forall m \in M_1 \; \langle M_2 , (\Phi \circ I_1) \cup \{x \mapsto \Phi(m)\}\rangle \models \psi$ resulting in $\forall m \in M_2 \; \langle M_2 , (\Phi \circ I_1) \cup \{x \mapsto m\}\rangle \models \psi$. By the semantics of $\forall$,  $\langle M_1,  (\Phi \circ I_1)\rangle \models   \forall x \, \psi$ and given the definition of $I_2$, $\langle M_1,  I_2\rangle \models   \forall x \, \psi$. Finally, culminating in $\mathcal{M}_2 \models   \forall x \, \psi$
+%\item $\varphi := \exists x\,  \psi$: Starting from  $\mathcal{M}_1 \models   \exists x \, \psi$, which is the same as $\langle M_1,  I_1\rangle \models   \exists x \, \psi$. By semantics of $\exists$, one obtains  $\exists m \in M_1 \; \langle M_1 , I_1 \cup \{x \mapsto m\} \rangle \models \psi$.  By the IH this leads to $\exists m \in M_1 \; \langle M_2 , (\Phi \circ (I_1 \cup \{x \mapsto m\})) \rangle \models \psi$ leading to $\exists m \in M_1 \; \langle M_2 , (\Phi \circ I_1) \cup \{x \mapsto \Phi(m)\}\rangle \models \psi$ resulting in $\exists m \in M_2 \; \langle M_2 , (\Phi \circ I_1) \cup \{x \mapsto m\}\rangle \models \psi$. By the semantics of $\exists$,  $\langle M_1,  (\Phi \circ I_1)\rangle \models   \exists x \, \psi$ and given the definition of $I_2$, $\langle M_1,  I_2\rangle \models   \exists x \, \psi$. Finally, culminating in $\mathcal{M}_2 \models   \exists x \, \psi$
+%
+%\item $\varphi := \forall X \, \psi$: Starting from  $\mathcal{M}_1 \models   \forall X \, \psi$, which is the same as $\langle M_1,  I_1\rangle \models   \forall x \, \psi$. By semantics of $\forall X$, one obtains  $\forall R \subset M_1^{ar(X)} \; \langle M_1 , I_1 \cup \{X \mapsto R\} \rangle \models \psi$. Hence, we know that every extension of $I_1$ that assigns the free predicate variable $X$ in $\psi$ and a relation with appropriate arity, will satisfy $\psi$. Since the IH allows for free variables, it follows from $\langle M_1,  I_1\rangle \models   \forall x \, \psi$
+%
+%
+%
+%
+% By the IH this leads to $\forall m \in M_1 \; \langle M_2 , (\Phi \circ (I_1 \cup \{x \mapsto m\})) \rangle \models \psi(x)$ leading to $\forall m \in M_1 \; \langle M_2 , (\Phi \circ I_1) \cup \{x \mapsto \Phi(m)\}\rangle \models \psi(x)$ resulting in $\forall m \in M_2 \; \langle M_2 , (\Phi \circ I_1) \cup \{x \mapsto m\}\rangle \models \psi(x)$. By the semantics of $\forall$,  $\langle M_1,  (\Phi \circ I_1)\rangle \models   \forall x \, \psi$ and given the definition of $I_2$, $\langle M_1,  I_2\rangle \models   \forall x \, \psi$. Finally, culminating in $\mathcal{M}_2 \models   \forall x \, \psi$
+%\end{itemize}
+%
+%
+%Now we need to show that for a formula $\varphi(\overline{x}, \overline{X}, \overline{u})\in \mathcal{M}$ and an extension $\Delta := \{\overline{x} \mapsto \overline{m}, \overline{X} \mapsto \overline{R}, \overline{u} \mapsto \overline{g}\}$ it is the case that $\langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$ is equivalent to $\langle M_2, (\Phi \circ I_1) \cup \Delta \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$. By definition , as well as $\langle M_2, \Phi \circ (I_1 \cup \Delta) \rangle \models \varphi(\overline{x}, \overline{X}, \overline{u})$ requires $\Phi((I_1\cup \Delta)(\varphi(\overline{x}, \overline{X}, \overline{u})))$, which further expanded amounts to $\Phi((I_1 \cup \{\overline{x} \mapsto \overline{m}, \overline{X} \mapsto \overline{R}, \overline{u} \mapsto \overline{g}\})(\varphi(\overline{x}, \overline{X}, \overline{u})))$. By the definition of $\Phi$ it follows that $\Phi (\{\overline{x} \mapsto \overline{m}, \overline{X} \mapsto \overline{R}, \overline{u} \mapsto \overline{g}\}) = $
+
+
+
+\section*{Exercise 5}
+\begin{quote}
+Let $\derives \mathbf{NK2}$ denote deducibility in the natural deduction calculus \textbf{NK2} in the course notes. For every rule $r$ with a \emph{variable/term side condition}, let $r^!$ denote the rule minus that condition. For each $r^!$, deduce $A_1, \dots , A_n \derives_{NK2\cup {r^!} } B$ where each $A_i$ is a sentence that clearly is true in the standard model of arithmetic, and $B$ is a sentence that clearly is not true (you should not justify that each $A_i/B$ has this property, but it should be easy to see). In each deduction, aim to use as few proof rules as possible.
+Consider all the relevant introduction and elimination rules for first and second order universal and existential quantifiers. The answers for two rules are given below. Present your answer for the remaining rules in the same format, using the notation conventions from the course notes
+
+\begin{center}
+\AxiomC{$[\forall x \exists y (y> x)]$}
+\RightLabel{\tiny($\forall^!_E $)}
+\UnaryInfC{$\exists y (y > x)[x/y]$}
+\dashedLine
+\UnaryInfC{$\exists y (y > y)$}
+\DisplayProof
+%\hspace{1cm}
+\AxiomC{$[\forall u \exists v \forall x (v(x) > u(x))]$}
+\RightLabel{\tiny($\forall^!_E v \equiv \lambda x. t$)}
+\UnaryInfC{$\exists v \forall x (v(x) > u(x))[u/\lambda x.t ]$}
+\dashedLine
+\UnaryInfC{$\exists v \forall x (v(x) > (\lambda x.t )(x))$}
+\dashedLine
+\UnaryInfC{$\exists v \forall x (v(x) > v(x))$}
+\DisplayProof
+\end{center}
+\end{quote}
+
+Starting with the first order cases. 
+\begin{enumerate}
+\item The rule $\forall_E$, i.e.  $\frac{\forall x A}{A[x/t]}$ where $t$ does not contain a variable bound in $A$. Is already solved in the exercise description.
+
+\item The rule $\exists_I$, i.e.  $\frac{A[x/t]}{\exists x A}$ where $t$ does not contain a variable bound in $A$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\forall y (y < s(y))]$}
+\dashedLine
+\UnaryInfC{$\forall y (y < x)[x/s(y)]$}
+\RightLabel{\scriptsize($\exists_I^! $)}
+\UnaryInfC{$\exists x \forall y (y < x)$}
+\end{prooftree}
+
+
+\item The rule $\forall_I$, i.e. $\frac{A[x/\stackrel{\pi}{\alpha]}}{\forall x A}$ where $\alpha$ does not occur in $A$ and not in $\pi$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\forall y(y = y)]$}
+\dashedLine
+\UnaryInfC{$\forall y(x = y) [x/y]$}
+\RightLabel{\scriptsize($\forall_I^!$)}
+\UnaryInfC{$\forall x \forall y (x = y)$}
+\end{prooftree}
+
+
+\item The rule $\exists_E^i$, i.e. $\frac{\exists x B \quad \stackrel{[B[x/\alpha]]^i}{\stackrel{\pi}{A}}}{A}$ where $\alpha$ does not occur in $A$ and does not occur in $B$ and not in the open assumptions $\pi$ on the right side of the proof. Consider the case
+
+\begin{prooftree}
+\small
+	\AxiomC{$[\exists x\exists y (x \neq y)]$}
+	\AxiomC{$[\exists y (x \neq y)[x / y]]^1$}
+	\dashedLine
+	\UnaryInfC{$ \exists y (y \neq y)$}
+\RightLabel{\scriptsize($\exists_E^{!\;1}$)}
+\BinaryInfC{$\exists y (y \neq y)$}
+\end{prooftree}
+Note that here the false sentence is a discharged hypothesis.
+
+
+%\begin{prooftree}
+%\small
+%	\AxiomC{$[\exists x\forall y (x < y \lor x=y)]$}
+%	
+%	\AxiomC{$[\forall y (z < y \lor z=y)]$}
+%	\AxiomC{$[(\forall y (z < y \lor z=y) \to z = 0]$}
+%	\RightLabel{\scriptsize($\to_E$)}
+%	\BinaryInfC{$z=0$}
+%\RightLabel{\scriptsize($\exists_E^!$)}
+%\BinaryInfC{$z=0$}
+%\end{prooftree}
+
+
+
+
+\item The rule $\forall_E$, i.e.  $\frac{\forall X A}{A[X/\lambda \overline{x}. B]}$ where $B$ does not contain a variable that is bound in $A$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\forall X \exists Y \forall x ((X(x) \to \neg Y(x)) \land (\neg X(x) \to Y(x)))]$}
+\RightLabel{\scriptsize($\forall_E^! $)}
+\UnaryInfC{$\exists Y \forall x ((X(x) \to \neg Y(x)) \land (\neg X(x) \to Y(x)))[X/\lambda z.Y(z)]$}
+\dashedLine
+\UnaryInfC{$\exists Y \forall x (((\lambda z. Y(z))(x) \to \neg Y(x)) \land (\neg (\lambda z. Y(z))(x) \to Y(x)))$}
+\dashedLine
+\UnaryInfC{$\exists Y \forall x ((Y(x) \to \neg Y(x)) \land (\neg Y(x) \to Y(x)))$}
+\end{prooftree}
+
+
+\item The rule $\forall_E$, i.e.  $\frac{\forall u A}{A[u/\lambda \overline{x}.t]}$ where $t$ does not contain a variable that is bound in $A$. Is already solved in the exercise description.
+
+
+\item The rule $\forall_I$, i.e. $\frac{A[X/\stackrel{\pi}{X_0]}}{\forall X A}$ where $X_0$ does not occur in $A$ and not in $\pi$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\forall Y \forall x (Y(x) \to Y(x))]$}
+\dashedLine
+\UnaryInfC{$ \forall Y \forall x (X(x) \to Y(x))[X/Y]$}
+\RightLabel{\scriptsize($\forall_I^! $)}
+\UnaryInfC{$\forall X \forall Y \forall x (X(x) \to Y(x))$}
+\end{prooftree}
+
+
+\item The rule $\forall_I$, i.e. $\frac{A[u/\stackrel{\pi}{u_0]}}{\forall u A}$ where $u_0$ does not occur in $A$ and not in $\pi$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\forall v \forall x (v(x) = v(x))]$}
+\dashedLine
+\UnaryInfC{$ \forall v \forall x (u(x) = v(x))[u/v]$}
+\RightLabel{\scriptsize($\forall_I^! $)}
+\UnaryInfC{$\forall u \forall v \forall x (u(x) = v(x))$}
+\end{prooftree}
+
+
+\item The rule $\exists_I$, i.e.  $\frac{A[X/\lambda \overline{x}. B]}{\exists X A}$ where $B$ does not contain a variable bound in $A$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\forall Y \forall x ((\neg Y(x) \to \neg Y(x)) \land (\neg \neg Y(x) \to Y(x)))]$}
+\dashedLine
+\UnaryInfC{$\forall Y \forall x (((\lambda z. \neg Y(z))(x) \to \neg Y(x)) \land (\neg (\lambda z. \neg Y(z))(x) \to Y(x)))$}
+\dashedLine
+\UnaryInfC{$\forall Y \forall x ((X(x) \to \neg Y(x)) \land (\neg X(x) \to Y(x)))[X/\lambda z. \neg Y(z)]$}
+\RightLabel{\scriptsize($\exists_I^!$)}
+\UnaryInfC{$\exists X \forall Y \forall x ((X(x) \to \neg Y(x)) \land (\neg X(x) \to Y(x)))$}
+\end{prooftree}
+
+
+
+
+
+\item The rule $\exists_I$, i.e.  $\frac{A[u/\lambda \overline{x}.t]}{\exists u A}$ where $t$ does not contain a variable bound in $A$. Consider the case
+\begin{prooftree}
+\AxiomC{$[\exists x \forall y (y < s(y))]$}
+\dashedLine
+\UnaryInfC{$\exists x \forall y (y < (\lambda z. s(y))(x))$}
+\dashedLine
+\UnaryInfC{$\exists x \forall y (y < u(x))[u/\lambda z. s(y)]$}
+\RightLabel{\scriptsize($\exists_I^!$)}
+\UnaryInfC{$\exists u \exists x \forall y (y < u(x))$}
+\end{prooftree}
+
+\item The rule $\exists_E^i$, i.e. $\frac{\exists X B \quad \stackrel{[B[X/X_0]]^i}{\stackrel{\pi}{A}}}{A}$ where $X_0$ does not occur in $A$ and not in the open assumptions $\pi$ on the right side of the proof. Consider the case
+
+\begin{changemargin}{-2cm}{-2cm}
+\begin{prooftree}
+\scriptsize
+	\AxiomC{$[\exists X\exists Y \forall x ((X(x) \to \neg Y(x)) \land ( \neg X(x) \to  Y(x)))]$}
+	\AxiomC{$[\exists Y \forall x ((X(x) \to \neg Y(x)) \land ( \neg X(x) \to  Y(x)))[ X/Y]]^1$}
+	\dashedLine
+	\UnaryInfC{$\exists Y \forall x ((Y(x) \to \neg Y(x)) \land ( \neg Y(x) \to  Y(x))) $}
+\RightLabel{\scriptsize($\exists_E^{!\;1}$)}
+\BinaryInfC{$\exists Y \forall x ((Y(x) \to \neg Y(x)) \land ( \neg Y(x) \to  Y(x))) $}
+\end{prooftree}
+\end{changemargin}
+Note that here the false sentence is a discharged hypothesis.
+
+
+%\begin{prooftree}
+%\scriptsize
+%	\AxiomC{$[\exists X \forall Y \forall x (Y(x) \to X(x))]$}
+%	
+%	\AxiomC{$[\forall Y \forall x (Y(x) \to Z(x))]$}
+%	\AxiomC{$[(\forall Y \forall x (Y(x) \to Z(x))) \to \forall x Z(x)]$}
+%	\RightLabel{\scriptsize($\to_E$)}
+%	\BinaryInfC{$\forall x Z(x)$}
+%\RightLabel{\scriptsize($\exists_E^!$)}
+%\BinaryInfC{$\forall x Z(x)$}
+%\end{prooftree}
+
+
+
+
+
+\item The rule $\exists_E^i$, i.e. $\frac{\exists u B \quad \stackrel{[B[u/u_0]]^i}{\stackrel{\pi}{A}}}{A}$ where $u_0$ does not occur in $A$ and not in the open assumptions $\pi$ on the right side of the proof. Consider the case
+\begin{prooftree}
+\small
+	\AxiomC{$[\exists u\exists v \forall x (u(x) \neq v(x))]$}
+	\AxiomC{$[\exists v \forall x (u(x) \neq v(x))[u / v]]^1$}
+	\dashedLine
+	\UnaryInfC{$ \exists v \forall x (v(x) \neq v(x))$}
+\RightLabel{\scriptsize($\exists_E^{!\;1}$)}
+\BinaryInfC{$\exists v \forall x (v(x) \neq v(x))$}
+\end{prooftree}
+Note that here the false sentence is a discharged hypothesis.
+
+
+
+%\begin{prooftree}
+%\tiny
+%	\AxiomC{$[\exists u \forall x \forall y (u(x) < y \lor u(x)=y)]$}
+%	
+%	\AxiomC{$[ \forall x \forall y (u(x) < y \lor u(x)=y)]$}
+%	\AxiomC{$[( \forall x \forall y (f(x) < y \lor f(x)=y)) \to \forall x f(x) = 0]$}
+%	\RightLabel{\scriptsize($\to_E$)}
+%	\BinaryInfC{$\forall x f(x) = 0$}
+%\RightLabel{\scriptsize($\exists_E^!$)}
+%\BinaryInfC{$\forall x f(x) = 0$}
+%\end{prooftree}
+
+
+
+
+\end{enumerate}
+
+
+
+
+
+%\section*{Exercise 44}
+%\begin{quote}
+%(Analogously to exercise 38:) Separate $\edist_G$ from $\eall_i$, $\edisp_G$, and $\edisp_G\edisp_G$ in a single connected model, if possible.
+%\end{quote}
+%
+%
+%Firstly, let $ab:=G=\{a,b\}$. Consider the following epistemic model $\mathcal{M}$.
+%
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$\neg p$] (1) at (0,0) {$1$};
+%	\node[vertex][label=below:$p$] (2) at (2,0) {$2$};
+%	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+%
+%
+%    \foreach \from/\to/\r in {1/2/a,2/3/b}
+%    \path[-](\from) edge node [above]{$\r$} (\to);
+%   
+%\end{tikzpicture}
+%\end{center}
+%\begin{enumerate}
+%\item $(\edist_G, \eall_a)$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \nmodels \eall_a p$ due to $1$, and $\mathcal{M},2 \models \edist_G p$, because taking the intersection of $R_a$ and $R_b$ it follows that state $2$ is isolated. Hence all states accessible through $R_{D_G}$ satisfy $p$.
+%
+%\item $(\edist_G, \eall_b)$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \nmodels \eall_b p$ due to $3$, and $\mathcal{M},2 \models \edist_G p$, because taking the intersection of $R_a$ and $R_b$ it follows that state $2$ is isolated. Hence all states accessible through $R_{D_G}$ satisfy $p$.
+%
+%\item $(\edist_G, \edisp_G)$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \nmodels \edisp_G p$ due to $\mathcal{M},2 \models \eall_a p$  and $\mathcal{M},2 \models \eall_b p$. Moreover, $\mathcal{M},2 \models \edist_G p$, because taking the intersection of $R_a$ and $R_b$ it follows that state $2$ is isolated. Hence all states accessible through $R_{D_G}$ satisfy $p$.
+%
+%\item $(\edist_G,  \edisp_G \edisp_G)$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \nmodels \edisp_G p$, due to the fact that, as established above, $\mathcal{M},2 \nmodels \edisp_G p$  there exists at least one state accessible form $2$ via $R_a$ and via $R_b$ such that $\edisp_G p$ does not hold. Hence, $\mathcal{M},2 \nmodels  \eall_a \edisp_G p $ and $\mathcal{M},2 \nmodels \eall_b \edisp_G p$. Moreover, $\mathcal{M},2 \models \edist_G p$, because taking the intersection of $R_a$ and $R_b$ it follows that state $2$ is isolated. Hence all states accessible through $R_{D_G}$ satisfy $p$.
+%\end{enumerate}
+%
+%
+%
+%\section*{Exercise 45}
+%\begin{quote}
+%Present a Kripke- and a Beth-countermodel for $\neg \neg A \to A$.
+%\end{quote}
+%Before moving forward, an overview of the required definitions. 
+%
+%\begin{mydef}
+%A model $\mathcal{M}:= \langle M, \leqslant , D, \Vdash \rangle$.
+%\begin{itemize}
+%\item $(M, \leqslant)$ is a partially ordered set.
+%\item $D$ assigns a structure to $\gamma \in M$, s.t. $\alpha, \beta \in M \; \alpha \leqslant \beta \sto D(\alpha) \subseteq D(\beta)$. (subset relation)
+%\item $\Vdash \subseteq M \times M$.
+%\begin{enumerate}
+%\item $\alpha \Vdash p$, if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B$, $D(\beta) \models p$;
+%\item $\alpha \Vdash \varphi \land \psi$, if $\alpha \Vdash \varphi \sand \alpha \Vdash  \psi$;
+%\item $\alpha \Vdash \varphi \lor \psi$,  if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B (\beta  \Vdash  \varphi \sor \beta  \Vdash  \psi)$;
+%\item $\alpha \Vdash \varphi \to \psi$, if $\forall \beta \geqslant \alpha (\beta \Vdash \varphi \sto \beta \Vdash \psi)$;
+%\item $\alpha \Vdash \forall x\; \varphi(x)$, if $\forall \beta \geqslant \alpha (\forall b \in |D(\beta)| \; \beta \Vdash \varphi(b))$;
+%\item $\alpha \Vdash \exists x\; \varphi(x)$, if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B (\exists b \in |D(\beta)| \; \beta \Vdash \varphi(b))$;
+%\item $\alpha \Vdash \neg \varphi$, if $\forall \beta \geqslant \alpha (\beta \nVdash \varphi)$.
+%\end{enumerate}
+%\end{itemize}
+%\end{mydef}
+%
+%Moreover, 
+%
+%\begin{mydef}
+%A formula $\varphi$ holds in a model $\mathcal{M}$ if $\alpha \Vdash cl(\varphi)$ for all $\alpha$, where $cl(\varphi)$ is the universal closure of $\varphi$.
+%\end{mydef}
+%
+%Furthermore, a nice lemma was also presented.
+%
+%\begin{lemma}
+%The following statements hold:
+%\begin{enumerate}
+%\item For $\alpha \leqslant \beta$, $\alpha \Vdash \varphi \sto \beta \Vdash \varphi$;
+%\item For $\alpha \nVdash \varphi \Leftrightarrow$ there is a path $P$ through $\alpha$ such that $\forall \beta \in P (\beta \nVdash \varphi)$;
+%\item For $\alpha \Vdash \varphi \Leftrightarrow$ there is a bar $B$ for $\alpha$ such that $\forall \beta \in B (\beta \Vdash \varphi)$;
+%\end{enumerate}
+%\end{lemma}
+%
+%
+%Moreover, the definition for a Beth model
+%\begin{mydef}
+%$\mathcal{M}$ is a Beth model if $|D(\alpha)|$ is a fixed set $D$ for all $\alpha$. 
+%\begin{enumerate}
+%\item $\alpha \Vdash p$, if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B$, $D(\beta) \models p$;
+%\item $\alpha \Vdash \varphi \land \psi$, if $\alpha \Vdash \varphi \sand \alpha \Vdash  \psi$;
+%\item $\alpha \Vdash \varphi \lor \psi$,  if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B (\beta  \Vdash  \varphi \sor \beta  \Vdash  \psi)$;
+%\item $\alpha \Vdash \varphi \to \psi$, if $\forall \beta \geqslant \alpha (\beta \Vdash \varphi \sto \beta \Vdash \psi)$;
+%\item $\alpha \Vdash \forall x \varphi(x) \Leftrightarrow \forall a \in D (\alpha \Vdash \varphi(a))$
+%\item $\alpha \Vdash \exists x\; \varphi(x)$, if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B (\exists b \in |D(\beta)| \; \beta \Vdash \varphi(b))$;
+%\item $\alpha \Vdash \neg \varphi$, if $\forall \beta \geqslant \alpha (\beta \nVdash \varphi)$.
+%\end{enumerate}
+%\end{mydef}
+%
+%and a Kripke model is defined as 
+%\begin{mydef}
+%$\mathcal{M}$ is a Kripke model if in (1), (3) and (6), $B=\{a\}$, i.e.
+%\begin{enumerate}
+%\item $\alpha \Vdash p$, if $D(\alpha) \models p$;
+%\item $\alpha \Vdash \varphi \land \psi$, if $\alpha \Vdash \varphi \sand \alpha \Vdash  \psi$;
+%\item $\alpha \Vdash \varphi \lor \psi$, if $\alpha  \Vdash  \varphi \sor \alpha  \Vdash  \psi$;
+%\item $\alpha \Vdash \varphi \to \psi$, if $\forall \beta \geqslant \alpha (\beta \Vdash \varphi \sto \beta \Vdash \psi)$;
+%\item $\alpha \Vdash \forall x\; \varphi(x)$, if $\forall \beta \geqslant \alpha (\forall b \in |D(\beta)| \; \beta \Vdash \varphi(b))$;
+%\item $\alpha \Vdash \exists x\; \varphi(x)$, if $\exists a \in |D(\alpha)| \; \alpha \Vdash \varphi(a)$;
+%\item $\alpha \Vdash \neg \varphi$, if $\forall \beta \geqslant \alpha (\beta \nVdash \varphi)$.
+%\end{enumerate}
+%\end{mydef}
+%
+%
+%Starting with the semantic unravelling of the sentence $\neg \neg \varphi \to \varphi$.
+%\begin{align*}
+%&\alpha \Vdash \neg \neg \varphi \to \varphi   && \iff & \\
+%&\forall \beta \geqslant \alpha (\beta \Vdash \neg \neg \varphi \sto  \beta \Vdash \varphi )  && \iff & \\
+%&\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\sneg \gamma \Vdash \neg \varphi) \sto  \beta \Vdash \varphi )  && \iff & \\
+%&\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\sneg (\forall \delta \geqslant \gamma \; \sneg \delta \Vdash \varphi )) \sto  \beta \Vdash \varphi )  && \iff & \\
+%&\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\exists \delta \geqslant \gamma \; \delta \Vdash  \varphi ) \sto  \beta \Vdash \varphi )  && \iff & \\
+%\end{align*}
+%
+%Firstly, consider the following Kripke model.
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=right :$\models \neg p$] (1) at (0,0) {$1$};
+%	\node[vertex][label=right:$p$] (2) at (0,2) {$2$};
+%
+%	
+%    \foreach \from/\to in {1/2}
+%    \path[->](\from) edge node [above]{} (\to);
+%\end{tikzpicture}
+%\end{center}
+%
+%First, one has to confirm that this model actually satisfies the required properties. Clearly, the set of worlds is a partial order (reflexive edges are not drawn).
+%Since $1 \leqslant 2$ and $D(1) \nmodels p$ and  $D(2) \models p$, it is the case that $D(1) \subseteq D(2)$. Hence, given
+%\begin{equation*}
+%\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\exists \delta \geqslant \gamma \; \delta \Vdash  p ) \sto  \beta \Vdash p ) 
+%\end{equation*}
+%and the fact that this is a Kripke model it follows
+%\begin{equation*}
+%\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\exists \delta \geqslant \gamma \; D(\delta) \models  p ) \sto  D(\beta) \models p ) 
+%\end{equation*}
+%Now consider $1$ as $\alpha$  and $1$ as $\beta$, by reflexivity $1 \geqslant 1$, resulting in 
+%\begin{equation*}
+% \forall \gamma \geqslant 1 (\exists \delta \geqslant \gamma \; D(\delta) \models  p ) \sto  D(1) \models p 
+%\end{equation*}
+%Clearly $ D(1) \models p $ can not be the case. Hence, if the premise is correct $\mathcal{M}$ is a counter model. To establish exactly that two case distinctions are required.
+%\begin{itemize}
+%\item \emph{Case 1:} For $\gamma$ is $1$, we have $2 \geqslant 1$ such that $D(2) \models p$.
+%\item \emph{Case 2:} For $\gamma$ is $2$, we have $2\geqslant 2$ such that $D(2) \models p$.
+%\end{itemize}
+%Hence, the premise of the implication is satisfied by $\mathcal{M}$, thus a counter Kripke model is found.
+%
+%Secondly, consider the following Beth model $\mathcal{M}:= \langle  M , \leqslant, D, \Vdash \rangle$. Where $M:=M_o \cup M_p=\{1,2,3 \dots\}\cup \{1_p,2_p,3_p,\dots\}$ and $\leqslant$ is the reflexive, anti-symmetric and transitive closure of $\{(1,1_p), (1,2), (2,2_p), (2,3), (3,3_p) ,\dots\}$, as well as $\forall \alpha \in M_o \; D(\alpha)\nmodels p$ and $\forall \alpha \in M_p \; D(\alpha)\models p$.
+%The following is a visualisation for the first three steps.
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex](1) at (1,0) {$1$};
+%	\node[vertex][label=left:$p$] (1p) at (0,1) {$1_p$};
+%
+%	\node[vertex](2) at (2,1) {$2$};
+%	\node[vertex][label=left:$p$] (2p) at (1,2) {$2_p$};
+%	
+%		\node[vertex](3) at (3,2) {$3$};
+%	\node[vertex][label=left:$p$] (3p) at (2,3) {$3_p$};
+%
+%	
+%    \foreach \from/\to in {1/1p,2/2p,3/3p, 1/2,2/3}
+%    \path[->](\from) edge node [above]{} (\to);
+%\end{tikzpicture}
+%\end{center}
+%
+%First, one has to confirm that this model actually satisfies the required properties. Clearly, the set of worlds is a partial order (reflexive and transitive edges are not drawn). 
+%Moreover, $\forall \alpha |D(\alpha)|=\{\}$, since only propositional statements are considered.
+%For any arbitrary $k >0$ it follows that, $k \leqslant k_p$ and $D(k) \nmodels p$ and  $D(k_p) \models p$, it is the case that $D(k) \subseteq D(k_p)$. Similarly, since $k \leqslant k+1$ and $D(k) \nmodels p$ and  $D(k+1) \nmodels p$, it is the case that $D(k) \subseteq D(k+1)$. Hence, given
+%\begin{equation*}
+%\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\exists \delta \geqslant \gamma \; \delta \Vdash  p ) \sto  \beta \Vdash p ) 
+%\end{equation*}
+%and the fact that this is a Beth model it follows
+%\begin{equation*}
+%\forall \beta \geqslant \alpha ( \forall \gamma \geqslant \beta (\exists \delta \geqslant \gamma \; \exists \mathcal{B}_{\delta}\forall \epsilon \in  \mathcal{B}_{\delta} \; D(\epsilon) \models p) \sto  \exists \mathcal{B}_{\beta}\forall \gamma \in  \mathcal{B}_{\beta} \; D(\gamma) \models p) 
+%\end{equation*}
+%Where $\exists \mathcal{B}_{\alpha}\forall \beta \in  \mathcal{B}_{\alpha} \; D(\beta) \models p$ is a shorthand for  "if there is a bar $B$ for $\alpha$, s.t. $\forall \beta \in B$, $D(\beta) \models p$".\\
+%
+%Now consider $1$ as $\alpha$. The statement $ \exists \mathcal{B}_{\beta}\forall \gamma \in  \mathcal{B}_{\beta} \; D(\gamma) \models p$ can not hold due to the fact that it would require that at some point there exists a bar, such that for all states in the bar it follows that $p$ holds. However, with $M_o$ being infinite and $1 \leqslant k$ for $k \in M_o$ such bar can not exist. That is, at every point of the path $(1,2,\dots,k)$ we know that $p$ can not hold. Moreover, it is possible to find an arbitrary path of that kind. Hence, for any given bar, there exists a path of that kind that intersects with this bar. Thereby, invalidating the statement  $\exists \mathcal{B}_{\beta}\forall \gamma \in  \mathcal{B}_{\beta} \; D(\gamma) \models p$. \\
+%
+%Hence, if the premise is correct $\mathcal{M}$ is a counter model. To establish exactly that two case distinctions are required.
+%Consider an arbitrary $k \geqslant 1$
+%\begin{itemize}
+%\item \emph{Case 1:} For $\gamma$ is $k_p$, we have $k_p \geqslant k_p$ such that $D(k_p) \models p$.
+%\item \emph{Case 2:} For $\gamma$ is $k+1$, we have $(k+1)_p\geqslant k+1$ such that $D((k+1)_p) \models p$.
+%\end{itemize}
+%Hence, the premise of the implication is satisfied by $\mathcal{M}$, thus a counter Beth model is found.
+%
+%
+%\section*{Exercise 46}
+%\begin{quote}
+%Present a Kripke-countermodel for $\neg \forall x \neg P(x) \to \exists x P(x)$.
+%\end{quote}
+%
+%
+%
+%Starting with the semantic unravelling of the sentence $\neg \forall x \neg P(x) \to \exists x P(x)$ with respect to a Kripke model.
+%
+%\begin{changemargin}{-1cm}{-1cm}
+%\begin{align*}
+%&\neg \forall x \neg P(x) \to \exists x P(x)   & \\
+%&\forall \beta \geqslant \alpha (\beta \Vdash \neg \forall x \neg P(x) \sto  \beta \Vdash \exists x P(x) )  & \\
+%&\forall \beta \geqslant \alpha (\forall \gamma \geqslant \beta (\sneg  \gamma \Vdash  \forall x \neg P(x)) \sto  \beta \Vdash \exists x P(x) )  & \\
+%&\forall \beta \geqslant \alpha (\forall \gamma \geqslant \beta (\sneg   \forall \delta \geqslant \gamma  \forall x_{\delta} \in |D(\delta)| (\delta \Vdash  \neg P(x_{\delta}))) \sto  \beta \Vdash \exists x P(x) )  &\\
+%&\forall \beta \geqslant \alpha (\forall \gamma \geqslant \beta (\sneg   \forall \delta \geqslant \gamma  \forall x_{\delta} \in |D(\delta)| (\forall \epsilon \geqslant \delta (\sneg  D(\epsilon) \models P(x_{\delta})))) \sto  \beta \Vdash \exists x P(x) )  &\\
+%&\forall \beta \geqslant \alpha (\forall \gamma \geqslant \beta (\sneg   \forall \delta \geqslant \gamma  \forall x_{\delta} \in |D(\delta)| (\forall \epsilon \geqslant \delta (\sneg  D(\epsilon) \models P(x_{\delta})))) \sto \exists x_{\beta} \in |D( \beta)| (D(\beta) \models P(x_{\beta}) ))  & \\
+%&\forall \beta \geqslant \alpha (\forall \gamma \geqslant \beta ( \exists \delta \geqslant \gamma  \exists x_{\delta} \in |D(\delta)| (\exists \epsilon \geqslant \delta ( D(\epsilon) \models P(x_{\delta})))) \sto \exists x_{\beta} \in |D( \beta)| (D(\beta) \models P(x_{\beta}) ))  & \\
+%\end{align*}
+%\end{changemargin}
+%
+%Consider the following Kripke model $\mathcal{M}$.
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=right :$\models \neg p$] (1) at (0,0) {$1$};
+%	\node[vertex][label=right:$p$] (2) at (0,2) {$2$};
+%
+%    \foreach \from/\to in {1/2}
+%    \path[->](\from) edge node [above]{} (\to);
+%\end{tikzpicture}
+%\end{center}
+%where $|D(1)|=|D(2)|=\{a\}$ and $D(1)\nmodels P(a)$ while $D(2)\models P(a)$.
+%
+%First, one has to confirm that this model actually satisfies the required properties. Clearly, the set of worlds is a partial order (reflexive edges are not drawn).
+%Since $1 \leqslant 2$ and $D(1) \nmodels P(a)$ and  $D(2) \models P(a)$, it is the case that $D(1) \subseteq D(2)$. 
+%
+%Now consider $1$ as $\alpha$  and $1$ as $\beta$, by reflexivity $1 \geqslant 1$, resulting in 
+%\begin{equation*}
+%\forall \gamma \geqslant \beta ( \exists \delta \geqslant \gamma  \exists x_{\delta} \in |D(\delta)| (\exists \epsilon \geqslant \delta ( D(\epsilon) \models P(x_{\delta})))) \sto \exists x_{\beta} \in |D( \beta)| (D(\beta) \models P(x_{\beta}) )
+%\end{equation*}
+%With $a$ being the only element in the domain and with $ D(1) \nmodels P(a)$ it follows that $ \exists x_{1} \in |D( 1)| \;(D(1) \models P(1) $ can not hold. Hence, if the premise is correct $\mathcal{M}$ is a counter model. To establish exactly that two case distinctions are required.
+%\begin{itemize}
+%\item \emph{Case 1:} For $\gamma$ is $1$, we have $2 \geqslant 1$ for $\delta$ and $2 \geqslant 2$ for $\epsilon$ such that $D(2) \models P(a)$.
+%\item \emph{Case 2:} For $\gamma$ is $2$, we have $2 \geqslant 2$ for $\delta$ and $2 \geqslant 2$ for $\epsilon$ such that $D(2) \models P(a)$.
+%\end{itemize}
+%Hence, the premise of the implication is satisfied by $\mathcal{M}$, thus a counter Kripke model is found.
+%
+%\section*{Exercise 47}
+%\begin{quote}
+%Consider the classical laws of distribution ($\lor$ over $\land$, $\land$ over $\lor$). Which parts of these laws (implications) hold and which fail
+%for intuitionistic logic?
+%Provide sequent or natural deduction proofs for the positive cases and Kripke and/or Beth counterexamples for the negative cases.
+%\end{quote}
+%
+%As far as I am aware the laws in question are:
+%\begin{enumerate}
+%\item $(P\land (Q\lor R))\to ((P\land Q)\lor (P\land R))$
+%\item $(P\lor (Q\land R))\to ((P\lor Q)\land (P\lor R))$
+%\item $((P\land Q)\lor (P\land R)) \to  (P\land (Q\lor R)) $
+%\item $((P\lor Q)\land (P\lor R)) \to (P\lor (Q\land R)) $
+%\end{enumerate}
+%
+%
+%For $(P\land (Q\lor R))\to ((P\land Q)\lor (P\land R))$ the sequent proof is
+%\begin{prooftree}
+%\def\fCenter{\ \vdash\ }
+%
+%		\AxiomC{}
+%		\UnaryInf$P \fCenter P$
+%		\UnaryInf$P, Q \fCenter P$
+%
+%		\AxiomC{}
+%		\UnaryInf$Q \fCenter Q$
+%		\UnaryInf$P, Q \fCenter Q$
+%
+%	\BinaryInf$P, Q \fCenter P\land Q$
+%	\UnaryInf$P, Q \fCenter (P\land Q)\lor (P\land R)$
+%
+%		\AxiomC{}
+%		\UnaryInf$P \fCenter P$
+%		\UnaryInf$P, R \fCenter P$
+%
+%		\AxiomC{}
+%		\UnaryInf$R \fCenter R$
+%		\UnaryInf$P, R \fCenter R$
+%
+%	\BinaryInf$P, R \fCenter P\land R$
+%	\UnaryInf$P, R \fCenter (P\land Q)\lor (P\land R)$
+%
+%
+%\BinaryInf$P, (Q\lor R) \fCenter (P\land Q)\lor (P\land R)$
+%\UnaryInf$P\land (Q\lor R) \fCenter (P\land Q)\lor (P\land R)$
+%\UnaryInf$\fCenter (P\land (Q\lor R))\to ((P\land Q)\lor (P\land R))$
+%\end{prooftree}
+%
+%
+%
+%For $(P\lor (Q\land R))\to ((P\lor Q)\land (P\lor R))$ the sequent proof is
+%\begin{prooftree}
+%\def\fCenter{\ \vdash\ }
+%
+%			\AxiomC{}
+%			\UnaryInf$P \fCenter P$
+%			\UnaryInf$P \fCenter P\lor Q$
+%
+%			\AxiomC{}
+%			\UnaryInf$P \fCenter P$
+%			\UnaryInf$P \fCenter P\lor R$
+%			
+%		\BinaryInf$P \fCenter (P\lor Q)\land (P\lor R)$
+%		
+%		
+%			\AxiomC{}
+%			\UnaryInf$Q \fCenter Q$
+%			\UnaryInf$Q, R \fCenter  Q$
+%			\UnaryInf$Q, R \fCenter P\lor Q$
+%			\AxiomC{}
+%			\UnaryInf$R \fCenter  R$
+%			\UnaryInf$Q, R \fCenter  R$
+%			\UnaryInf$Q, R \fCenter P\lor R$
+%		\BinaryInf$Q, R \fCenter (P\lor Q)\land (P\lor R)$
+%		\UnaryInf$Q\land R \fCenter (P\lor Q)\land (P\lor R)$
+%		
+%\BinaryInf$P\lor (Q\land R) \fCenter (P\lor Q)\land (P\lor R)$
+%\UnaryInf$\fCenter (P\lor (Q\land R))\to ((P\lor Q)\land (P\lor R))$
+%\end{prooftree}
+%
+%
+%For $((P\land Q)\lor (P\land R)) \to  (P\land (Q\lor R)) $ the sequent proof is
+%\begin{prooftree}
+%\def\fCenter{\ \vdash\ }
+%
+%			\AxiomC{}
+%			\UnaryInf$P \fCenter  P$
+%			\UnaryInf$P, Q \fCenter P$
+%			
+%			\AxiomC{}
+%			\UnaryInf$Q \fCenter  Q$
+%			\UnaryInf$P, Q \fCenter Q$
+%			\UnaryInf$P, Q \fCenter Q\lor R$
+%			
+%		\BinaryInf$P, Q \fCenter P\land (Q\lor R)$
+%		\UnaryInf$P\land Q \fCenter P\land (Q\lor R)$
+%		
+%			\AxiomC{}
+%			\UnaryInf$P \fCenter  P$
+%			\UnaryInf$P, R \fCenter P$
+%			
+%			\AxiomC{}
+%			\UnaryInf$R \fCenter  R$
+%			\UnaryInf$P, R \fCenter R$
+%			\UnaryInf$P, R \fCenter Q\lor R$
+%		\BinaryInf$P, R \fCenter P\land (Q\lor R)$
+%		\UnaryInf$P\land R \fCenter P\land (Q\lor R)$
+%		
+%\BinaryInf$(P\land Q)\lor (P\land R) \fCenter P\land (Q\lor R)$
+%\UnaryInf$\fCenter ((P\land Q)\lor (P\land R)) \to  (P\land (Q\lor R))$
+%\end{prooftree}
+%
+%
+%
+%For $((P\lor Q)\land (P\lor R)) \to (P\lor (Q\land R)) $ the sequent proof is
+%\begin{prooftree}
+%\scriptsize
+%\def\fCenter{\ \vdash\ }
+%
+%			\AxiomC{}
+%			\UnaryInf$P\fCenter P$
+%			\UnaryInf$P, P \fCenter P$
+%			\UnaryInf$P, P \fCenter P\lor (Q\land R)$
+%			
+%			\AxiomC{}
+%			\UnaryInf$P \fCenter P$
+%			\UnaryInf$P, R \fCenter P$
+%			\UnaryInf$P, R \fCenter P\lor (Q\land R)$
+%			\BinaryInf$P, (P\lor R) \fCenter P\lor (Q\land R)$
+%			
+%			\AxiomC{}
+%			\UnaryInf$P \fCenter P$
+%			\UnaryInf$Q, P \fCenter P$
+%			\UnaryInf$Q, P \fCenter P\lor (Q\land R)$
+%			
+%				\AxiomC{}
+%				\UnaryInf$Q \fCenter Q$
+%				\UnaryInf$Q, R \fCenter Q$
+%								
+%				\AxiomC{}
+%				\UnaryInf$R \fCenter R$
+%				\UnaryInf$Q, R \fCenter R$
+%			\BinaryInf$Q, R \fCenter (Q\land R)$
+%			\UnaryInf$Q, R \fCenter P\lor (Q\land R)$
+%			\BinaryInf$Q, (P\lor R) \fCenter P\lor (Q\land R)$
+%		
+%\BinaryInf$(P\lor Q), (P\lor R) \fCenter P\lor (Q\land R)$
+%\UnaryInf$(P\lor Q)\land (P\lor R) \fCenter P\lor (Q\land R)$
+%\UnaryInf$\fCenter ((P\lor Q)\land (P\lor R)) \to (P\lor (Q\land R))$
+%\end{prooftree}
+
+
+%\section*{Exercise 37}
+%\begin{quote}
+%\begin{theorem}
+%Multi-(n)-modal \textbf{S5} is the smallest normal modal logic, based on frames with accessibility relations $R_1 ,\cdots , R_n$ , that includes the knowledge axiom, as well as positive and negative introspection.
+%\end{theorem}
+%
+%\begin{corollary}
+%Each of the $n$ accessibility relations in those frames, for which n-modal \textbf{S5} is sound and complete, is an equivalence relation.
+%\end{corollary}
+%Make all facts (exercises, definitions, etc) explicit that are used to prove the above theorem and its corollary, respectively.
+%\end{quote}
+
+%
+%To show the theorem, we require the fact that the knowledge axiom, as well as positive and negative introspection, have equivalent formulations in multi-modal logic. For negative introspection this was shown in\emph{ exercise 34} and for the other cases the translation as presented in \emph{exercise 33} can be used. Those equivalent formulations are (T), (4) and (5). Now given the definition of \textbf{S5} 
+%and the definition of normal modal logic (see below) one obtains that $S5$ captures multi-agent epistemic logic. Moreover, since multi-agent epistemic logic requires the accessibility relations to be equivalence relations, one can use the theorem 
+%\begin{quote}
+%$A \in \textbf{S5}$ iff A is valid in all frames where the accessibility relation is an equivalence relation. 
+%\end{quote}
+%and the fact that (T) and (5) characterise equivalence classes that Multi-(n)-modal \textbf{S5} is the smallest normal modal logic capturing multi-agent epistemic logic. That is, any modal logic requiring the accessibility relations to be equivalence relations must include (T) and (5) and (4) (since is a consequence of the prior two).
+%
+%Apart form the previous theorem and the inferences made above, e.g. characterisation of equivalence relation, one requires the theorem 
+%
+%\begin{quote}
+%The logic  $\mathbf{S5}$ with axioms (T) and (5) (in
+%addition to (K) and CL axioms) is sound and complete for frames,
+%where the accessibility relation satisfies the properties (E1) and (E5).
+%\end{quote}
+%
+%to show the claim.
+%
+%
+%Lastly, some of the notions used in the theorem and corollary.
+%\begin{enumerate}
+%\item 
+%Multi-(n)-modal \textbf{S5} is the smallest normal modal logic, based on frames with accessibility relations $R_1 ,\cdots , R_n$ , that includes the knowledge axiom, as well as positive and negative introspection.
+%
+%\begin{enumerate}
+%\item \textit{propositional logic} \\
+%A propositional logic $\mathcal{L}$ is a set of formulas that is
+%\begin{itemize}
+%\item closed under substitutions ($PV \mapsto FORM$)
+%\item closed under modus ponens: $\frac{F \quad F \to G}{G}$
+%\end{itemize}
+%
+%\item \textit{normal modal logic} \\
+%A normal modal logic is a logic extending CL, containing
+%the axiom scheme (i.e., all instances of)
+%\begin{equation*}
+%\all (A \to B) \to \all A \to \all B
+%\end{equation*}
+%and is closed under the following necessitation rule $\frac{F}{\all F}$.
+%
+%
+%\item \textit{Multi-(n)-modal} \\
+%Syntax:
+%more than one (non-dual) modal operators. We will consider
+%only unary modal operators, here.
+%
+%Semantics:
+%interpretations (and frames) with more than one accessibility
+%relation over one and the same set of states/worlds:
+%$\mathcal{M} = \langle W , R_1 , \dots,  R_n , V \rangle$ bzw. $\mathcal{F} = \langle W , R_1 , \dots,  R_n  \rangle$ 
+%Each accessibility relation $R_i$ determines a modality (e.g.,
+%denoted by $\all_i$) plus the corresponding dual modality ($\some_i$ )
+% $v_{\mathcal{M}}(\all_iF,w)=1 \iff \forall u (wR_iu \sto v_{\mathcal{M}}(D,u)=1)$
+%
+%\item \textbf{Proof system for modal logic}
+%A Hilbert-style proof system for the logic of all frames \textbf{K} is given
+%by 
+%\begin{itemize}
+%\item Axioms: CL tautologies + (K) $\all(A \to B) \to (\all A \to \all B)$
+%\item Rules: Modus Ponens + necessitation
+%\end{itemize}
+%To obtain other normal logics the system for \textbf{K} is extended by
+%further axioms:
+%
+%\item \textbf{S5} \\
+%To obtain \textbf{S5} the system for \textbf{K} is extended by
+%further axioms:
+%\begin{itemize}
+%\item $\all A \to A$
+%\item $\all A \to \all \all A $
+%\item $\some A \to \all \some A$
+%\end{itemize}
+%
+%\item \textit{Kripke semantics} \\
+%A Kripke interpretation (model) is a tuple $\mathcal{M} = \langle W, R, V\rangle$: 
+%\begin{itemize}
+%\item non-empty set W of (possible) worlds (states, points)
+%\item an accessibility relation $R \subseteq W \times W$
+%\item (variable) assignment $V : PV \to 2^W$
+%\end{itemize}
+%
+%\item \textit{frames} \\
+%The pair $\langle W, R\rangle$ of an interpretation $\mathcal{M} = \langle W, R, V\rangle$
+%is called the (Kripke) frame on which $\mathcal{M}$ is based.
+%\item \textit{accessibility relations} \\
+%See 1a).
+%
+%
+%\item \textit{knowledge axiom} \\
+%knowledge axiom: $\eall_i A \to A$
+%\item \textit{positive introspection} \\
+%positive introspection: $\eall_i A \to \eall_i \eall_i A$ 
+%\item \textit{negative introspection} \\
+%negative introspection: $\neg \eall_i A \to \eall_i \neg \eall_i A$ 
+%\end{enumerate}
+%
+%
+%\item 
+%Each of the $n$ accessibility relations in those frames, for which n-modal \textbf{S5} is sound and complete, is an equivalence relation.
+%
+%\begin{enumerate}
+%\item \textit{sound}  \\
+%One speaks of soundness, iff a formula $\varphi \in \mathcal{L}$ is derivable, in a proof system, from a set of premises $\Gamma \subseteq \mathcal{L}$, then $\varphi$ must be the logical consequence of $\Gamma$. That is, iff   $\Gamma \vdash_X \varphi$ implies $\Gamma \vDash_{\mathcal{X}} \varphi$.
+%
+%\item \textit{complete} \\
+%One speaks of completeness, iff a formula $\varphi \in \mathcal{L}$ is the logical consequence of a set of premises $\Gamma \subseteq \mathcal{L}$, then it must be derivable, in a proof system, from $\Gamma$ as well. That is, iff  $\Gamma \vDash_{\mathcal{X}} \varphi$ implies $ \Gamma \vdash_X \varphi$.
+%\item \textit{equivalence relation} \\
+%A binary relation $R$ is an equivalence relation iff it satisfies 
+%\begin{itemize}
+%\item E1 reflexive: $\forall s \; sRs$;
+%\item E2 symmetric: $\forall s \forall t \;(sRt \sto tRs )$;
+%\item E4 transitive: $\forall s \forall t \forall u \; ((sRt \land tRu) \sto sRu)$;
+%\end{itemize}
+%\item \textit{other} \\
+%For all other see above.
+%\end{enumerate}
+%\end{enumerate}
+%
+%
+%
+%\section*{Exercise 38}
+%\begin{quote}
+%Present an interpretation $\mathcal{M}$ for two agents 1 and 2 such that the modalities $\eall_1 ,\eall_2, \edisp_{\{1,2\}}, \egen_{\{1,2\}}$, and $\ecom_{\{1,2\}}$ are pairwise different. More precisely: for every pair $(\mathbf{X}, \mathbf{Y})$ of different modalities specify a world $w$ and a formula $F$, s.t. $v_{\mathcal{M}}(\mathbf{X}F,w)  \neq v_{\mathcal{M}}(\mathbf{Y}F,w)$.
+%\end{quote}
+%
+%
+%
+%
+%Firstly, let $ab:=G=\{a,b\}$. Consider the following epistemic model $\mathcal{M}$.
+%
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$p$] (1) at (0,0) {$1$};
+%	\node[vertex][label=below:$p$] (2) at (2,0) {$2$};
+%	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+%	
+%	\node[vertex][label=below:$p$] (4) at (6,0) {$4$};
+%	\node[vertex][label=below:$\neg p$] (5) at (8,0) {$5$};
+%
+%    \foreach \from/\to/\r in {1/2/a,2/3/b, 4/5/a}
+%    \path[-](\from) edge node [above]{$\r$} (\to);
+%   
+%\end{tikzpicture}
+%\end{center}
+%\begin{enumerate}
+%\item $(\eall_a, \eall_b)$:\\
+%Consider state $4$. That is, $\mathcal{M},4 \nmodels \eall_a p$ due to $5$, and $\mathcal{M},4 \models \eall_b p$.
+%\item $(\eall_a, \edisp_{ab})$:\\
+%Consider state $4$. That is, $\mathcal{M},4 \nmodels \eall_a p$ due to $5$, and $\mathcal{M},4 \models \edisp_{ab} p$ due to $\mathcal{M},4 \models \eall_b p$.
+%\item $(\eall_a, \egen_{ab})$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \models \eall_a p$, and $\mathcal{M},2 \nmodels \egen_{ab} p$ due to $\mathcal{M},2 \nmodels \eall_b p$, which is due to $3$.
+%\item $(\eall_a, \ecom_{ab})$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \models \eall_a p$, and $\mathcal{M},2 \nmodels \ecom_{ab} p$ caused by $\mathcal{M},2 \nmodels \egen_{ab} p$ due to $\mathcal{M},2 \nmodels \eall_b p$, which is due to $3$.
+%\item $(\eall_b, \edisp_{ab})$:\\
+%Consider state $2$. That is, $\mathcal{M},2 \nmodels \eall_b p$ due to $3$, and $\mathcal{M},2 \models \eall_a p$.
+%\item $(\eall_b, \egen_{ab})$:\\
+%Consider state $4$. That is, $\mathcal{M},4 \models \eall_b p$, and $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+%\item $(\eall_b, \ecom_{ab})$:\\
+%Consider state $4$. That is, $\mathcal{M},4\models \eall_a p$, and $\mathcal{M},4 \nmodels \ecom_{ab} p$ caused by $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+%
+%
+%\item $(\edisp_{ab}, \egen_{ab})$:\\
+%Consider state $4$. That is, $\mathcal{M},4 \models \edisp_{ab} p$ due to $\mathcal{M},4 \models \eall_b p$, and $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+%\item $(\edisp_{ab}, \ecom_{ab})$:\\
+%Consider state $4$. That is, $\mathcal{M},4 \models \edisp_{ab} p$ due to $\mathcal{M},4 \models \eall_b p$, and $\mathcal{M},4 \nmodels \ecom_{ab} p$ caused by $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+%
+%\item $(\egen_{ab}, \ecom_{ab})$:\\
+%Consider state $1$. That is, $\mathcal{M},1 \models \egen_{ab} p$ due to $\mathcal{M},1 \models \eall_a p$ and $\mathcal{M},1 \models \eall_b p$, and $\mathcal{M},1 \nmodels  \egen_{ab} \egen_{ab} p$ due to $\mathcal{M},2 \nmodels  \egen_{ab} p$ caused by $\mathcal{M},2 \nmodels  \eall_b p$.
+%\end{enumerate}
+%
+%
+%\section*{Exercise 39}
+%\begin{quote}
+%Prove or refute: $(\mathcal{M},s) \models \edisp_G \egen_G A$ implies $(\mathcal{M},s) \models \egen_G A$ and $(\mathcal{M},s) \models \egen_G A$ implies $(\mathcal{M},s) \models \edisp_G \egen_G A$.
+%\end{quote}
+%
+%\begin{itemize}
+%\item $\mathcal{M},s \models \edisp_G \egen_G \varphi$ implies $\mathcal{M},s \models \egen_G \varphi$\\
+%Elevating $\mathcal{M},s \models \edisp_G \egen_G \varphi$, one obtains $\exists i \in G : \mathcal{M},s \models \eall_i \egen_G \varphi$, from this it follows $\exists i \in G : \forall t (sR_it \sto \mathcal{M},t \models \egen_G \varphi)$.
+%%and subsequently the statement 
+%%\begin{equation*}
+%%\exists i \in G : \forall t (sR_it \sto \forall j \in G : \mathcal{M}, t \models \eall_j \varphi)
+%%\end{equation*}
+%%Since there exists an agent $i$, such that $t$ is accessible from $s$ through $R_i$, we know with $\mathcal{M}$ being an epistemic model, that $s$ is accessible from $t$ through $R_i$ as well. 
+%%Now, since every state a 
+%Since, there exists an agent $i$, such that for all from $s$ accessible states $t$, $\mathcal{M},t \models \egen_G \varphi$. Now with $\mathcal{M}$ being an epistemic model, it is required that $sR_is$. Hence, $\mathcal{M},s \models \egen_G \varphi$.
+%
+%
+%\item $\mathcal{M},s \models \egen_G \varphi$ implies $\mathcal{M},s \models \edisp_G \egen_G \varphi$\\
+%Consider the following epistemic model $\mathcal{M}$.
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$\neg p$] (1) at (0,0) {$1$};
+%	\node[vertex][label=below:$p$] (2) at (2,0) {$2$};
+%	\node[vertex][label=below:$p$] (3) at (4,0) {$3$};
+%	\node[vertex][label=below:$p$] (4) at (6,0) {$4$};
+%	\node[vertex][label=below:$\neg p$] (5) at (8,0) {$5$};
+%
+%    \foreach \from/\to/\r in {1/2/a,2/3/b,3/4/a,4/5/b}
+%    \path[-](\from) edge node [above]{$\r$} (\to);
+%   
+%\end{tikzpicture}
+%\end{center}
+%Let $ab:= G = \{a,b\}$. Observe that $\mathcal{M},3 \models \egen_{ab} p$, which elevated to the meta-level is $\forall i \in G : \mathcal{M},3 \models \eall_i p$. Now, since $2, 3$ and $4$ are the only states accessible by a relation $R_i$, the claim clearly follows. However, through similar reasoning one can can conclude that  $\mathcal{M},2 \nmodels \egen_{ab} p$ and $\mathcal{M},4 \nmodels \egen_{ab} p$. That is, in those states there exists at least one agent that can not distinguish between $p$ and $\neg p$, due to the states $1$ and $5$. Therefore, no agent in state $3$ knows that $ \egen_{ab} p$. That is, 
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$\neg p$] (1) at (0,0) {$1$};
+%	\node[vertex][label=below:$\nmodels \egen_{ab}$] (2) at (2,0) {$2$};
+%	\node[vertex][label=below:$\models \egen_{ab}$] (3) at (4,0) {$3$};
+%	\node[vertex][label=below:$\nmodels \egen_{ab}$] (4) at (6,0) {$4$};
+%	\node[vertex][label=below:$\neg p$] (5) at (8,0) {$5$};
+%
+%    \foreach \from/\to/\r in {1/2/a,2/3/b,3/4/a,4/5/b}
+%    \path[-](\from) edge node [above]{$\r$} (\to);
+%   
+%\end{tikzpicture}
+%\end{center}
+%\end{itemize}
+%
+%
+%
+%\section*{Exercise 40}
+%\begin{quote}
+%Visualization lemma:
+%\begin{enumerate}
+%\item $(\mathcal{M},s) \models \egen_G^k A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.
+%\item $(\mathcal{M},s) \models \ecom_G A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$.
+%\end{enumerate}
+%\end{quote}
+%Let $s \leadsto_G^k t$ represent that $t$ is $G$-reachable from $s$ in $k$ steps.
+%\begin{enumerate}
+%\item By induction over $k$.
+%\begin{itemize}
+%\item \textbf{IH:} $\mathcal{M},s \models \egen_G^k \varphi$ iff $\mathcal{M},t \models \varphi$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.
+%\item \textbf{IB:} $k=1$ (I am not sure whether to start from 1 or from 0) \\
+%$\mathcal{M},s \models \egen_G^1 \varphi$ is equivalent to $\mathcal{M},s \models \egen_G \varphi$, which is equivalent to the meta-level statement, $\forall i \in G : \forall t (sR_it \sto \mathcal{M}, s \models \varphi)$. 
+%Furthermore, the statement "$\mathcal{M},t \models \varphi$ for all $t$ that are $G$-reachable from $s$ in $1$ step" is equivalent to $\forall t (s R_{E_G} t \sto \mathcal{M},t \models \varphi)$, with $R_{E_G}:= \bigcup_{i \in G} R_i$. For the following transformations consider that $G$ is finite and a forall quantification can therefore be understood as a big conjunction. Moreover, note that all transformations occur on the meta level.
+%%the big conjunctions and disjunctions are just short hand notations on the meta-level. 
+%\begin{align*}
+%& \forall t ((s,t) \in \bigcup_{i \in G} R_i \sto \mathcal{M},t \models \varphi) && (\textit{Set Theory: } x \in X \cup Y \Leftrightarrow x \in X \lor x \in Y)& \\
+%& \forall t ((\bigvee_{i \in G} (s,t) \in R_i) \sto \mathcal{M},t \models \varphi) && (\textit{Implication: } \neg x \lor y \Leftrightarrow x \sto y)& \\
+%& \forall t (\neg (\bigvee_{i \in G} (s,t) \in R_i) \lor \mathcal{M},t \models \varphi) && (\textit{DeMorgan: } \neg (x \lor y) \Leftrightarrow \neg x \land \neg y& \\
+%& \forall t ((\bigwedge_{i \in G} (s,t) \nin R_i) \lor \mathcal{M},t \models \varphi) && (\textit{Distributivity: } (x \land y) \lor z \Leftrightarrow (x \lor z) \land (y \lor z))& \\
+%& \forall t (\bigwedge_{i \in G} ((s,t) \nin R_i \lor \mathcal{M},t \models \varphi)) && (\textit{Implication: } \neg x \lor y \Leftrightarrow x \sto y))& \\
+%& \forall t (\bigwedge_{i \in G} ((s,t) \in R_i \sto \mathcal{M},t \models \varphi)) && ( \forall x (P(x) \land Q(x)) \Leftrightarrow  \forall x P(x) \land \forall x Q(x))& \\
+%& \bigwedge_{i \in G}\forall t ((s,t) \in R_i \sto \mathcal{M},t \models \varphi) && (\textit{Finite G and sem. of } \forall)& \\
+%& \forall i \in G : \forall t ((s,t) \in R_i \sto \mathcal{M},t \models \varphi) && &
+%\end{align*}
+%
+%\item \textbf{IS:} $k = n+1$
+%$\mathcal{M},s \models \egen_G^{n+1} \varphi$ is equivalent to $\mathcal{M},s \models \egen_G \egen_G^n \varphi$, which again means that $\forall i \in G : \forall t (sR_it \sto \mathcal{M}, t \models \egen_G^n \varphi)$. As established previously 
+%\begin{equation*}
+%\forall i \in G : \forall t (sR_it \sto \mathcal{M}, s \models \varphi) \iff \forall t (s R_{E_G} t \sto \mathcal{M},t \models \varphi)
+%\end{equation*}
+%Therefore, one obtains
+%\begin{equation*}
+%\forall t (s R_{E_G} t \sto \mathcal{M},t \models \egen_G^n \varphi)
+%\end{equation*}
+%By IH one obtains the equivalent statement 
+%\begin{equation*}
+%\forall t (s R_{E_G} t \sto \forall u (t \leadsto_G^n u \sto \mathcal{M},u \models \varphi))
+%\end{equation*}
+%This statement expresses that every state $G$-reachable in $n$ steps from every state $t$ reachable from $s$ satisfies $\varphi$ (thus by reflexivity and $k\geq 1$, $s$ and every state accessible from $s$ also satisfies $\varphi$). Hence, every state $u$ $G$-reachable from $t$ in $n$ steps is reachable from $s$ in $n+1$ steps. Moving on.
+%
+%\begin{align*}
+%&\forall t \forall u (s R_{E_G} t \sto  (t \leadsto_G^n u \sto \mathcal{M},u \models \varphi))&& \iff&\\
+%&\forall t \forall u (s\leadsto_G^1 t \sto  (t \leadsto_G^n u \sto \mathcal{M},u \models \varphi))&& \iff \textit{ (by reasining above)}&\\
+%&\forall t \forall u (s \leadsto_G^{n+1} u \sto \mathcal{M},u \models \varphi)&& &\\
+%&\forall u (s \leadsto_G^{n+1} u \sto \mathcal{M},u \models \varphi)&& &
+%\end{align*}
+%
+%\end{itemize}
+%
+%
+%\item $\mathcal{M},s \models \ecom_G \varphi$ iff $\mathcal{M},t \models \varphi$ for all $t$ that are $G$-reachable from $s$.
+%\begin{itemize}
+%
+%\item $"\Longrightarrow"$ 
+%Assume $\mathcal{M},s \models \ecom_G \varphi$ and that $\exists t (s \leadsto_G t \sand \mathcal{M}, t \nmodels \varphi)$. Without loss of generality assume that $s \leadsto_G^k t$ such that $\mathcal{M},t \nmodels \varphi$. Hence, given the previous result it follows that $\mathcal{M},s \nmodels \egen_G^i \varphi$ for all $i\geq k$. Now given $\mathcal{M}, s \models \ecom_G \varphi$ iff $\forall k > 0 \mathcal{M},s \models \egen_G^k \varphi$. Which clearly is a contradiction.  
+%\item $"\Longleftarrow"$ 
+%Assume that $\forall t (s \leadsto_G t \sto \mathcal{M},t \models \varphi)$. Consider an arbitrary $k>0$. By assumption $\forall t (s \leadsto_G^k t \sto \mathcal{M},t \models \varphi)$, which given the previous result means that $\mathcal{M},s \models \egen_G^k \varphi$. Since this can be done for an arbitrary $k$, one obtains by definition $\mathcal{M},s \models \ecom_G \varphi$.
+%
+%\end{itemize}
+%\end{enumerate}
+%
+%
+%
+%\section*{Exercise 41}
+%\begin{quote}
+%Call a state t in a frame $G$-reachable (in $i$ steps) from state $s$ if there is a path $\pi$ (of length $i$) from $s$ to $t$, where all edges of $\pi$ are in $\bigcup_{j \in G} R_j$. \\
+%
+%$(\mathcal{M},s) \models \edisp_G^k A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.\\
+%
+%Proof or refute that dispersed knowledge can be characterized analogously by replacing ‘for all $t$’ with ‘for some $t$’.
+%\end{quote}
+%
+%Consider the epistemic model $\mathcal{M}$.
+%
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$p$] (1) at (0,1) {$1$};
+%	\node[vertex][label=below:$\neg p$] (2) at (2,1) {$2$};
+%	
+%	\path[-](1) edge node [above]{$a$} (2);
+%   
+%\end{tikzpicture}
+%\end{center}
+%
+%Since state $1$ is reachable from $1$ the condition $\mathcal{M},t \models p$ for some $t$ that are $G$-reachable from $1$ in $k$ steps, is satisfied. However, since $\mathcal{M},1 \nmodels \eall_a p$ due to state $2$, it follows that $\mathcal{M},1 \nmodels \edisp_a p$.
+%
+%
+%\section*{Exercise 42}
+%\begin{quote}
+%Call a state t in a frame $G$-reachable (in $i$ steps) from state $s$ if there is a path $\pi$ (of length $i$) from $s$ to $t$, where all edges of $\pi$ are in $\bigcup_{j \in G} R_j$. \\
+%
+%$(\mathcal{M},s) \models \edisp_G^k A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.\\
+%
+%Proof or refute that dispersed knowledge can be characterized analogously by replacing $\bigcup_{j \in G}R_j $ with $\bigcap_{j \in G} R_j$.
+%\end{quote}
+%
+%Let $G_{\cap}$-reachability, the notion of reachability obtained by replacing $\bigcup_{j \in G}R_j $ with $\bigcap_{j \in G} R_j$. Moreover, let $R_{S_G} := \bigcap_{j \in G} R_j$.
+%Consider the following model epistemic model $\mathcal{M}$.
+%
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$p$] (1) at (0,1) {$1$};
+%	\node[vertex][label=below:$p$] (2) at (2,1) {$2$};
+%	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+%	\node[vertex][label=below:$\neg p$] (4) at (4,2) {$4$};
+%	
+%	\path[-](1) edge node [above]{$a,b$} (2);
+%	\path[-](2) edge node [above]{$a$} (3);
+%	\path[-](2) edge node [above]{$b$} (4);
+%	
+%    
+%   
+%\end{tikzpicture}
+%\end{center}
+%
+%By evaluating $\mathcal{M},2 \nmodels \edisp_{ab} p$, due to $\mathcal{M},2 \nmodels \eall_a p$ (since $\mathcal{M},3 \nmodels p$) and due to $\mathcal{M},2 \nmodels \eall_b p$ (since $\mathcal{M},4 \nmodels p$). However, considering the $\bigcap_{j \in G} R_j$, i.e. the relation
+%
+%\begin{center}
+%\begin{tikzpicture}
+%  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+%  \tikzset{edge/.style = {->,- = latex'}}
+%	\node[vertex][label=below:$p$] (1) at (0,1) {$1$};
+%	\node[vertex][label=below:$p$] (2) at (2,1) {$2$};
+%	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+%	\node[vertex][label=below:$\neg p$] (4) at (4,2) {$4$};
+%	
+%	\path[-](1) edge node [above]{${S_G}$} (2);
+%    
+%\end{tikzpicture}
+%\end{center}
+%
+%the condition $\mathcal{M},t \models \varphi$ for all $t$ that are $G_{\cap}$-reachable from $2$ in $k$ steps is clearly satisfied.
+%
+%
+%\section*{Exercise 43}
+%\begin{quote}
+%Explore the notion of distributed knowledge as defined somewhat informally, e.g., in Wikipedia. In particular investigate whether the characterizations suggested in exercises 41 or 42 might be ad- equate for distributed knowledge.
+%\end{quote}
+%
+%For me the best characterisation of distributed knowledge described in in Wikipedia, is the one calling it aggregated knowledge. That is, all individuals of the group aggregate their knowledge together, to construct the knowledge of the group. Hence, if someone would ask the group whether $p$ or $\neg p$ holds. It is sufficient, that a single member of the group can distinguish between those two cases. Moreover, given this it is also possible that the group knows more that each individual. For example, agent $a$ knows that $p$, while agent $b$ knows that $p \sto q$. \\
+%
+%With respect to exercise 42. An agent can distinguish between two states iff there is no epistemic relation between those two. Since, the group can distinguish between two states iff at least one agent can, one can infer that two states are indistinguishable for the group iff no agent can distinguish between them. That is, if $ \bigcap_{j \in G} R_j$. 
+%
+%The characterisation of distributed knowledge $\edist_G$ in "Dynamic Epistemic Logic" is described as the knowledge obtained by collaboration and is characterised as 
+%\begin{equation*}
+%\mathcal{M},s \models \edist_G \varphi \iff \forall t (s R_{D_G} t \sto \mathcal{M},t \models \varphi)
+%\end{equation*}
+%where $R_{D_G}:= \bigcap_{j \in G} R_j$. \\
+%
+%With respect to 41. Consider the same example as in Exercise 41 and observe that this characterisation breaks down. That is, since $G=\{a\}$, $\edist_G$ coincides with $\eall_a$. While the characterisation as given in 41 holds, $\eall_a$ clearly does not.
+
+\end{document}

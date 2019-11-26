@@ -1,0 +1,9 @@
+& c_{114} \land c_{138} \land c_{147} \land c_{159} \land \\
+& c_{239} \land c_{248} \land c_{252} \land c_{275} \land \\
+& c_{322} \land \\
+& c_{419} \land c_{432} \land c_{466} \land c_{481} \land c_{497} \land \\
+& c_{536} \land c_{545} \land c_{558} \land c_{567} \land c_{579} \land \\
+& c_{617} \land c_{628} \land c_{642} \land c_{674} \land c_{696} \land \\
+& c_{784}  \\
+& c_{835} \land c_{854} \land c_{868} \land c_{872} \land \\
+& c_{929} \land c_{957} \land c_{962} \land c_{973} \land c_{995} \\

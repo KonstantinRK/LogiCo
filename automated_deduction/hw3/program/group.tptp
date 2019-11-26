@@ -1,0 +1,5 @@
+fof(left_identity,axiom, ! [X] : mult(e,X) = X).
+fof(left_inverse,axiom,! [X] : mult(inverse(X),X) = e).
+fof(associativity,axiom,! [X,Y,Z] : mult(mult(X,Y),Z) = mult(X,mult(Y,Z))).
+fof(right_identity,conjecture,! [X] : mult(X,e) = X).
+

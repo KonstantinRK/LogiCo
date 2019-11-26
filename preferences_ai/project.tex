@@ -1,0 +1,259 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{bussproofs}
+\usepackage{rotating}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observ}{Observation}
+\newtheorem{mydef}{Definition}
+
+%opening\\
+
+\title{Preferences in AI: Project\\
+\author{Konstantin Kueffner (01252260)}}
+
+\newcommand{\lto}{\supset}
+\newcommand{\liff}{\leftrightarrow}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\tall}[1]{\left[ #1 \right]}
+\newcommand{\tsome}[1]{\left\langle  #1 \right\rangle}
+
+\newcommand{\eall}{\mathbf{K}}
+\newcommand{\esome}{\mathbf{P}}
+\newcommand{\edisp}{\mathbf{S}}
+\newcommand{\edist}{\mathbf{D}}
+\newcommand{\egen}{\mathbf{E}}
+\newcommand{\ecom}{\mathbf{C}}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+\newcommand{\derives}{\vdash}
+\newcommand{\nderives}{\nvdash}
+
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+\newcommand{\vanB}{van Benthem}
+\newcommand{\tofo}{\hookleftarrow}
+\newcommand{\of}{\iota }
+\newcommand{\os}{\iota \to o}
+\newcommand{\ot}{(\iota \to o)\to o}
+
+\newcommand{\pref}{\preceq}
+\newcommand{\spref}{\prec}
+\newcommand{\util}{\omega}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\begin{document}
+
+\maketitle
+
+This paper discusses the deviation of the outcomes produces by collective utility functions on the one hand, and voting rules on the other.
+
+
+
+\section{Preliminaries}
+Before moving on towards the actual analysis, some definitions and notational peculiarities ought to be clarified. Especially, because in this paper the definitions of some notions are slightly altered. However, before doing so consider the following fundamental definitions.
+\begin{mydef}
+\label{def:election}
+Let $\mathbb{L}$ be the set of all linear orders. Moreover, let $\mathbb{L}_X$ be the set of all linear orders over the set $X$. Moreover, for some $\preceq \in L$ let $\mathcal{S}(\preceq)$ be the set over which $\preceq$ is constructed.
+\end{mydef} 
+In a slight abuse of notation let $L \subseteq \mathbb{L}$ then $\mathcal{S}(L):= \bigcup_{l \in L} \mathcal{S}(l)$.
+
+\subsection{Voting Rules}
+To introduce the notion of a voting rule one first has to give  a formal definition of an election.
+\begin{mydef}
+\label{def:election}
+Let $A$ be a non-empty set of \emph{agents}, let $C$ be a non-empty set of \emph{candidates} and let $\pref_A := (\pref_a)_{a \in A}$ such that $\pref_a \in \mathbb{L}$\footnote{Let $\mathbb{L}$ be the set of all linear orders.} be a family of preference profiles, i.e. a family of linear orders over $C$ with $\pref_a$ reflecting the preferences of agent $a$. Then the structure $E:=\langle C, \pref_A \rangle$ is called an \emph{election}. If the set of agents is clear from the context the subscript in $\pref_A$ will be dropped.
+\end{mydef} 
+
+
+For convenience sake consider the following definitions.
+
+
+%let \emph{$\mathcal{L}$ be the set of all linear orders}, and 
+%let \emph{$\rho_c(v_a)$ be the position of the candidate $c\in C$ in the preferences of agent $a \in A$}. 
+%Moreover, if $\emptyset \neq C' \subseteq C$, then $E|_{C'}:= \langle C' , V_A|_{C'}\rangle$, where $ V_A|_{C'}$ is simply a shorthand for the family of linear orders, obtained by restricting the orders in the family $V_A$ to the subset of candidates $C'$.\\
+
+\begin{mydef}
+\label{def:support}
+Let $E := \langle C, \pref_A\rangle$ be an election. Let $\rho_E$ be the function that returns the position of the candidate $c\in C$ in the preferences of agent $a \in A$, i.e.
+\begin{equation*}
+\rho_E: C \times A \to \mathbb{N}^+ \quad (c,a) \mapsto |\{c' \mid \forall c' \in C \; c \pref_a c'\}|
+\end{equation*}
+Moreover,  if $\emptyset \neq C' \subseteq C$, then $E|_{C'}:= \langle C' , \pref_A'\rangle$, where $ \pref_A'$ is the family of linear orders, obtained by restricting the orders in the family $\pref_A$ to the subset of candidates $C'$. That is,
+\begin{equation*}
+E|_{C'}:= \langle C' , \pref_A'\rangle = \langle C' ,  (\{ (c, c')  \mid \forall c, c' \in C' \; ( c , c') \in \pref_a\})_{a \in A} \rangle 
+\end{equation*}
+\end{mydef} 
+ 
+A method of aggregating  preference profiles of an election is required, leading to the definition voting rules  (also referred as social choice functions). 
+%The following definition will not be as general as possible, as for the sake of convenience it will use the the notion of an election. However, this does not influence the results presented in this paper.
+\begin{mydef}
+\label{def:voting_rules_general}
+The function $\mathcal{V}$ is called a \emph{social choice function} if it maps preference profiles, i.e. linear orders, to non-empty subsets of $C$, the (co-)winners, i.e.
+\begin{equation*}
+\mathcal{V}:\powerset(\mathbb{L}) \to( \powerset(\mathcal{S}(\mathbb{L})) \setminus \emptyset)
+\end{equation*}
+
+%A \emph{social choice function} $F:  \powerset(\mathcal{L}) \to \powerset(C) \setminus \emptyset$ is function that maps preference profiles, i.e. linear orders, to
+%non-empty subsets of $C$, the (co-)winners. 
+%Moreover, a social choice function that always selects exactly one winner it is \emph{resolute}.
+\end{mydef} 
+In a slight abuse of notation the equality $\mathcal{V}(E)=E^\mathcal{V}=\mathcal{V}(\pref_A):=\mathcal{V}(\{ \pref_a \mid \forall a \in A \})$ will be used as a shorthand.\\
+
+Again, this paper discusses only a fragment of all possible voting rules. Some of those rules can be grouped together, as they behave in most cases similar with respect to the topics discussed in this paper. Hence, from now on the following rules will be discussed.
+
+\begin{mydef}
+\label{def:voting_rules_specific}
+Let $A$ be a set of agents, $C$ be a set of candidates and let $E:=\langle C, \pref_A\rangle$ be an election. Moreover, let $\alpha:= (x_1, \dots, x_m) \in \mathbb{N}^{|C|}$, then the function $\sigma_{\alpha}^E: C \to \mathbb{N}$ is defined as $\sigma_{\alpha}^E(c):=  \sum_{a \in A} \alpha_{\rho(c,\pref_a)}$ and as a shorthand let $\sigma:=\sigma_{\overline{1}}$.\footnote{If the election is clear from the context the, superscript is dropped. } 
+\begin{itemize}
+\item Let $\mathcal{V}_{SC(\alpha)}$ be a \emph{Scoring rule}, if $\alpha:= (x_1, \dots, x_m) \in \mathbb{N}^{|C|}$ such that  $x_1 \leq \dots \leq x_m$ and $x_1 < x_m$, and if $\mathcal{V}_{SC(\alpha)}(E)=\argmax_{c \in C} (\sigma_{\alpha}(c))$.
+%:=\argmax_{c \in C} (\sum_{a \in A} \alpha_{\rho_c(v_a)}).
+Furthermore, for the specific vector 
+\begin{itemize}
+\item $P := (1, 0, \dots, 0, 0)\in \mathbb{N}^{|C|}$, $\mathcal{V}_{SC(P)}$ is called \emph{Plurality rule}.
+\item $V := (1, 1, \dots, 1, 0)\in \mathbb{N}^{|C|}$, $\mathcal{V}_{SC(V)}$ is called \emph{Veto rule}.
+\item $B := (m-1, m-2 , \dots,1, 0)\in \mathbb{N}^{|C|}$, $\mathcal{V}_{SC(B)}$ is called \emph{Borda rule}.
+\end{itemize}
+\item Let $\mathcal{V}_{STV}$ be the \emph{Single Transferable Vote} rule. Meaning that there are $m-1$ rounds, and at each round the candidate with the lowest plurality score is removed. Formalised this may look like the following.
+\begin{equation*}
+\mathcal{V}_{STV}(E):=
+\begin{cases}
+C & \quad \textit{if } |C|=1 \\
+\mathcal{V}_{STV}(E|_{C\setminus \argmin_{c \in C} (\sigma_{P}(c))} & \quad \textit{otw.}
+\end{cases}
+\end{equation*}
+\item Let $\mathcal{V}_{Cop}$ be the \emph{Copeland} rule. Meaning, candidates engage in a pairwise comparisons, if a candidates wins such a match-up they gain $1$ point, if the match-up is a draw each wins $\frac{1}{2}$ points. Lastly, those candidates with the greatest score are selected.
+That is, let $\zeta_{Cop}^E: C \times C \to \mathbb{N}$ be 
+\begin{equation*}
+\zeta_{Cop}^E(c,c'):=
+\begin{cases}
+0.5 & \quad \textit{if } |\mathcal{V}_{SC}^P(E|_{\{c,c'\}})| = 2 \\
+1 & \quad \textit{if } |\mathcal{V}_{SC}^P(E|_{\{c,c'\}})| = 1 \land c \in \mathcal{V}_{SC}^P(E|_{\{c,c'\}}) \\
+0 & \quad \textit{otw.}
+\end{cases}
+\end{equation*}
+%\sigma_{(1,0)}^{E|_{\{c,c'\}}}(c)> \sigma_{(1,0)}^{E|_{\{c,c'\}}}(c')
+Allowing for $\sigma_{Cop}^E: C \to \mathbb{N}$ to be $\sigma_{Cop}(c):= \sum_{c' \in C\setminus \{c\}} \zeta_{Cop}^{E}(c,c')$ leading finally to $\mathcal{V}_{Cop}(E)=\argmax_{c \in C} (\sigma_{Cop}(c))$.
+\end{itemize}
+\end{mydef} 
+
+
+\subsection{Utility Functions}
+The following definition is not orthodox and is normally not required to define utility functions. However, by introducing a similar structure to an election, it is possible to clean up the notations such that the notations for voting rules and utility functions are nearly symmetrical. For the lack of a better name this structure will be called a \emph{selection}, as in this case the winners are not elected, but selected based such that collective utility is maximised.   
+
+\begin{mydef}
+\label{def:selection}
+Let $A$ be a non-empty set of \emph{agents}, let $C$ be a non-empty set of \emph{candidates} and let $\util_A := (\omega_a)_{a \in A}$ be a family of \emph{utility functions} $\util_a: C \to \mathbb{R}$, i.e. $\util_a(c)$ represents the utility gained by the agent $a$ if candidate $c$ is selected. Then the structure $S:=\langle C, \util_A \rangle$ is called a \emph{selection}.
+\end{mydef} 
+
+
+The notion of a collective utility functions in general can be understood as follows. 
+
+\begin{mydef}
+\label{def:collective_utility_general}
+Let $S:=\langle C, \util_A\rangle$ be a selection, then $\omega_A^{\circ}$ is a collective utility function, if it is a utility function obtained by aggregating all utilities in $\omega_A$. Moreover, the function $\mathcal{U}_{\circ}$ is called a \emph{collective utility selection function} if $\mathcal{U}_{\circ}(S):= \argmax_{c \in C}(\omega_A^{\circ}(c))$. 
+%that aggregates of the $u_A$, if it is an aggregation of the agents utility functions.
+%$A$ be a set of \emph{agents}, let $C$ be a set of \emph{candidates} and let $u_a: C \to \mathbb{R}$ be the \emph{utility function} of agent $a$. 
+\end{mydef} 
+
+In this paper the focus lies on the following collective utility functions in particular.
+
+\begin{mydef}
+\label{def:collective_utility_specific}
+Let $S:=\langle C, \omega_A\rangle$ be a selection and let
+\begin{itemize}
+\item $\omega_A^+$ be the \emph{utilitarian} utility function, where $\forall c \in C \; \omega_A^+(c):=\sum_{a \in A} \omega_a(c)$; 
+\item $\omega_A^{*}$ be the \emph{Nash} utility function, where $\forall c \in C \; \omega_A^*(c):=\prod_{a \in A} \omega_a(c)$; 
+\item $\omega_A^{=}$ be the \emph{egalitarian} utility function, where $\forall c \in C \; \omega_A^=(c):= \min_{a \in A}(\omega_a(c))$.
+\end{itemize}
+\end{mydef}
+
+Lastly, to conveniently reference the utility of a set of candidates, notation will be abused meaning that for some set of candidates $C$ and some utility function $\omega$ over $C$ and some $C' \subseteq C $, $\omega(C'):=\sum_{c \in C'} \omega(c)$.
+%\begin{mydef}
+%\label{def:collective_utility_weight}
+%Let $C$ be a set of candidates and let $u:C \to \mathbb{R}$ be a utility function. Let $|| \cdot ||: C \to \mathbb{R}$ be defined as 
+%$||C'||=\sum_{c \in C'} u(c)$ for some $C'\subseteq C$.
+%\end{mydef}
+
+
+
+\subsection{Others}
+It is fairly easy to see that a selection induced an election. To make this explicit consider the following.
+
+\begin{mydef}
+\label{def:transformation}
+Let $S:=\langle C, \omega_A\rangle$ be a selection, the let $\tau$ be the transformation $\tau(S)=S^{\tau}=E^S=\langle C, \pref_A^{S} \rangle$ where, $\pref_A^{S}$
+%:= (\tau(\omega_A))_{a \in A}$ 
+is defined such that $\forall c,c'\in C$
+\begin{equation*}
+\begin{split}
+\omega_a(c) < \omega_a(c') \iff c \spref_a^{S} c' \quad \mathit{and} 
+\quad \omega_a(c) = \omega_a(c') \iff( c \pref_a^{S} c'  \land c' \pref_a^{S} c )
+\end{split}
+\end{equation*}
+\end{mydef}
+
+
+Finally, arriving at the notion of distortion, which is one of the major concepts required in this paper.
+\begin{mydef}
+\label{def:distortion}
+Let $S:=\langle C, U_A\rangle$ be a selection, let $\omega_A^{\circ}$ be a collective utility function and let $\mathcal{U}$ be the corresponding collective utility selection function, let $\mathcal{V}_{\diamond}$ be a social choice function for $\tau(S)$. Then we define the distortion as 
+\begin{equation*}
+|| S ||_{\diamond}^{\circ}:= \frac{\omega_A^{\circ}(\mathcal{U}(S))}{\omega_A^{\circ}(\mathcal{V}_{\diamond}(\tau(S)))}
+\end{equation*}
+\end{mydef}
+
+
+\section{Worst Case Distortion}
+
+This section investigates, the magnitude of distortion when switching from collective utility functions to voting rules. 
+Firstly, a small lemma showing that the deviation when considering scoring rules can not be bound. Moreover, to strengthen the result, the proof will only rely on strict linear orders.  
+
+\begin{lemma}
+\label{lemma:wc-default-scoring}
+Let $E:\langle C, V_A\rangle$ be an election, let $U_A$ be a family of utility functions with domain $C$ and let $F_{SC}^{\alpha}$ be an arbitrary scoring function. The deviation $\Delta_1(F_{SC}^{\alpha}(E), U_A^{\circ})$ for $\circ \in \{+, *, =\}$ is unbound.
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+\item For $\circ = +$. Let $A:=\{a_1, \dots, a_n\}$ be a set of agents such that $|A|>3$ and let $C:=\{c_1, \dots, c_m\}$ be a set of candidates such that $|C|>2$. Consider the following family of utility functions.
+\begin{equation*}
+\begin{split}
+u_{a_1}&:= \{ c_1 \mapsto n-1 + x\} \cup \{c_i \mapsto m-i \mid 1 < i \leq m\} \\
+u_{a_k}&:= \{c_i \mapsto i-1 \mid 1 \leq i \leq m\}  \quad k>1\\
+\end{split}
+\end{equation*}
+where $x \in \mathbb{N}$ arbitrary. Now observe that 
+\end{itemize}
+\end{proof}
+
+\end{document}

@@ -1,0 +1,527 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{listing}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+\newcommand{\lto}{\supset}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+
+
+%\newcommand{\imp}[1]{$\supset$}
+
+\begin{document}
+
+\section*{Problem 2.1}
+\begin{quote}
+Consider the following formula:
+\begin{equation*}
+\varphi := x=y \to (x = a \lor x = b)
+\end{equation*}
+where $x$, $y$ are variables and $a$, $b$ are constants. \\
+Describe the class of interpretations that makes this formula valid.
+\end{quote}
+As it was often done in the lecture, assume that $=$ is already interpreted as the usual equality relation. Otherwise variants where $=$ is a constant binary relation evaluating to true could be considered, which (I think) may not be the purpose of this exercise? However, considering $=$ as equality  alone is insufficient, as this class of interpretations still contains interpretations where the formula evaluates to false. Hence, the approach chosen here, is to further restrict the class of interpretations by restricting the domain of the interpretations in the class.  \\
+
+Claim: $\mathcal{I} \models \varphi$ if and only if $\mathcal{I} \in \{ \mathcal{J} | \mathfrak{P}(\mathcal{I})\}$, where $\mathfrak{P}(\mathcal{J})$ holds if and only if $=$ is the equality relation, $|\alpha^{\mathcal{J}}|\leq 1$. \\
+
+(Note: only one sort has to be considered, as otherwise the formula would not be well formed). \\
+
+"$\Leftarrow$" For $|\alpha^{\mathcal{I}}|=1$, for sake of convenience call this element $0$. Hence, $\mathcal{I}(x=y \to (x = a \lor x = b)) = (0= 0 \sto (0 = 0 \sor 0 = 0)))$. 
+%Similarly for the case $|\alpha^{\mathcal{I}}|=2$ where for the sake of convenience those elements are called $0$ and $1$. In the interpretations where $x \neq y$ this formula holds vacuously. In the case of $\mathcal{I}(x)=0$ and $\mathcal{I}(y)=0$ then $\mathcal{I}(x=y \to (x = a \lor x = b)) = (0=^{\mathcal{I}} 0 \sto (0 =^{\mathcal{I}} 0 \sor 0 =^{\mathcal{I}} 1)))$, which clearly holds. The same holds for the last possible interpretation. 
+
+"$\Rightarrow$" Consider the class of interpretations where $|\alpha^{\mathcal{I}}|>1$. Hence, for some $\mathcal{I}$ from this class, there are at least two distinct elements $0$ and $1$. Now, given this fact choose $\mathcal{I}$ from this class to be such that $a^{\mathcal{I}}=b^{\mathcal{I}}$, as well as $x^{\mathcal{I}}=y^{\mathcal{I}}$ and $a^{\mathcal{I}}\neq x^{\mathcal{I}}$. Clearly $\mathcal{I}(x=y \to (x = a \lor x = b))$ evaluates to false.\\
+
+Moreover, it is possible to extend the class of interpretations to interpretations with domain $2$, if one specifies that $a$ and $b$ ought to be distinct.
+\section*{Problem 2.2}
+\begin{quote}
+Consider two axiomatisable theories $\mathcal{T}_1$ and $\mathcal{T}_2$ such that $\Sigma_{\mathcal{T}_1} = \Sigma_{\mathcal{T}_2} = \Sigma$  and $A_{\mathcal{T}_2} \subseteq A_{\mathcal{T}_1}$. Recall that $\Sigma_{\mathcal{T}_i}$ and $A_{\mathcal{T}_1}$ denote, respectively, a signature and set of axioms defining $\mathcal{T}_1$,
+for $i = 1, 2$. Let $F$ be a formula over signature $\Sigma$.
+\begin{enumerate}
+\item If $F$ is valid in $\mathcal{T}_1$ , it is also valid in $\mathcal{T}_2$? Prove your answer or give a counterexample.
+\item If $F$ is valid in $\mathcal{T}_2$ , it is also valid in $\mathcal{T}_1$? Prove your answer or give a counterexample.
+\end{enumerate}
+\end{quote}
+
+Let $\varphi=F$. 
+\begin{enumerate}
+\item Let $\mathcal{T}_1 := \mathcal{T}_E$ and $\mathcal{T}_2:= \mathcal{T}_{\emptyset}$, where $A_{\emptyset}= \emptyset$, i.e. arbitrary interpretations. Clearly $A_{\emptyset}\subseteq A_{\mathcal{T}_E}$. Moreover, let $\varphi:= a=b \to (f(a)=f(b))$. Let the corresponding signatures be appropriate with respect to the conditions above and the formula $\varphi$.
+Firstly, as $\varphi$ is an instance of function congruence, clearly $\mathcal{T}_E \models \varphi$. Secondly, choose $\mathcal{I}$ such that there are at least two distinct elements in the domain, which will be called $0$ and $1$. Moreover, let $f^{\mathcal{I}}$ be a unary constant function mapping to $0$ and let $a^{\mathcal{I}}=b^{\mathcal{I}}:=1$ and . Lastly, let $=^\mathcal{I}$ be a binary relation such that $=^{\mathcal{I}}:=\{(1,1)\}$. Clearly, the premise of the implication in $\varphi$ is satisfied by $\mathcal{I}$, while the consequent is not. Hence, $\mathcal{I} \nmodels \varphi$ and therefore $\mathcal{T}_{\emptyset} \nmodels \varphi$.
+
+
+\item $\varphi$ is valid in $\mathcal{T}_2$. This means that for every $\mathcal{T}_2$-interpretation $\mathcal{I}_{\mathcal{T}_2}$, it holds that $\mathcal{I}_{\mathcal{T}_2} \models \varphi$. Moreover, since $\mathcal{I}_{\mathcal{T}_2}$ is a $\mathcal{T}_2$-interpretation, it holds that $\mathcal{I}_{\mathcal{T}_2} \models A_{\mathcal{T}_2}$.
+Therefore, since $\varphi$ is valid in $\mathcal{T}_2$, this means for an arbitrary interpretation $\mathcal{I}$, 
+\begin{equation*} 
+\mathcal{I} \models A_{\mathcal{T}_2} \implies \mathcal{I} \models \varphi
+\end{equation*}
+Now, $\mathcal{I}_{\mathcal{T}_1} \models A_{\mathcal{T}_1}$ can be rewritten as
+\begin{equation*}
+\mathcal{I}_{\mathcal{T}_1} \models \bigwedge_{\psi \in A_{\mathcal{T}_1}} \psi
+\end{equation*}
+Furthermore, since $A_{\mathcal{T}_2} \subseteq A_{\mathcal{T}_1}$ one can split the this into
+\begin{equation*}
+\mathcal{I}_{\mathcal{T}_1} \models \left(\bigwedge_{\psi \in A_{\mathcal{T}_2}} \psi \right) \land \left( \bigwedge_{\psi \in A_{\mathcal{T}_1} \setminus A_{\mathcal{T}_2}} \psi  \right)
+\end{equation*}
+
+Moreover, given the tautology $(A \land B )\to A $ one obtains
+\begin{equation*}
+\mathcal{I}_{\mathcal{T}_1} \models \left(\bigwedge_{\psi \in A_{\mathcal{T}_2}} \psi \right) 
+\end{equation*}
+So clearly $\mathcal{I}_{\mathcal{T}_1} \models A_{\mathcal{T}_2}$ and thus given the observation above it follows that $\mathcal{I}_{\mathcal{T}_1} \models \varphi$.
+
+
+\end{enumerate}
+
+
+\section*{Problem 2.3}
+\begin{quote}
+For each formula below, decide whether it is satisfiable or not by relying on
+the decision procedure of the theory or arrays. If the formula is satisfiable, give an interpretation that satisfies the formula.
+\begin{enumerate}
+\item $read(write(A, i, e), j) = e \land i \neq j \land read(A, j) \neq e$,
+where $i, e, j$, are integer-valued constants and $A$ is an array constant.
+\item $read(write(write(A, i, e), j, f ), k) = read(A, j) \land$ \\
+$ i = k \land read(A, k) \neq g \land read(A, j) \neq g$,
+where $i, e, j, f, k, g$, are integer-valued constants and $A$ is an array constant.
+\end{enumerate}
+\end{quote}
+
+
+\begin{enumerate}
+\item $read(write(A, i, e), j) = e \land i \neq j \land read(A, j) \neq e$
+\begin{enumerate}
+\item \texttt{read-over-write 1}: \\
+$read(write(A, i, e), j) = e \mapsto i = j \land e = e$ and $read(A,j) \mapsto f_A(j)$ resulting in 
+\begin{equation*}
+i = j \land e = e \land i \neq j \land f_A(j) \neq e
+\end{equation*}
+Moving on with congruence closure over $\mathcal{T}_E$.
+\begin{align*}
+&[e]& &[i]& &[j]& &[f_A(j)]& \\ 
+&[e]& &[i,j]& &[f_A(j)]& \\ 
+\end{align*}
+Now $iRj$ and $i \neq j$, resulting in \texttt{unsatisfiable}.
+\item \texttt{read-over-write 2}: \\
+$read(write(A, i, e), j) = e \mapsto i \neq j \land read(A,j) = e$ and $read(A,j) \mapsto f_A(j)$ resulting in 
+\begin{equation*}
+f_A(j) = e \land i \neq j \land f_A(j) \neq e \land i \neq j 
+\end{equation*}
+Moving on with congruence closure over $\mathcal{T}_E$.
+\begin{align*}
+&[e]& &[i]& &[j]& &[f_A(j)]& \\ 
+& & &[i]& &[j]& &[f_A(j), e]& \\ 
+\end{align*}
+Now $f_A(j)Re$ and $f_A(j) \neq e$, resulting in \texttt{unsatisfiable}.
+\end{enumerate}
+Hence, one obtains \texttt{unsatisfiable}.
+
+
+\item $read(write(write(A, i, e), j, f ), k) = read(A, j) \land i = k \land read(A, k) \neq g \land read(A, j) \neq g$
+\begin{enumerate}
+\item \texttt{read-over-write 1}: \\
+$read(write(write(A, i, e), j, f ), k) = read(A, j) \mapsto j=k \land f = read(A, j)$ and $read(A,j) \mapsto f_A(j)$, $read(A,k) \mapsto f_A(k)$ resulting in 
+\begin{equation*}
+ j=k \land f = f_A(j) \land i = k \land f_A(k) \neq g \land f_A(j) \neq g
+\end{equation*}
+Moving on with congruence closure over $\mathcal{T}_E$.
+\begin{align*}
+&[e]& &[i]& &[j]& &[f]& &[g]& &[k]& &[f_A(j)]& &[f_A(k)]& \\  
+&[e]& &[i,k]& &[j,k]& &[f,f_A(j)]& &[g]& &[f_A(k)]& && &&\\  
+&[e]& &[i,k]& &[j,k]& &[f,f_A(j),f_A(k)]& &[g]& && && &&\\  
+&[e]& &[i,j,k]& &&  &[f,f_A(j),f_A(k)]& &[g]& &&  &&\\  
+\end{align*}
+The rules are applied exhaustively. Hence return \texttt{satisfiable}.
+\end{enumerate}
+According to the relation $R$ one possible interpretation $\mathcal{I}$ satisfying the formula is 
+$e^{\mathcal{I}}:=1$, $g^{\mathcal{I}}:=2$, $i^{\mathcal{I}}=j^{\mathcal{I}}=k^{\mathcal{I}}:=0$ and $A^{\mathcal{I}}[0]:=0$, where $0,1$ and $2$ are some distinct elements in the domain of the same sort (i.e. they are integer). 
+\end{enumerate}
+
+
+\section*{Problem 2.4}
+\begin{quote}
+Consider the formula:
+\begin{equation*}
+g(f (a - 2)) = a + 2 \land g(f (b)) = b - 2 \land b + 1 = a - 1
+\end{equation*}
+where $a, b$ are constants interpreted over integers, $f , g$ are function symbols, and $+, -, 1, 2$ are interpreted in the standard way over the integers.
+\begin{enumerate}
+\item 
+Use the Nelson-Oppen decision procedure to determine the satisfiability of the above formula.
+Use the decision procedures for the theory of uninterpreted functions and use simple mathematical reasoning for deriving new equalities among the constants in the theory of linear integer
+arithmetic. If the formula is satisfiable, give an interpretation that satisfies the formula.
+
+\item 
+Encode the above formula as an input to the Z3 SMTsolver and evaluate Z3 on your encoding,
+using http://rise4fun.com/Z3. Interpret the result of Z3. Provide the electronic version
+of your Z3 encoding together with your solution.
+\end{enumerate}
+\end{quote}
+
+\begin{enumerate}
+\item
+\begin{itemize}
+\item Breaking apart in unit clauses and identifying the theories
+\begin{equation*}
+\begin{split}
+& g(f (\textcolor{red}{a - 2})) = \textcolor{red}{a + 2}, \\
+& g(f (\textcolor{red}{b})) = \textcolor{red}{b - 2}, \\
+& \textcolor{red}{b + 1 =} \textcolor{red}{a - 1}
+\end{split}
+\end{equation*}
+where the \textcolor{red}{red} coded elements, represent parts of the integer arithmetic theory elements. Note, to be thorough $b$ was chosen as well. 
+\item As a next step "separate" theories.
+\begin{align*}
+&g(f (a - 2)) = a + 2 && \mapsto && \textcolor{blue}{g(f (c_0)) = c_1} && \land  && \textcolor{red}{c_0 = a - 2 \land c_1 = a +2} & \\
+&g(f (b)) = b - 2 && \mapsto && \textcolor{blue}{g(f (c_2)) = c_3} && \land  && \textcolor{red}{c_2 = b \land c_3 =b-2} & \\
+&b + 1 = a - 1 && \mapsto &&  && \land  && \textcolor{red}{b + 1 = a - 1} & \\
+\end{align*}
+were \textcolor{red}{red} is integer arithmetic and \textcolor{blue}{blue} is the theory of uninterpreted functions.
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ \mathit{unint. \; Func.}} &&  \mathit{Equ.}  &\\
+& \textcolor{red}{ c_0 = a - 2 }  && \textcolor{blue}{ g(f (c_0)) = c_1 } &&    &\\
+& \textcolor{red}{ c_1 = a + 2 }  && \textcolor{blue}{ g(f (c_2)) = c_3 } &&    &\\
+& \textcolor{red}{ c_2 = b  }  && \textcolor{blue}{ } &&    &\\
+& \textcolor{red}{ c_3 = b-2 }  && \textcolor{blue}{ } &&    &\\
+& \textcolor{red}{ b + 1 = a - 1 }  && \textcolor{blue}{ } &&    &\\
+\end{align*}
+\item Starting by reasoning in $\textcolor{red}{ \mathit{lin. \; Arith.} }$. From $\textcolor{red}{b+1 = a-1}$, one obtains $\textcolor{red}{b = a-2}$ and $\textcolor{red}{a = b+2}$. Now given, $\textcolor{red}{c_2 = b}$ and $\textcolor{red}{c_0 = a-2}$, the equality $c_0 = c_2$ is derived.
+Hence, 
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ unint. \; Func.} &&  Equ.  &\\
+& \textcolor{red}{ c_0 = a - 2 }  && \textcolor{blue}{ g(f (c_0)) = c_1 } &&  c_0 = c_2  &\\
+& \textcolor{red}{ c_1 = a + 2 }  && \textcolor{blue}{ g(f (c_2)) = c_3 } &&    &\\
+& \textcolor{red}{ c_2 = b  }  && \textcolor{blue}{ } &&    &\\
+& \textcolor{red}{ c_3 = b-2 }  && \textcolor{blue}{ } &&    &\\
+& \textcolor{red}{ b + 1 = a - 1 }  && \textcolor{blue}{ } &&    &\\
+\end{align*}
+
+\item With this new equality congruence closure, i.e. reasoning in $\textcolor{blue}{ \mathit{unint. \; Func.}} $ can be applied.
+
+\begin{align*}
+& \textcolor{blue}{[c_0]} && \textcolor{blue}{[c_1]} &&  \textcolor{blue}{[c_2]}  && \textcolor{blue}{[c_3]} && \textcolor{blue}{[g(f(c_0))]}  && \textcolor{blue}{[g(f(c_2))]} &\\
+& \textcolor{blue}{[c_0,} && \textcolor{blue}{c_2]} &&  \textcolor{blue}{[c_1,}  &&  \textcolor{blue}{g(f(c_0))]} && \textcolor{blue}{[c_3,}  && \textcolor{blue}{g(f(c_2))]} &\\
+& \textcolor{blue}{[c_0,} && \textcolor{blue}{c_2]} &&  \textcolor{blue}{[c_1,}  &&  \textcolor{blue}{g(f(c_0)),} && \textcolor{blue}{c_3,}  && \textcolor{blue}{g(f(c_2))]} &\\
+\end{align*}
+with the last step being the application of function congruence. Hence, the equality $c_1 = c_3$ is obtained.
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ unint. \; Func.} &&  Equ.  &\\
+& \textcolor{red}{ c_0 = a - 2 }  && \textcolor{blue}{ g(f (c_0)) = c_1 } &&  c_0 = c_2  &\\
+& \textcolor{red}{ c_1 = a + 2 }  && \textcolor{blue}{ g(f (c_2)) = c_3 } &&   c_1 = c_3 &\\
+& \textcolor{red}{ c_2 = b  }  && \textcolor{blue}{ } &&    &\\
+& \textcolor{red}{ c_3 = b-2 }  && \textcolor{blue}{ } &&    &\\
+& \textcolor{red}{ b + 1 = a - 1 }  && \textcolor{blue}{ } &&    &\\
+\end{align*}
+\item Moving back into reasoning in $\textcolor{red}{ \mathit{lin. \; Arith.} }$. Since $c_1 = c_3$ it follows that $\textcolor{red}{ a + 2  =  b - 2}$, contradicting the equation $\textcolor{red}{ a + 1 = a - 1}$, i.e. $\textcolor{red}{ a + 4  =  b }$ and $\textcolor{red}{ b  =  a - 2}$ leads to $\textcolor{red}{ a + 4  =  a - 2}$.
+
+%& \textcolor{blue}{[c_0, }  && \textcolor{blue}{c_3,} && \textcolor{blue}{g(f(c_2))]} &&  \textcolor{blue}{[c_1}  && \textcolor{blue}{g(f(c_0))]} && \textcolor{blue}{[c_2]}  &\\
+\end{itemize}
+All derived equalities are derived by the original set of unit clauses, which induce a contradiction. Hence, unsatisfiability is obtained.
+
+
+
+
+\item \url{https://rise4fun.com/Z3/6tHqd}
+
+\texttt{
+\begin{tabbing}
+(declare-sort U)\\
+\\
+(declare-const a Int)\\
+(declare-const b Int)\\
+\\
+(declare-fun f (Int) U)\\
+(declare-fun g (U) Int)\\
+\\
+(assert (= (g (f (- a 2))) (+ a 2)))\\
+(assert (= (g (f b)) (- b 2)))\\
+(assert (= (+ b 1) (- a 1)))\\
+\\
+(check-sat)
+\end{tabbing}
+}
+(Note: \texttt{U} was chosen as the output / input of $f$ / $g$ is not specified.) 
+
+With output \texttt{unsat}, meaning that the formula is not satisfiable.
+The command \texttt{(get-model)} returns an error, as there is no model to be returned.
+
+
+Alternatively one can also use the following encoding
+\texttt{
+\begin{tabbing}
+(declare-sort U)\\
+\\
+(declare-const a Int)\\
+(declare-const b Int)\\
+\\
+(declare-fun f (Int) U)\\
+(declare-fun g (U) Int)\\
+\\
+(assert (\=and (= (g (f (- a 2))) (+ a 2))  \\
+\> (and (= (g (f b)) (- b 2))   (= (+ b 1) (- a 1)))))\\
+\\
+(check-sat)
+\end{tabbing}
+}
+\end{enumerate}
+
+
+\section*{Problem 2.5}
+\begin{quote}
+Consider the formula:
+\begin{equation*}
+read(write(A, a, f (b)), c + 1) = f (d) \land f (b) \neq f (d - 1) \land (b + 1 = d \lor c = a - 1)
+\end{equation*}
+where $A$ is an array constant with integer elements, $a, b, c, d$ are constants interpreted over integers, $f$ is a function symbol, and $+,1$ are interpreted in the standard way over the integers.
+\begin{enumerate}
+\item Use the Nelson-Oppen decision procedure to determine the satisfiability of the above formula.
+Use the decision procedures for the theory of uninterpreted functions and the theory of arrays,
+and use simple mathematical reasoning for deriving new equalities among the constants in the
+theory of linear integer arithmetic. If the formula is satisfiable, give an interpretation that satisfies the formula.
+
+\item Encode the above formula as an input to the Z3 SMTsolver and evaluate Z3 on your encoding,
+using http://rise4fun.com/Z3. Interpret the result of Z3. Provide the electronic version
+of your Z3 encoding together with your solution.
+
+\end{enumerate}
+\end{quote}
+
+Firstly, I assume  (hope, as otherwise the following would not be correct) that $-$ is also to be interpreted in the standard way over the integers. Secondly, for the sake of being concise, let $w$ stand for $write$ and $r$ stand for $read$. 
+That is,  $read(write(A, a, f (b)), c + 1) \mapsto r(w(A, a, f (b)), c + 1)$.
+(This is really just a measure to be able to write the formulas into a single line. I sincerely hope that this is ok.)
+\begin{enumerate}
+\item Since the formula contains elements of the theory of arrays, one is confronted with a non-convex problem. Hence, due to the clause $(b + 1 = d \lor c = a - 1)$ splitting is required. To be sure, consider 
+\begin{align*}
+&read(write(A, a, f (b)), c + 1) = f (d) & & \mapsto & &p_1& \\
+& f (b) \neq f (d - 1) & & \mapsto & &p_2& \\
+& b + 1 = d  & & \mapsto & &p_3& \\
+&c = a - 1 & & \mapsto & &p_4& \\
+\end{align*}
+By splitting on $p_4$ and by unit propagation, one obtains that the formula $p_1 \land p_2 \land (p_3 \lor p_4)$ is satisfiable in both cases. Hence, further evaluation is required. Starting with $p_4$ being true and $p_3$ being false, i.e. $\mathcal{I}(p_1)=true,\mathcal{I}(p_2)=true, \mathcal{I}(p_3)=false$ and $\mathcal{I}(p_4)=true$. Hence, the equality $c = a - 1 $ will be passed to the decision proceeder.
+\begin{itemize}
+\item Breaking apart the formula $read(write(A, a, f (b)), c + 1) = f (d) \land f (b) \neq f (d - 1) \land c = a - 1$ in unit clauses  and "separating" theories.
+
+ \hspace*{\dimexpr-\leftmargini-\leftmarginii-\leftmarginiii}\parbox{\linewidth}{%
+ \small
+\begin{align*}
+& r(w(A, a, f (b)), c + 1) = f(d) && \mapsto &&  && &&  && \\
+&\textcolor{red}{ c_0 = a \land c_1 = b \land c_2 = d \land c_3 = c +1 }  && \land && \textcolor{blue}{ c_5 = f(c_1) \land c_6 = f(c_2)} && \land && \textcolor{orange}{ c_6 = r(w(A, c_0, c_5), c_3)}  &\\
+&  && &&  && &&  && \\
+& f(b) \neq f (d - 1) && \mapsto &&  && &&  && \\
+&\textcolor{red}{ c_1 = b \land c_4 = d-1 }  && \land && \textcolor{blue}{ c_5 = f(c_1) \land c_7 = f(c_4)} && && \textcolor{orange}{}  &\\
+&  && &&  && &&  && \\
+&  c = a - 1 && \mapsto &&  && &&  && \\
+&\textcolor{red}{  c = a - 1 }  &&  && \textcolor{blue}{ } &&  && \textcolor{orange}{}  &\\
+\end{align*}}\par
+
+were \textcolor{red}{red} is integer arithmetic, \textcolor{blue}{blue} is the theory of uninterpreted functions and \textcolor{orange}{orange} is the theory of arrays.
+
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ \mathit{unint. \; Func.}} && \textcolor{orange}{ \mathit{Arr.}} && \mathit{Equ.}  &\\
+& \textcolor{red}{c_0 = a }  && \textcolor{blue}{ c_5 = f(c_1)  } && \textcolor{orange}{ c_6 = r(w(A, c_0, c_5), c_3) } &&  &\\
+& \textcolor{red}{c_1 = b }  && \textcolor{blue}{ c_6 = f(c_2) } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_2 = d }  && \textcolor{blue}{ c_7 = f(c_4) } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_3 = c +1  }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_4 = d-1 }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{ c = a - 1}  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+\end{align*}
+
+\item Starting with reasoning in $\textcolor{red}{ \mathit{lin. \; Arith.} } $. By $\textcolor{red}{c_0 = a}$, $\textcolor{red}{c = a-1}$ and $\textcolor{red}{c_3 = c +1 }$ one obtains $c_3 = c_0$. Hence, 
+
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ \mathit{unint. \; Func.}} && \textcolor{orange}{ \mathit{Arr.}} && \mathit{Equ.}  &\\
+& \textcolor{red}{c_0 = a }  && \textcolor{blue}{ c_5 = f(c_1)  } && \textcolor{orange}{ c_6 = r(w(A, c_0, c_5), c_3) } && c_3 = c_0 &\\
+& \textcolor{red}{c_1 = b }  && \textcolor{blue}{ c_6 = f(c_2) } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_2 = d }  && \textcolor{blue}{ c_7 = f(c_4) } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_3 = c +1  }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_4 = d-1 }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{ c = a - 1}  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+\end{align*}
+
+\item Now, continue reasoning in $\textcolor{orange}{ \mathit{Arr.}}$.
+\begin{itemize}
+\item \texttt{read-over-write 1}: \\
+$\textcolor{orange}{ c_6 = r(w(A, c_0, c_5), c_3) } \mapsto c_0 = c_3 \land c_5 = c_6$ resulting in 
+\begin{equation*}
+c_0 = c_3 \land c_0 = c_3 \land c_5 = c_6
+\end{equation*}
+Applying congruence closure
+\begin{align*}
+& \textcolor{orange}{[c_0]} && \textcolor{orange}{[c_3]} && \textcolor{orange}{[c_5]} && \textcolor{orange}{[c_6]} & \\
+& \textcolor{orange}{[c_0,} && \textcolor{orange}{ c_3]} && \textcolor{orange}{[c_5,} && \textcolor{orange}{ c_6]} & \\
+\end{align*}
+\end{itemize}
+Hence, a new shared equality $c_5 = c_6$ is obtained.
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ \mathit{unint. \; Func.}} && \textcolor{orange}{ \mathit{Arr.}} && \mathit{Equ.}  &\\
+& \textcolor{red}{c_0 = a }  && \textcolor{blue}{ c_5 = f(c_1)  } && \textcolor{orange}{ c_6 = r(w(A, c_0, c_5), c_3) } && c_3 = c_0 &\\
+& \textcolor{red}{c_1 = b }  && \textcolor{blue}{ c_6 = f(c_2) } && \textcolor{orange}{ } &&  c_5 = c_6 &\\
+& \textcolor{red}{c_2 = d }  && \textcolor{blue}{ c_7 = f(c_4) } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_3 = c +1  }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_4 = d-1 }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{ c = a - 1}  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+\end{align*}
+
+\item Now engaging in reasoning over $\textcolor{blue}{ \mathit{unint. \; Func.}}$. That is, one employs congruence closure over the formula $c_3 = c_0  \land c_5 = c_6  \land c_5 = f(c_1) \land c_6 = f(c_2) \land  c_7 = f(c_4)$.
+
+\hspace*{\dimexpr-\leftmargini-\leftmarginii}\parbox{\linewidth}{%
+\begin{align*}
+& \textcolor{blue}{[c_0]} && \textcolor{blue}{[c_1]} &&  \textcolor{blue}{[c_2]}  && \textcolor{blue}{[c_3]} && \textcolor{blue}{[c_4]} && \textcolor{blue}{[c_5]} && \textcolor{blue}{[c_6]} && \textcolor{blue}{[c_7]} && \textcolor{blue}{[f(c_1)]} &&  \textcolor{blue}{[f(c_2)]} &&  \textcolor{blue}{[f(c_4)]}&\\
+& \textcolor{blue}{[c_0,} && \textcolor{blue}{c_3]} &&  \textcolor{blue}{[c_1]}  && \textcolor{blue}{[c_2]} && \textcolor{blue}{[c_4]} && \textcolor{blue}{[c_5,} && \textcolor{blue}{c_6,} && \textcolor{blue}{f(c_1),} && \textcolor{blue}{f(c_2)]} &&  \textcolor{blue}{[c_7} &&  \textcolor{blue}{f(c_4)]}&\\
+\end{align*}}\par
+
+No further equivalence classes can be joined. Hence, satisfiability is obtained. However, in this process no new equivalences are derived.
+
+\item Lastly, it is easy to see that the equivalence $c_5 = c_6$ can not be used for further inferences in $ \textcolor{red}{ \mathit{lin. \; Arith.} }$. Therefore, all rules are applied exhaustively and satisfiability is returned.
+\begin{align*}
+& \textcolor{red}{ \mathit{lin. \; Arith.} }  && \textcolor{blue}{ \mathit{unint. \; Func.}} && \textcolor{orange}{ \mathit{Arr.}} && \mathit{Equ.}  &\\
+& \textcolor{red}{c_0 = a }  && \textcolor{blue}{ c_5 = f(c_1)  } && \textcolor{orange}{ c_6 = r(w(A, c_0, c_5), c_3) } && c_3 = c_0 &\\
+& \textcolor{red}{c_1 = b }  && \textcolor{blue}{ c_6 = f(c_2) } && \textcolor{orange}{ } &&  c_5 = c_6 &\\
+& \textcolor{red}{c_2 = d }  && \textcolor{blue}{ c_7 = f(c_4) } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_3 = c +1  }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{c_4 = d-1 }  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+& \textcolor{red}{ c = a - 1}  && \textcolor{blue}{ } && \textcolor{orange}{ } &&  &\\
+\end{align*}
+\end{itemize}
+
+Finally, since the formula is satisfiable, a satisfying interpretation $\mathcal{I}$ can be given as witness. 
+\begin{align*}
+& a^\mathcal{I}:= 1 && b^\mathcal{I}:= 1 && c^\mathcal{I}:= 0 && d^\mathcal{I}:= 1 \\
+& A^\mathcal{I}[0]:= 0 && A^\mathcal{I}[1]:=0 && f^\mathcal{I}(0):=0 && f^\mathcal{I}(1):=1 
+\end{align*}
+with the rest being arbitrary.
+
+
+\item \url{https://rise4fun.com/Z3/lfqzQ}
+\texttt{
+\begin{tabbing}
+(declare-sort U)\\
+\\
+(declare-const a Int)\\
+(declare-const b Int)\\
+(declare-const c Int)\\
+(declare-const d Int)\\
+\\
+(declare-const ar (Array Int U))\\
+\\
+(declare-fun f (Int) U)\\
+\\
+(assert (= (select (store ar a (f b)) (+ c 1))  (f d)))\\
+(assert (not (= (f b) (f (- d 1)))))\\
+(assert (or (= (+ b 1) d) (= c (- a 1))))\\
+\\
+(check-sat)\\
+(get-model)\\
+\end{tabbing}
+}
+(Note: \texttt{U} was chosen as the output of $f$ is not specified.) 
+
+With output \texttt{sat}, meaning that the formula is satisfiable.
+The command \texttt{(get-model)} returns
+
+\texttt{
+\begin{tabbing}
+(model \=\\
+\>;; universe for U: \\
+\>;; U!val!1 U!val!0 \\
+\>;; ----------- \\
+\>;; definit\=ions for universe elements: \\
+\>\>(declare-fun U!val!1 () U) \\
+\>\>(declare-fun U!val!0 () U) \\
+\>;; cardinality constraint: \\
+\>\>(forall ((x U)) (or (= x U!val!1) (= x U!val!0))) \\
+\>;; ----------- \\
+\>(define-fun c () Int 0) \\
+\>(define-fun a () Int 1) \\
+\>(define-fun b () Int 38) \\
+\>(define-fun d () Int 0) \\
+\>(define-fun f ((x!0 Int)) U \\
+\>\>(ite (= x!0 38) U!val!0 \\
+\>\>(ite (= x!0 0) U!val!0 \\
+\>\>(ite (= x!0 (- 1)) U!val!1 U!val!0)))) )
+\end{tabbing}
+}
+
+Firstly, the universe of the general sort is defined. Here this particular sort contains the values $1$ and $0$. That is, to be more specific,  \texttt{(declare-fun U!val!1 () U)} and \texttt{(declare-fun U!val!0 () U)} specify two constants with the name \texttt{U!val!1} and \texttt{U!val!0} respectively. Then the universe of the sort \texttt{U}, is limited to those values due to \texttt{(forall ((x U)) (or (= x U!val!1) (= x U!val!0)))}.
+\texttt{
+\begin{tabbing}
+(model \=\\
+\>;; universe for U: \\
+\>;; U!val!1 U!val!0 \\
+\>;; ----------- \\\\
+\>;; definit\=ions for universe elements: \\
+\>\>(declare-fun U!val!1 () U) \\
+\>\>(declare-fun U!val!0 () U) \\
+\>;; cardinality constraint: \\
+\>\>(forall ((x U)) (or (= x U!val!1) (= x U!val!0))) \\
+\end{tabbing}
+}
+Following this several integer constants are defined. That is, \texttt{c} is set to the value $0$, \texttt{a} to $1$, \texttt{b} to $38$ and \texttt{d} to $0$.
+\texttt{
+\begin{tabbing}
+(define-fun c () Int 0) \\
+(define-fun a () Int 1) \\
+(define-fun b () Int 38) \\
+(define-fun d () Int 0) \\
+\end{tabbing}
+}
+Lastly, the function \texttt{f} is a function from integer values to the sort domain of the sort $U$, such that \texttt{f(38)} evaluates to the element \texttt{U!val!0} of the sort \texttt{U}, \texttt{f(0)} evaluates to the element \texttt{U!val!0} of the sort \texttt{U}, 
+\texttt{f(-1)} evaluates to the element \texttt{U!val!1} of the sort \texttt{U} and \texttt{f(x)} in all other cases evaluates to the element \texttt{U!val!0} of the sort \texttt{U}.
+
+\texttt{
+\begin{tabbing}
+(defin\=e-fun f ((x!0 Int)) U \\
+\>(ite (= x!0 38) U!val!0 \\
+\>(ite (= x!0 0) U!val!0 \\
+\>(ite (= x!0 (- 1)) U!val!1 U!val!0)))) )
+\end{tabbing}
+}
+
+
+Alternatively one can also use the following encoding
+\texttt{
+\begin{tabbing}
+(declare-sort U)\\
+\\
+(declare-const a Int)\\
+(declare-const b Int)\\
+(declare-const c Int)\\
+(declare-const d Int)\\
+\\
+(declare-const ar (Array Int U))\\
+\\
+(declare-fun f (Int) U)\\
+\\
+(assert (\=and (= (select (store ar a (f b)) (+ c 1))  (f d)) \\
+\>(and  (not (= (f b) (f (- d 1)))) \\
+\>(or (= (+ b 1) d) (= c (- a 1))))))
+\\
+(check-sat)\\
+(get-model)\\
+\end{tabbing}
+}
+
+
+\end{enumerate}
+\end{document}

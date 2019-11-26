@@ -1,0 +1,550 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{import}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{bussproofs}
+\usepackage{verbatim}
+
+\usepackage[utf8]{inputenc}
+
+
+\usepackage[style=ieee]{biblatex}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{mydef}[thm]{Definition}
+
+
+%opening
+
+
+\begin{document}
+
+%\maketitle
+
+\section*{Exercise 1}
+Show that every infinite c.e. set contains an infinite computable subset. \\
+
+We want to show that every infinite c.e. set contains an infinite computable subset.
+Before we start, we recall that an infinite set A is computable, if and only if it is the range of an increasing computable function.
+Therefore, if we are able to construct an increasing computable function $f$, s.t. $range(f) \subseteq A$, with $A$ being c.e., 
+we will have proven the claim.
+Firstly, we note that $A$ is a c.e. set. Hence, there exists an effective procedure for enumerating its items. 
+That is, since $A \neq \emptyset$ there exists a computable function $g$, s.t. $range(g) = A$.
+Thus, we can use $g$ list all elements in $A$. Moreover, since $A$ is infinite there can not be a maximal
+element. That is, if we fix a specific element, we will always find another element of $A$ which is greater than the selected element, i.e. $\forall x \exists y x<y \wedge  x \in A \wedge y  \in A$.
+Thus we define another function, function $f$, as follows
+
+
+\begin{equation*}
+f := 
+\begin{cases}
+f(0) = g(\mu z [0 \dotminus g(z)=0]) \\
+f(n+1) = g(\mu z [(f(n)+1) \dotminus g(z) = 0])
+\end{cases}
+\end{equation*}
+
+To obtain a more intuitive understanding of $f$ we can formulate it as follows.
+
+\begin{equation*}
+f := 
+\begin{cases}
+f(0) = z  & \quad \exists z\; 0 \leq z \wedge  z \in A \\
+f(n+1) = z & \quad \exists z \; f(n) < z \wedge  z \in A
+\end{cases}
+\end{equation*}
+
+So the proposed function can also be expressed as an algorithm:
+
+
+\begin{lstlisting}[frame=single, escapeinside={(*}{*)}] 
+def f(n):
+  n_max = f(max(n-1,0))
+  for i in (*$\omega$*):
+  	x = g(i)
+    if x > n_max:
+       return x
+\end{lstlisting}
+
+
+Furthermore, we can summarise this function as follows:
+\begin{itemize}
+\item $f$ is defined recursively
+\item $f$ uses an arbitrary enumeration of the elements in $A$, which is fixed by the function $g$
+\item $f$ uses minimisation to iterate over the enumeration by means of $\omega$
+\item \textbf{Most importantly:} $f(n+1)$ is the first element in the enumeration of $A$ via $g$, which is greater than $f(n)$
+\end{itemize}
+
+
+Moreover, $f$ has the following properties:
+\begin{enumerate}
+\item by construction $range(f) \subseteq range(g) = A$;
+\item by construction and by $A$ is infinite it follows that $range(f)$ is infinite
+(i.e. we can always find another element in $A$ which is greater than $f(n)$);
+\item by construction $f(n) < f(n+1)$;
+\item $f$ is computable, since $A=range(g)$ is infinite, we can always find an $z \in A$ greater than $f(n)$ 
+Hence, the minimisation can never diverge. 
+\end{enumerate}
+Thus, $f$ is a \emph{strictly increasing} function with an infinite range. Thus the set $B:=range(f)$
+is computable and infinite. Lastly, since $B=range(f) \subseteq range(g)=A$, $B$ is an infinite computable subset of 
+the arbitrary c.e. set $A$, thus proving our claim.
+
+
+\section*{Exercise 2}
+Prove that there exists a simple set $S$ containing all odd numbers. Use this to show
+that the union of two simple sets does not have to be simple. \\
+
+\begin{comment}
+Before, we start I want to some intuitive attempts to generate such a set $S$ and explain why this attempt would fail.
+I chose to do so, as I think that it provides an intuitive understanding of the algorithm, which actually constructs $S$.
+Okay, firstly what happens if we take any simple set and add all odd numbers into it? Well then there would be the possibility 
+that the resulting set is not simple, because for example $\overline{A}$ is not infinite.
+Okay, what if I start with a set containing all odd numbers and I simply add elements into the set based on the algorithm presented in 
+the lecture? Well it could be the case that I add every (or most) of the even numbers into my set, thus our complement would not be infinite. 
+Ha, but this could easily be solved by only taking every second even number into the set. Well then the complement of our set would 
+in the most inconvenient case be computable. Thus it must intersect with its complement, which obviously is a contradiction.
+Okay, so you are saying that the complement of our set must contain only even numbers, but must contain enough even numbers such that it is still infinite, for example half of every even number, and that those numbers are chosen such that thy do not contain an infinite c.e. set? Yes that is exactly what we want. What are we waiting of, lets build the set.
+\end{comment}
+
+Firstly, to make life easier. Let
+\begin{equation*}
+\begin{split}
+Ev &:= \{2n \mid n \geq 0\}  \\
+Od &:= \{2n+1 \mid n \geq 0\}
+\end{split}
+\end{equation*}
+
+Secondly, we recall the conditions presented in the lecture.
+
+\begin{equation*}
+\begin{split}
+N_e: & \quad |A \cap \{0, 1, \ldots , 2e\}| \leq e \\
+P_e: & \quad W_e \textit{ infinite} \implies W_e \cap A \neq \emptyset
+\end{split}
+\end{equation*}
+
+Thirdly, we recall the algorithm presented in the lecture.
+
+The algorithm to enumerate into $A:=\emptyset$ is:
+\begin{enumerate}
+\item For each yet unsatisfied $P_e$ wait for a stage $s$ at which there is a number $x \in W_e,s$ with $x > 2e$.
+\item If such $x$ appears, enumerate it into $A$. Declare $P_e$ to be satisfied.
+\end{enumerate}
+
+Okay, now lets modify our conditions
+ 
+\begin{equation*}
+\begin{split}
+N_e': & \quad |S \cap \{0, 1, \ldots , 4e\} \cap Ev| \leq e \\
+P_e: & \quad W_e \textit{ infinite} \implies W_e \cap A \neq \emptyset
+\end{split}
+\end{equation*}
+
+Apart from the fact that we did not modify $P_e$, we can immediately observe that for $N_e'$
+we require that in a given range of even numbers, 
+at most half of them are allowed to be in our set $S$. Since,
+\begin{equation*}
+\begin{split}
+|\{0, 1, \ldots , 4e\} \cap Ev| = |{0, 2, \ldots , 4e}| = 2e
+\end{split}
+\end{equation*}
+Thus, if we require our intersection with $S$ to be smaller or equal than $e$, we are only able to select at most half of those 
+elements. Moreover, if we now look at the complement of $S$, we can observe
+\begin{equation*}
+\begin{split}
+|\overline{S} \cap \{0, 1, \ldots , 4e\} \cap Ev| > e
+\end{split}
+\end{equation*}
+This means, if we construct $S$ correctly $\overline{S}$ contains more than $e$ elements 
+taken from a given range of even numbers of size $2e$. Thus, $\overline{S}$ would definitely be infinite. 
+Moreover, given a correct construction
+\begin{equation*}
+\begin{split}
+|\overline{S} \cap \{0, 1, \ldots , 4e\} \cap Ev| = |\overline{S} \cap \{0, 1, \ldots , 4e\}|
+\end{split}
+\end{equation*}
+otherwise $S$ can not contain all possible odd numbers.
+Since at the beginning of our construction all $S=Od$, therefore we know that 
+$|S \cap \{0, 1, \ldots , 4e\} \cap Od| = 2e$. Hence, $N_e$ was chosen such that it is only concerned with $x \in Ev$, while 
+at the same time guaranteeing that $\overline{S}$ is infinite. \\
+Okay, lets define our algorithm, thus showing among other that $S$ is c.e
+
+
+The algorithm to enumerate into $S:=Od$ is:
+\begin{enumerate}
+\item For each yet unsatisfied $P_e$ wait for a stage $s$ at which there is a number $x \in W_e,s$ with $x > 4e \vee x \in Od$ .
+\item If such $x$ appears, 
+\begin{enumerate}
+\item  If $x \in Od$:  This stage is not possible as was already $P_e$ satisfied (I only added this option in order to demonstrate that only even numbers are added).
+\item  If $x > 4e \wedge x \nin Od$:  Enumerate it into $S$. Declare $P_e$ to be satisfied.
+\end{enumerate}
+\end{enumerate}
+
+\paragraph*{$P_e$:} 
+Firstly, lets look at $P_e$ (similar to the proof presented in the lecture).
+That is, if $W_e$ is infinite, there will be a stage $s$, at which an element $x > 4e \vee x \in Od$ is enumerated into $W_{e,s}$. 
+If $x \in Od$ is satisfied before $x > 4e$ we simply stop, as it already intersects $Od$ and $P_e$ was already satisfied.
+If, however, $x > 4e \wedge x \in Od$ we simply enumerate $x$ into $S$ thus $P_e$ previously not satisfied, will now be satisfied by (2.b), as after this stage $x \in S \cap W_e$.
+
+\paragraph*{$N_e'$:} 
+Secondly, lets look at $N_e$ (similar to the proof presented in the lecture). 
+We know that in $|\{0, 1, \ldots , 4e\} \cap Ev|$ are at most $2e$ elements. 
+However, since we require any element in $y<4e$ to be added by an $i<e$ (since $4(e+k)<4e$ a contradiction for any $k\in \omega$),
+We know that we can add at least $e-1$ elements, one for each $i$, to $S$ (remember we only add even elements) that lie within
+$\{0, 1, \ldots , 4e\} \cap Ev$. Hence, $|S \cap \{0, 1, \ldots , 4e\} \cap Ev| \leq e$ holds. \\
+\linebreak
+
+Thus we have constructed a simple set $S$ containing all odd numbers, i.e. $Od \subset S$.
+Furthermore, if we would have simply exchanged all occurrences of odd with even and the other way round we would have 
+constructed a simple set containing all even numbers, let call this set $S'$.
+Thus we know, $Od \subset S$ and $Ev \subset S'$ since already $Od \cup Ev = \omega$ this must also hold for its supersets, i.e.
+
+\begin{equation*}
+\begin{split}
+S \cup S' = \omega
+\end{split}
+\end{equation*}
+Thus the union of our two simple sets has a finite complement, i.e. $\overline{\omega}=\emptyset$ and is therefore computable. 
+Hence, it can not be simple as well. 
+
+\section*{Exercise 3}
+\begin{enumerate}
+\item Consider the collection of partial computable functions $f : \omega \rightarrow \omega$ that output $0$ for at least one $x$. Is the index set $\{i \mid \phi_i(x) = 0 \textit{ for some }x \in \omega\}$ of this collection computable? Is it c.e.? Explain why.
+\item Show that the index set $Inf = \{i \mid W_i \textit{ is infinite}\}$ of infinite sets is a $\Pi_2^0$ set.
+
+\end{enumerate}
+
+
+\subsection*{Exercise 3.1}
+
+Consider the collection of partial computable functions $f : \omega \to \omega$ that output $0$ for at least one $x$.
+Is the index set $A:=\{i : \phi_i(x) = 0 \textit{ for some } x \in \omega\}$ of this collection computable? Is it c.e.? Explain why.
+
+Firstly, we notice the that 
+
+\begin{equation*}
+\begin{split}
+A & = \{i \mid \phi_i(x) = 0 \textit{ for some } x \in \omega\} \\
+  & =  \{i \mid \exists x \; \phi_i(x) = 0\} \\
+   & =  \{i \mid \exists x \; \phi_i(x)\downarrow \wedge \phi_i(x) = 0\} \\
+& =  \{i \mid \exists x \exists s \; \phi_{i,s}(x)\downarrow \wedge \phi_{i,s}(x) = 0\} \\
+  & = \{i \mid \exists x \exists s \; \phi_{i,s}(x) = 0\} \\
+\end{split}
+\end{equation*}
+
+This means, that 
+
+\begin{equation*}
+\begin{split}
+i \in A \iff \exists x \; \phi_i(x)=0 \iff \exists x \exists s \; \phi_{i,s}(x)=0 
+\iff \exists x \exists s \; \phi_{i,s}(x)\downarrow \wedge \phi_{i,s}(x) = 0
+\end{split}
+\end{equation*}
+
+We know, that $R(s,x,i):=\phi_{i,s}(x)\downarrow \wedge \phi_{i,s}(x) = 0$ is a computable relation. 
+Therefore, $\exists x \exists s R(s,x,i)$ is in $\Sigma_1^0$, which gives us an upper bound for the set $A$. 
+In particular, we now know that $A$ is at most c.e..
+However, since we have merely obtained an upper bound, we now have to find a lower bound.
+This can easily be accomplished by appealing to \emph{Rice's Theorem}.
+Firstly, we know $A$ is the index set of an arbitrary family $\mathcal{K}$ of functions. 
+We know,
+\begin{itemize}
+\item all $\phi_i$ in $\mathcal{K}$ are partial computable, otherwise the would not have an index in our enumeration of partial computable functions.
+\item $\mathcal{K} \neq \emptyset$, e.g. $\forall x \; o(x)=0$.
+\item $\mathcal{K}$ is not equal the family of all partial computable functions, e.g. $\forall x \; one(x)=1$
+\end{itemize}
+Thus, we are now able to apply Rice's Theorem and conclude that the index set corresponding to  $\mathcal{K}$, 
+which is our $A$, is not computable. Thus we know $A$ is c.e. but not computable.
+
+\subsection*{Exercise 3.2}
+
+Show that the index set $Inf = \{i \mid W_i \textit{ is infinite}\}$ of infinite sets is a $\Pi_0^2$ set.
+Firstly, a set is a $\Pi_0^2$ set if it can be expressed by a computable relation $R$ embedded in the structure 
+$\forall \bar{x} \exists \bar{y} \; R(\bar{x},\bar{y})$. Furthermore, if a set is infinite and we fix an arbitrary large element, 
+we will still be able to find an element which is greater than the item we just fixed. That is, 
+
+\begin{equation*}
+\begin{split}
+A \textit{ infinite} \iff \forall x \exists y \; x \in W_i  \implies x<y \wedge y \in W_i
+\end{split}
+\end{equation*}
+
+Therefore, we can express $Inf$ as follows
+
+\begin{equation*}
+\begin{split}
+Inf & = \{i \mid  \forall x \exists y \; x \in W_i  \implies x<y  \wedge y \in W_i \} \\
+& = \{i \mid  \forall x \exists y \;  x \in dom(\phi_i) \implies x<y \wedge y \in dom(\phi_i) \} \\
+& = \{i \mid  \forall x \exists y \; \phi_i(x)\downarrow \implies  x<y \wedge \phi_i(y)\downarrow  \} \\
+& = \{i \mid  \forall x \exists y \exists s \exists s'  \; \phi_{i,s}(x)\downarrow \implies  x<y \wedge  \phi_{i,s'}(y)\downarrow  \} \\
+\end{split}
+\end{equation*}
+
+
+Hence, we can express the following equalities
+
+\begin{equation*}
+\begin{split}
+i \in Inf &  \iff W_i \textit{ infinite}  \\
+& \iff \forall x \exists y \; x \in W_i \implies x<y \wedge y \in W_i\\
+& \iff \forall x \exists y \; \phi_i(x)\downarrow \implies  x<y \wedge \phi_i(y)\downarrow \\
+& \iff \forall x \exists y \exists s \exists s'  \; \phi_{i,s}(x)\downarrow \implies x<y \wedge  \phi_{i,s'}(y)\downarrow
+\end{split}
+\end{equation*}
+
+Since, $ R(i,x,y,s,s') :=  \phi_{i,s}(x)\downarrow \implies x<y \wedge \phi_{i,s'}(y)\downarrow$ is obviously computable and 
+embedded s.t. $ \forall x \exists y \exists s \exists s' \; R(i,x,y,s,s')$, we can conclude it is in $\Pi_0^2$. Furthermore, the
+relation expresses that if $x$ is in the domain of $\phi_i$, i.e. if there exist a state $s$ at which  $\phi_i(x)\downarrow$ 
+then there must also exists a $y$ in the domain of $\phi_i$ (i.e. $\phi_i(y)\downarrow$), such that $x<y$. 
+Otherwise, our set $dom(\phi_i)=W_i$ can not be of infinite size. Therefore, the relation/formula defined expresses $Inf = \{i \mid W_i \textit{ is infinite}\}$ is in  $\Pi_0^2$.
+
+
+\section*{Exercise 4}
+Prove that $K|_m \overline{K}$.
+\\
+We know that 
+
+\begin{equation*}
+\begin{split}
+A|_m B \iff A \nleq_mB \wedge B \nleq_m A
+\end{split}
+\end{equation*}
+
+Furthermore,
+
+\begin{equation*}
+\begin{split}
+A \leq_m B \iff (x \in A \iff f(x) \in B)
+\end{split}
+\end{equation*}
+with $f$ computable.
+We first show $\overline{K} \nleq_m K$. Therefore, we assume that $\overline{K} \leq_m K$.
+We know $K$ is c.e., thus by using the theorem in the script we conclude $\overline{K}$ must also be c.e..
+Then we simply use \emph{Post} and obtain $\overline{K}$  and $K$ are both computable. Hence, we obtain a contradiction,
+since $K$ is not computable.
+
+
+Now we show $ K \nleq_m \overline{K} $. Yet again, we assume $K \leq_m \overline{K}$. Hence, there must exists a
+computable function $f$, s.t. $x \in K \iff f(x) \in \overline{K}$. More specifically this means that
+
+\begin{equation*}
+\begin{split}
+x \in K  \implies f(x)\in \overline{K} \wedge x \in \overline{K}  \implies f(x) \in K
+\end{split}
+\end{equation*}
+Since, if $x$ is not in $K$ it must be in its complement, thus per definition $f(x)$ must not be in $\overline{K}$ and can 
+therefore only be in $K$.\\
+Ok, given that we now recall that we have already established that $\overline{K} \nleq_m K$. Hence, we know there can not be a computable function $f'$, s.t. $x \in \overline{K} \iff f'(x) \in K$, which written in an extended format results in 
+
+\begin{equation*}
+\begin{split}
+x \in \overline{K}  \implies f'(x)\in K \wedge x \in K  \implies f'(x) \in \overline{K}
+\end{split}
+\end{equation*}
+
+Now, it is easy to see that if we would be able to reduce $K$ to $\overline{K}$, i.e. $K \leq_m \overline{K}$ we could use 
+$f$ as the function $f'$ required by  $\overline{K} \leq_m K$. However, since $\overline{K} \nleq_m K$ we obtain a contradiction.
+Thus we have proven $K|_m \overline{K}$.
+
+
+\section*{Exercise 5}
+
+A is 1-reducible to B (notation: $A \leq_1 B$) if there is an injective computable function $f$ such that, for all $x$,
+$x \in A \iff f(x) \in B$.
+The 1-degrees are defined similarly to the m-degrees and the Turing degrees.
+\begin{enumerate}
+\item Study the 1-degrees containing computable sets.
+\item Let $A$ be the set of even numbers. Is there a non-computable set $B$ such that $A \nleq_1 B$?
+\end{enumerate}
+
+\subsection*{Exercise 5.1}
+Study the 1-degrees containing computable sets.
+
+Firstly, we define 1-degrees similar to the m-degrees.
+
+An equivalence class under $\equiv_1$ is called an 1-degree (or many-one degree). We write 
+\begin{itemize}
+\item $a_1 = deg_1(A) = \{X \subseteq \omega \mid X \equiv_1 A\}$
+\item $b_1 \leq a_1 \iff B \leq_1 A$ for some $B \in b_1$ and$A \in a_1$
+\end{itemize}
+
+\subsubsection*{Partial Order (General)}
+
+The first properties we will test are reflexivity, transitivity and antisymmetry for $\leq_1$ then the corresponding properties for their corresponding degrees follow.
+\paragraph{Reflexivity} 
+Let $f$ be the bijective identity function $f: \omega \to \omega, x \mapsto f(x)=x$ and $A$ a computable set. Hence, we obtain 
+\begin{equation*}
+\begin{split}
+x \in A  \iff f(x) \in A  \iff x \in A 
+\end{split}
+\end{equation*}
+which allows us to conclude that $A \leq_1 A$.
+As for the statement $a_1 \leq a_1$, we simply take $B \in a_1$ and $B' \in a_1$.
+We know, by the definition of degree, $B \equiv_1 B'$ thus especially $B \leq_1 B'$ thus $a_1 \leq a_1$.
+
+\paragraph{Transitivity} 
+We know $A \leq_1 B$ and $B \leq C$. Thus there exists an injective, computable function $f$ and
+an injective, computable function $g$, s.t.
+\begin{equation*}
+\begin{split}
+x \in A  \iff f(x) \in B \\
+x \in B  \iff g(x) \in C
+\end{split}
+\end{equation*}
+Thus we simply can construct the function $h:= g \circ f$, which is thus also injective and computable.
+Now we can show that given $h$ we obtain
+\begin{equation*}
+\begin{split}
+x \in A  & \iff f(x) \in B  \iff g(f(x)) \in C \\
+& \iff h(x) \in C
+\end{split}
+\end{equation*}
+Hence, we have shown transitivity. As for the corresponding degrees.  
+We know $a_1 \leq b_1$ and $b_1 \leq c_1$ thus we have $A \in a_1, B \in b_1, C \in c_1$, s.t.
+$A \leq_1 B \leq_1 C$, by transitivity of $\leq_1$ we have $A \leq_1 C$. Hence, by the definition of the degree 
+$a_1 \leq c_1$.
+
+\paragraph{Antisymmetry} 
+First we show that, if $A \leq_1 B$ and $B \leq_1 A$, we have $A \equiv_1 B$ as well $B \equiv_1 A$.
+This hold per definition 
+
+\begin{equation*}
+\begin{split}
+A \equiv_1 B \iff A \leq_1 B \wedge B \leq_1 A \iff B \equiv_1 A
+\end{split}
+\end{equation*}
+
+As for $a_1 \leq b_1$ and $b_1 \leq a_1$ implies $b_1 = a_1$, we simply take $A \in a_1$ and $B \in b_1$.
+Since, $a_1 \leq b_1$ it follows that $A \leq_1 B$ and from $b_1 \leq a_1$ it follows that $B \leq_1 A$. 
+Hence, we have $A \equiv_1 B$, thus per definition we have $B \in a_1$ and $A \in b_1$ thus we conclude $a_1 = b_1$.
+
+\subsubsection*{Infinitely many degrees on computable Sets}
+We want to show that there are infinity many degrees within the group of computable sets. 
+Let $A$ and $B$ be finite sets with $|A|<|B|$.
+We now assume they belong to the same degree. Therefore, $A \equiv_1 B$, that is $A \leq_1 B \wedge B \leq_1 A$.
+Lets investigate $B \leq_1 A$, if this statement holds there must be a injective, computable function $f$ s.t.
+
+\begin{equation*}
+\begin{split}
+x \in B  \iff f(x) \in A
+\end{split}
+\end{equation*}
+However, since $f$ is injective and $|A|<|B|$ there must be an element $x \in B$, where $f(x)\uparrow$, this however contradicts 
+the computable condition.
+If on the other hand $f$ is computable then there must be an element $y \in A$ such that $f(x)=y=f(x')$ for $x,x' \in B$, thus 
+contradiction the injective condition. Hence, we can conclude that two finite sets with different size can not be in the same degree.
+Moreover, since there are infinitely many computable sets of different size, there must be infinitely many degrees 1-degrees in the 
+set of computable functions.
+\linebreak
+
+\textit{(I think there should also be a total order of 1-degrees contained in the computable sets. Unfortunately, I could not finish the proof in time, therefore I was not able to include it)}
+
+
+
+\subsection*{Exercise 5.2}
+Let $A$ be the set of even numbers. Is there a non-computable set $B$ such that $A \nleq_1 B$? \\
+We will show that $A$ is not reducible to to the simple set $B$ by assuming $A \leq_1 B$.
+This means, there exists an injective computable function $f$ such that, for all $x$,
+$x \in A \iff f(x) \in B$. That is,
+
+\begin{equation*}
+\begin{split}
+x \in A  \implies f(x)\in B \wedge x \in \overline{A}  \implies f(x) \in \overline{B}
+\end{split}
+\end{equation*}
+
+Furthermore, an injective function must fulfil the property 
+\begin{equation*}
+\begin{split}
+\forall x, x' \in X: f(x)=f(x') \implies x= x'
+\end{split}
+\end{equation*}
+
+
+
+We now can use this computable and injective function $f$ to construct $f_{|\overline{A}}^{-1}$
+
+\begin{equation*}
+\begin{split}
+f_{|\overline{A}}^{-1}(y):= 
+\begin{cases}
+x & \quad \exists x f(x)=y \wedge x \in \overline{A} \\
+\uparrow & \quad o.t.w.
+\end{cases}
+\end{split}
+\end{equation*}
+Firstly, since $f$ is injective there can only be one $x$, which for a given $y$  fulfils the equation $f(x)=y$.
+Hence, $f_{|\overline{A}}^{-1}(y)$ maps to a single $x$.
+Furthermore, due to the fact that $x \in \overline{A}  \implies f(x) \in \overline{B}$ we know that, if there exists an $x$ which satisfies
+$f(x)=y$ and $x \in \overline{A}$ the $y$ must have been in $\overline{B}$. (Otherwise, there would exists an element $z$ such that 
+$f(z)=y$ with $z \in \overline{A}$ and $f(z) \in B$, which obviously would contradict our assumption).
+
+Therefore, we can deduce that $dom(f_{|\overline{A}}^{-1}) \subseteq \overline{B}$. Moreover, since  $\overline{A}$ is infinite 
+there must be due to injectivity infinitely many distinct $y \in \overline{B}$ and since $range(f_{|\overline{A}})=dom(f_{|\overline{A}}^{-1})$ we know that $dom(f_{|\overline{A}}^{-1})$ is an infinite subset in $\overline{B}$. 
+Additionally, $A$ is computable, thus $\overline{A}$ is computable. Since we know $f$ is computable we know that the relation
+$f(x)=y \wedge x \in \overline{A}$ must be computable. Hence, $\exists f(x)=y \wedge x \in \overline{A}$ is at most c.e. (arithmetic hierarchy $\rightarrow \Sigma_1^0$), thus $f_{|\overline{A}}^{-1}$ is also c.e.. Based on this we know that there must be an $e \in \omega$ s.t. $\phi_e=f_{|\overline{A}}^{-1}$. This means that $W_e=dom(\phi_e)$ is an infinite subset of $\overline{B}$. 
+However, since $W_e$ infinite our simple set property requires $B \cap W_e \neq \emptyset$, this however since $W_e \subseteq \overline{B}$ this is impossible. 
+Hence, we obtain a contradiction and can conclude that such a function $f$ can not exists, resulting in $A \nleq_1 B$.
+
+
+
+
+\section*{Exercise 6}
+
+Define the $\omega-jump$ of A as follows:
+\begin{equation*}
+\begin{split}
+A^{(\omega)} =\{\langle m,n \rangle \mid m \in A^{(n)}\}
+\end{split}
+\end{equation*}
+
+Show that:
+\begin{enumerate}
+\item  $A^{(n)} \leq_T A^{(\omega)}$ for all $n \in \omega$
+\item	$A^{(\omega)} \nleq_T A^{(n)} $ for any  $n \in \omega$
+\end{enumerate}
+
+\section*{Exercise 6.1}
+We want to show that $A^{(n)} \leq_T A^{(\omega)}$. This simply means that
+we are able to construct the characteristic function $\chi_{A^{(n)}}$ by using 
+the characteristic function  $\chi_{A^{(\omega)}}$ a finitely often.
+We know that $A^{(\omega)} =\{\langle m,n \rangle \mid m \in A^{(n)}\}$
+Thus we can simply use the paring function $\langle \cdot,\cdot \rangle$ to construct,
+\begin{equation*}
+\begin{split}
+\chi_{A^{(n)}}(x) := \chi_{A^{(\omega)}}(\langle x,n \rangle)
+\end{split}
+\end{equation*}
+Since,$\chi_{A^{(\omega)}}(\langle x,n \rangle)$ is definitely computable relative to $A^{(\omega)}$, $A^{(n)}$ is also computable 
+relative to  $A^{(\omega)}$. Furthermore, as $A^{(\omega)}$ contains all $x \in A^{(n)}$, paired with the jump number it is easy 
+to see that $\chi_{A^{(n)}}(x)$ is actually the characteristic function for $A^{(n)}$. Thus, since we argued for an arbitrary $n$ we have shown $A^{(n)} \leq_T A^{(\omega)}$ for all $n \in \omega$.
+
+\section*{Exercise 6.2}
+We want to show that $A^{(\omega)} \nleq_T A^{(n)} $ for any  $n \in \omega$.
+Thus we simply assume that $A^{(\omega)} \leq_T A^{(n)} $ for any  $n \in \omega$.
+Since, we already know that for all $n \in \omega$ the statement $A^{(n)} \leq_T A^{(\omega)}$ holds. Therefore, since $A^{(\omega)} \leq_T A^{(n)} \wedge A^{(n)} \leq_T A^{(\omega)}$, we obtain $A^{(n)} \equiv_T A^{(\omega)}$ for any $n \in \omega$ this allows for the following equivalences
+\begin{equation*}
+\begin{split}
+A^{(n)} \equiv_T A^{(\omega)} \equiv_T A^{(n+1)} 
+\end{split}
+\end{equation*}
+Therefore, we can write
+\begin{equation*}
+\begin{split}
+A^{(n+1)} \leq_T A^{(n)} 
+\end{split}
+\end{equation*}
+This, however, contradicts our \emph{Jump Theorem}, in particular $A' \nleq_T A $, since
+$A^{(n+1)} = A^{(n)'}$
+Therefore, we obtain that $A^{(\omega)} \nleq_T A^{(n)} $ for any  $n \in \omega$.
+
+\end{document}

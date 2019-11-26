@@ -1,0 +1,450 @@
+
+
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{bussproofs}
+\usepackage{rotating}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{mydef}{Definition}
+
+%opening
+
+
+\newcommand{\lto}{\supset}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\tall}[1]{\left[ #1 \right]}
+\newcommand{\tsome}[1]{\left\langle  #1 \right\rangle}
+
+\newcommand{\eall}{\mathbf{K}}
+\newcommand{\esome}{\mathbf{P}}
+\newcommand{\edisp}{\mathbf{S}}
+\newcommand{\edist}{\mathbf{D}}
+\newcommand{\egen}{\mathbf{E}}
+\newcommand{\ecom}{\mathbf{C}}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+
+\begin{document}
+
+%\maketitle
+
+
+
+\section*{Exercise 37}
+\begin{quote}
+\begin{theorem}
+Multi-(n)-modal \textbf{S5} is the smallest normal modal logic, based on frames with accessibility relations $R_1 ,\cdots , R_n$ , that includes the knowledge axiom, as well as positive and negative introspection.
+\end{theorem}
+
+\begin{corollary}
+Each of the $n$ accessibility relations in those frames, for which n-modal \textbf{S5} is sound and complete, is an equivalence relation.
+\end{corollary}
+Make all facts (exercises, definitions, etc) explicit that are used to prove the above theorem and its corollary, respectively.
+\end{quote}
+
+
+To show the theorem, we require the fact that the knowledge axiom, as well as positive and negative introspection, have equivalent formulations in multi-modal logic. For negative introspection this was shown in\emph{ exercise 34} and for the other cases the translation as presented in \emph{exercise 33} can be used. Those equivalent formulations are (T), (4) and (5). Now given the definition of \textbf{S5} 
+and the definition of normal modal logic (see below) one obtains that $S5$ captures multi-agent epistemic logic. Moreover, since multi-agent epistemic logic requires the accessibility relations to be equivalence relations, one can use the theorem 
+\begin{quote}
+$A \in \textbf{S5}$ iff A is valid in all frames where the accessibility relation is an equivalence relation. 
+\end{quote}
+and the fact that (T) and (5) characterise equivalence classes that Multi-(n)-modal \textbf{S5} is the smallest normal modal logic capturing multi-agent epistemic logic. That is, any modal logic requiring the accessibility relations to be equivalence relations must include (T) and (5) and (4) (since is a consequence of the prior two).
+
+Apart form the previous theorem and the inferences made above, e.g. characterisation of equivalence relation, one requires the theorem 
+
+\begin{quote}
+The logic  $\mathbf{S5}$ with axioms (T) and (5) (in
+addition to (K) and CL axioms) is sound and complete for frames,
+where the accessibility relation satisfies the properties (E1) and (E5).
+\end{quote}
+
+to show the claim.
+
+
+Lastly, some of the notions used in the theorem and corollary.
+\begin{enumerate}
+\item 
+Multi-(n)-modal \textbf{S5} is the smallest normal modal logic, based on frames with accessibility relations $R_1 ,\cdots , R_n$ , that includes the knowledge axiom, as well as positive and negative introspection.
+
+\begin{enumerate}
+\item \textit{propositional logic} \\
+A propositional logic $\mathcal{L}$ is a set of formulas that is
+\begin{itemize}
+\item closed under substitutions ($PV \mapsto FORM$)
+\item closed under modus ponens: $\frac{F \quad F \lto G}{G}$
+\end{itemize}
+
+\item \textit{normal modal logic} \\
+A normal modal logic is a logic extending CL, containing
+the axiom scheme (i.e., all instances of)
+\begin{equation*}
+\all (A \lto B) \lto \all A \lto \all B
+\end{equation*}
+and is closed under the following necessitation rule $\frac{F}{\all F}$.
+
+
+\item \textit{Multi-(n)-modal} \\
+Syntax:
+more than one (non-dual) modal operators. We will consider
+only unary modal operators, here.
+
+Semantics:
+interpretations (and frames) with more than one accessibility
+relation over one and the same set of states/worlds:
+$\mathcal{M} = \langle W , R_1 , \dots,  R_n , V \rangle$ bzw. $\mathcal{F} = \langle W , R_1 , \dots,  R_n  \rangle$ 
+Each accessibility relation $R_i$ determines a modality (e.g.,
+denoted by $\all_i$) plus the corresponding dual modality ($\some_i$ )
+ $v_{\mathcal{M}}(\all_iF,w)=1 \iff \forall u (wR_iu \sto v_{\mathcal{M}}(D,u)=1)$
+
+\item \textbf{Proof system for modal logic}
+A Hilbert-style proof system for the logic of all frames \textbf{K} is given
+by 
+\begin{itemize}
+\item Axioms: CL tautologies + (K) $\all(A \lto B) \lto (\all A \lto \all B)$
+\item Rules: Modus Ponens + necessitation
+\end{itemize}
+To obtain other normal logics the system for \textbf{K} is extended by
+further axioms:
+
+\item \textbf{S5} \\
+To obtain \textbf{S5} the system for \textbf{K} is extended by
+further axioms:
+\begin{itemize}
+\item $\all A \lto A$
+\item $\all A \lto \all \all A $
+\item $\some A \lto \all \some A$
+\end{itemize}
+
+\item \textit{Kripke semantics} \\
+A Kripke interpretation (model) is a tuple $\mathcal{M} = \langle W, R, V\rangle$: 
+\begin{itemize}
+\item non-empty set W of (possible) worlds (states, points)
+\item an accessibility relation $R \subseteq W \times W$
+\item (variable) assignment $V : PV \to 2^W$
+\end{itemize}
+
+\item \textit{frames} \\
+The pair $\langle W, R\rangle$ of an interpretation $\mathcal{M} = \langle W, R, V\rangle$
+is called the (Kripke) frame on which $\mathcal{M}$ is based.
+\item \textit{accessibility relations} \\
+See 1a).
+
+
+\item \textit{knowledge axiom} \\
+knowledge axiom: $\eall_i A \lto A$
+\item \textit{positive introspection} \\
+positive introspection: $\eall_i A \lto \eall_i \eall_i A$ 
+\item \textit{negative introspection} \\
+negative introspection: $\neg \eall_i A \lto \eall_i \neg \eall_i A$ 
+\end{enumerate}
+
+
+\item 
+Each of the $n$ accessibility relations in those frames, for which n-modal \textbf{S5} is sound and complete, is an equivalence relation.
+
+\begin{enumerate}
+\item \textit{sound}  \\
+One speaks of soundness, iff a formula $\varphi \in \mathcal{L}$ is derivable, in a proof system, from a set of premises $\Gamma \subseteq \mathcal{L}$, then $\varphi$ must be the logical consequence of $\Gamma$. That is, iff   $\Gamma \vdash_X \varphi$ implies $\Gamma \vDash_{\mathcal{X}} \varphi$.
+
+\item \textit{complete} \\
+One speaks of completeness, iff a formula $\varphi \in \mathcal{L}$ is the logical consequence of a set of premises $\Gamma \subseteq \mathcal{L}$, then it must be derivable, in a proof system, from $\Gamma$ as well. That is, iff  $\Gamma \vDash_{\mathcal{X}} \varphi$ implies $ \Gamma \vdash_X \varphi$.
+\item \textit{equivalence relation} \\
+A binary relation $R$ is an equivalence relation iff it satisfies 
+\begin{itemize}
+\item E1 reflexive: $\forall s \; sRs$;
+\item E2 symmetric: $\forall s \forall t \;(sRt \sto tRs )$;
+\item E4 transitive: $\forall s \forall t \forall u \; ((sRt \land tRu) \sto sRu)$;
+\end{itemize}
+\item \textit{other} \\
+For all other see above.
+\end{enumerate}
+\end{enumerate}
+
+
+
+\section*{Exercise 38}
+\begin{quote}
+Present an interpretation $\mathcal{M}$ for two agents 1 and 2 such that the modalities $\eall_1 ,\eall_2, \edisp_{\{1,2\}}, \egen_{\{1,2\}}$, and $\ecom_{\{1,2\}}$ are pairwise different. More precisely: for every pair $(\mathbf{X}, \mathbf{Y})$ of different modalities specify a world $w$ and a formula $F$, s.t. $v_{\mathcal{M}}(\mathbf{X}F,w)  \neq v_{\mathcal{M}}(\mathbf{Y}F,w)$.
+\end{quote}
+
+
+
+
+Firstly, let $ab:=G=\{a,b\}$. Consider the following epistemic model $\mathcal{M}$.
+
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex][label=below:$p$] (1) at (0,0) {$1$};
+	\node[vertex][label=below:$p$] (2) at (2,0) {$2$};
+	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+	
+	\node[vertex][label=below:$p$] (4) at (6,0) {$4$};
+	\node[vertex][label=below:$\neg p$] (5) at (8,0) {$5$};
+
+    \foreach \from/\to/\r in {1/2/a,2/3/b, 4/5/a}
+    \path[-](\from) edge node [above]{$\r$} (\to);
+   
+\end{tikzpicture}
+\end{center}
+\begin{enumerate}
+\item $(\eall_a, \eall_b)$:\\
+Consider state $4$. That is, $\mathcal{M},4 \nmodels \eall_a p$ due to $5$, and $\mathcal{M},4 \models \eall_b p$.
+\item $(\eall_a, \edisp_{ab})$:\\
+Consider state $4$. That is, $\mathcal{M},4 \nmodels \eall_a p$ due to $5$, and $\mathcal{M},4 \models \edisp_{ab} p$ due to $\mathcal{M},4 \models \eall_b p$.
+\item $(\eall_a, \egen_{ab})$:\\
+Consider state $2$. That is, $\mathcal{M},2 \models \eall_a p$, and $\mathcal{M},2 \nmodels \egen_{ab} p$ due to $\mathcal{M},2 \nmodels \eall_b p$, which is due to $3$.
+\item $(\eall_a, \ecom_{ab})$:\\
+Consider state $2$. That is, $\mathcal{M},2 \models \eall_a p$, and $\mathcal{M},2 \nmodels \ecom_{ab} p$ caused by $\mathcal{M},2 \nmodels \egen_{ab} p$ due to $\mathcal{M},2 \nmodels \eall_b p$, which is due to $3$.
+\item $(\eall_b, \edisp_{ab})$:\\
+Consider state $2$. That is, $\mathcal{M},2 \nmodels \eall_b p$ due to $3$, and $\mathcal{M},2 \models \eall_a p$.
+\item $(\eall_b, \egen_{ab})$:\\
+Consider state $4$. That is, $\mathcal{M},4 \models \eall_b p$, and $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+\item $(\eall_b, \ecom_{ab})$:\\
+Consider state $4$. That is, $\mathcal{M},4\models \eall_a p$, and $\mathcal{M},4 \nmodels \ecom_{ab} p$ caused by $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+
+
+\item $(\edisp_{ab}, \egen_{ab})$:\\
+Consider state $4$. That is, $\mathcal{M},4 \models \edisp_{ab} p$ due to $\mathcal{M},4 \models \eall_b p$, and $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+\item $(\edisp_{ab}, \ecom_{ab})$:\\
+Consider state $4$. That is, $\mathcal{M},4 \models \edisp_{ab} p$ due to $\mathcal{M},4 \models \eall_b p$, and $\mathcal{M},4 \nmodels \ecom_{ab} p$ caused by $\mathcal{M},4 \nmodels \egen_{ab} p$ due to $\mathcal{M},4 \nmodels \eall_a p$, which is due to $5$.
+
+\item $(\egen_{ab}, \ecom_{ab})$:\\
+Consider state $1$. That is, $\mathcal{M},1 \models \egen_{ab} p$ due to $\mathcal{M},1 \models \eall_a p$ and $\mathcal{M},1 \models \eall_b p$, and $\mathcal{M},1 \nmodels  \egen_{ab} \egen_{ab} p$ due to $\mathcal{M},2 \nmodels  \egen_{ab} p$ caused by $\mathcal{M},2 \nmodels  \eall_b p$.
+\end{enumerate}
+
+
+\section*{Exercise 39}
+\begin{quote}
+Prove or refute: $(\mathcal{M},s) \models \edisp_G \egen_G A$ implies $(\mathcal{M},s) \models \egen_G A$ and $(\mathcal{M},s) \models \egen_G A$ implies $(\mathcal{M},s) \models \edisp_G \egen_G A$.
+\end{quote}
+
+\begin{itemize}
+\item $\mathcal{M},s \models \edisp_G \egen_G \varphi$ implies $\mathcal{M},s \models \egen_G \varphi$\\
+Elevating $\mathcal{M},s \models \edisp_G \egen_G \varphi$, one obtains $\exists i \in G : \mathcal{M},s \models \eall_i \egen_G \varphi$, from this it follows $\exists i \in G : \forall t (sR_it \sto \mathcal{M},t \models \egen_G \varphi)$.
+%and subsequently the statement 
+%\begin{equation*}
+%\exists i \in G : \forall t (sR_it \sto \forall j \in G : \mathcal{M}, t \models \eall_j \varphi)
+%\end{equation*}
+%Since there exists an agent $i$, such that $t$ is accessible from $s$ through $R_i$, we know with $\mathcal{M}$ being an epistemic model, that $s$ is accessible from $t$ through $R_i$ as well. 
+%Now, since every state a 
+Since, there exists an agent $i$, such that for all from $s$ accessible states $t$, $\mathcal{M},t \models \egen_G \varphi$. Now with $\mathcal{M}$ being an epistemic model, it is required that $sR_is$. Hence, $\mathcal{M},s \models \egen_G \varphi$.
+
+
+\item $\mathcal{M},s \models \egen_G \varphi$ implies $\mathcal{M},s \models \edisp_G \egen_G \varphi$\\
+Consider the following epistemic model $\mathcal{M}$.
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex][label=below:$\neg p$] (1) at (0,0) {$1$};
+	\node[vertex][label=below:$p$] (2) at (2,0) {$2$};
+	\node[vertex][label=below:$p$] (3) at (4,0) {$3$};
+	\node[vertex][label=below:$p$] (4) at (6,0) {$4$};
+	\node[vertex][label=below:$\neg p$] (5) at (8,0) {$5$};
+
+    \foreach \from/\to/\r in {1/2/a,2/3/b,3/4/a,4/5/b}
+    \path[-](\from) edge node [above]{$\r$} (\to);
+   
+\end{tikzpicture}
+\end{center}
+Let $ab:= G = \{a,b\}$. Observe that $\mathcal{M},3 \models \egen_{ab} p$, which elevated to the meta-level is $\forall i \in G : \mathcal{M},3 \models \eall_i p$. Now, since $2, 3$ and $4$ are the only states accessible by a relation $R_i$, the claim clearly follows. However, through similar reasoning one can can conclude that  $\mathcal{M},2 \nmodels \egen_{ab} p$ and $\mathcal{M},4 \nmodels \egen_{ab} p$. That is, in those states there exists at least one agent that can not distinguish between $p$ and $\neg p$, due to the states $1$ and $5$. Therefore, no agent in state $3$ knows that $ \egen_{ab} p$. That is, 
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex][label=below:$\neg p$] (1) at (0,0) {$1$};
+	\node[vertex][label=below:$\nmodels \egen_{ab}$] (2) at (2,0) {$2$};
+	\node[vertex][label=below:$\models \egen_{ab}$] (3) at (4,0) {$3$};
+	\node[vertex][label=below:$\nmodels \egen_{ab}$] (4) at (6,0) {$4$};
+	\node[vertex][label=below:$\neg p$] (5) at (8,0) {$5$};
+
+    \foreach \from/\to/\r in {1/2/a,2/3/b,3/4/a,4/5/b}
+    \path[-](\from) edge node [above]{$\r$} (\to);
+   
+\end{tikzpicture}
+\end{center}
+\end{itemize}
+
+
+
+\section*{Exercise 40}
+\begin{quote}
+Visualization lemma:
+\begin{enumerate}
+\item $(\mathcal{M},s) \models \egen_G^k A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.
+\item $(\mathcal{M},s) \models \ecom_G A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$.
+\end{enumerate}
+\end{quote}
+Let $s \leadsto_G^k t$ represent that $t$ is $G$-reachable from $s$ in $k$ steps.
+\begin{enumerate}
+\item By induction over $k$.
+\begin{itemize}
+\item \textbf{IH:} $\mathcal{M},s \models \egen_G^k \varphi$ iff $\mathcal{M},t \models \varphi$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.
+\item \textbf{IB:} $k=1$ (I am not sure whether to start from 1 or from 0) \\
+$\mathcal{M},s \models \egen_G^1 \varphi$ is equivalent to $\mathcal{M},s \models \egen_G \varphi$, which is equivalent to the meta-level statement, $\forall i \in G : \forall t (sR_it \sto \mathcal{M}, s \models \varphi)$. 
+Furthermore, the statement "$\mathcal{M},t \models \varphi$ for all $t$ that are $G$-reachable from $s$ in $1$ step" is equivalent to $\forall t (s R_{E_G} t \sto \mathcal{M},t \models \varphi)$, with $R_{E_G}:= \bigcup_{i \in G} R_i$. For the following transformations consider that $G$ is finite and a forall quantification can therefore be understood as a big conjunction. Moreover, note that all transformations occur on the meta level.
+%the big conjunctions and disjunctions are just short hand notations on the meta-level. 
+\begin{align*}
+& \forall t ((s,t) \in \bigcup_{i \in G} R_i \sto \mathcal{M},t \models \varphi) && (\textit{Set Theory: } x \in X \cup Y \Leftrightarrow x \in X \lor x \in Y)& \\
+& \forall t ((\bigvee_{i \in G} (s,t) \in R_i) \sto \mathcal{M},t \models \varphi) && (\textit{Implication: } \neg x \lor y \Leftrightarrow x \sto y)& \\
+& \forall t (\neg (\bigvee_{i \in G} (s,t) \in R_i) \lor \mathcal{M},t \models \varphi) && (\textit{DeMorgan: } \neg (x \lor y) \Leftrightarrow \neg x \land \neg y& \\
+& \forall t ((\bigwedge_{i \in G} (s,t) \nin R_i) \lor \mathcal{M},t \models \varphi) && (\textit{Distributivity: } (x \land y) \lor z \Leftrightarrow (x \lor z) \land (y \lor z))& \\
+& \forall t (\bigwedge_{i \in G} ((s,t) \nin R_i \lor \mathcal{M},t \models \varphi)) && (\textit{Implication: } \neg x \lor y \Leftrightarrow x \sto y))& \\
+& \forall t (\bigwedge_{i \in G} ((s,t) \in R_i \sto \mathcal{M},t \models \varphi)) && ( \forall x (P(x) \land Q(x)) \Leftrightarrow  \forall x P(x) \land \forall x Q(x))& \\
+& \bigwedge_{i \in G}\forall t ((s,t) \in R_i \sto \mathcal{M},t \models \varphi) && (\textit{Finite G and sem. of } \forall)& \\
+& \forall i \in G : \forall t ((s,t) \in R_i \sto \mathcal{M},t \models \varphi) && &
+\end{align*}
+
+\item \textbf{IS:} $k = n+1$
+$\mathcal{M},s \models \egen_G^{n+1} \varphi$ is equivalent to $\mathcal{M},s \models \egen_G \egen_G^n \varphi$, which again means that $\forall i \in G : \forall t (sR_it \sto \mathcal{M}, t \models \egen_G^n \varphi)$. As established previously 
+\begin{equation*}
+\forall i \in G : \forall t (sR_it \sto \mathcal{M}, s \models \varphi) \iff \forall t (s R_{E_G} t \sto \mathcal{M},t \models \varphi)
+\end{equation*}
+Therefore, one obtains
+\begin{equation*}
+\forall t (s R_{E_G} t \sto \mathcal{M},t \models \egen_G^n \varphi)
+\end{equation*}
+By IH one obtains the equivalent statement 
+\begin{equation*}
+\forall t (s R_{E_G} t \sto \forall u (t \leadsto_G^n u \sto \mathcal{M},u \models \varphi))
+\end{equation*}
+This statement expresses that every state $G$-reachable in $n$ steps from every state $t$ reachable from $s$ satisfies $\varphi$ (thus by reflexivity and $k\geq 1$, $s$ and every state accessible from $s$ also satisfies $\varphi$). Hence, every state $u$ $G$-reachable from $t$ in $n$ steps is reachable from $s$ in $n+1$ steps. Moving on.
+
+\begin{align*}
+&\forall t \forall u (s R_{E_G} t \sto  (t \leadsto_G^n u \sto \mathcal{M},u \models \varphi))&& \iff&\\
+&\forall t \forall u (s\leadsto_G^1 t \sto  (t \leadsto_G^n u \sto \mathcal{M},u \models \varphi))&& \iff \textit{ (by reasining above)}&\\
+&\forall t \forall u (s \leadsto_G^{n+1} u \sto \mathcal{M},u \models \varphi)&& &\\
+&\forall u (s \leadsto_G^{n+1} u \sto \mathcal{M},u \models \varphi)&& &
+\end{align*}
+
+\end{itemize}
+
+
+\item $\mathcal{M},s \models \ecom_G \varphi$ iff $\mathcal{M},t \models \varphi$ for all $t$ that are $G$-reachable from $s$.
+\begin{itemize}
+
+\item $"\Longrightarrow"$ 
+Assume $\mathcal{M},s \models \ecom_G \varphi$ and that $\exists t (s \leadsto_G t \sand \mathcal{M}, t \nmodels \varphi)$. Without loss of generality assume that $s \leadsto_G^k t$ such that $\mathcal{M},t \nmodels \varphi$. Hence, given the previous result it follows that $\mathcal{M},s \nmodels \egen_G^i \varphi$ for all $i\geq k$. Now given $\mathcal{M}, s \models \ecom_G \varphi$ iff $\forall k > 0 \mathcal{M},s \models \egen_G^k \varphi$. Which clearly is a contradiction.  
+\item $"\Longleftarrow"$ 
+Assume that $\forall t (s \leadsto_G t \sto \mathcal{M},t \models \varphi)$. Consider an arbitrary $k>0$. By assumption $\forall t (s \leadsto_G^k t \sto \mathcal{M},t \models \varphi)$, which given the previous result means that $\mathcal{M},s \models \egen_G^k \varphi$. Since this can be done for an arbitrary $k$, one obtains by definition $\mathcal{M},s \models \ecom_G \varphi$.
+
+\end{itemize}
+\end{enumerate}
+
+
+
+\section*{Exercise 41}
+\begin{quote}
+Call a state t in a frame $G$-reachable (in $i$ steps) from state $s$ if there is a path $\pi$ (of length $i$) from $s$ to $t$, where all edges of $\pi$ are in $\bigcup_{j \in G} R_j$. \\
+
+$(\mathcal{M},s) \models \edisp_G^k A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.\\
+
+Proof or refute that dispersed knowledge can be characterized analogously by replacing ‘for all $t$’ with ‘for some $t$’.
+\end{quote}
+
+Consider the epistemic model $\mathcal{M}$.
+
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex][label=below:$p$] (1) at (0,1) {$1$};
+	\node[vertex][label=below:$\neg p$] (2) at (2,1) {$2$};
+	
+	\path[-](1) edge node [above]{$a$} (2);
+   
+\end{tikzpicture}
+\end{center}
+
+Since state $1$ is reachable from $1$ the condition $\mathcal{M},t \models p$ for some $t$ that are $G$-reachable from $1$ in $k$ steps, is satisfied. However, since $\mathcal{M},1 \nmodels \eall_a p$ due to state $2$, it follows that $\mathcal{M},1 \nmodels \edisp_a p$.
+
+
+\section*{Exercise 42}
+\begin{quote}
+Call a state t in a frame $G$-reachable (in $i$ steps) from state $s$ if there is a path $\pi$ (of length $i$) from $s$ to $t$, where all edges of $\pi$ are in $\bigcup_{j \in G} R_j$. \\
+
+$(\mathcal{M},s) \models \edisp_G^k A$ iff $(\mathcal{M},t) \models A$ for all $t$ that are $G$-reachable from $s$ in $k$ steps.\\
+
+Proof or refute that dispersed knowledge can be characterized analogously by replacing $\bigcup_{j \in G}R_j $ with $\bigcap_{j \in G} R_j$.
+\end{quote}
+
+Let $G_{\cap}$-reachability, the notion of reachability obtained by replacing $\bigcup_{j \in G}R_j $ with $\bigcap_{j \in G} R_j$. Moreover, let $R_{S_G} := \bigcap_{j \in G} R_j$.
+Consider the following model epistemic model $\mathcal{M}$.
+
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex][label=below:$p$] (1) at (0,1) {$1$};
+	\node[vertex][label=below:$p$] (2) at (2,1) {$2$};
+	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+	\node[vertex][label=below:$\neg p$] (4) at (4,2) {$4$};
+	
+	\path[-](1) edge node [above]{$a,b$} (2);
+	\path[-](2) edge node [above]{$a$} (3);
+	\path[-](2) edge node [above]{$b$} (4);
+	
+    
+   
+\end{tikzpicture}
+\end{center}
+
+By evaluating $\mathcal{M},2 \nmodels \edisp_{ab} p$, due to $\mathcal{M},2 \nmodels \eall_a p$ (since $\mathcal{M},3 \nmodels p$) and due to $\mathcal{M},2 \nmodels \eall_b p$ (since $\mathcal{M},4 \nmodels p$). However, considering the $\bigcap_{j \in G} R_j$, i.e. the relation
+
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex][label=below:$p$] (1) at (0,1) {$1$};
+	\node[vertex][label=below:$p$] (2) at (2,1) {$2$};
+	\node[vertex][label=below:$\neg p$] (3) at (4,0) {$3$};
+	\node[vertex][label=below:$\neg p$] (4) at (4,2) {$4$};
+	
+	\path[-](1) edge node [above]{${S_G}$} (2);
+    
+\end{tikzpicture}
+\end{center}
+
+the condition $\mathcal{M},t \models \varphi$ for all $t$ that are $G_{\cap}$-reachable from $2$ in $k$ steps is clearly satisfied.
+
+
+\section*{Exercise 43}
+\begin{quote}
+Explore the notion of distributed knowledge as defined somewhat informally, e.g., in Wikipedia. In particular investigate whether the characterizations suggested in exercises 41 or 42 might be ad- equate for distributed knowledge.
+\end{quote}
+
+For me the best characterisation of distributed knowledge described in in Wikipedia, is the one calling it aggregated knowledge. That is, all individuals of the group aggregate their knowledge together, to construct the knowledge of the group. Hence, if someone would ask the group whether $p$ or $\neg p$ holds. It is sufficient, that a single member of the group can distinguish between those two cases. Moreover, given this it is also possible that the group knows more that each individual. For example, agent $a$ knows that $p$, while agent $b$ knows that $p \sto q$. \\
+
+With respect to exercise 42. An agent can distinguish between two states iff there is no epistemic relation between those two. Since, the group can distinguish between two states iff at least one agent can, one can infer that two states are indistinguishable for the group iff no agent can distinguish between them. That is, if $ \bigcap_{j \in G} R_j$. 
+
+The characterisation of distributed knowledge $\edist_G$ in "Dynamic Epistemic Logic" is described as the knowledge obtained by collaboration and is characterised as 
+\begin{equation*}
+\mathcal{M},s \models \edist_G \varphi \iff \forall t (s R_{D_G} t \sto \mathcal{M},t \models \varphi)
+\end{equation*}
+where $R_{D_G}:= \bigcap_{j \in G} R_j$. \\
+
+With respect to 41. Consider the same example as in Exercise 41 and observe that this characterisation breaks down. That is, since $G=\{a\}$, $\edist_G$ coincides with $\eall_a$. While the characterisation as given in 41 holds, $\eall_a$ clearly does not.
+
+\end{document}

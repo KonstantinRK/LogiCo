@@ -1,0 +1,17 @@
+[NotebookApp | WARNING] No nbgrader_config.py file found (rerun with --debug to see where nbgrader is looking)
+[NotebookApp | INFO] Loading the validate_assignment nbgrader serverextension
+[NotebookApp | INFO] Serving notebooks from local directory: /Users/krk/Dropbox/Privat/Logico/SS2019/automated_deduction/exercises/sat
+[NotebookApp | INFO] 0 active kernels 
+[NotebookApp | INFO] The Jupyter Notebook is running at: http://localhost:8888/?token=2ecae37425c424f4790e2e06369fbb15f00f1d53e1382162
+[NotebookApp | INFO] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[NotebookApp | CRITICAL] 
+    
+    Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://localhost:8888/?token=2ecae37425c424f4790e2e06369fbb15f00f1d53e1382162
+[NotebookApp | INFO] Accepting one-time-token-authenticated connection from ::1
+[NotebookApp | WARNING] Notebook Untitled.ipynb is not trusted
+[NotebookApp | INFO] Kernel started: f6d8b0fa-753b-4b5d-8119-8d43e6a9c907
+[NotebookApp | INFO] Adapting to protocol v5.1 for kernel f6d8b0fa-753b-4b5d-8119-8d43e6a9c907
+[NotebookApp | INFO] Saving file at /Untitled.ipynb
+[NotebookApp | WARNING] Saving untrusted notebook Untitled.ipynb

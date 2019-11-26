@@ -1,0 +1,643 @@
+\documentclass[8pt]{beamer}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{import}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{bussproofs}
+%\usepackage{MnSymbol}
+\usepackage{stmaryrd}
+\usepackage{adjustbox}
+\usepackage{fancybox}
+\usepackage{tikz}
+
+\usepackage{comment}
+
+%\usepackage[square]{natbib}
+
+\usepackage[utf8]{inputenc}
+
+
+\usepackage[backend=biber, style=authoryear]{biblatex}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{mydef}[thm]{Definition}
+
+\newcommand\altfootnote[1]{%
+  \tikz[remember picture,overlay]
+  \draw (current page.south west) +(1in + \oddsidemargin,0.5em)
+  node[anchor=south west,inner sep=0pt]{\parbox{\textwidth}{%
+      \rlap{\rule{10em}{0.4pt}}\raggedright\scriptsize#1}};}
+
+\newcommand{\myfootnote}[1]{
+    \renewcommand{\thefootnote}{}
+    \footnotetext{\hspace{-4pt}\scriptsize#1}
+    \renewcommand{\thefootnote}{\arabic{footnote}}
+}
+
+\newcommand*{\skepcon}{\ensuremath{\mathrel{\medvert\mskip-5.7mu\clipbox{1 0 0 0}{$\sim$}}}}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\title{Seminar in Logic}
+\subtitle{Non-Monotonic Reasoning}
+% \date{\today}
+\date{}
+\author{Konstantin Kueffner}
+% \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+
+
+
+%\bibliographystyle{unsrtnat}
+\addbibresource{seminar_logic.bib}
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[subsubsectionstyle=hide]
+\end{frame}
+
+
+\section{Introduction}
+\subsection{Monotonic Reasoning}
+
+\begin{frame}{Monotonic Reasoning}
+\metroset{block=fill}
+\begin{block}{Monotonicity (Intuition)}
+Additional information can not invalidate previous conclusions.
+\end{block}
+
+\begin{block}{Global Monotonicity}   
+A logic is called globally monotonic if for $A$ and $B$ being theories, such that $A \subseteq B$ it follows that $Th(A) \subseteq Th(B)$, with $Th(S):=\{p \mid S \models p \}$ (or syntactically $Th(S)=\{p \mid S \vdash p \}$)
+\end{block}
+For example: $\Gamma \models \varphi$ implies $\Gamma \cup \{\psi\} \models \varphi$ or \emph{weak-l} in Sequent Calculus.
+
+\begin{block}{Local Monotonicity}    
+A logic is called locally monotonic, if it allows for "Strengthening the Antecedent".                    
+\end{block} 
+For example: In propositional logic it is a tautology $(A \to C) \to (A \wedge B \to C)$.
+\myfootnote{\cite{bochman2005explanatory,mcdermott1980non, mccarthy1981circumscription}s}
+\end{frame}
+
+\subsection{Motivating Problems}
+
+
+\subsubsection{Tweety-Problem}
+
+\begin{frame}{Motivating Problems: Tweety Problem}
+
+\begin{block}{Stage 1: Naive Model}
+\begin{equation*}
+\begin{split}
+\mathcal{T}_1:= \{ \forall x \; Person(x) \to Innocent(x), Person(Tweety) \} 
+\end{split}
+\end{equation*}
+\end{block}
+\begin{block}{Stage 2: Expansion 1}
+\begin{equation*}
+\begin{split}
+\mathcal{T}_2:= \mathcal{T}_1   \cup \{& Murderer(Tweety),\\
+&\forall x \; Murderer(x) \to Person(x), \\
+&\forall x \; Murderer(x) \to \neg Innocent(x)\}
+\end{split}
+\end{equation*}
+\end{block}
+\begin{block}{Stage 3: Naive Solution}
+\begin{equation*}
+\begin{split}
+\mathcal{T}_3:= \mathcal{T}_2 &\setminus \{ \forall x \; Person(x) \to Innocent(x)\} \\
+& \cup \{ \forall x \; Person(x) \wedge \neg Murderer(x) \to Innocent(x)\} \\
+\end{split}
+\end{equation*}
+\end{block} 
+
+\end{frame}
+
+\begin{frame}{Motivating Problems: Tweety Problem 2}
+\begin{block}{Stage 4: Expansion 2}
+\begin{equation*}
+\begin{split}
+\mathcal{T}_4:= \mathcal{T}_3   \cup \{& Person(Polly)\}\\
+\end{split}
+\end{equation*}
+\end{block}
+
+But now 
+\begin{equation*}
+\begin{split}
+&\mathcal{T}_4 \nmodels Innocent(Polly)\\
+&\mathcal{T}_4 \cup \{\neg Murderer(Polly)\} \models Innocent(Polly)\\
+\end{split}
+\end{equation*}
+
+Hence,
+\begin{center}
+\emph{Innocent when proven to be not a murderer?}
+\end{center}
+
+\textbf{Problems:}
+\begin{itemize}
+\item - listing all exceptions (not yet classified crimes)
+\item - expansion may lead to inconsistency
+\item - checking all exceptions (absence of complete information)
+
+
+\end{itemize}
+
+\myfootnote{\cite{reiter1980logic,mccarthy1981circumscription}}
+\end{frame}
+
+\subsubsection{General Frame-Problem}
+
+\begin{frame}{Motivating Problems: Frame Problem}
+
+\begin{block}{Temporal Projection Problem}
+\begin{itemize}
+\item - Frame / Persistence Problem $\to$ "What does not change?"
+\item - Ramification Problem $\to$ "What changes implicitly?"
+\item - Qualification Problem $\to$ "When is an action possible?"
+\end{itemize}
+\end{block} 
+\myfootnote{\cite{ginsberg1987reasoning,BOCHMAN2007557,nonmonoton_stanford2018,stanford2016frame,ginsberg1987reasoning}}
+\end{frame}
+
+\begin{comment}
+\begin{block}{Naive Model}
+\begin{equation*}
+\begin{split}
+&\forall x \; (PAINT(x,c) \to COLOUR_{n+1}(x,c)) \\
+&\forall x \; (MOVE(x,p) \to POSITION_{n+1}(x,p)) \\
+\end{split}
+\end{equation*}
+\end{block} 
+
+\begin{block}{Inertia}
+\begin{equation*}
+\begin{split}
+&\forall x \; ((MOVE(x,p) \wedge COLOUR_{n}(x,c)) \to COLOUR_{n+1}(x,c)) \\
+&\forall x \; ((PAINT(x,p) \wedge POSITION_{n}(x,p)) \to POSITION_{n+1}(x,p)) \\
+\end{split}
+\end{equation*}
+\end{block} 
+\end{comment}
+
+
+\begin{frame}{Why Non-Monotonic Reasoning?}
+
+\begin{block}{What is desired?}
+Capture statements such as:
+\begin{itemize}
+\item - Normally X holds
+\item - Typically X is the case
+\item - Assume X as a default
+\end{itemize}
+\end{block}
+
+
+In order to 
+\begin{itemize}
+\item - modelling normality and abnormality
+\item - modelling a reasoned use of assumptions
+\item - distinguish between information
+\item - allow for safe reasoning in a dynamic environment
+\end{itemize}
+
+\myfootnote{\cite{nonmonoton_stanford2018,BOCHMAN2007557}}
+\end{frame}
+
+
+\section{Approaches to Non-Monotonic Reasoning}
+\begin{frame}{General Approaches to Non-Monotonic Reasoning }
+
+
+\begin{block}{Preferential Non-Monotonic Reasoning}    
+\begin{itemize}
+\item Type: locally non-monotonic (possibly globally monotonic)
+\item Core Concept: Cumulative / Preferential Models
+\item Formalisms: Circumscription, Closed World Assumption, Conditional Logic
+\item (Strongly connected to Meta-Theoretic Approach)
+\end{itemize}
+\end{block} 
+
+
+\begin{block}{Explanatory Non-Monotonic Reasoning}    
+\begin{itemize}
+\item Type: globally non-monotonic (possibly locally monotonic)
+\item Core Concept: Explanatory Closure / Stable Extensions
+\item Formalisms: Default Logic, Modal Non-Monotonic Logic 
+\end{itemize}
+\end{block} 
+
+\begin{block}{Other methods of characterisation}    
+\begin{itemize}
+\item logic formulas vs. inference rules
+\item credulous vs. sceptical inference
+\item cumulative vs. not-cumulative
+\end{itemize}
+\end{block} 
+\myfootnote{\cite{bochman2005explanatory,BOCHMAN2007557,brewka1997nonmonotonic}}
+\end{frame}
+
+
+
+\subsection{Preferential Non-Monotonic Reasoning}
+\subsubsection{Core Concept}
+\begin{frame}{Preferential Non-Monotonic Reasoning: Core Concept}
+\metroset{block=fill}
+\begin{block}{Cumulative Models}
+$\langle S,l, \prec \rangle$ where 
+\begin{itemize}
+\item  - $S$ states
+\item  - $l:S \to \powerset(\mathcal{U})$ with $\mathcal{U}$ set of all interpretations
+\item  - $\prec$ is a strict partial order on $S$ satisfying the smoothness condition.
+\end{itemize} 
+\end{block}
+
+\begin{block}{Preferential Models}
+$\langle S,l, \prec \rangle$ cumulative where $|l(s)|=1$
+\end{block}
+\begin{block}{Model Preference Logics}
+Let $W:=\langle S,l, \prec \rangle$ be a preferential model, such that 
+\begin{itemize}
+\item - $S$ is a subset of all interpretations, i.e. $S \subseteq \mathcal{U}$ 
+\item - $l$ is the identity
+\item - $\prec$ is well-founded
+\end{itemize}
+\end{block}
+\myfootnote{\cite{kraus1990nonmonotonic,brewka1997nonmonotonic}}
+\end{frame}
+\subsection{Explanatory Non-Monotonic Reasoning}
+
+\subsubsection{Core Concept}
+
+
+\begin{frame}{Explanatory Non-Monotonic Reasoning: Core Concept}
+\metroset{block=fill}
+
+\begin{block}{Explanation Closure (Intuition)}
+Any fact holding in a model should be explained by the rules of the domain.
+\end{block}
+
+\begin{block}{Stable Extensions (Intuition)}
+A \emph{Stable Extension} is explanatory closed set of formulas representing one possible set of consistent beliefs. 
+\end{block}
+Commonly:
+\begin{itemize}
+\item - multiple stable extensions exist
+\item - defined by a fixed-point operation
+\begin{itemize}
+\item For operator $T$,  $S$ is a fixed-point iff $T(S)=S$
+\end{itemize}
+\end{itemize}
+
+\myfootnote{\cite{bochman2005explanatory,BOCHMAN2007557,brewka1997nonmonotonic}}
+
+\end{frame}
+
+
+\begin{comment}
+
+\subsubsection{Meta Theoretic Approach}
+\begin{frame}{Preferential Non-Monotonic Reasoning: Meta Theoretic Approach}
+Important meta-theoretical properties:
+\begin{prooftree}
+\AxiomC{$\varphi \skepcon \psi$}
+\AxiomC{$\varphi \skepcon \chi$}
+\RightLabel{\scriptsize(Cautious Monotonicity)}
+\BinaryInfC{$\varphi \wedge \psi \skepcon \chi$}
+\end{prooftree}
+
+allows for the formalisation of \emph{Lemmas} and 
+
+\begin{prooftree}
+\AxiomC{$\varphi \skepcon \chi$}
+\AxiomC{$\psi \skepcon \chi$}
+\RightLabel{\scriptsize(Or)}
+\BinaryInfC{$\varphi \vee \psi \skepcon \chi$}
+\end{prooftree}
+
+enables the reasoning about cases. \\
+\metroset{block=fill}
+
+\begin{block}{Cumulative Models and Preferential Models}
+Cumulative Models and Preferential Models captured on meta-theoretic level (System \textbf{C} and \textbf{P} = \textbf{C} + Or)
+\end{block}
+\begin{block}{Cumulative Models and Preferential Models}
+Every model preference logic has a preferential inference relation.  
+\end{block}
+\myfootnote{\cite{kraus1990nonmonotonic, brewka1997nonmonotonic}}
+\end{frame}
+
+\end{comment}
+
+\section{Specific Non-Monotonic Formalisms}
+\subsection{Circumscription}
+
+\begin{frame}{Circumscription}
+\metroset{block=fill}
+\begin{block}{Circumscription}
+Let $S$ FOL-sentence containing $P(x_1, \dots, x_n)$, short $P(\overline{x})$. Let $S(\Phi)$ replaces $P$ with $\Phi$. \\
+Then the schema
+\begin{equation*}
+\begin{split}
+\forall \Phi \; ((S(\Phi) \wedge  \forall \overline{x} \; (\Phi(\overline{x})\to P(\overline{x}))) \to \forall \overline{x} \; (P(\overline{x}) \to \Phi(\overline{x})))
+\end{split}
+\end{equation*}
+is called the circumscription of $P$.
+\end{block}
+
+\begin{block}{Model Theoretic Notion}
+Let $\langle S,l, \prec \rangle$ be a model preference logic, s.t. 
+\begin{equation*}
+\begin{split}
+s_1 \prec s_2  \textit{  iff  } &l(s_1) \models P(\overline{x}) \textit{ implies } l(s_2) \models P(\overline{x}) \textit{ and} \\
+& \textit{not } l(s_2) \models P(\overline{x}) \textit{ implies } l(s_1) \models P(\overline{x})
+\end{split}
+\end{equation*}
+with $P$ being circumscribed.
+\end{block}
+Note: Expresses normality based on \emph{Abnormality Theory}
+\myfootnote{\cite{mccarthy1981circumscription,brewka1997nonmonotonic}}
+\end{frame}
+
+\begin{frame}{Circumscription: Example 1}
+\metroset{block=fill}
+Let $\mathcal{I}_x:=(D_{\mathcal{I}_x}, I_{\mathcal{I}_x})$ s.t. 
+\begin{itemize}
+
+\item $I_{\mathcal{I}_0}(Guilty):=\{\}$
+\item $I_{\mathcal{I}_1}(Guilty):=\{\delta\}$
+\item  $I_{\mathcal{I}_2}(Guilty):=\{\delta, \sigma, \eta\}$
+\item $I_{\mathcal{I}_3}(Guilty):=\{\delta, \sigma, \eta, \gamma\}$
+\end{itemize}
+
+with $D_{\mathcal{I}_x}:=\{\delta, \sigma, \eta, \gamma\}$ for all x.
+The following preference can be established
+\begin{equation*}
+\begin{split}
+\mathcal{I}_0 \prec \mathcal{I}_1 \prec \mathcal{I}_2 \prec \mathcal{I}_3 
+\end{split}
+\end{equation*}
+
+Given
+\begin{equation*}
+\begin{split}
+&S = Guilty(A) \wedge Guilty(B) \wedge Guilty(C) \\
+\end{split}
+\end{equation*}
+$\mathcal{I}_1$ is chosen.
+\myfootnote{\cite{brewka1997nonmonotonic}}
+\end{frame}
+
+
+
+
+\begin{frame}{Circumscription: Example 2}
+\metroset{block=fill}
+Recall
+\begin{equation*}
+\begin{split}
+\forall \Phi \; (S(\Phi) \wedge  \forall \overline{x} \; (\Phi(\overline{x})\to P(\overline{x}))) \to \forall \overline{x} \; (P(\overline{x}) \to \Phi(\overline{x}))
+\end{split}
+\end{equation*} 
+Given
+\begin{equation*}
+\begin{split}
+&S = Guilty(A) \wedge Guilty(B) \wedge Guilty(C) \\
+&\Phi(x) = (x=A \vee x=B \vee x=C)
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\begin{split}
+\Phi(A) \wedge \Phi(B) \wedge \Phi(C) \wedge \forall \overline{x} \; (\Phi(\overline{x})\to Guilty(\overline{x}))) \to \forall \overline{x} \; (Guilty(\overline{x}) \to \Phi(\overline{x}))
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\begin{split}
+&(A=A \vee A=B \vee A=C)\wedge (B=A \vee B=B \vee B=C) \wedge (C=A \vee C=B \vee C=C) \\
+& \wedge \forall \overline{x} \; ((\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C)\to Guilty(\overline{x})))  \\
+& \to  \forall \overline{x} \; (Guilty(\overline{x})   \to  (\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C))
+\end{split}
+\end{equation*} 
+\myfootnote{\cite{mccarthy1981circumscription}}
+
+\end{frame}
+
+
+\begin{frame}{Circumscription: Example 3}
+\metroset{block=fill}
+
+
+\begin{equation*}
+\begin{split}
+&S = Guilty(A) \wedge Guilty(B) \wedge Guilty(C) \wedge Guilty(D) \\
+&\Phi(x) = (x=A \vee x=B \vee x=C)
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\begin{split}
+&(A=A \vee A=B \vee A=C)\wedge (B=A \vee B=B \vee B=C) \\
+& \wedge (C=A \vee C=B \vee C=C) \wedge (D=A \vee D=B \vee D=C) \\
+& \wedge \forall \overline{x} \; ((\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C)\to Guilty(\overline{x})))  \\
+& \to  \forall \overline{x} \; (Guilty(\overline{x})   \to  (\overline{x}=A \vee \overline{x}=B \vee \overline{x}=C ))
+\end{split}
+\end{equation*}
+
+\myfootnote{\cite{mccarthy1981circumscription}}
+
+\end{frame}
+
+
+
+\subsection{Default Logic}
+\begin{frame}{Default Logic}
+\metroset{block=fill}
+\begin{block}{Default Logic}
+A default $\delta$ has the form
+\begin{prooftree}
+\AxiomC{$\varphi: \psi_1, \dots, \psi_n$}
+\UnaryInfC{$\chi$}
+\end{prooftree}
+with $\varphi, \chi, \psi_1, \dots, \psi_n$ being closed propositional formulas for $n>0$.
+\end{block}
+
+\begin{block}{Default Theory}
+$\Delta = (D,W)$ is a default theory. With $W$ a set of predicate formulas and $D$ a set of defaults. For any $S \subseteq \mathcal{L}$, let $\Gamma(S)$ be the smallest set satisfying
+
+\begin{itemize}
+\item D1: $W \subseteq \Gamma(S)$
+\item D2: $Th_{\mathcal{L}}(\Gamma(S))=\Gamma(S)$
+\item D3: if $(\varphi: \psi_1, \dots, \psi_n / \chi) \in D$ and $\varphi \in  \Gamma(S)$ and $\neg \psi_1, \dots, \neg \psi_n \nin S$  then $\chi \in \Gamma(S)$.
+\end{itemize}
+\end{block}
+\myfootnote{\cite{ANTONIOU2007517,reiter1980logic}}
+\end{frame}
+
+
+
+\begin{frame}{Default Logic: Example}
+\metroset{block=fill}
+Given $\Delta:=(W,D)$
+\begin{equation*}
+\begin{split}
+ W:= \{&Murderer(Tweety), Person(Polly), \\
+&  Murderer(x) \to \neg Innocent(x), Murderer(x) \to  Person(x) \}\\
+ D:=\{&Person(x):Innocent(x)/Innocent(x)\}
+\end{split}
+\end{equation*}
+Possible sets:
+\begin{equation*}
+\begin{split}
+&E_1:= W \cup \{Innocent(Polly), Person(Tweety), \neg Innocent(Tweety)\} \\
+&E_2:= W \cup \{Innocent(Polly), Person(Tweety), \neg Innocent(Tweety), Innocent(Tweety)\}
+\end{split}
+\end{equation*}
+$E_1$ is a stable extension, $E_2$ is not. 
+\myfootnote{\cite{ANTONIOU2007517}}
+\end{frame}
+
+
+
+\begin{frame}{Default Logic: Example - Credulous and Sceptical Reasoing}
+\metroset{block=fill}
+Given $\Delta:=(W,D)$
+\begin{equation*}
+\begin{split}
+ W:= \{&Murderer(Tweety), Person(Polly),  Murderer(x) \to  Person(x) \}\\
+ D:=\{&Person(x):Innocent(x)/Innocent(x), \\
+ & Murderer(x): \neg Innocent(x)/\neg Innocent(x)\}
+\end{split}
+\end{equation*}
+
+Possible sets:
+\begin{equation*}
+\begin{split}
+&E_1:= W \cup \{Innocent(Polly), Person(Tweety), Innocent(Tweety)\}\\
+&E_2:= W \cup \{Innocent(Polly), Person(Tweety), \neg Innocent(Tweety)\}\}
+\end{split}
+\end{equation*}
+$E_1$ and $E_2$  are stable extensions. 
+ 
+\myfootnote{\cite{nonmonoton_stanford2018,brewka1997nonmonotonic}}
+\end{frame}
+
+\section{Applications}
+\subsection{Law}
+\begin{frame}{Non-Monotonic Reasoning in Law}
+
+\textbf{Areas of legal reasoning}
+\begin{itemize}
+\item - reasoning with laws - axiomatic view
+\item - reasoning about laws - interpretation of legal rules
+\item - reasoning about facts - burden of proof
+\item - reasoning about interactions - dynamic disputes between agents
+\item - reasoning about legal action - legality of future actions
+\end{itemize}
+
+\textbf{Argumentation Theory}
+\begin{itemize}
+\item central to law
+\item abstract argumentation theory
+\begin{itemize}
+\item - non-monotonic
+\item - notion of argument, attack and defeat
+\item - semantics for Default Logic or logic programs
+\end{itemize}
+\end{itemize}
+
+\myfootnote{\cite{prakken2015law, Prakken2017,BOCHMAN2007557}}
+
+\end{frame}
+
+
+\begin{frame}{Non-Monotonic Reasoning in Law}
+
+
+\textbf{Rules with exceptions}
+\begin{itemize}
+\item Exceptions and Context
+\begin{itemize}
+\item - higher force
+\item - self-defence
+\end{itemize}
+\end{itemize}
+
+\textbf{Rules with conflicting conclusions}
+\begin{itemize}
+\item dynamic hierarchies of preference
+\begin{itemize}
+\item - specificity, authority and recency
+\end{itemize}
+\item Possible application: preference default logic
+\end{itemize}
+
+\myfootnote{\cite{prakken2015law, Prakken2017,ANTONIOU2007517}  }
+\end{frame}
+
+
+\subsection{Other Applications}
+\begin{frame}{Other Applications of Non-Monotonic Reasoning}
+\textbf{Computer Science}
+\begin{itemize}
+\item - Truth Maintenance Systems
+\item - Normal Logic Programs
+\item - Database Theory
+\end{itemize}
+
+\textbf{Cognitive Sciences}
+\begin{itemize}
+\item - closer approximation of human reasoning
+\item - possible bridge between symbolic and connectionist approaches
+\end{itemize}
+\textbf{Biology}
+\begin{itemize}
+\item - exception hierarchies
+\end{itemize}
+\myfootnote{\cite{isaac2014logic,evans2002logic,BOCHMAN2007557,ANTONIOU2007517}}
+\end{frame}
+
+\printbibliography
+
+\begin{frame}{Smoothness Condition}
+\metroset{block=fill}
+\begin{block}{Smoothness Condition}
+$\langle S, l \prec \rangle$ satisfies smoothness condition if $\forall \alpha \in \mathcal{L}$ the set $ \{s \in S \mid \forall m \in l(s)  \; m \models \alpha\}$ is smooth, i.e. every state is either minimal or is in relation to a minimal state.
+\end{block}
+\myfootnote{\cite{kraus1990nonmonotonic}}
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}

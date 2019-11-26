@@ -1,0 +1,1421 @@
+      \documentclass [11pt]{article}
+   \usepackage{latexsym}
+   \usepackage{amssymb}
+      \usepackage{amsmath}
+      \usepackage{amsthm}
+   \usepackage{url}
+
+   \textwidth      15cm
+   \textheight     23cm
+   \oddsidemargin 0.5cm
+   \topmargin    -0.5cm
+   \evensidemargin\oddsidemargin
+
+% \newcommand{\nop}[1]{#1}
+ \newcommand{\nop}[1]{}
+
+
+   \pagestyle{plain}
+   \bibliographystyle{plain}
+
+
+%
+%  \newtheorem{theorem}{Theorem}
+%  \newtheorem{lemma}[theorem]{Lemma}
+%  \newtheorem{exercise}{Exercise}
+
+  \newcommand{\ra}{\rightarrow}
+  \newcommand{\Ra}{\Rightarrow}
+  \newcommand{\La}{\Leftarrow}
+  \newcommand{\la}{\leftarrow}
+  \newcommand{\LR}{\Leftrightarrow}
+
+  \renewcommand{\phi}{\varphi}
+  \renewcommand{\theta}{\vartheta}
+
+
+\newcommand{\ccfont}[1]{\protect\mathsf{#1}}
+\newcommand{\NP}{\ccfont{NP}}
+\newcommand{\Ptime}{\ccfont{P}}
+\newcommand{\phs}[1]{\Sigma_{#1}^{\Ptime}}
+\newcommand{\php}[1]{\Pi_{#1}^{\Ptime}}
+\newcommand{\pha}[1]{\Lambda_{#1}^{\Ptime}}
+\newcommand{\QSAT}[1]{\ccfont{QSAT}_{#1}}
+\newcommand{\MINSAT}{\mbox{\bf MINIMAL MODEL SAT}}
+\newcommand{\True}{\mathbf{true}}
+\newcommand{\False}{\mathbf{false}}
+%\newcommand{\QSAT}[1]{\mathit{QBF}_{\exists, 2}}
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+
+
+  \newcommand{\lto}{\rightarrow}
+  \newcommand{\sto}{\Rightarrow}
+  \newcommand{\snto}{\Leftarrow}
+  \newcommand{\lnto}{\leftarrow}
+  \newcommand{\siff}{\Leftrightarrow}
+   \newcommand{\liff}{\leftrightarrow}
+   \newcommand{\nmodels}{\not\models}
+
+\newcommand{\clau}{\mathit{Clause}}
+\newcommand{\var}{\mathit{Var}}
+\newcommand{\lit}{\mathit{Lit}}
+\newcommand{\dom}{\mathit{Dom}}
+
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+    \newtheorem{observation}[theorem]{Observation}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{example}[theorem]{Example}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem{exercise}[theorem]{Exercise}
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+
+
+\noindent
+\begin{exercise}[5 credits]
+{\em 
+Recall the following characterizations of the complexity classes 
+$\phs{i}$ and $\php{i}$ for $i \geq 1$. 
+}%em
+
+
+\medskip
+
+\noindent
+\begin{theorem}
+\label{thm:main}
+Let $L$ be a language and $i \geq 1$. 
+\begin{itemize}
+\item Then $L \in \phs{i}$ iff there is
+a polynomially balanced relation $R$ such that the language 
+$\{x\# y \mid (x,y) \in R\}$ is in $\php{i-1}$ and 
+\[
+L = \{x \mid \mbox{there exists a } y 
+\mbox{ with } |y| \leq |x|^k
+\mbox{ s.t. } (x,y) \in R\}
+\]
+\item Then $L \in \php{i}$ iff there is
+a polynomially balanced relation $R$ such that the language 
+$\{x\# y \mid (x,y) \in R\}$ is in $\phs{i-1}$ and 
+\[
+L = \{x \mid \mbox{for all } y \mbox{ with } |y| \leq |x|^k, (x,y) \in R\}
+\]
+\end{itemize}
+\end{theorem}
+
+\medskip
+\begin{corollary}
+Let $L$ be a language and $i \geq 1$.
+\begin{itemize}
+\item  Then $L \in \phs{i}$ iff there is
+a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+relation $R$ such that 
+\[
+L = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \mbox{ such
+that } 
+(x,y_1,\ldots,y_i) \in R\}
+\]
+where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd. 
+
+\item 
+Then $L \in \php{i}$ iff there is
+a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+relation $R$ such that 
+\[
+L = \{x \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_i \mbox{ such
+that } 
+(x,y_1,\ldots,y_i) \in R\}
+\]
+where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd. 
+\end{itemize}
+\end{corollary}
+
+
+\medskip
+\noindent
+{\em 
+Give a rigorous proof of this corollary.
+}%em
+\end{exercise}
+
+\noindent
+{\bf Hint.} Use the above theorem and proceed by induction on $i$.
+It suffices to prove the correctness of the characterization of 
+$\phs{i}$. You may use the characterization of $\php{i}$ in the induction step.
+
+
+
+\medskip
+
+\paragraph*{Solution}
+
+To make the proof Corollary \label{cor:main} of more concise consider the following.
+\begin{definition}
+For some $n$ let $\mathcal{R}^n$ represent the set of all $n$-ary relations.
+Moreover, if $R \in \mathcal{R}^2$, then let $\mathcal{L}(R):= \{x\# y \mid (x,y) \in R\}$.
+Furthermore, as an abbreviation let p.b. stand for polynomially balanced and let p.d. stand for polynomial-time decidable
+\end{definition}
+Before delving into the proof of Corollary \label{cor:main} consider the following remark.
+\begin{remark}
+As proposed in the slides. It is possible to omit the condition $|y| \leq |x|^k$,  due to fact that $R$ is a polynomially balanced relation.
+\end{remark}
+
+Moreover, some preliminary results. 
+
+\begin{lemma}
+\label{lem:lang-rel}
+For some $R \in \mathcal{R}^2$ with $R$ p.b. it follows that $(x,y) \in R =_{\Ptime} x\#y \in \mathcal{L}(R)$.
+\end{lemma}
+\begin{proof}
+Let $\tau$ be the bijection $\tau(x,y) = x\#y$ (and its inverse $\tau^{-1}(x\#y) = (x,y)$).
+
+Firstly, $\tau$ can be computed in polynomial time with respect to $|x|$\footnote{This is stronger than required.}. That is, given the input $(x,y)$ one can easily create the string $x\#y$ by copying $x$ adding a $\#$ and copying $y$, and since $R$ is p.b. it must be that $|y| \leq |x|^k$ for some $k >0$. Hence, it follows that this transformation can be done in linear time with respect to $|x|$.
+
+Secondly, $\tau^{-1}$ can be computed in polynomial time with respect to $|x|$. That is, given the input $x\#y$ one can easily create the tuple $(x,y)$ iterating over $x\#y$ until $\#$ is reached. Then one merely copies everything before the separator into the first position of the tuple and everything after into the second position. Since $R$ is p.b. it must be that $|y| \leq |x|^k$ for some $k >0$. Hence, it follows that this transformation can be done in linear time with respect to $|x|$.
+
+
+Thirdly, it must be established that 
+\begin{equation*}
+(x,y) \in R \iff \tau(x,y) \in \mathcal{L}(R) \land \tau^{-1}(x\#y) \iff x\#y \in \mathcal{L}(R)
+\end{equation*}
+However, since $\tau(x,y)=x\#y$ and $\tau^{-1}(x\#y)=(x,y)$ this follows by construction of $\mathcal{L}$.
+\end{proof}
+Finally, allowing the demonstration of the following corollary.
+
+\begin{corollary}
+\label{cor:main}
+Let $L$ be a language and $i \geq 1$. 
+\begin{itemize}
+\item  $L \in \phs{i}$ iff there is
+a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+relation $R$ such that 
+\[
+L = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \mbox{ such
+that } 
+(x,y_1,\ldots,y_i) \in R\}
+\]
+where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd. 
+\item $L \in \php{i}$ iff there is
+a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+relation $R$ such that 
+\[
+L = \{x \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_i \mbox{ such
+that } 
+(x,y_1,\ldots,y_i) \in R\}
+\]
+where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd. 
+\end{itemize}
+
+\end{corollary}
+\begin{proof}
+Firstly, in the subsequent proof a p.b. relation $R \in \mathcal{R}^2$ will be obtained  by applying Theorem \ref{thm:main} w.l.o.g. assume that $\forall (x,y) \in R \; |x|>1$. As for any polynomially balanced relation $R$, where there exists an $(x,y) \in R$ such that $x\leq 1$ it is possible to construct the relation $R':=\{( x\boxtimes , y) \mid (x,y) \in R\}$ (where $\boxtimes$ is some new character) that still is polynomially balanced, i.e. increasing the size of $x$ can not invalidate the condition for being polynomially balanced. Moreover, this construction can clearly be done in polynomial time. Moreover, using $R'$ one can just as easily reconstruct $R$. Hence, $\mathcal{L}(R')$ will live at the same level of the polynomial hierarchy as $\mathcal{L}(R)$.
+
+
+Secondly, the claim can be demonstrated by induction on $i$.
+
+\begin{itemize}
+\item \textbf{IH:} For a fixed $i>0$.
+
+\begin{equation*}
+\begin{split}
+L \in \phs{i} \iff & \exists R  \in  \mathcal{R}^{i+1} \; R \; p.b. \land R \; p.d. \land  \\
+&L = \{x \mid \exists y_1 \forall y_2\exists y_3\dots Q y_i  \; (x,y_1,\ldots,y_i) \in R\}
+\\
+& (i \text{ even}  \sto Q=\forall) \land (i \text{ odd}  \sto Q=\exists) 
+\end{split}
+\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+and 
+\begin{equation*}
+\begin{split}
+L \in \php{i} \iff & \exists R  \in  \mathcal{R}^{i+1} \; R \; p.b. \land R \; p.d. \land  \\
+&L = \{x \mid \forall y_1 \exists y_2\forall y_3\dots Q y_i  \; (x,y_1,\ldots,y_i) \in R\} \land \\
+& (i \text{ even}  \sto Q=\exists) \land (i \text{ odd}  \sto Q=\forall) 
+\end{split}
+\end{equation*}
+%where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd. 
+
+
+\item \textbf{IB:} For $i=1$.
+Firstly, starting from $L \in \phs{1}$, by Theorem \ref{thm:main}, on obtains
+\begin{equation*}
+\begin{split}
+L \in \phs{1} \iff \exists R \in \mathcal{R}^{2} \; R \; p.b.  \land \mathcal{L}(R) \in \php{0} \land L = \{x \mid \exists y \; (x,y) \in R\}
+\end{split}
+\end{equation*}
+Since, $\php{0}=\Ptime$ this is equivalent to
+\begin{equation*}
+\begin{split}
+L \in \phs{1} \iff  \exists R \in \mathcal{R}^{2} \; R \; p.b.  \land \mathcal{L}(R) \in \Ptime \land L = \{x \mid \exists y \; (x,y) \in R\}
+\end{split}
+\end{equation*}
+By Lemma \ref{lem:lang-rel}, since $\mathcal{L}(R) \in \Ptime$, it follows that $(x,y) \in R$  can be decided in polynomial time. Hence, the previous equality is equivalent to 
+\begin{equation*}
+\begin{split}
+L \in \phs{1} \iff  \exists R \in \mathcal{R}^{2} \; R \; p.b.  \land R \; p.d. \land L = \{x \mid \exists y \; (x,y) \in R\}
+\end{split}
+\end{equation*}
+which is precisely what was desired.
+
+
+Secondly, starting from $L \in \php{1}$ this is done completely in analogue. That is, by Theorem \ref{thm:main}, on obtains
+\begin{equation*}
+\begin{split}
+L \in \php{1} \iff \exists R \in \mathcal{R}^{2} \; R \; p.b.  \land \mathcal{L}(R) \in \phs{0} \land L = \{x \mid \forall  y \; (x,y) \in R\}
+\end{split}
+\end{equation*}
+Since, $\phs{0}=\Ptime$ this is equivalent to
+\begin{equation*}
+\begin{split}
+L \in \php{1} \iff  \exists R \in \mathcal{R}^{2} \; R \; p.b.  \land \mathcal{L}(R) \in \Ptime \land L = \{x \mid \forall y \; (x,y) \in R\}
+\end{split}
+\end{equation*}
+By Lemma \ref{lem:lang-rel}, since $\mathcal{L}(R) \in \Ptime$, it follows that $(x,y) \in R$  can be decided in polynomial time. Hence, the previous equality is equivalent to 
+\begin{equation*}
+\begin{split}
+L \in \php{1} \iff  \exists R \in \mathcal{R}^{2} \; R \; p.b.  \land R \; p.d. \land L = \{x \mid \forall y \; (x,y) \in R\}
+\end{split}
+\end{equation*}
+which is precisely what was desired.
+
+
+\item \textbf{IS:} Let $i=n+1$. Observe the following
+\begin{equation*}
+\begin{split}
+&L \in \phs{n+1}\\
+\stackrel{\text{(i)}}{\iff}& \exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land \mathcal{L}(R_2) \in \php{n} \land L = \{x \mid \exists y \; (x,y) \in R_2\} \\
+\stackrel{\text{(ii)}}{\iff} &\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\}  \land \\
+& L = \{x \mid \exists y \; (x,y) \in R_2\}  \land \\
+&  (n \text{ even}  \sto Q=\exists )\land (n \text{ odd}  \sto Q=\forall )\\
+\stackrel{\text{(iii)}}{\iff} &\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+& L = \{x \mid \exists y \; (x,y) \in R_2\} \land  \\ 
+&  (n \text{ even}  \sto Q=\exists )\land (n \text{ odd}  \sto Q=\forall )\\
+\stackrel{\text{(iv)}}{\iff} &\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&R_2 = \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land\\ 
+& L = \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \land  \\ 
+&  (n \text{ even}  \sto Q=\exists )\land (n \text{ odd}  \sto Q=\forall )\\
+\stackrel{\text{(v)}}{\iff} & \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\} \land  \\ 
+&  (n \text{ even}  \sto Q=\exists )\land (n \text{ odd}  \sto Q=\forall )\\
+\stackrel{\text{(vi)}}{\iff} & \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \exists y \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\land  \\ 
+&  (n \text{ even}  \sto Q=\exists )\land (n \text{ odd}  \sto Q=\forall )\\
+\stackrel{\text{(vii)}}{\iff} & \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \exists y_1 \forall y_2 \exists y_3 \dots Q y_{n+1}  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+&  (n+1 \text{ even}  \sto Q=\forall) \land (n+1 \text{ odd}  \sto Q=\exists) \\
+\end{split}
+\end{equation*}
+\end{itemize}
+
+\begin{enumerate}
+\item[(i)] Here Theorem \ref{thm:main} was applied.
+\item[(ii)] Here the \textbf{IH} was applied, i.e. 
+\begin{equation*}
+\begin{split}
+\mathcal{L}(R_2) \in \php{n} \iff& \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} \land  \\
+ & (n \text{ even}  \sto Q=\exists) \land (n \text{ odd}  \sto Q=\forall )
+\end{split}
+\end{equation*}
+
+
+\item[(iii)] Firstly, $\Rightarrow$. Starting from 
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} 
+\end{split}
+\end{equation*}
+Taking the relation $R_{n+1}$ one can construct the relation $R_{n+2} \in \mathcal{R}^{n+2}$ such that 
+ \begin{equation*}
+\begin{split}
+ R_{n+2}=\{ (x,y,y_1,\ldots,y_n) \mid (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} 
+\end{split}
+\end{equation*}
+To do so one merely has to split the first entry in $(x\#y,y_1,\ldots,y_n) \in R_{n+1}$ into two, which can be done in polynomial time (similar argument as in Lemma \ref{lem:lang-rel}). Moreover, by construction it clearly holds that
+ \begin{equation*}
+\begin{split}
+ (x,y,y_1,\ldots,y_n) \in R_{n+2} \iff  (x\#y,y_1,\ldots,y_n) \in R_{n+1}
+\end{split}
+\end{equation*}
+Since by assumption $R_2$ is polynomially balanced it follows that there exists a $k$ such that for any $(x,y) \in R_{2}$ one has $|y| \leq |x|^k$. Furthermore, it is known that $R_{n+1}$ is p.b., thus there exists a $k'$ such that for any $1 \leq i \leq n$ one has $|y_i| \leq |x\#y|^{k'}\leq |x| +1 +|x|^k$. By assumption, i.e. $|x|>1$, it follows that there exists a $k^* \geq k$ such that $|y_i| \leq |x|^{k*}$ and $|y| \leq |x|^{k*}$. Hence, $R_{n+2}$ is polynomially balanced. 
+Additionally, one knows that $R_{n+1}$ is p.d., thus $R_{n+2}$ can be decided by concatenating the first two entries and querying $R_{n+1}$. Both operations can be done in polynomial time, thus $R_{n+2}$ is p.d..
+Hence, one obtains 
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+
+\medskip
+
+Secondly, $\Leftarrow$.  This argument is essentially the same as the previous one, but in reverse (and with slight alterations in the complexity arguments). That is, starting from
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+Taking the relation $R_{n+2}$ one can construct the relation $R_{n+1} \in \mathcal{R}^{n+1}$ such that 
+ \begin{equation*}
+\begin{split}
+ R_{n+1}=\{ (x\#y,y_1,\ldots,y_n) \mid (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+To do so one merely has to concatenate the first two entries in $(x,y,y_1,\ldots,y_n) \in R_{n+1}$ using the separator $\#$, which can be done in polynomial time (similar argument as in Lemma \ref{lem:lang-rel}). Moreover, it clearly holds that
+ \begin{equation*}
+\begin{split}
+(x\#y,y_1,\ldots,y_n) \in R_{n+1} \iff   (x,y,y_1,\ldots,y_n) \in R_{n+2} 
+\end{split}
+\end{equation*}
+It is known that $R_{n+2}$ is p.b., thus there exists a $k$ such that for $1 \leq i \leq n$, $|y_i| \leq |x|^k$ and $|y| \leq |x|^k$. Now since $|x| <|x\#y|$ it must be that $R_{n+1}$ is p.b. as well.
+Additionally, one knows that $R_{n+2}$ is p.d., thus $R_{n+1}$ can be decided by splitting the first entry on $\#$ and querying $R_{n+2}$. Both operations can be done in polynomial time, thus $R_{n+1}$ is p.d..
+Hence, one obtains 
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} 
+\end{split}
+\end{equation*}
+
+
+\item[(iv)] This equality is guaranteed by the following. Take an arbitrary relation $R$. Clearly, $(x,y) \in R \iff x\#y \in \mathcal{L}(R)$. Hence, in this particular case one has $(x,y) \in R_2 \iff x\#y \in \mathcal{L}(R_2)$. Now starting from  
+\begin{equation*}
+\begin{split}
+\mathcal{L}(R_2) &= \{x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+L &= \{x \mid \exists y \; (x,y) \in R_2\}  \\ 
+\end{split}
+\end{equation*}
+due to 
+ \begin{equation*}
+\begin{split}
+(\alpha,\beta) \in R_2 &\iff \alpha\#\beta \in\mathcal{L}(R_2) \\
+&\iff \alpha\#\beta \in \{ x\#y \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \\
+&\iff (\alpha,\beta) \in \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+one obtains the equivalent statement
+\begin{equation*}
+\begin{split}
+R_2 &= \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+L &= \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+%$\exists R \in \mathcal{R}^n \{x\#y \mid  \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\}$
+
+
+
+\item[(v)] Firstly, $\Rightarrow$. Starting from 
+
+\begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&R_2 = \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land\\ 
+& L = \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+one can simply use weakening to obtain the part of the statement, where $R_2$ does not occur. 
+\begin{equation*}
+\begin{split}
+& \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+Thereby, eradicating all references of $R_2$. 
+
+\medskip
+Secondly, $\Leftarrow$. Starting from 
+\begin{equation*}
+\begin{split}
+& \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+One can define the relation $R_2:=\{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} $.
+Since it is known that $R_{n+2}$ is p.b. this implies that there exists a $k$ such that $|y| \leq |x|^k$, thus implying that $R_2$ is p.b..
+Allowing one to conclude that
+\begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&R_2 = \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land\\ 
+& L = \{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+
+\item[(vi)] Starting from $\{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}$. Notice that 
+\begin{equation*}
+\begin{split}
+ &(\alpha, \beta) \in \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} \\ 
+ &\iff \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (\alpha, \beta,y_1,\ldots,y_n) \in R_{n+2}
+\end{split}
+\end{equation*}
+From this it follows that 
+\begin{equation*}
+\begin{split}
+ &\exists y \; (\alpha,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} \\ 
+ &\iff \exists y \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (\alpha, y,y_1,\ldots,y_n) \in R_{n+2}
+\end{split}
+\end{equation*}
+and therefore
+\begin{equation*}
+\begin{split}
+ &\{x \mid \exists y \; (x,y) \in  \{(x,y) \mid \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}\\ 
+ &= \{x \mid \exists y \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}
+\end{split}
+\end{equation*}
+
+
+\item[(vii)] This particular renaming of bound variables is clearly an equivalence transformation. Hence, 
+\begin{equation*}
+\begin{split}
+n \text{ even}  \sto Q=\exists \land n \text{ odd}  \sto Q=\forall  \iff  n+1 \text{ even}  \sto Q=\forall \land n+1 \text{ odd}  \sto Q=\exists 
+\end{split}
+\end{equation*}
+remains to be established. However, this follows directly from the fact that $n$ is even if and only if $n+1$ is odd. That is, 
+if $n$ was even, one has $Q=\exists$. However, this implies that for $Q=\exists$ for $n+1$ being odd and if $n+1$ is odd then $Q=\exists$, meaning that $Q=\exists$ for $n$ is even.
+Analogous for the other case.
+\end{enumerate}
+\bigskip
+The other case, i.e. for $L \in \php{n+1}$ is done completely analogously (see Appendix).
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%
+%
+%
+%
+%To do so it suffices to prove Lemma XX and Lemma YY.
+%
+%\begin{lemma}
+%\label{lem:sig}
+%There exists a  a polynomially balanced relation $R$ with $\{x\# y \mid (x,y) \in R\}$ is in $\php{i-1}$, if and only if there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \; |y| \leq |x|^k \land  (x,y) \in R\} = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\end{lemma}
+%
+%%
+%
+%\begin{definition}
+%Let $R$ be a 2-ary relation, then $\mathcal{L}(R):= \{x\# y \mid (x,y) \in R\}$.
+%\end{definition}
+%
+%
+%\begin{remark}
+%As proposed in the slides. It is possible to omit the condition $|y| \leq |x|^k$,  due to fact that $R$ is a polynomially balanced relation.
+%\end{remark}
+%
+%\begin{lemma}
+%\label{lem:to}
+%For all $i>0$.
+%\begin{itemize}
+%\item If $R$ is a polynomially balanced relation such that the language $\{x\# y \mid (x,y) \in R\}$ is in $\php{i-1}$, then there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;   (x,y) \in R\} = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\item If $R$ is a polynomially balanced relation such that the language $\{x\# y \mid (x,y) \in R\}$ is in $\phs{i-1}$, then there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \forall y \;   (x,y) \in R\} = \{x \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd.
+%\end{itemize}
+%\end{lemma}
+%
+%\begin{proof}
+%\begin{itemize}
+%\item \textbf{IH:} For $i>0$.
+%\begin{itemize}
+%\item If $R$ is a polynomially balanced relation such that the language $\{x\# y \mid (x,y) \in R\}$ is in $\php{i-1}$, then there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;   (x,y) \in R\} = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\item If $R$ is a polynomially balanced relation such that the language $\{x\# y \mid (x,y) \in R\}$ is in $\phs{i-1}$, then there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \forall y \;   (x,y) \in R\} = \{x \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd.
+%\end{itemize}
+%
+%\item \textbf{IB:}
+%\begin{itemize}
+%\item 
+%Let $i=1$. Assume that one has $R$ polynomially balanced such that $\mathcal{L}(R) \in \php{0}$. Since $\php{0}=\Ptime$ it follows that $R$ is not only polynomially balanced, but also polynomially decidable. Finally, with $R$ being 2-ary, it follows that $R$ is the desired $R'$ and since $R'=R$ it is clearly the case that
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;  (x,y) \in R\} = \{x \mid \exists y_1  \;  (x,y_1) \in R'\}
+%\end{split}
+%\end{equation*}
+%\item  Let $i=1$. Assume that one has $R$ polynomially balanced such that $\mathcal{L}(R) \in \phs{0}$. Since $\phs{0}=\Ptime$ it follows that $R$ is not only polynomially balanced, but also polynomially decidable. Finally, with $R$ being 2-ary, it follows that $R$ is the desired $R'$ and since $R'=R$ it is clearly the case that
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \forall y \;  (x,y) \in R\} = \{x \mid \forall y_1  \;  (x,y_1) \in R'\}
+%\end{split}
+%\end{equation*}
+%\end{itemize}
+%
+%
+%\item \textbf{IS:} 
+%Firstly, w.l.o.g. assume that $x>1$. As for any polynomially balanced relation $R$, where there exists an $(x,y) \in R$ such that $x\leq 1$ it is possible to construct the relation $R':=\{( x\boxtimes , y) \mid (x,y) \in R\}$ that still is polynomially balanced, i.e. by increasing the size of $x$ can not invalidate the condition for being polynomially balanced. Moreover, this construction can clearly be done in polynomial time. 
+%Secondly, the actual claim can be demonstrated by induction on $i$.
+%
+%\bigskip
+%
+%Let $i=n+1$. Consider a polynomially balanced (p.b.) relation $R$ such that $\mathcal{L}(R) \in \php{n}$.  By Theorem \ref{thm:main}, it follows that there exists a p.b. relation $R_{\Pi}$ with $\mathcal{L}(R_{\Pi}) \in \phs{n-1}$ such that 
+%\begin{equation*}
+%\begin{split}
+%\mathcal{L}(R)=\{x_R\#y_{\Pi} \mid (x_R,y_{\Pi}) \in R\}=\{ x_R\#y_{\Pi} \mid \forall y_{\Sigma} \; ( x_R\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}\}
+%\end{split}
+%\end{equation*}
+%By \textbf{IH}, it follows that there exists a polynomially balanced, polynomially decidable, $n$-ary relation $R_*^{n}$ such that
+% \begin{equation*}
+%\begin{split}
+%&\{ x_R\#y_{\Pi} \mid \forall y_{\Sigma} \; ( x_R\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}\} \\
+%&=\{x_R\#y_{\Pi} \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R\#y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\exists$ if $n-1$ is even and $\forall$ if $n-1$ is odd. Hence, $Q$ is $\forall$ if $n$ is even and $\exists$ if $n$ is even.
+%By equality, one obtains 
+% \begin{equation*}
+%\begin{split}
+%&\mathcal{L}(R)=\{x_R\#y_{\Pi} \mid (x_R,y_{\Pi}) \in R\}= \\
+%&=\{x_R\#y_{\Pi} \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R\#y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%Using $R_*^{n}$ one can construct the relation 
+% \begin{equation*}
+%\begin{split}
+%R_*^{n+1}:=\{ (x_R,y_{\Pi},y_1,\ldots,y_{n-2} ) \mid (x_R\#y_{\Pi},y_1,\ldots,y_{n-2} ) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%Clearly, by construction 
+% \begin{equation*}
+%\begin{split}
+%\mathcal{L}(R) &= \{x_R\#y_{\Pi} \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R\#y_{\Pi},y_1,\ldots,y_{n-1}) \in  R_*^{n}\} \\
+%&= \{x_R\#y_{\Pi} \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R,y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n+1}\} 
+%\end{split}
+%\end{equation*}
+%Now since $(x,y) \in R \iff x\#y \in \mathcal{L}(R)$ it follows
+% \begin{equation*}
+%\begin{split}
+%(x,y) \in R &\iff (x,y) \in \{(x_R,y_{\Pi} )\mid \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R,y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n+1}\}  \\
+%&\iff \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x,y,y_1,\ldots,y_{n-1})   \in R_*^{n+1}
+%\end{split}
+%\end{equation*}
+%From there it follows that 
+%\begin{equation*}
+%\begin{split}
+% \{x_R& \mid \exists y_{\Pi} \;   (x_R,y_{\Pi}) \in R\} = \\
+% &= \{x_R \mid \exists y_{\Pi} \;   (x,y) \in \{(x_R,y_{\Pi} )\mid \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R,y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n+1}\} \}     \\
+% &= \{x_R \mid \exists y_{\Pi} \forall y_1 \exists y_2\forall y_3\cdots Q y_{n-1 }\;  (x_R,y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n+1}\}  \\
+% &= \{x_R \mid \exists y_{1} \forall y_2 \exists y_3 \cdots Q y_{n }\;  (x_R,y_{1},y_1,\ldots,y_{n-1}) \in R_*^{n+1}\}  
+%\end{split}
+%\end{equation*}
+%Now, by \textbf{IH}, it follows that $Q$ is $\forall$ if $n$ is even and $\exists$ if $n$ is odd. 
+%
+%
+%Lastly, it has to be established that $R_*^{n+1}$ is both polynomially balanced and polynomially decidable.
+%It is known that $\mathcal{R}_*^{n}$ is both polynomially balanced and polynomially decidable.
+%By constriction, one knows that 
+%\begin{equation*}
+%\begin{split}
+%R_*^{n+1}=\{(x_R,y_{\Pi},y_1,\ldots,y_{n-1})  \mid  (x_R\#y_{\Pi},y_1,\ldots,y_{n-1}) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%Hence, $R_*^{n}$ is clearly polynomially decidable, because to solve $(x,y_1,\ldots,y_{n}) \in R_*^{n}$ it suffices to concatenate $x$ and $y_1$ and query $R_*^{n}$, which by \textbf{IH} can be done in polynomial time. 
+%
+%
+%Moving on towards establishing that $R_*^{n+1}$ is polynomially balanced. Firstly, observe that by assumption $R$ is polynomially balanced. Meaning that there exists a $k_R\in \mathbb{N}$ such that for all $(x_R,y_{\Pi}) \in R$ one knows 
+%$|y_{\Pi}|\leq |x_R|^{k_R}$. By \textbf{IH}, one knows that $R_*^{n}$ is p.b., thus it follows that for $i \in \{1,\dots, n-1\}$ one has $|y_i |\leq |x_R\#y_{\Pi}|^{k_{\Pi}}$. Again, it is known that $|x_R\#y_{\Pi}| \leq  |x_R| +1 + |x_R|^{k_{R}}$, thus by
+% assumption one knows that $x>1$ hence it follows that there must exists a $k_*$ such that for $i \in \{1,\dots, n-1\}$ one has $|y_i |\leq |x_R|^{k_*}$. Hence, it follows that $|y_1|,\dots ,|y_{n-2}|, |y_{\Pi}|\leq  |x_R|^{k_*}$, thus it follows that $R_*^{n+1}$ is polynomially balanced. Thereby, establishing the claim.
+%\end{itemize}
+%
+%\bigskip
+%
+%The other case is done in analogue. !!!!!!!!!!!!!!!!!!!!!!
+%\end{proof}
+%
+%
+%
+%
+%
+%
+%\begin{lemma}
+%\label{lem:to}
+%For all $i>0$. If $R$ is a polynomially balanced, polynomial-time decidable $(i+1)$-ary relation. Then there exists a polynomially balanced relation 
+%\begin{itemize}
+%\item $R_{\Pi}$ such that $\mathcal{L}(R_{\Pi}) \in \php{i-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R\}
+% =\{x \mid \exists y \;  (x,y) \in R_{\Pi}\} 
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\item $R_{\Sigma}$ such that $\mathcal{L}(R_{\Sigma}) \in \phs{i-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R\}
+% =\{x \mid \exists y  (x,y) \in R_{\Sigma}\} 
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd.
+%\end{itemize}
+%\end{lemma}
+%
+%\begin{proof}
+%Proof by induction over $i$.
+%\begin{itemize}
+%\item \textbf{IH:} For $i>0$. If $R$ is a polynomially balanced, polynomial-time decidable $(i+1)$-ary relation. Then there exists a polynomially balanced relation 
+%\begin{itemize}
+%\item $R_{\Pi}$ such that $\mathcal{L}(R_{\Pi}) \in \php{i-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R\}
+% =\{x \mid \exists y \;  (x,y) \in R_{\Pi}\} 
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\item $R_{\Sigma}$ such that $\mathcal{L}(R_{\Sigma}) \in \phs{i-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x \mid \forall y_1 \exists y_2\forall y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R\}
+% =\{x \mid \exists y  (x,y) \in R_{\Sigma}\} 
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\exists$ if $i$ is even and $\forall$ if $i$ is odd.
+%\end{itemize}
+%
+%\item \textbf{IB:(MISSING)}
+%\begin{itemize}
+%\item 
+%Let $i=1$. Assume that one has $R$ polynomially balanced such that $\mathcal{L}(R) \in \php{0}$. Since $\php{0}=\Ptime$ it follows that $R$ is not only polynomially balanced, but also polynomially decidable. Finally, with $R$ being 2-ary, it follows that $R$ is the desired $R'$ and since $R'=R$ it is clearly the case that
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;  (x,y) \in R\} = \{x \mid \exists y_1  \;  (x,y_1) \in R'\}
+%\end{split}
+%\end{equation*}
+%\item  Let $i=1$. Assume that one has $R$ polynomially balanced such that $\mathcal{L}(R) \in \phs{0}$. Since $\phs{0}=\Ptime$ it follows that $R$ is not only polynomially balanced, but also polynomially decidable. Finally, with $R$ being 2-ary, it follows that $R$ is the desired $R'$ and since $R'=R$ it is clearly the case that
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \forall y \;  (x,y) \in R\} = \{x \mid \forall y_1  \;  (x,y_1) \in R'\}
+%\end{split}
+%\end{equation*}
+%\end{itemize}
+%
+%
+%\item \textbf{IS:} 
+%Let $i=n+1$. Assume that there exists the polynomially decidable, polynomially balanced, $n+1$-ary relation $R$. 
+%To that end let $R^{n}$ be defined as
+%\begin{equation*}
+%R^n := \{(x\#y , y_1, \dots, y_{n-1}) \mid (x,y,y_1,\dots y_{n-1}) \in R\}
+%\end{equation*} 
+%Clearly, this relation can be decided in polynomial-time. Moreover, since $x < x\#y$, $R^n$ must be polynomially balanced.
+%Hence, by \textbf{IH}, it follows that there exists a polynomially balanced relation 
+%$R_{\Pi}$ such that $\mathcal{L}(R_{\Pi}) \in \php{n-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x_R\#y_{\Pi} \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x_R\#y_{\Pi},y_1,\ldots,y_{n-1}) \in R^n\}
+% =\{x_R\#y_{\Pi} \mid \exists y_{\Pi} \;  (x_R\#y,y_{\Pi}) \in R_{\Pi}\} 
+%\end{split}
+%\end{equation*}
+%Due to $(x,y) \in R \iff x\#y \in \mathcal{L}(R)$ it follows that
+%\begin{equation*}
+%\begin{split}
+%\{(x_R,y_{\Pi})\mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x_R\#y_{\Pi},y_1,\ldots,y_{n-1}) \in R^n\}
+% =\{(x_R,y_{\Pi}) \mid \exists y_{\Pi} \;  (x_R\#y,y_{\Pi}) \in R_{\Pi}\} 
+%\end{split}
+%\end{equation*}
+%This implies that 
+%\begin{equation*}
+%\begin{split}
+%&\{x_R \mid \forall y_{\Pi} \exists y_1\forall y_3\cdots Q y_n \;  (x,y_{\Pi},\dots,y_n) \in R^{n+1}\} \\
+%& =\{x_R \mid \forall y_{\Pi} \exists y_1\forall y_3\cdots Q y_n \;  (x\#y_{\Pi},\dots,y_n) \in R^{n}\}
+%\end{split}
+%\end{equation*}
+%Moreover, one can construct the relation $R_2^{n}$ 
+%\begin{equation*}
+%\begin{split}
+%R_2^{n}:=\{x_R\#y_{\Pi}  \mid \forall y_{\Pi} \exists y_1\forall y_3\cdots Q y_n \;  (x_R\#y_{\Pi},\dots,y_n) \in R^{n}\}
+%\end{split}
+%\end{equation*}
+%Hence, one knows that 
+%\begin{equation*}
+%\begin{split}
+%(x,y) \in R_2^{n} \iff  \forall y_{\Pi} \exists y_1\forall y_3\cdots Q y_n \;  (x\#y,\dots,y_n) \in R^{n}
+%\end{split}
+%\end{equation*}
+%Moreover, 
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%
+%
+%
+%
+%
+%\end{itemize}
+%\end{proof}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newpage
+%
+%\begin{lemma}
+%\label{lem:sig-to}
+%For all $i>0$, if $R$ is a polynomially balanced relation such that the language $\{x\# y \mid (x,y) \in R\}$ is in $\php{i-1}$, then there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;   (x,y) \in R\} = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\end{lemma}
+%\begin{proof}
+%Firstly, w.l.o.g. assume that $x>1$. As for any polynomially balanced relation $R$, where there exists an $(x,y) \in R$ such that $x\leq 1$ it is possible to construct the relation $R':=\{( x\boxtimes , y) \mid (x,y) \in R\}$ that still is polynomially balanced, i.e. by increasing the size of $x$ can not invalidate the condition for being polynomially balanced. Moreover, this construction can clearly be done in polynomial time. 
+%Secondly, the actual claim can be demonstrated by induction on $i$.
+%\begin{itemize}
+%\item \textbf{IH:} For an $i>0$, if $R$ is a polynomially balanced relation with $\mathcal{L}(R)\in \php{i-1}$, then there exists a polynomially balanced, polynomial-time decidable $(i+1)$-ary
+%relation $R'$ such that 
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;  (x,y) \in R\} = \{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R'\}
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%
+%\item \textbf{IB:} 
+%Let $i=1$. Assume that one has $R$ polynomially balanced such that $\mathcal{L}(R) \in \php{0}$. Since $\php{0}=\Ptime$ it follows that $R$ is not only polynomially balanced, but also polynomially decidable. Finally, with $R$ being 2-ary, it follows that $R$ is the desired $R'$ and since $R'=R$ it is clearly the case that
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;  (x,y) \in R\} = \{x \mid \exists y_1  \;  (x,y_1) \in R'\}
+%\end{split}
+%\end{equation*}
+%
+%
+%\item \textbf{IS:} 
+%Let $i=n+1$. Consider a polynomially balanced (p.b.) relation $R$ such that $\mathcal{L}(R) \in \php{n}$.  By Theorem \ref{thm:main}, it follows that there exists a p.b. relation $R_{\Pi}$ with $\mathcal{L}(R_{\Pi}) \in \phs{n-1}$ such that 
+%\begin{equation*}
+%\begin{split}
+%\mathcal{L}(R)=\{x_R\#y_{\Pi} \mid (x_R,y_{\Pi}) \in R\}=\{ x_R\#y_{\Pi} \mid \forall y_{\Sigma} \; ( x_R\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}\}
+%\end{split}
+%\end{equation*}
+%By Theorem \ref{thm:main} one knows that there exists a p.b. relation $R_{\Sigma}$ with $\mathcal{L}(R_{\Sigma}) \in \php{n-2}$ such that 
+%\begin{equation*}
+%\begin{split}
+%\mathcal{L}(R_{\Pi})=\{x\#y_{\Pi}\#y_{\Sigma} \mid (x\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}\}=
+%\{ x_R\#y_{\Pi}\#y_{\Sigma}  \mid \exists y \; (x_R\#y_{\Pi}\#y_{\Sigma} ,y) \in R_{\Sigma}\}
+%\end{split}
+%\end{equation*}
+%Now, by applying the \textbf{IH} it is guaranteed that there exists a polynomially balanced, polynomially decidable, $n-1$-ary relation $R_*^{n-1}$ such that
+% \begin{equation*}
+%\begin{split}
+%&\{ x_R\#y_{\Pi}\#y_{\Sigma}  \mid \exists y \; (x_R\#y_{\Pi}\#y_{\Sigma} ,y) \in R_{\Sigma}\}  \\
+%&=\{x_R\#y_{\Pi}\#y_{\Sigma} \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x_R\#y_{\Pi}\#y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}
+%\end{split}
+%\end{equation*}
+%Notice that $Q$ is $\forall$ if $n-2$ is even, and $\exists$ is it is odd.
+%By simple equality one obtains 
+%\begin{equation*}
+%\begin{split}
+%\mathcal{L}(R_{\Pi})&=\{x_R\#y_{\Pi}\#y_{\Sigma} \mid (x_R\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}\}\\
+%%\{ \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x,y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}\\
+%&=\{x_R\#y_{\Pi}\#y_{\Sigma} \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x_R\#y_{\Pi}\#y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}\\
+%\end{split}
+%\end{equation*}
+%From there let $R_*^{n}$ be defined as 
+%\begin{equation*}
+%\begin{split}
+%R_*^{n}&:=\{(x\#y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2})  \mid  (x\#y_{\Pi}\#y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}
+%\end{split}
+%\end{equation*}
+%Since $(x,y) \in R_{\Pi} \iff x\#y  \in \mathcal{L}(R_{\Pi}) $, it follows that  
+%\small
+%\begin{equation*}
+%\begin{split}
+%(x,y) \in R_{\Pi}& \iff  x\#y \in \{x_R\#y_{\Pi}\#y_{\Sigma}\mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x_R\#y_{\Pi}\#y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}\\
+%& \iff  (x,y) \in \{(x_R\#y_{\Pi},y_{\Sigma}) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x_R\#y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%\normalsize
+%%Using this one can define $R_{\Pi}':=\{ (x,y) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x\#y,y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}$ such that 
+%%\begin{equation*}
+%%\begin{split}
+%%(x,y) \in R_{\Pi} \iff  (x,y) \in R_{\Pi}'
+%%\end{split}
+%%\end{equation*}
+%From this one obtains that 
+%\small
+%\begin{equation*}
+%\begin{split}
+%&\mathcal{L}(R)=\\
+%&=\{x_R\#y_{\Pi} \mid (x_R,y_{\Pi}) \in R\}=\{ x_R\#y_{\Pi} \mid \forall y_{\Sigma} \; (x_R\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}\} \\
+%&=\{ x_R\#y_{\Pi}  \mid \forall y_{\Sigma} \; (x_R\#y_{\Pi},y_{\Sigma}) \in  \{(x_R\#y_{\Pi},y_{\Sigma}) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x\#y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n}\} \\
+%&\stackrel{(1)}{=}\{  x_R\#y_{\Pi} \mid \forall y_{\Sigma} \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x_R\#y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n}\} 
+%%&= \{ x\#y \mid \forall y_0 \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-2 }\;  (x\#y,y_0,y_1,\ldots,y_{n-2}) \in R_*^{n}\} 
+%\end{split}
+%\end{equation*}
+%\normalsize
+%As before, let $R_*^{n+1}$ be the relation 
+%\begin{equation*}
+%\begin{split}
+%R_*^{n+1}&:=\{(x_R,y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2})  \mid  (x_R\#y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%Since $(x,y) \in R \iff x\#y  \in \mathcal{L}(R) $, it follows that  
+%\begin{equation*}
+%\begin{split}
+%(x,y) \in R& \iff  x\#y \in \{x_R\#y_{\Pi} \mid\forall y_{\Sigma} \exists y_1 \forall y_2 \cdots Q y_{n-2 }\;  (x_R\#y_{\Pi},y_{\Sigma},\ldots,y_{n-2}) \in R_*^{n}\}\\
+%& \iff  (x,y) \in \{(x_R,y_{\Pi}) \mid \forall y_0 \exists y_1\forall y_2\cdots Q y_{n-2 }\;  (x_R,y_{\Pi},y_{\Sigma},\ldots,y_{n-2}) \in R_*^{n+1}\}
+%\end{split}
+%\end{equation*}
+%Therefore, one obtains 
+%\begin{equation*}
+%\begin{split}
+% &\{x_R \mid \exists y_{\Pi} \;  (x_R,y_{\Pi}) \in R\} =\\
+% &= \{x_R \mid \exists y_{\Pi} \; (x_R,y_{\Pi}) \in \{(x_R,y_{\Pi}) \mid \forall y_{\Sigma} \exists y_1\forall y_2\cdots Q y_{n-2 }\;  ((x_R,y_{\Pi}, y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n+1}\}\} \\
+% &\stackrel{(1)}{=} \{x_R \mid \exists y_{\Pi}  \forall y_{\Sigma} \exists y_1\forall y_2\cdots Q y_{n-2 }\;  (x_R,y_{\Pi}, y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n+1}\}\\
+% &=  \{x \mid \exists y_1  \forall y_2 \cdots Q y_{n }\;  (x,y_1,\ldots,y_{n}) \in R_*^{n+1}\}
+%\end{split}
+%\end{equation*}
+%Observe, that if $n-2$ is even if and only if $n$ is even. Hence, the $Q$ is the appropriate quantifier.
+%Lastly, it has to be established that $R_*^{n+1}$ is both polynomially balanced and polynomially decidable.
+%It is known that $\mathcal{R}_*^{n-1}$ is both polynomially balanced and polynomially decidable.
+%By constriction, one knows that 
+%\begin{equation*}
+%\begin{split}
+%R_*^{n}=\{(x,y,y_1,\ldots,y_{n-2})  \mid  (x\#y,y_1,\ldots,y_{n-2}) \in R_*^{n-1}\}
+%\end{split}
+%\end{equation*}
+%Hence, $R_*^{n}$ is clearly polynomially decidable, because to solve $(x,y_1,\ldots,y_{n-1}) \in R_*^{n}$ it suffices to concatenate $x$ and $y_1$ and query $R_*^{n-1}$, which by \textbf{IH} can be done in polynomial time. 
+%Analogously, by construction
+%\begin{equation*}
+%\begin{split}
+%R_*^{n+1}&:=\{(x_R,y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2})  \mid  (x_R\#y_{\Pi},y_{\Sigma},y_1,\ldots,y_{n-2}) \in R_*^{n}\}
+%\end{split}
+%\end{equation*}
+%Hence, by \textbf{IH}  and the fact that concatenation can be done in polynomial time, it follows that $R_{*}^{n+1}$ can be decided in polynomial time. 
+%
+%Moving on towards establishing that $R_*^{n+1}$ is polynomially balanced. Firstly, observe that by assumption $R$ is polynomially balanced. Meaning that there exists a $k_R\in \mathbb{N}$ such that for all $(x_R,y_{\Pi}) \in R$ one knows 
+%$|y_{\Pi}|\leq |x_R|^{k_R}$. By Theorem \ref{cor:main-sig}, it is known that for any $ ( x_R\#y_{\Pi},y_{\Sigma}) \in R_{\Pi}$ one has $|y_{\Sigma}|\leq |x_R\#y_{\Pi}|^{k_{\Pi}}$. However, since $x_R\#y_{\Pi} \in \mathcal{L}(R)$ and since $|y_{\Pi}|\leq |x_R|^{k_R}$ follows that $|x_R\#y_{\Pi}| \leq |x_R| +|x_R|^{k_R} + 1$. Now by assumption, i.e. $x>1$, there must be a $k_R'$
+%such that $|x_R\#y_{\Pi}| \leq | x_R|^{k_R'}$. Hence, it follows that $|y_{\Sigma}|\leq (|x_R|^{k_r'})^{k_{\Pi}'}= |x_R|^{k_r' +k_{\Pi} }=|x_R|^{k_{\Pi} '}$. Now by, \textbf{IH}, one knows that $R_*^{n-1}$ is p.b., thus it follows that for $i \in \{1,\dots, n-2\}$ one has $|y_i |\leq |x_R\#y_{\Pi}\#y_{\Pi}|^{k_{\Pi}}$. Again it is known that $|x_R\#y_{\Pi}\#y_{\Pi}| \leq |x_R|^{k_{R}} + |x_R|^{k_{\Pi} '} \leq |x_R|^{2*k_{\Pi} '}= |x_R|^{k_*}$. Hence, it follows that $|y_1|,\dots ,|y_{n-2}|,|y_{\Sigma}| , |y_{\Pi}|\leq  |x_R|^{k_*}$, thus it follows that $R_*^{n+1}$ is polynomially balanced. Thereby, establishing the claim.
+%
+%
+%
+%%Moreover, with respect to polynomially balanced, as  $R_*^{n-1}$ is polynomially balanced it follows for $(x\#y,y_1,\ldots,y_{n-2})$ and an $1 \leq i \leq n-2$ one has $|y_i| \leq (|x|+|y|)^k$ for some $k>0$.
+%
+%%
+%%Let $i=n+1$. Assume that one has the polynomially balanced relation $R$ such that $\mathcal{L}(R) \in \php{n}$. By Theorem \ref{thm:main} this implies that there exists a polynomially balanced relation $R_{L}^{n-1}$ such that $\mathcal{L}(R_{L}^{n-1}) \in \phs{n-1}$ and that
+%%\begin{equation*}
+%%\begin{split}
+%%\mathcal{L}(R)=\{x\# y \mid (x,y) \in R\}=\{x \mid \forall y \;  (x,y) \in R_{L}^{n-1}\}
+%%\end{split}
+%%\end{equation*}
+%%Now by \textbf{IH}, it follows that there exists an $n$-ary, polynomially balanced and polynomially decidable relation $R_{\Pi}$ such that 
+%%\begin{equation*}
+%%\begin{split}
+%%\mathcal{L}(R_{\Pi})&=  \{x\# y \mid (x,y) \in R_{\Pi}\}\\
+%%&=\{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\}\\
+%%&=\{x\#y \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\}
+%%\end{split}
+%%\end{equation*}
+%%Furthermore, let $P_{\Pi}^{n+1}$ be defined such that
+%%\begin{equation*}
+%%\begin{split}
+%%(x,y_1, \dots y_n) \in R_{\Pi}^{n+1} \iff  (x\#y_1,\ldots,y_{n}) \in R_{\Pi}^{n}
+%%\end{split}
+%%\end{equation*}
+%%Thus on obtains
+%%\begin{equation*}
+%%\begin{split}
+%%(x,y) \in R_{\Pi} &\iff (x,y) \in \{ (x,y) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\} \\
+%%&\iff  (x,y) \in \{ (x,y) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x,y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n+1}\}
+%%\end{split}
+%%\end{equation*}
+%%From this it follows that 
+%%\begin{equation*}
+%%\begin{split}
+%%\mathcal{L}(R)&=\{x \#y \mid \forall y_0 \;  (x\#y ,y_0) \in R_{\Pi}\} \\
+%%&=\{x \#y \mid \forall y_0 \;  (x\#y,y_0) \in \{ (x',y') \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x',y',y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n+1}\}\}  \\
+%%&\stackrel{(!)}{=}\{x \#y \mid \forall y_0 \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y,y_0,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n+1}\}  \\
+%%\end{split}
+%%\end{equation*}
+%%\begin{equation*}
+%%\begin{split}
+%%\mathcal{L}(R)&=\{x \mid \forall y \;  (x,y) \in \{ (x,y) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\}\} \\
+%%&= \{x \mid \forall y \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\}  \\
+%%&= \{x\#y' \mid \forall y \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y' \#y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\} 
+%%\end{split}
+%%\end{equation*}
+%%As before one can construct the following relation.
+%%
+%%Hence, 
+%%\begin{equation*}
+%%\begin{split}
+%%(x,y) \in R \iff (x,y) \in \{ (x,y) \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_{n-1} \;  (x\#y,y_1,\ldots,y_{n-1}) \in R_{\Pi}^{n}\}
+%%\end{split}
+%%\end{equation*}
+%\end{itemize}
+%\end{proof}
+%
+%
+%\begin{lemma}
+%\label{lem:sig-from}
+%Let $R$ be a polynomially balanced, polynomial-time decidable $(i+1)$-ary relation, then there exists a polynomially balanced relation $R'$ with $\{x\# y \mid (x,y) \in R'\}$ being in $\php{i-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R\}
+% =\{x \mid \exists y \; |y| \leq |x|^k \land  (x,y) \in R'\} 
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%\end{lemma}
+%\begin{proof}
+%\begin{itemize}
+%\item \textbf{IH:} For an $i>0$, if $R$ is a polynomially balanced, polynomial-time decidable $(i+1)$-ary relation, then there exists a polynomially balanced relation $R'$ with $\{x\# y \mid (x,y) \in R'\}$ being in $\php{i-1}$, such that
+%\begin{equation*}
+%\begin{split}
+%\{x \mid \exists y_1 \forall y_2\exists y_3\cdots Q y_i \;  (x,y_1,\ldots,y_i) \in R\}
+% =\{x \mid \exists y \; |y| \leq |x|^k \land  (x,y) \in R'\} 
+%\end{split}
+%\end{equation*}
+%where $Q$ is $\forall$ if $i$ is even and $\exists$ if $i$ is odd.
+%
+%
+%\item \textbf{IB:} Let $i=1$. Assume that one has $R$ polynomially balanced, polynomially decidable  such that $\mathcal{L}(R) \in \php{0}$. Since $\php{0}=\Ptime$ it follows that $R$ is not only polynomially balanced, but also polynomially decidable. Finally, with $R$ being 2-ary, it follows that $R$ is the desired $R'$ and since $R'=R$ it is clearly the case that
+%\begin{equation*}
+%\begin{split}
+% \{x \mid \exists y \;  (x,y) \in R\} = \{x \mid \exists y_1  \;  (x,y_1) \in R'\}
+%\end{split}
+%\end{equation*}
+%\item \textbf{IS:} 
+%
+%\end{itemize}
+%\end{proof}
+
+\newpage
+
+\noindent
+\begin{exercise}[5 credits]
+{\em Recall the $\phs{2}$-hardness proof of \MINSAT\ by reduction from the $\QSAT{2}$-problem: 
+%
+Let an arbitrary instance of $\QSAT{2}$ be given by the 
+QBF
+%
+$$\psi = (\exists x_1, \dots, x_k) 
+(\forall y_1, \dots, y_\ell) \phi
+$$
+%
+%
+Now let $\{x'_1, \dots, x'_k, z\}$ be fresh propositional variables.
+Then we construct an instance of 
+\MINSAT\ by the {\em variable $z$} and the {\em formula} 
+%
+%\smallskip
+$$\chi =  
+\big(\bigwedge_{i=1}^k (\neg x_i \leftrightarrow x'_i) \big)
+\wedge \big( \neg \phi \vee (y_1 \wedge \dots 
+\wedge y_\ell \wedge z)\big)
+$$
+%
+Recall from the lecture that we have already proved the following 
+implication:  \\
+$\psi$ is $\True$ (in every interpretation) $\Ra$ $z$ is $\True$ in a minimal model of $\chi$.
+
+
+\smallskip
+\noindent
+Give a rigorous proof also of the opposite direction, i.e.: \\
+$z$ is $\True$ in a minimal model of $\chi$ 
+$\Ra$ $\psi$ is $\True$ (in every interpretation).
+} % em
+\end{exercise}
+
+
+\noindent
+{\bf Hint.} Let ${\cal J}$ be 
+a minimal model of $\chi$ and let 
+$z$ be $\True$ in ${\cal J}$. 
+\begin{itemize}
+\item First show that then 
+${\cal J} (y_j) = \True$ for every $j$.
+\item
+Second, let ${\cal I}$ be the truth assignment obtained by 
+restricting ${\cal J}$ to the variables 
+$\{x_1, \dots, x_k \}$. Show that (by the minimality of ${\cal J}$)
+${\cal I}$ is indeed a 
+partial assigment on $\{x_1, \dots, x_k\}$ s.t.\ for any values assigned to $\{y_1, \dots, y_\ell\}$, the formula $\phi$ is $\True$. 
+\end{itemize}
+
+\paragraph*{Solution}
+
+Firstly, a restatement of the reduction, to unify with the notation used in the solution. 
+
+\begin{definition}
+Let $\varphi:=(\exists x_1, \dots, x_k) (\forall y_1, \dots, y_\ell) \psi$ be a $\mathbf{QBF}_{2,\exists}$-formula, then let
+\begin{equation*}
+\chi(\varphi):=\big(\bigwedge_{i=1}^k (\neg x_i \leftrightarrow x'_i) \big)
+\wedge \big( \neg \psi \vee (y_1 \wedge \dots 
+\wedge y_\ell \wedge z)\big)
+\end{equation*}
+Moreover, $\mathcal{Y}(\varphi):= \{y_1, \dots, y_\ell\}$, $\mathcal{X}(\varphi):= \{x_1, \dots, x_k\}$ and $\mathcal{X}'(\varphi):=\{x'_1, \dots, x'_k\}$. Lastly, let $\tau: \mathcal{X}(\varphi) \to \mathcal{X}'(\varphi)$ a bijection such that $x_i \mapsto \tau(x_i)=x'_i$. 
+\end{definition}
+
+\begin{remark}
+The function $\tau$ is thus merely a function that given $x\in \mathcal{X}(\varphi)$ allows one to access the corresponding $x' \in \mathcal{X}'(\varphi)$. Moreover, corresponding in this case merely means they occur in the sub-formula $\neg x_i \leftrightarrow x'_i$ of $\chi(\varphi)$. Lastly, by construction of the sub-formula $\bigwedge_{i=1}^k (\neg x_i \leftrightarrow x'_i) $ one can be sure that $\tau$ is actually bijective.
+\end{remark}
+Secondly, in this proof the notion of subset minimality is required. To wield the usual notion of subset minimality, it is necessary to conceptualise an interpretation as a set of atoms, where an atom is true under this interpretation if and only if it is part of the set. Here, a marginally different approach shall be chosen.
+
+
+\begin{definition}
+Let $\mathcal{I}$ be an interpretation over the set of atoms $A_{\mathcal{I}}$. Then $\mathfrak{S}(\mathcal{I}):=\{x \mid \forall x\in A_{\mathcal{I}} \; \mathcal{I}(x)=\True\}$. Moreover, an interpretation $\mathcal{J}$ then $\mathcal{I} \subseteq \mathcal{J}$ if and only if $\mathfrak{S}(\mathcal{I}) \subseteq \mathfrak{S}(\mathcal{J})$ and $\mathcal{I} \subset \mathcal{J}$ if and only if $\mathfrak{S}(\mathcal{I}) \subset \mathfrak{S}(\mathcal{J})$
+Moreover, $\mathcal{I}$ is a subset minimal if and only if $\nexists \mathcal{I}' \;  \mathcal{I}' \subset \mathcal{I}$.
+Similarly, $\mathcal{I}$ is a subset minimal interpretation of a formula $\varphi$ if and only if $\mathcal{I}\models \varphi \land \nexists \mathcal{I}' \;  \mathcal{I}' \subset \mathcal{I} \land \mathcal{I}'\models \varphi$.
+\end{definition}
+
+\begin{remark}
+Notice that if $\mathcal{I}$ is a subset minimal interpretation of the formula $\varphi$, then $\mathfrak{S}(\mathcal{I}) \subseteq \var(\varphi)$. That is, if there would exists an $x \in \mathfrak{S}(\mathcal{I})$ such that $x\notin \var(\varphi)$, $\mathcal{I}$ would not be subset minimal.
+\end{remark}
+
+%\begin{definition}
+%Let $\mathcal{I}$ be an interpretation over the set of atoms $A_{\mathcal{I}}$ and $\mathcal{J}$ be an interpretation over the set of atoms $A_{\mathcal{J}}$
+%Then  $\mathcal{I} \subseteq \mathcal{J}$ if and only if $A_{\mathcal{I}}\subseteq A_{\mathcal{J}}$ and $\forall a \in A_{\mathcal{I}}\; \mathcal{I}(a) \sto \mathcal{J}(a)$.
+%Furthermore, $\mathcal{I} \subset \mathcal{J}$ is as usual simply $\mathcal{I} \subseteq \mathcal{J}$ and  $\mathcal{I} \neq \mathcal{J}$.
+%Moreover, $\mathcal{I}$ is subset minimal if and only if $\nexists \mathcal{I}' \;  \mathcal{I}' \subset \mathcal{I}$.
+%\end{definition}
+
+
+Thirdly, the notion of extension is required.
+
+\begin{definition}
+Let $\mathcal{I}$ be an interpretation. Then an extension of $\mathcal{I}$ by the atoms $X$, is any interpretation $\mathcal{J}$ such that $\mathcal{I} \subseteq \mathcal{J}$ and $\forall x \in X \; \mathcal{J}(x)=\True \lor \mathcal{J}(x)=\False$.
+\end{definition}
+%The subsequent solution does not adhere to the route outlined by the hints of the exercise statement. 
+%\begin{lemma}
+%Let $\varphi:=(\exists x_1, \dots, x_k) (\forall y_1, \dots, y_\ell) \psi$ be a $\mathbf{QBF}_{2,\exists}$-formula, such that there exists a minimal model $\mathcal{J}$, where $\mathcal{J} \models z$, (i.e. $ \mathcal{J}(z)=\True$) and $\mathcal{J} \models \chi(\varphi)$. Then $\forall y \in \mathcal{Y}(\varphi) \; \mathcal{J} \models y$.
+%\end{lemma}
+%
+
+
+As suggested in the given hint, to demonstrate Lemma XX, two precursory results are demonstrated.
+
+\begin{lemma}
+\label{lem:all-y}
+Let $\varphi:=(\exists x_1, \dots, x_k) (\forall y_1, \dots, y_\ell) \psi$ be a $\mathbf{QBF}_{2,\exists}$-formula, such that there exists a minimal model $\mathcal{J}$ of $\chi(\varphi)$, where $\mathcal{J} \models z$. Then $\forall y \in \mathcal{Y}(\varphi) \; \mathcal{J} \models y$.
+\end{lemma}
+\begin{proof}
+Assume that $\mathcal{J}$ exists, thus it is known that $\mathcal{J} \models z$ and that $\mathcal{J}$ is a subset minimal interpretation of $\chi(\varphi)$. Assume that there exists a $y \in \mathcal{Y}(\varphi)$ such that $\mathcal{J} \nmodels y$. If this is the case, then clearly $\mathcal{J} \nmodels  (y_1 \wedge \dots \wedge y_\ell \wedge z)$. However, since $\mathcal{J} \models \chi(\varphi)$, it must be that $\mathcal{J}\models \neg \psi$. By construction it is known that $z \notin \var(\varphi)$. Therefore, the only occurrence of $z$ in $\chi(\varphi)$ is in the sub-formula $ (y_1 \wedge \dots \wedge y_\ell \wedge z)$. Now, with the one $y$ evaluating to $\False$ under $\mathcal{J}$, the truth value of $z$ is immaterial in the evaluation of $\chi(\varphi)$. Hence, one can construct the interpretation $\mathcal{J}'$ such that $\forall x \neq z\; \mathcal{J}'(x):=\mathcal{J}(x)$ and $\mathcal{J}'(z):=\False$ that satisfies $\chi(\varphi)$. Hence, by definition one obtains $\mathcal{J}' \subset \mathcal{J} $, which clearly violates the assumed subset minimality of $\mathcal{J}$. Therefore, one can conclude that $\forall y \in \mathcal{Y}(\varphi) \; \mathcal{J} \models y$.
+\end{proof}
+
+Guided by the hint, the second relevant lemma.
+
+\begin{lemma}
+\label{lem:sat-phi}
+Let $\varphi:=(\exists x_1, \dots, x_k) (\forall y_1, \dots, y_\ell) \psi$ be a $\mathbf{QBF}_{2,\exists}$-formula, such that there exists a minimal model $\mathcal{J}$ of $\chi(\varphi)$, where $\mathcal{J} \models z$. Let $\mathcal{I}_{|_X}$ be the interpretation $\forall x \in \mathcal{X}(\varphi)\; \mathcal{I}_{|_X}(x)=\mathcal{J}(x) \land \mathfrak{S}(\mathcal{I}_{|_X}) \subseteq \mathcal{X}(\varphi)$, i.e. it is $\mathcal{J}$ restricted to the variables in $\mathcal{X}(\varphi)$. Then it holds that for any arbitrary extension $\mathcal{I}_{|_{X\cup Y}}$ of $\mathcal{I}_{|_X}$ by the variables in $\mathcal{Y}(\varphi)$, it must be that $\mathcal{I}_{|_{X\cup Y}}\models \psi$. 
+\end{lemma}
+\begin{proof}
+Towards a contradiction, assume that there exists an extension $\mathcal{I}_{|_{X\cup Y}}$ of $\mathcal{I}_{|_{X}}$ by the variables in $\mathcal{Y}(\varphi)$ such that $\mathcal{I}_{|_{X\cup Y}} \nmodels \psi$. Hence, by semantics this implies that $\mathcal{I}_{|_{X\cup Y}} \models  \neg\psi$. Now using $\mathcal{I}_{|_{X\cup Y}}$ an interpretation $\mathcal{J}'$ will be constructed such that $\mathcal{J}' \subset \mathcal{J}$ and $\mathcal{J}' \models \chi(\varphi)$. The sought after interpretation is defined such that
+\begin{itemize}
+\item $\forall x \in \mathcal{X}(\varphi) \; \mathcal{J}'(x):=\mathcal{I}_{|_{X\cup Y}}(x)$;
+\item $\forall x \in \mathcal{X}(\varphi) \; \mathcal{J}'(\tau(x)):=\neg \mathcal{I}_{|_{X\cup Y}}(x)$;
+\item $\forall y \in \mathcal{Y}(\varphi) \; \mathcal{J}'(y):=\mathcal{I}_{|_{X\cup Y}}(y)$;
+\item $ \mathcal{J}'(z):=\False$.
+\end{itemize}
+Notice that $\mathcal{J}'$ was constructed using $\mathcal{I}_{|_{X\cup Y}}$, which is an extension of $\mathcal{I}_{|_{X}}$, which itself is merely a restriction of $\mathcal{J}$ to the variables in $\mathcal{X}(\varphi)$. Hence,
+it follows that $\forall x \in \mathcal{X}(\varphi) \; \mathcal{J}'(x)=\mathcal{J}(x)$. 
+Moreover, together with the fact that $\mathcal{J} \models \bigwedge_{i=1}^k (\neg x_i \leftrightarrow x'_i)$ (and the construction of $\tau$) it follows that $\forall x' \in \mathcal{X}'(\varphi) \; \mathcal{J}'(x')=\mathcal{J}(x')$. Therefore, $\mathcal{J}$ and $\mathcal{J}'$ agree on the variables in $\mathcal{X}(\varphi)\cup \mathcal{X}'(\varphi)$, i.e. $\mathfrak{S}(\mathcal{J}') \cap (\mathcal{X}(\varphi)\cup \mathcal{X}'(\varphi))=\mathfrak{S}(\mathcal{J}) \cap (\mathcal{X}(\varphi)\cup \mathcal{X}'(\varphi))$. 
+Now, by Lemma \ref{lem:all-y}, it is known that for any $y \in \mathcal{Y}(\varphi)$ it must be that $\mathcal{J}\models y$, i.e. $\mathfrak{S}(\mathcal{J}) \cap  \mathcal{Y}(\varphi)= \mathcal{Y}(\varphi)$. Hence, $\mathfrak{S}(\mathcal{J}') \cap \mathcal{Y}(\varphi) \subseteq \mathfrak{S}(\mathcal{J}) \cap \mathcal{Y}(\varphi)$. Furthermore, by assumption it is known that $\mathcal{J} \models z$ while $\mathcal{J}'$ does not, thus $\mathfrak{S}(\mathcal{J}') \cap \{z\} \subset \mathfrak{S}(\mathcal{J}) \cap\{z\}$ holds. To summarise, 
+\begin{enumerate}
+\item[(i)] $\mathfrak{S}(\mathcal{J}') \cap (\mathcal{X}(\varphi)\cup \mathcal{X}'(\varphi)=\mathfrak{S}(\mathcal{J}) \cap (\mathcal{X}(\varphi)\cup \mathcal{X}'(\varphi)$,
+\item[(ii)] $\mathfrak{S}(\mathcal{J}') \cap \mathcal{Y}(\varphi) \subseteq \mathfrak{S}(\mathcal{J}) \cap \mathcal{Y}(\varphi)$ and 
+\item[(iii)] $\mathfrak{S}(\mathcal{J}') \cap \{z\} \subset \mathfrak{S}(\mathcal{J}) \cap\{z\}$.
+\end{enumerate}
+
+As this covers all variables assigned in $\mathcal{J}$ by subset minimality and all variables assigned in $\mathcal{J}'$ by construction, one can conclude that $\mathfrak{S}(\mathcal{J}')  \subset \mathfrak{S}(\mathcal{J})$ which by definition implies that $\mathcal{J}'\subset\mathcal{J}$.
+
+
+What remains to be shown is that $\mathcal{J}' \models \chi(\varphi)$. From (i) and the fact that $\mathcal{J} \models \chi(\varphi)$ one obtains $\mathcal{J}' \models \bigwedge_{i=1}^k (\neg x_i \leftrightarrow x'_i)$. Furthermore, by assumption it is known that $\mathcal{I}_{|_{X\cup Y}} \models \neg \varphi$, by construction one knows that $\forall x \in \mathcal{X}(\varphi)\cup \mathcal{Y}(\varphi)\; \mathcal{J}'(x)=\mathcal{I}_{|_{X\cup Y}}(x) $, as well as  $\mathcal{X}(\varphi)\cup \mathcal{Y}(\varphi)= \var(\varphi)=\var(\psi)$. Hence, one can conclude that $\mathcal{J}' \models \neg \psi$.
+Which thereby, forces that $\mathcal{J}' \models \chi(\varphi)$, thus clearly contradicting the subset minimality of $\mathcal{J}$. 
+
+%Assume that $\mathcal{J}$ exists, thus it is known that $\mathcal{J} \models z$ and $\mathcal{J} \models \chi(\varphi)$ and that $\mathcal{J}$ is subset minimal. Assume that there exists a $y \in \mathcal{Y}(\varphi)$ such that $\mathcal{J} \nmodels y$. If this is the case then clearly $\mathcal{J} \nmodels  (y_1 \wedge \dots \wedge y_\ell \wedge z)$. However, since $\mathcal{J} \models \chi(\varphi)$, it must be that $\mathcal{J}\models \neg \psi$. However, by construction it is known that $z \notin \var(\varphi)$. Therefore, the only occurrence of $z$ in $\chi(\varphi)$ is in $ (y_1 \wedge \dots \wedge y_\ell \wedge z)$. Now, with the one $y$ evaluating to $\False$ under $\mathcal{J}$, the truth value of $z$ is immaterial. Hence, one can construct the interpretation $\mathcal{J}'$ such that $\forall x \neq z\; \mathcal{J}'(x)=\mathcal{J}(x)$ and $\mathcal{J}'(z)=\False$ that satisfies $\chi(\varphi)$. Hence, by definition one obtains $\mathcal{J}' \subset \mathcal{J} $, which clearly violates the assumed subset minimality of $\mathcal{J}$. Therefore, one can conclude that $\forall y \in \mathcal{Y}(\varphi) \; \mathcal{J} \models y$.
+\end{proof}
+
+
+Finally, allowing the proof of the main result.
+
+\begin{lemma}
+Let $\varphi:=(\exists x_1, \dots, x_k) (\forall y_1, \dots, y_\ell) \psi$ be a $\mathbf{QBF}_{2,\exists}$-formula.
+$z$ is $\True$ in a minimal model of $\chi(\varphi) \implies \varphi$ is $\True$.
+\end{lemma}
+\begin{proof}
+If the antecedent is not satisfied, the statement holds vacuously. 
+Hence, to demonstrate this claim, under the assumption that $z$ is $\True$ in a minimal model of $\chi(\varphi)$, the formula $\varphi$ is $\True$. This is precisely the case if there exists a partial assignment $\mathcal{I}$ of the variables $\mathcal{X}(\varphi)$ such that any extension $\mathcal{I}'$ by the  variables $\mathcal{Y}(\varphi)$ satisfies $\psi$, i.e. $\mathcal{I}' \models \psi$.  However, this is precisely what Lemma \ref{lem:sat-phi} provides. That is, using this lemma it is possible to construct such a partial truth assignment for the variables in $\mathcal{X}(\varphi)$. 
+\end{proof}
+
+
+\newpage
+
+\paragraph*{Appendix}
+
+Let $i=n+1$. Observe the following
+\begin{equation*}
+\begin{split}
+&L \in \php{n+1}\\
+\stackrel{\text{(i)}}{\iff}& \exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land \mathcal{L}(R_2) \in \phs{n} \land L = \{x \mid \forall y \; (x,y) \in R_2\} \\
+\stackrel{\text{(ii)}}{\iff} &\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\}  \land \\
+& L = \{x \mid \forall y \; (x,y) \in R_2\}  \land \\
+&  (n \text{ even}  \sto Q=\forall )\land (n \text{ odd}  \sto Q=\exists )\\
+\stackrel{\text{(iii)}}{\iff} &\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+& L = \{x \mid \forall y \; (x,y) \in R_2\} \land  \\ 
+&  (n \text{ even}  \sto Q=\forall )\land (n \text{ odd}  \sto Q=\exists )\\
+\stackrel{\text{(iv)}}{\iff} &\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&R_2 = \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land\\ 
+& L = \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \land  \\ 
+&  (n \text{ even}  \sto Q=\forall )\land (n \text{ odd}  \sto Q=\exists )\\
+\stackrel{\text{(v)}}{\iff} & \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\} \land  \\ 
+&  (n \text{ even}  \sto Q=\forall )\land (n \text{ odd}  \sto Q=\exists )\\
+\stackrel{\text{(vi)}}{\iff} & \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \forall y \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\land  \\ 
+&  (n \text{ even}  \sto Q=\forall )\land (n \text{ odd}  \sto Q=\exists )\\
+\stackrel{\text{(vii)}}{\iff} & \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \forall y_1 \exists y_2 \forall y_3 \dots Q y_{n+1}  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+&  (n+1 \text{ even}  \sto Q=\exists) \land (n+1 \text{ odd}  \sto Q=\forall) \\
+\end{split}
+\end{equation*}
+
+\begin{enumerate}
+\item[(i)] Here Theorem \ref{thm:main} was applied.
+\item[(ii)] Here the \textbf{IH} was applied, i.e. 
+\begin{equation*}
+\begin{split}
+\mathcal{L}(R_2) \in \phs{n} \iff& \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} \land  \\
+ & (n \text{ even}  \sto Q=\forall) \land (n \text{ odd}  \sto Q=\exists )
+\end{split}
+\end{equation*}
+
+
+\item[(iii)] Firstly, $\Rightarrow$. Starting from 
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} 
+\end{split}
+\end{equation*}
+Taking the relation $R_{n+1}$ one can construct the relation $R_{n+2} \in \mathcal{R}^{n+2}$ such that 
+ \begin{equation*}
+\begin{split}
+ R_{n+2}=\{ (x,y,y_1,\ldots,y_n) \mid (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} 
+\end{split}
+\end{equation*}
+To do so one merely has to split the first entry in $(x\#y,y_1,\ldots,y_n) \in R_{n+1}$ into two, which can be done in polynomial time (similar argument as in Lemma \ref{lem:lang-rel}). Moreover, by construction it clearly holds that
+ \begin{equation*}
+\begin{split}
+ (x,y,y_1,\ldots,y_n) \in R_{n+2} \iff  (x\#y,y_1,\ldots,y_n) \in R_{n+1}
+\end{split}
+\end{equation*}
+Since by assumption $R_2$ is polynomially balanced it follows that there exists a $k$ such that for any $(x,y) \in R_{2}$ one has $|y| \leq |x|^k$. Furthermore, it is known that $R_{n+1}$ is p.b., thus there exists a $k'$ such that for any $1 \leq i \leq n$ one has $|y_i| \leq |x\#y|^{k'}\leq |x| +1 +|x|^k$. By assumption, i.e. $|x|>1$, it follows that there exists a $k^* \geq k$ such that $|y_i| \leq |x|^{k*}$ and $|y| \leq |x|^{k*}$. Hence, $R_{n+2}$ is polynomially balanced. 
+Additionally, one knows that $R_{n+1}$ is p.d., thus $R_{n+2}$ can be decided by concatenating the first two entries and querying $R_{n+1}$. Both operations can be done in polynomial time, thus $R_{n+2}$ is p.d..
+Hence, one obtains 
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+
+\medskip
+
+Secondly, $\Leftarrow$.  This argument is essentially the same as the previous one, but in reverse (and with slight alterations in the complexity arguments). That is, starting from
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+Taking the relation $R_{n+2}$ one can construct the relation $R_{n+1} \in \mathcal{R}^{n+1}$ such that 
+ \begin{equation*}
+\begin{split}
+ R_{n+1}=\{ (x\#y,y_1,\ldots,y_n) \mid (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+To do so one merely has to concatenate the first two entries in $(x,y,y_1,\ldots,y_n) \in R_{n+1}$ using the separator $\#$, which can be done in polynomial time (similar argument as in Lemma \ref{lem:lang-rel}). Moreover, it clearly holds that
+ \begin{equation*}
+\begin{split}
+(x\#y,y_1,\ldots,y_n) \in R_{n+1} \iff   (x,y,y_1,\ldots,y_n) \in R_{n+2} 
+\end{split}
+\end{equation*}
+It is known that $R_{n+2}$ is p.b., thus there exists a $k$ such that for $1 \leq i \leq n$, $|y_i| \leq |x|^k$ and $|y| \leq |x|^k$. Now since $|x| <|x\#y|$ it must be that $R_{n+1}$ is p.b. as well.
+Additionally, one knows that $R_{n+2}$ is p.d., thus $R_{n+1}$ can be decided by splitting the first entry on $\#$ and querying $R_{n+2}$. Both operations can be done in polynomial time, thus $R_{n+1}$ is p.d..
+Hence, one obtains 
+ \begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+1}  \in  \mathcal{R}^{n+1} \; R_{n+1} \; p.b. \land R_{n+1} \; p.d. \land  \\
+&\mathcal{L}(R_2) = \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\} 
+\end{split}
+\end{equation*}
+
+
+\item[(iv)] This equality is guaranteed by the following. Take an arbitrary relation $R$. Clearly, $(x,y) \in R \iff x\#y \in \mathcal{L}(R)$. Hence, in this particular case one has $(x,y) \in R_2 \iff x\#y \in \mathcal{L}(R_2)$. Now starting from  
+\begin{equation*}
+\begin{split}
+\mathcal{L}(R_2) &= \{x\#y \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+L &= \{x \mid \forall y \; (x,y) \in R_2\}  
+\end{split}
+\end{equation*}
+due to 
+ \begin{equation*}
+\begin{split}
+(\alpha,\beta) \in R_2 &\iff \alpha\#\beta \in\mathcal{L}(R_2) \\
+&\iff \alpha\#\beta \in \{ x\#y \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \\
+&\iff (\alpha,\beta) \in \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} 
+\end{split}
+\end{equation*}
+one obtains the equivalent statement
+\begin{equation*}
+\begin{split}
+R_2 &= \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land \\ 
+L &= \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\} 
+\end{split}
+\end{equation*}
+%$\exists R \in \mathcal{R}^n \{x\#y \mid  \forall y_1 \exists y_2\forall y_3\dots Q y_n  \; (x\#y,y_1,\ldots,y_n) \in R_{n+1}\}$
+
+
+
+\item[(v)] Firstly, $\Rightarrow$. Starting from 
+
+\begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&R_2 = \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land\\ 
+& L = \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+one can simply use weakening to obtain the part of the statement, where $R_2$ does not occur. 
+\begin{equation*}
+\begin{split}
+& \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+Thereby, eradicating all references of $R_2$. 
+
+\medskip
+Secondly, $\Leftarrow$. Starting from 
+\begin{equation*}
+\begin{split}
+& \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+& L = \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+One can define the relation $R_2:=\{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} $.
+Since it is known that $R_{n+2}$ is p.b. this implies that there exists a $k$ such that $|y| \leq |x|^k$, thus implying that $R_2$ is p.b..
+Allowing one to conclude that
+\begin{equation*}
+\begin{split}
+&\exists R_2 \in \mathcal{R}^{2} \; R_2 \; p.b.  \land  \exists R_{n+2}  \in  \mathcal{R}^{n+2} \; R_{n+2} \; p.b. \land R_{n+2} \; p.d. \land  \\
+&R_2 = \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}  \land\\ 
+& L = \{x \mid \forall y \; (x,y) \in  \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}  \\ 
+\end{split}
+\end{equation*}
+
+\item[(vi)] Starting from $\{x \mid \forall y \; (x,y) \in  \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}$. Notice that 
+\begin{equation*}
+\begin{split}
+ &(\alpha, \beta) \in \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} \\ 
+ &\iff  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (\alpha, \beta,y_1,\ldots,y_n) \in R_{n+2}
+\end{split}
+\end{equation*}
+From this it follows that 
+\begin{equation*}
+\begin{split}
+ &\forall y \; (\alpha,y) \in  \{(x,y) \mid  \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\} \\ 
+ &\iff \forall y  \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (\alpha, y,y_1,\ldots,y_n) \in R_{n+2}
+\end{split}
+\end{equation*}
+and therefore
+\begin{equation*}
+\begin{split}
+ &\{x \mid \forall y \; (x,y) \in  \{(x,y) \mid \exists y_1 \forall y_2\exists y_3\dots Q y_n  \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}\}\\ 
+ &= \{x \mid \forall y  \exists y_1 \forall y_2\exists y_3\dots Q y_n   \; (x,y,y_1,\ldots,y_n) \in R_{n+2}\}
+\end{split}
+\end{equation*}
+
+
+\item[(vii)] This particular renaming of bound variables is clearly an equivalence transformation. Hence, 
+\begin{equation*}
+\begin{split}
+n \text{ even}  \sto Q=\forall \land n \text{ odd}  \sto Q=\exists  \iff  n+1 \text{ even}  \sto Q=\exists \land n+1 \text{ odd}  \sto Q=\forall 
+\end{split}
+\end{equation*}
+remains to be established. However, this follows directly from the fact that $n$ is even if and only if $n+1$ is odd. That is, 
+if $n$ was even, one has $Q=\forall$. However, this implies that for $Q=\forall$ for $n+1$ being odd and if $n+1$ is odd then $Q=\forall$, meaning that $Q=\forall$ for $n$ is even.
+Analogous for the other case.
+\end{enumerate}
+
+\end{document}
+
+

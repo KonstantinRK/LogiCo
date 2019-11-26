@@ -1,0 +1,874 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{import}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{bussproofs}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usetikzlibrary{arrows, automata}
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage[style=ieee]{biblatex}
+\usepackage{rotating}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{mydef}[thm]{Definition}
+
+
+
+\makeatletter
+\def\section{\@ifstar\unnumberedsection\numberedsection}
+\def\numberedsection{\@ifnextchar[%]
+  \numberedsectionwithtwoarguments\numberedsectionwithoneargument}
+\def\unnumberedsection{\@ifnextchar[%]
+  \unnumberedsectionwithtwoarguments\unnumberedsectionwithoneargument}
+\def\numberedsectionwithoneargument#1{\numberedsectionwithtwoarguments[#1]{#1}}
+\def\unnumberedsectionwithoneargument#1{\unnumberedsectionwithtwoarguments[#1]{#1}}
+\def\numberedsectionwithtwoarguments[#1]#2{%
+  \ifhmode\par\fi
+  \removelastskip
+  \vskip 3ex\goodbreak
+  \refstepcounter{section}%
+  \hbox to \hsize{%
+    \vtop{\parindent=0pt \leavevmode\Large\bfseries\raggedright #2\quad\thesection\par}%
+    }
+  \vskip 2ex\nobreak\noindent%
+  \addcontentsline{toc}{section}{%
+    \protect\numberline{\thesection}%
+    #1}%
+  \ignorespaces}
+\def\unnumberedsectionwithtwoarguments[#1]#2{%
+  \ifhmode\par\fi
+  \removelastskip
+  \vskip 3ex\goodbreak
+  \hbox to \hsize{%
+    \vtop{\parindent=0pt\leavevmode\Large\bfseries\raggedright #2\par}%
+    }
+  \vskip 2ex\nobreak\noindent%
+  \addcontentsline{toc}{section}{%
+    #1}%
+  \ignorespaces}
+\makeatother
+
+
+\makeatletter
+\def\subsection{\@ifstar\unnumberedsubsection\numberedsubsection}
+\def\numberedsubsection{\@ifnextchar[%]
+  \numberedsubsectionwithtwoarguments\numberedsubsectionwithoneargument}
+\def\unnumberedsubsection{\@ifnextchar[%]
+  \unnumberedsubsectionwithtwoarguments\unnumberedsubsectionwithoneargument}
+\def\numberedsubsectionwithoneargument#1{\numberedsubsectionwithtwoarguments[#1]{#1}}
+\def\unnumberedsubsectionwithoneargument#1{\unnumberedsubsectionwithtwoarguments[#1]{#1}}
+\def\numberedsubsectionwithtwoarguments[#1]#2{%
+  \ifhmode\par\fi
+  \removelastskip
+  \vskip 3ex\goodbreak
+  \refstepcounter{subsection}%
+  \hbox to \hsize{%
+    \vtop{\parindent=0pt \leavevmode\Large\bfseries\raggedright #2\quad\thesubsection\par}%
+    }
+  \vskip 2ex\nobreak\noindent%
+  \addcontentsline{toc}{subsection}{%
+    \protect\numberline{\thesubsection}%
+    #1}%
+  \ignorespaces}
+\def\unnumberedsubsectionwithtwoarguments[#1]#2{%
+  \ifhmode\par\fi
+  \removelastskip
+  \vskip 3ex\goodbreak
+  \hbox to \hsize{%
+    \vtop{\parindent=0pt\leavevmode\Large\bfseries\raggedright #2\par}%
+    }
+  \vskip 2ex\nobreak\noindent%
+  \addcontentsline{toc}{subsection}{%
+    #1}%
+  \ignorespaces}
+\makeatother
+
+
+
+
+
+
+
+\begin{document}
+
+%\maketitle
+\section{Homework}
+\subsection{Exercise}
+Define $l:=\lambda x \lambda y \, (x \; y)$, $r:=\lambda x \lambda y \, (y \; x)$. Then write a term $\textit{if-then-else}$ such that for all $u$, $v$
+\begin{equation*}
+\begin{split}
+(\textit{if-then-else})\; l \; u \; v \mapsto u \\
+(\textit{if-then-else})\; r \; u \; v \mapsto v \\
+\end{split}
+\end{equation*}
+\paragraph{Solution:} One possible definition for $(\textit{if-then-else})$ is 
+\begin{equation*}
+\begin{split}
+(\textit{if-then-else}):= \lambda o \lambda u \lambda v \, (o \; False \; True \; True \; u \; v)
+\end{split}
+\end{equation*}
+with $True:= \lambda x \lambda y \; x$ and $False:= \lambda x \lambda y \;y$ as defined in the lecture.
+
+We can observe for arbitrary $\lambda$-terms $u$, $v$ that 
+\begin{equation*}
+\begin{split}
+&(\textit{if-then-else})\; l \; u \; v = (\lambda o \lambda u \lambda v \,(o \; False \; True \; True \; u \; v)) \; l \; u \; v \\
+&\mapsto^* l \; False \; True \; True \; u \; v = (\lambda x \lambda y \;(x  \;  y))\;False \; True \; True \; u \; v \\
+&\mapsto^* False \; True \; True \; u \; v = (\lambda x \lambda y \; y) \;True \; True \; u \; v \\
+&\mapsto^* True \; u \; v = (\lambda x \lambda y \; x)\; u \; v \\
+&\mapsto^*  u \\
+\end{split}
+\end{equation*}
+and
+\begin{equation*}
+\begin{split}
+&(\textit{if-then-else})\; r \; u \; v = (\lambda o \lambda u \lambda v \,(o \; False \; True \; True \; u \; v)) \; r \; u \; v \\
+&\mapsto^* r \; False \; True \; True \; u \; v = (\lambda x \lambda y \;(y  \;  x))\;False \; True \; True \; u \; v \\
+&\mapsto^* True \; False \; True \; u \; v = (\lambda x \lambda y \; x) \;False \; True \; u \; v \\
+&\mapsto^* False \; u \; v = (\lambda x \lambda y \; y)\; u \; v \\
+&\mapsto^*  v \\
+\end{split}
+\end{equation*}
+Hence, the term $(\textit{if-then-else})$ exhibits the desired behaviour.
+
+\subsection{Exercise}
+Write a $\lambda$-term $\textit{Smaller}$ such that 
+\begin{equation*}
+\begin{split}
+\textit{Smaller}\; \overline{n} \; \overline{m} &\mapsto True \quad \textit{ if } n < m \\
+\textit{Smaller}\; \overline{n} \; \overline{m} &\mapsto False \quad \textit{otw.} \\
+\end{split}
+\end{equation*}
+\paragraph{Solution:} Firstly, housekeeping. It is assumed that, as presented in the lecture, $\overline{n}$ and $\overline{m}$ refer to Church-numerals. Moreover, it is assumed that "$<$" refers to the smaller relation in $\mathbb{N}$.
+
+Secondly, the general idea of the presented approach will be discussed. We shall construct the smaller relation as follows. 
+\begin{equation*}
+\textit{not}(\textit{isZero}(\dotminus (x,y)))
+\end{equation*}
+with  $\textit{not}$ being defined as 
+\begin{equation*}
+\textit{not}(x):=
+\begin{cases}
+0 \quad &\textit{if }x=1 \\
+1 \quad &\textit{if }x=0 \\
+undef. \quad &\textit{otw.} \\
+\end{cases}
+\end{equation*}
+with $\textit{isZero}$ being defined as 
+\begin{equation*}
+\textit{isZero}(x):=
+\begin{cases}
+1 \quad &\textit{if }x=0 \\
+0 \quad &\textit{otw.}
+\end{cases}
+\end{equation*}
+and with $\dotminus$ being defined as 
+\begin{equation*}
+\dotminus(x,y):=
+\begin{cases}
+x-y \quad &\textit{if }x>y \\
+0 \quad &\textit{otw.}
+\end{cases}
+\end{equation*}
+Hence, the following behaviour can be observed. 
+
+If $x \leq y$ the term evaluates to 
+\begin{equation*}
+\textit{not}(\textit{isZero}(\dotminus (x,y)))= \textit{not}(\textit{isZero}(0)) =  \textit{not}(1) =  0  
+\end{equation*}
+and if $x>y$ we have $x-y>0$ resulting in
+\begin{equation*}
+\textit{not}(\textit{isZero}(\dotminus (x,y)))= \textit{not}(\textit{isZero}(x-y)) =  \textit{not}(0) = 1  
+\end{equation*}
+
+Thirdly, we have to translate this intuition into $\lambda$-terms. Before we do so, however, a small remark regarding notation. That is, a $\lambda$-term of the shape $f^n \; x$ represents $\underbrace{f(f \cdots(f \; }_{\text{n-times}}x) \cdots)$. 
+
+We start the translation with $\dotminus$. To capture the behaviour
+\begin{equation*}
+\begin{split}
+\dotminus \; \overline{x} \; \overline{y} &\mapsto \overline{x-y} \quad \textit{  if } x>y \\
+\dotminus \; \overline{x} \; \overline{y} &\mapsto \overline{0} \quad \quad \quad \textit{otw }\\
+\end{split}
+\end{equation*}
+we define $\dotminus := \lambda x \lambda y \,(y \; \textit{Pred} \; x)$, with $\textit{Pred}$ as defined in the lecture and thus obtain for the arbitrary Church-numerals $\overline{n}$ and $\overline{m}$ 
+
+\begin{equation*}
+\begin{split}
+\dotminus \; \overline{n} \; \overline{m} &= (\lambda x \lambda y \,(y \; \textit{Pred} \; x)) \; \overline{n} \; \overline{m} \\
+& \mapsto^* \overline{m} \; \textit{Pred} \; \overline{n} = (\lambda f \lambda x \, (f^m \; x)) \; \textit{Pred} \; \overline{n} \\
+& \mapsto^* \textit{Pred}^m \; \overline{n} =  \textit{Pred}^m \; (\lambda f \lambda x \, (f^n \; x)) \\
+\end{split}
+\end{equation*}
+From there we have two cases to account for.
+if $n>m$, then
+\begin{equation*}
+\mapsto^* \textit{Pred}^{m-m} \; (\lambda f \lambda x \, (f^{n-m} \; x) = \lambda f \lambda x \, (f^{n-m} \; x) = \overline{n-m}
+\end{equation*}
+and if $n \leq m$, then
+\begin{equation*}
+\begin{split}
+&\mapsto^* \textit{Pred}^{m-n} \;( \lambda f \lambda x \, (f^{n-n} \; x)) = \textit{Pred}^{m-n} \; (\lambda f \lambda x \, x)
+=  \textit{Pred}^{m-n} \; \overline{0} \mapsto^* \overline{0}\\
+ \end{split}
+\end{equation*}
+because $Pred \; \overline{0} \mapsto^* \overline{0}$.
+
+Now, moving on towards $\textit{isZero}$. Here we simply use the definition provided in the lecture. That is,
+\begin{equation*}
+\begin{split}
+\textit{isZero} \; \overline{0}  &\mapsto True\\
+\textit{isZero} \; \overline{n+1} &\mapsto False \\
+\end{split}
+\end{equation*}
+with 
+\begin{equation*}
+\textit{isZero}:= \lambda n \, n \;(\lambda z \, False)\; True
+\end{equation*}
+Moreover, for $\textit{not}$ we define 
+
+\begin{equation*}
+\begin{split}
+\textit{not} \; True &\mapsto False\\
+\textit{not} \; False  &\mapsto True \\
+\end{split}
+\end{equation*}
+with 
+
+\begin{equation*}
+\textit{not}:= \lambda o \lambda u \lambda v \, (o \; v \; u)
+\end{equation*}
+Allowing us to observe
+
+\begin{equation*}
+\begin{split}
+\textit{not} \; True &= (\lambda o \lambda u \lambda v \, (o \; v \; u))\; True \mapsto  \lambda u \lambda v \, (True \; v \; u) \\
+ &= \lambda u \lambda v \, ((\lambda x \lambda y \, x) \; v \; u) \mapsto^* \lambda u \lambda v \,  v = False
+ \end{split}
+\end{equation*}
+
+and
+
+
+\begin{equation*}
+\begin{split}
+\textit{not} \; False &= (\lambda o \lambda u \lambda v \, (o \; v \; u))\; False \mapsto  \lambda u \lambda v \, (False \; v \; u) \\
+ &= \lambda u \lambda v \, ((\lambda x \lambda y \, y) \; v \; u) \mapsto^* \lambda u \lambda v \,  u = True
+ \end{split}
+\end{equation*}
+
+Lastly, we have to combine these terms to create 
+\begin{equation*}
+\textit{Smaller}:= \lambda n \lambda m \, (\textit{not}\; (\textit{isZero}\; (\dotminus \; m \; n)))
+\end{equation*}
+Hence, for any Church-numerals $\overline{n}$ and $\overline{m}$ we have
+
+\begin{equation*}
+\begin{split}
+&\textit{Smaller} \; \overline{n} \; \overline{m}= (\lambda n \lambda m \, (\textit{not}\; (\textit{isZero}\; (\dotminus \; m \; n)))) \; \overline{n} \; \overline{m} \\
+&\mapsto^* \textit{not}\; (\textit{isZero}\; (\dotminus \; \overline{m}\; \overline{n})) =  \textit{not}\; (\textit{isZero}\; ((\lambda x \lambda y \, y \; \textit{Pred} \; x) \; \overline{m}\; \overline{n})) \\
+&\mapsto^* \textit{not}\; (\textit{isZero}\; (\overline{n} \; \textit{Pred} \; \overline{m})) = \textit{not}\; (\textit{isZero}\; ((\lambda f \lambda x \, (f^n \; x)) \; \textit{Pred} \; \overline{m})) \\
+&\mapsto^* \textit{not}\; (\textit{isZero}\; (\textit{Pred}^n \; \overline{m})) \mapsto^* \textit{not}\;(\textit{isZero}\; \overline{m \dotminus n}) \\
+ \end{split}
+\end{equation*}
+Now we are again confronted with two cases. That is, in the case $m \leq n$ it follows that $m-n\leq 0$ and thus $\overline{m \dotminus n}=\overline{0}$ resulting in
+
+\begin{equation*}
+\begin{split}
+= \textit{not}\;(\textit{isZero}\; \overline{0}) &\mapsto^*  not\; True = (\lambda o \lambda u \lambda v \, (o \; v \; u))\; True \\
+&\mapsto  \lambda u \lambda v \, (True \; v \; u) \mapsto \lambda u \lambda v \, v = False
+ \end{split}
+\end{equation*}
+
+and in the case $n<m$ we have $\overline{m \dotminus n}=\overline{m - n} \neq \overline{0}$ resulting in
+\\
+\begin{equation*}
+\begin{split}
+= \textit{not}\;(\textit{isZero}\; \overline{m - n}) &\mapsto^*  not\; False = (\lambda o \lambda u \lambda v \, (o \; v \; u))\; False \\
+&\mapsto  \lambda u \lambda v \, (False \; v \; u) \mapsto \lambda u \lambda v \, u = True
+ \end{split}
+\end{equation*}
+which is exactly the desired behaviour of $\textit{Smaller}$.
+
+
+\subsection{Exercise}
+Define for every $n\in \mathbb{N}$
+\begin{equation*}
+\begin{split}
+\underline{0}&:= \lambda x \lambda f \, x \\
+\underline{n+1}&:= \lambda x \lambda f \, (f\; \underline{n}\; (f \;  \underline{n-1}\;(\cdots (f\; \underline{0}\; x) \cdots)))
+ \end{split}
+\end{equation*}
+
+Examples:
+\begin{equation*}
+\begin{split}
+\underline{1}&:= \lambda x \lambda f \, (f \; \underline{0} \; x) \\
+\underline{2}&:= \lambda x \lambda f \, (f \; \underline{1} \; (f \; \underline{0} \; x) )\\
+\underline{3}&:= \lambda x \lambda f \, (f \; \underline{2} \; (f \; \underline{1} \; (f \; \underline{0} \; x) ))\\
+\end{split}
+\end{equation*}
+\begin{enumerate}
+\item Write a $\lambda$-term $t$ such that for all $n\in \mathbb{N}$
+\begin{equation*}
+\begin{split}
+t \; \underline{0} &\mapsto \underline{0} \\
+t \; \underline{n+1} &\mapsto \underline{n} \\
+\end{split}
+\end{equation*}
+\item Write a $\lambda$-term $t$ such that for all $n\in \mathbb{N}$
+\begin{equation*}
+\begin{split}
+t \; \underline{n} \mapsto \underline{n+1} \\
+\end{split}
+\end{equation*}
+\item Write a $\lambda$-term $t$ such that for all $n\in \mathbb{N}$
+\begin{equation*}
+\begin{split}
+t \; \underline{n}\; \underline{m} \mapsto \underline{n+m} \\
+\end{split}
+\end{equation*}
+\end{enumerate}
+\paragraph{Solution:}
+
+\subsubsection*{Term 1}
+Let 
+\begin{equation*}
+t = P := \lambda n \, n \;\underline{0}\; True
+\end{equation*}
+
+For the case $\underline{n}=\underline{0}$ we have, 
+\begin{equation*}
+\begin{split}
+&P\; \underline{0} = (\lambda n \, n \;\underline{0}\; True) \; \underline{0} \\
+&\mapsto^* \underline{0} \; \underline{0} \; True = (\lambda x \lambda f \, x) \; \underline{0} \; True \mapsto^* \underline{0}
+\end{split}
+\end{equation*}
+and otherwise for $\underline{n+1}$ we have 
+\begin{equation*}
+\begin{split}
+&P\; \underline{n+1} = (\lambda n \, n \;\underline{0}\; True) \; \underline{n+1} 
+\mapsto^* \underline{n+1} \; \underline{0} \; True\\
+&= (\lambda x \lambda f \, (f\; \underline{n}\; (\cdots \;  x \; \cdots))) \; \underline{0} \; True  \\
+&\mapsto^* True\; \underline{n}\; (\cdots \; \underline{0}\; \cdots) \\
+&=  (\lambda x \lambda y \, x)\; True\; \underline{n}\; (\cdots \; \underline{0}\; \cdots) \mapsto^* \underline{n}
+\end{split}
+\end{equation*}
+
+
+\subsubsection*{Term 2}
+Let 
+\begin{equation*}
+t = S := \lambda n \lambda y \lambda g \,(g \; n \; ( n \; y \; g))
+\end{equation*}
+
+We separate the proof into two cases.
+
+For the case $\underline{n} =\underline{0}$ we have, 
+\begin{equation*}
+\begin{split}
+&S\; \underline{0} =  (\lambda n \lambda y \lambda g \,(g \; n \; ( n \; y \; g))) \; \underline{0} \mapsto  \lambda y \lambda g \,(g \;  \underline{0} \; (  \underline{0} \; y \; g)) \\
+&= \lambda y \lambda g \,(g \;  \underline{0} \; (  (\lambda x \lambda f \, x)  \; y \; g)) 
+\mapsto^*  \lambda y \lambda g \,(g \;  \underline{0} \; y) = \underline{0}
+\end{split}
+\end{equation*}
+
+and otherwise for $\underline{n+1}$ we have 
+
+\begin{equation*}
+\begin{split}
+&S\; \underline{n+1} =  (\lambda n \lambda y \lambda g \,(g \; n \; ( n \; y \; g))) \; \underline{n+1} \mapsto  \lambda y \lambda g \,(g \;  \underline{n+1} \; (  \underline{n+1} \; y \; g)) \\
+&= \lambda y \lambda g \,(g \;  \underline{n+1} \; ( (\lambda x \lambda f \, (f\; \underline{n}\; (\cdots \; x\; \cdots ))) \; y \; g)) \\
+&\mapsto^* \lambda y \lambda g \, (g \;  \underline{n+1} \; (g \;  \underline{n} \; (\cdots \; y \; \cdots ))) = \underline{n+2}
+\end{split}
+\end{equation*}
+
+
+\subsubsection*{Term 3}
+Let 
+\begin{equation*}
+t=A:= \lambda n \lambda m \, n \; m \; ( \lambda x \lambda y \, S \; y)
+\end{equation*}
+Let $\underline{m}$ be an arbitrary numeral, then we have for $\underline{n}=\underline{0}$
+\begin{equation*}
+\begin{split}
+A \; \underline{n} \; \underline{m} &= (\lambda n \lambda m \, n \; m \; ( \lambda x \lambda y \, S \; y)) \; \underline{n} \; \underline{m} \mapsto^*  \underline{n} \; \underline{m} \; ( \lambda x \lambda y \, S \; y) \\
+&= (\lambda x \lambda f \, x)\; \underline{m} \; ( \lambda x \lambda y \, S \; y) 
+\mapsto^* \underline{m}
+\end{split}
+\end{equation*}
+
+
+and otherwise for $\underline{n+1}$ we have
+\begin{equation*}
+\begin{split}
+A \; \underline{n+1} \; \underline{m} &= (\lambda n \lambda m \, n \; m \; ( \lambda x \lambda y \, S \; y)) \; \underline{n+1} \; \underline{m} \mapsto^*  \underline{n+1} \; \underline{m} \; ( \lambda x \lambda y \, S \; y) \\
+&= (\lambda x \lambda f \, (f\; \underline{n+1}\; (\cdots \; x \; \cdots))) \; \underline{m} \; ( \lambda x \lambda y \, S \; y) \\
+&\mapsto^* ( \lambda x \lambda y \, S \; y) \; \underline{n+1}\; (\cdots \; \underline{m}  \; \cdots) \\
+&\mapsto^*  S \; (\cdots \;  \underline{m}  \; \cdots) \mapsto^* S^{n+1} \; \underline{m} \\
+&\mapsto^* S^{n} \; \underline{m+1} \mapsto^* S \; \underline{m+n} \mapsto^* \underline{m+(n+1)}
+\end{split}
+\end{equation*}
+
+
+
+
+
+
+
+\section{Homework}
+\subsection{Exercise}
+
+Formally prove by induction on $u$ that 
+\begin{equation*}
+u[v/y][t/x]=u[t/x][v[t/x]/y]
+\end{equation*}
+provided $x \neq y$ and $y$ does not occur in $t$.
+
+\paragraph{Solution:} By induction on $u$
+\begin{itemize}
+\item For $u=y$ we have
+\begin{equation*}
+\begin{split}
+u[v/y][t/x]&=y[v/y][t/x]=v[t/x]=y[v[t/x]/y] \\
+&\stackrel{x\neq y}{=}y[t/x][v[t/x]/y]=u[t/x][v[t/x]/y]
+\end{split}
+\end{equation*}
+
+\item For $u=x$ we have
+\begin{equation*}
+\begin{split}
+u[v/y][t/x]&=x[v/y][t/x]\stackrel{x\neq y}{=}x[t/x]=t\\
+&\stackrel{y\textit{ n. in }t}{=} t[v[t/x]/y]=x[t/x][v[t/x]/y]=u[t/x][v[t/x]/y]
+\end{split}
+\end{equation*}
+
+\item For $u=z$ with $x \neq z$ and $y \neq z$ we have
+\begin{equation*}
+\begin{split}
+u[v/y][t/x]&=z[v/y][t/x]\stackrel{y\neq z}{=}z[t/x]\stackrel{x\neq z}{=}z \\
+&\stackrel{y\neq z}{=}z[v[t/x]/y]\stackrel{x\neq z}{=}z[t/x][v[t/x]/y]=u[t/x][v[t/x]/y]
+\end{split}
+\end{equation*}
+
+
+
+\item For $u=\lambda z \, w$ we have
+\begin{equation*}
+\begin{split}
+u[v/y][t/x]&=(\lambda z \, w)[v/y][t/x] \stackrel{Def.}{=} \lambda z \, w[v/y][t/x] \stackrel{IH}{=}
+ \lambda z \, w[t/x][v[t/x]/y] \\
+ &\stackrel{Def.}{=}  (\lambda z \, w)[t/x][v[t/x]/y]
+=u[t/x][v[t/x]/y]
+\end{split}
+\end{equation*}
+
+
+
+
+\item For $u=w_1\; w_2$ we have
+\begin{equation*}
+\begin{split}
+u[v/y][t/x]&=(w_1\; w_2)[v/y][t/x] \stackrel{Def.}{=} w_1[v/y][t/x]\; w_2[v/y][t/x] \\
+&\stackrel{IH}{=}
+ w_1[t/x][v[t/x]/y] \; w_2[t/x][v[t/x]/y] \\
+ &\stackrel{Def.}{=}  (w_1\; w_2)[t/x][v[t/x]/y]
+=u[t/x][v[t/x]/y]
+\end{split}
+\end{equation*}
+
+\end{itemize}
+
+
+
+\subsection{Exercise}
+Prove or disprove:
+\begin{quote}
+If $w$ is elementary and $w \mapsto w'$, then $w'$ is elementary.
+\end{quote}
+
+\paragraph{Solution:} We shall disprove this claim by constructing an elementary $\lambda$-term which does not reduce (within one step) to an elementary $\lambda$-term. \\
+Firstly, we know that 
+\begin{itemize}
+\item a $\lambda$-term $u\; t$ is elementary, if $t\in SN$, $u \in SN$ but $t\; u \nin SN$ and that
+\item a $\lambda$-term $t$ is strongly normalisable, i.e. $t \in SN$, if there is no infinite reduction of $t$, i.e. $h(t)$ is finite.
+\end{itemize}
+Secondly, let $w$ be the $\lambda$-term 
+\begin{equation*}
+w:= t \; u = (\lambda x (z(x\;x)))(\lambda x\,x\;x)
+\end{equation*}
+Thirdly, we need to show that $w$ is elementary. 
+\begin{enumerate}
+\item We can observe that $t$ and $u$ contain no redex, thus can no longer be reduced and are therefore in normal form. Hence, allowing us to conclude $t \in SN$ and $u \in SN$.
+
+\item To show that $w \nin SN$ we will reduce the term once. In this case the only possibility to do so is to apply $t$ to $u$, i.e. 
+\begin{equation*}
+w = t \; u = (\lambda x (z(x\;x)))(\lambda x\,x\;x)\mapsto  z((\lambda x\,x\;x)\;(\lambda x\,x\;x)) = w'
+\end{equation*}
+Given $w'$ we can observe that $w'=t'u'$ with $h(u')$ being infinite. That is, as shown in the lecture the term $u'=((\lambda x\,x\;x)\;(\lambda x\,x\;x))$ has an infinite reduction. Therefore, $h(w')$ is infinite. Moreover, since $w'$ has not the form $(\lambda x \, v)\; t \; t_1 \ldots \,t_n$ with $u,t,t_1,\ldots,t_n \in SN$ it can not be elementary. 
+\end{enumerate}
+Hence, the claim is disproven.
+
+
+\subsection{Exercise}
+Prove or disprove:
+\begin{quote}
+There are terms $u$ and $t$ such that $x$ does not occur in $u$ and $(\lambda x \, u)\; t$ is elementary.
+\end{quote}
+
+\paragraph{Solution:} Assume that the $\lambda$-terms $u$ and $t$ exists. That is, we let $u$ and $t$ be $\lambda$-terms, such that 
+\begin{equation*}
+w = v \; t = (\lambda x \, u) \; t
+\end{equation*}
+with $x$ not in $u$, is elementary. 
+
+Since, $w$ is elementary we know that $(\lambda x \, u) \in SN$, $t \in SN$ and $w \nin SN$. 
+Moreover, by Prop. 12 we know that 
+\begin{center}
+$(\lambda x \, u)\; t$ is elementary implies $u[t/x] \nin SN$
+\end{center}
+However, since $x$ not in $u$ we obtain 
+\begin{equation*}
+u[t/x]=u \nin SN
+\end{equation*}
+Thus we obtain $u \nin SN$ and $(\lambda x \, u) \in SN$, which is a contradiction. That is, with $h(u)$ being infinite, it follows that $h((\lambda x \, u))$ is also infinite, as we can always find a redex within $u$ to contract.
+To conclude, assuming the existence of such terms induces a contradiction. 
+
+
+
+
+
+
+\section{Homework}
+\subsection{Exercise}
+Let $t:A$ be a term that does not contain free variables and is in normal form. Prove that 
+\begin{itemize}
+\item if $A=B \wedge C$ then $t=\langle u,v \rangle$ and 
+\item if $A=B\to C$ then $t= \lambda x^B\, u$
+\end{itemize}
+
+\paragraph{Solution:} Proof by induction on the type derivation $\mathcal{D}$ of $t$, with the $IH$: 
+\\
+
+For a $\lambda$-term $t:A$, which does not contain free variables and is in normal form, its type derivation $\mathcal{D}$ must be of the shape.
+
+
+\begin{prooftree}
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:C$}
+           \LeftLabel{$\mathcal{D}=$ }
+           \RightLabel{\quad \textit{if} $A=B\to C$ }
+          \UnaryInfC{$\lambda x^B \, u: B\to C $}       
+\end{prooftree}
+and 
+\begin{prooftree}
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:B$}
+          \noLine
+          \AxiomC{$\mathcal{\mathcal{E}}'$}
+          \UnaryInfC{$v:C$}
+           \LeftLabel{$\mathcal{D}=$ }
+           \RightLabel{\quad \textit{if} $A=B \wedge C$ }
+          \BinaryInfC{$\langle u,v \rangle: B \wedge C$}       
+\end{prooftree}
+
+Now we are going to distinguish by cases according to the last rule of the type derivation $\mathcal{D}$ of $t$.
+
+\begin{enumerate}
+\item If $\mathcal{D}=$
+          \AxiomC{}
+          \UnaryInfC{$t:A$}       
+\DisplayProof
+we know that $t$ is a variable. Hence, $t$ contains itself as a free variable. However, we know that $t$ can not contain free variables. Therefore, this rule can not be the last rule of the type derivation $\mathcal{D}$.
+
+\item If $\mathcal{D}=$
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:C$}
+          \UnaryInfC{$\lambda x^B \, u: B\to C $} 
+  \DisplayProof 
+  we have our thesis. That is, $A=B\to C$ and $t$ was derived by the desired rule.  
+  
+
+\item If $\mathcal{D}=$
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:B$}
+          \noLine
+          \AxiomC{$\mathcal{\mathcal{E}}'$}
+          \UnaryInfC{$v:C$}
+          \BinaryInfC{$\langle u,v \rangle: B \wedge C$}    
+  \DisplayProof 
+  we have our thesis. That is, $A=B\wedge C$ and $t$ was derived by the desired rule.   
+    
+    
+\item If $\mathcal{D}=$
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:E \wedge F$} 
+          \UnaryInfC{$u\;\pi_0:E $} 
+  \DisplayProof 
+  with $t=u\;\pi_0$. We can observe that if $u$ contains free variables, then $u\;\pi_0$ must contain the same free variables. Because the applied rule does not bin free variables in $u$. Therefore, it follows from $t=u\;\pi_0$ being free variable free, that $u$ does not contain free variables. Moreover, if $u$ contains a redex or the subterm $\langle t_0, t_1 \rangle \; \pi_i$ with $i \in \{0,1\}$. Then the same must be contained in $u\;\pi_0$
+ as $u$ was not modified by this rule. Therefore, if $t=u\;\pi_0$ is in normal form, then $u$ must also be in normal form.
+ 
+Hence, we conclude that $u$ must be in normal form and can not contain free variables, allowing us to apply the $IH$ for $u:E\wedge F$. That is, we obtain
+  \begin{prooftree}
+           \noLine
+          \AxiomC{$\mathcal{D}''$}
+          \UnaryInfC{$r:E$}
+          \noLine
+          \AxiomC{$\mathcal{E}''$}
+          \UnaryInfC{$o:F$}
+          \LeftLabel{$\mathcal{D}=$ }
+          \BinaryInfC{$\langle r,o \rangle: E \wedge F$} 
+          \UnaryInfC{$\langle r,o \rangle \pi_0:E $}      
+\end{prooftree}
+However, as $\langle t_0, t_1 \rangle \; \pi_i \mapsto t_i$ with $i \in \{0,1\}$ it follows that $t=\langle r,o \rangle \;\pi_0$ is not in normal form. Hence, the type derivation of $t$ can not be of this shape.
+
+
+\item If $\mathcal{D}=$
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:E \wedge F$} 
+          \UnaryInfC{$u\;\pi_1:F $} 
+  \DisplayProof 
+we can discard this case in analogue to the case 4.
+
+\item If $\mathcal{D}=$
+          \noLine
+          \AxiomC{$\mathcal{D}'$}
+          \UnaryInfC{$u:E \to F$}
+          \noLine
+          \AxiomC{$\mathcal{\mathcal{E}}'$}
+          \UnaryInfC{$v:E$}
+          \BinaryInfC{$u\;v: F$}    
+\DisplayProof 
+with $t=u\; v$. Here we argue in a similar fashion as in case 4. 
+That is, we will argue that $u$ must be free variable free and in normal form.
+
+As this rule does not bind free variables in $u$, those variables must remain free in $u\; v$. Furthermore, if $u$ contains a redex or  $\langle t_0, t_1 \rangle \pi_i$ with $i \in \{0,1\}$, those must also be present in $u\; v$, as $u$ is not modified by this rule. Hence, it follows that $u$ must be in normal form and can not contain free variables. Furthermore, with $u: E\to F$ it follows by $IH$ that
+
+\begin{prooftree}
+          \noLine
+          \AxiomC{$\mathcal{D}''$}
+          \UnaryInfC{$r: F$}
+          \LeftLabel{$\mathcal{D}=$}
+          \UnaryInfC{$\lambda x^E\, r: E \to F$}
+          \noLine
+          \AxiomC{$\mathcal{\mathcal{E}}'$}
+          \UnaryInfC{$v:E$}
+          \BinaryInfC{$(\lambda x^E\, r)\;v: F$} 
+\end{prooftree}
+that is $t=(\lambda x^E\, r)\;v$ and thus $t$ contains a redex and is therefore not in normal form. Hence, the type derivation of $t$ can not be of this shape.
+\end{enumerate}
+Given this result our thesis follows immediately. 
+
+
+
+
+\section{Homework}
+\subsection{Exercise}
+Define $\neg A := A \to \bot$, where $\bot$ is a type variable. Write a natural deduction of 
+\begin{equation*}
+\neg\neg (A \wedge B) \to \neg \neg A
+\end{equation*}
+
+\paragraph{Solution:} Firstly, we substitute
+\begin{equation*}
+\begin{split}
+\neg\neg (A \wedge B) \to \neg \neg A &= \neg ((A\wedge B) \to \bot) \to  \neg(A\to\bot) \\
+ &= ((A\wedge B) \to \bot) \to  \bot) \to ((A\to\bot) \to \bot) 
+\end{split}
+\end{equation*}
+Secondly, the derivation. 
+
+Two derivations will be presented. The first one is merely the natural deduction, while the second one depicts the natural deduction together with its corresponding $\lambda$-terms.
+
+
+\begin{prooftree}
+\AxiomC{$[((A\wedge B) \to \bot) \to  \bot]^{(1)}$ }
+\AxiomC{$[A\to  \bot]^{(2)}$ }
+\AxiomC{$[(A\wedge B) ]^{(3)}$ }
+\UnaryInfC{$A$}
+\BinaryInfC{$ \bot$}
+\RightLabel{\scriptsize$(3)$}
+\UnaryInfC{$(A\wedge B) \to \bot$}
+\BinaryInfC{$ \bot$}
+\RightLabel{\scriptsize$(2)$}
+\UnaryInfC{$(A\to\bot) \to \bot $}
+\RightLabel{\scriptsize$(1)$}
+\UnaryInfC{$(((A\wedge B) \to \bot) \to  \bot) \to ((A\to\bot) \to \bot )$}
+\end{prooftree}
+
+
+
+And now with the corresponding $\lambda$-terms
+
+
+\begin{prooftree}
+\small
+\AxiomC{$ z^{((A\wedge B) \to \bot) \to  \bot} : [((A\wedge B) \to \bot) \to  \bot]^{(1)}$ }
+\AxiomC{$y^{A\to\bot}:[A\to  \bot]^{(2)}$ }
+\AxiomC{$x^{A\wedge B}: [(A\wedge B) ]^{(3)}$ }
+\UnaryInfC{$ x^{A\wedge B}\, \pi_0:A$}
+\BinaryInfC{$y^{A\to\bot}\, ( x^{A\wedge B}\, \pi_0):  \bot$}
+\RightLabel{\scriptsize$(3)$}
+\UnaryInfC{$\lambda x^{A\wedge B}(y^{A\to\bot}\, (x\, \pi_0)): (A\wedge B) \to \bot$}
+\BinaryInfC{$ z^{((A\wedge B) \to \bot) \to  \bot} \lambda x^{A\wedge B}(y^{A\to\bot}\, (x\, \pi_0)): \bot$}
+\RightLabel{\scriptsize$(2)$}
+\UnaryInfC{$\lambda y^{A\to\bot}(z^{((A\wedge B) \to \bot) \to  \bot} \lambda x^{A\wedge B}(y\, (x\, \pi_0))):(A\to\bot) \to \bot $}
+\RightLabel{\scriptsize$(1)$}
+\UnaryInfC{$\lambda z^{((A\wedge B) \to \bot) \to  \bot} \lambda y^{A\to\bot}(z\, \lambda x^{A\wedge B}(y\, (x\, \pi_0))):
+(((A\wedge B) \to \bot) \to  \bot) \to ((A\to\bot) \to \bot )$}
+\end{prooftree}
+
+
+
+\section{Homework}
+\subsection{Exercise}
+Show that the $\lambda$-term 
+\begin{equation*}
+\lambda y \, y\; y \; (\lambda x \, x \; y \; x)  
+\end{equation*}
+is typable in $D\Omega$ with a type that does not contain $\top$.
+
+\paragraph{Solution:} 
+Given the bracketing convention we have
+\begin{equation*}
+t:= \lambda y \, y\; y \; (\lambda x \, x \; y \; x)  = \lambda y \,( (y\; y) \; (\lambda x \, ((x \; y) \; x)) )
+\end{equation*}
+
+
+for which we shall provide a type derivation.
+
+\begin{prooftree}
+\AxiomC{$  y : b_0$}
+\UnaryInfC{$ y :b_2$}
+\AxiomC{$  y : b_0$}
+\UnaryInfC{$ y :b_3$}
+\BinaryInfC{$y\; y: c_3$}
+\AxiomC{$  x : a_0$}
+\UnaryInfC{$ x :a_1$}
+\AxiomC{$  y : b_0$}
+\UnaryInfC{$ y :b_1$}
+\BinaryInfC{$ x \; y: c_1$}
+\AxiomC{$  x : a_0$}
+\UnaryInfC{$ x :a_2$}
+\BinaryInfC{$ (x \; y) \; x : c_2$}
+\UnaryInfC{$ \lambda x \, ((x \; y) \; x) :c_4$}
+\BinaryInfC{$ (y\; y) \; (\lambda x \, ((x \; y) \; x)) : c_5$}
+\UnaryInfC{$ \lambda y \,( (y\; y) \; (\lambda x \, ((x \; y) \; x)) ):c_6$}
+\end{prooftree}
+
+
+
+Based on this derivation we start by constructing the type schema.
+
+\begin{equation*}
+\begin{split}
+a_0&= a_1 \wedge a_2 = (b_1 \to (a_2 \to c_2)) \wedge a_2 \\
+a_1&= b_1 \to c_1 =  (b_1 \to (a_2 \to c_2)) \\
+a_2&= ?\\   
+b_0&= b_1 \wedge b_2 \wedge b_3 = b_1 \wedge (b_3 \to ((( (b_1 \to (a_2 \to c_2)) \wedge a_2) \to c_2)\to c_5)) \wedge b_3\\    
+b_1&= ?\\   
+b_2&= b_3 \to c_3 = b_3 \to (a_0 \to c_2)\to c_5= b_3 \to ((( (b_1 \to (a_2 \to c_2)) \wedge a_2) \to c_2)\to c_5)\\
+b_3&= ?\\ 
+c_1&=a_2 \to c_2 \\
+c_2&= ?\\
+c_3&=c_4 \to c_5 = (((b_1 \to (a_2 \to c_2)) \wedge a_2) \to c_2) \to c_5\\
+c_4&= a_0 \to c_2 = ((b_1 \to (a_2 \to c_2)) \wedge a_2) \to c_2\\ 
+c_5&= ?\\
+c_6&= b_0 \to c_5= (b_1 \wedge (b_3 \to ((( (b_1 \to (a_2 \to c_2)) \wedge a_2) \to c_2)\to c_5)) \wedge b_3) \to c_5
+\end{split}
+\end{equation*}
+
+This is the general schema from which we are going to build our types.
+
+We start by setting the following types.
+
+\begin{equation*}
+\begin{split}
+a_2= A; \quad b_1= B; \quad b_3 = B; \quad c_2= C; \quad c_5= D\\ 
+\end{split}
+\end{equation*}
+and substitute to obtain
+
+\begin{equation*}
+\begin{split}
+a_0&= (B \to (A \to C)) \wedge A \\
+a_1&= (B \to (A \to C)) \\
+a_2&= A\\   
+b_0&= B \wedge (B \to ((( (B \to (A \to C)) \wedge A) \to C)\to D))\\    
+b_1&= B\\   
+b_2&=  B \to ((( (B \to (A \to C)) \wedge A) \to C)\to D)\\
+b_3&= B\\ 
+c_1&=A \to C \\
+c_2&= C\\
+c_3&= (((B \to (A \to C)) \wedge A) \to C) \to D\\
+c_4&= ((B \to (A \to C)) \wedge A) \to C\\ 
+c_5&= D\\
+c_6&= (B \wedge (B \to ((( (B \to (A \to C)) \wedge A) \to C)\to D)) \wedge B) \to D
+\end{split}
+\end{equation*}
+
+resulting in \\
+
+
+\begin{sidewaysfigure}
+
+\begin{prooftree}
+\AxiomC{$  y : B \wedge (B \to ((( (B \to (A \to C)) \wedge A) \to C)\to D))^{(*)}$}
+\UnaryInfC{$ y :B \to ((( (B \to (A \to C)) \wedge A) \to C)\to D)$}
+\AxiomC{$  y : (*)$}
+\UnaryInfC{$ y :B$}
+\BinaryInfC{$y\; y: (((B \to (A \to C)) \wedge A) \to C)\to D$}
+\AxiomC{$  x : (B \to (A \to C)) \wedge A$}
+\UnaryInfC{$ x :B \to (A \to C) $}
+\AxiomC{$  y : (*)$}
+\UnaryInfC{$ y :B$}
+\BinaryInfC{$ x \; y: A \to C$}
+\AxiomC{$  x : (B \to (A \to C)) \wedge A$}
+\UnaryInfC{$ x :A$}
+\BinaryInfC{$ (x \; y) \; x : C$}
+\UnaryInfC{$ \lambda x \, ((x \; y) \; x) : ((B \to (A \to C)) \wedge A) \to C$}
+\BinaryInfC{$ (y\; y) \; (\lambda x \, ((x \; y) \; x)) : D$}
+\UnaryInfC{$ \lambda y \,( (y\; y) \; (\lambda x \, ((x \; y) \; x)) ): (B \wedge (B \to ((( (B \to (A \to C)) \wedge A) \to C)\to D)))\to D$}
+\end{prooftree}
+\end{sidewaysfigure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

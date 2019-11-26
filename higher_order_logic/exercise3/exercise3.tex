@@ -1,0 +1,1464 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} [python]
+\usepackage{url}
+\usepackage{bussproofs}
+\usepackage{rotating}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observ}{Observation}
+\newtheorem{mydef}{Definition}
+
+%opening\\
+%
+
+
+\newcommand{\lto}{\supset}
+\newcommand{\liff}{\leftrightarrow}
+\newcommand{\some}{\Diamond}
+\newcommand{\all}{\Box}
+
+\newcommand{\tall}[1]{\left[ #1 \right]}
+\newcommand{\tsome}[1]{\left\langle  #1 \right\rangle}
+
+\newcommand{\eall}{\mathbf{K}}
+\newcommand{\esome}{\mathbf{P}}
+\newcommand{\edisp}{\mathbf{S}}
+\newcommand{\edist}{\mathbf{D}}
+\newcommand{\egen}{\mathbf{E}}
+\newcommand{\ecom}{\mathbf{C}}
+
+\newcommand{\sand}{\; and \;}
+\newcommand{\sor}{ \; or \;}
+\newcommand{\sneg}{not \;}
+\newcommand{\sto}{\Rightarrow}
+\newcommand{\negmodels}{\nvDash}
+
+\newcommand{\derives}{\vdash}
+\newcommand{\nderives}{\nvdash}
+
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+\newcommand{\vanB}{van Benthem}
+\newcommand{\tofo}{\hookleftarrow}
+\newcommand{\of}{\iota }
+\newcommand{\os}{\iota \to o}
+\newcommand{\ot}{(\iota \to o)\to o}
+\begin{document}
+
+%\maketitle
+
+
+\section*{Exercise 3.1}
+\begin{quote}
+Define the syntax and standard semantics for third-order logic. \emph{For simplicity, throughout this assignment you may restrict your attention to a language with no function symbols and function variables, and higher-order quantification restricted to sets, and sets of sets (i.e. unary relations).}
+\end{quote}
+
+In the lecture simple type theory was given as a vehicle for thinking about higher-order logics. Moreover, in \vanB there exists a characterisation of how to "generate" a $k$-order logic, $\mathcal{L}_k$, by using simply type theory. However, given the restriction of the language (relational and monadic) used throughout this exercise, a less general definition will be used to obtain the required third-order logic.
+
+
+\begin{mydef}
+Let $\mathbb{T}_n^n$ for be defined inductively
+\begin{itemize}
+\item $o \in \mathbb{T}_0^0$ the type boolean;
+\item $\iota \in \mathbb{T}_1^1$ the type individual;
+\item $\tau \in \mathbb{T}_n^n$ then $\tau:= \sigma \to o$ for $\sigma \in \mathbb{T}_{n-1}^{n-1}$
+\end{itemize}
+Moreover, let 
+\begin{equation*}
+\mathbb{T}_m^n:= \bigcup_{i = m}^n  \mathbb{T}_i^i
+\end{equation*}
+and let
+\begin{equation*}
+\mathbb{T}:= \bigcup_{i = m}^{\infty} \mathbb{T}_i^i
+\end{equation*}
+\end{mydef}
+
+If $m=0$ the subscript will be dropped.
+
+\paragraph*{Remark} This restriction is possible since in the languages considered here, no function symbols and function variables are present, thus implying that for all types of the form $\tau \to \sigma$ it must follow that $\sigma=o$. Moreover, since all predicates and all predicate symbols will be monadic, types of the form $\tau_1 \to \dots \to \tau_n \to \sigma$ for $\tau_1, \dots, \tau_n, \sigma \in \mathbb{T}$ and $n >1$ can be excluded. Notice, $\mathbb{T}$ is a fragment of the relational variant of the simple type theory. \\
+
+Moreover, this leads to the definition of order.
+
+\begin{mydef}
+Let $\tau \in \mathbb{T}$ be a type, its order $|\tau|$ is defined as $|\tau|=n$ iff $\tau \in \mathbb{T}_n^n$.
+\end{mydef}
+
+Consider the following observation.
+\begin{lemma}
+For every $k$, $|\{ \tau \mid \forall \tau \in  \mathbb{T}\; |\tau| = k\}|=1$.
+\end{lemma}
+\begin{proof}
+For $k<3$ this is clearly the case, i.e. $o$ for $k=0$, $\iota$ for $k=1$ and $\iota \to o$ for $k=2$. Moreover, by induction, let $\tau$ such that $ |\tau|=k+1>2$. Then $\tau = \sigma \to o$, by IH, $|\sigma|=k$ and thus unique. Hence, $\tau$ is unique.
+\end{proof}
+
+This allows to uniquely specify the type by giving its order. \\
+%Rather than using the austere version of $k$-ordered logic presented in \vanB, a language with the same conveniences as found in the definition of second-order logic of the lecture will be constructed.
+
+Using this definition of order, it is here where the signature used in most of what follows will be introduced. 
+
+\begin{mydef}
+Let $L:=\langle \mathit{CS}, \mathit{FS}, \mathit{PS}\rangle$ be a signature. If 
+\begin{itemize}
+\item $\forall c^{\tau} \in \mathit{CS} \; |\tau|=1$, i.e. all constant symbols represent individuals;
+\item $ \mathit{FS}  = \emptyset$ and
+\item $\forall P^{\tau} \in \mathit{PS} \; |\tau|=2 \land \mathit{arity}(P)=1$, i.e. all predicate symbols represent sets of individuals;
+\end{itemize} 
+then $L$ is called an $e$-signature.
+\end{mydef}
+
+Notice that this requires, the signature to be typed.
+
+\subsection*{k-Order Logic}
+This is simply a more general version of the following sub-section.
+This definition draws upon the definition of the syntax of $L_{\omega}$ as presented in \vanB. 
+For a given language $L$, a $L_k$-term is defined as follows:
+\begin{mydef}
+Let $L$ be an $e$-signature. Then the set of $L_k$-terms is defined as
+\begin{equation*}
+\mathrm{Term}(L_k)=\bigcup_{1 \leq i \leq k} \mathrm{Term}_i(L_k)
+\end{equation*}
+where 
+\begin{itemize}
+\item $\mathrm{Term}_1(L_k)$ is defined as:
+\begin{itemize}
+\item  constant symbols, $c^{\iota} \in \mathrm{Term}_1(L_k)$.
+\item  variable symbols, $x^{\iota} \in \mathrm{Term}_1(L_k)$;
+\end{itemize} 
+\item $\mathrm{Term}_i(L_k)$ for $1 \leq i \leq k$ is defined as:
+\begin{itemize}
+\item  variable symbols $x^{\tau} \in \mathrm{Term}_i(L_k)$, if $|\tau|=i$;
+\end{itemize} 
+\end{itemize} 
+\end{mydef}
+
+If apparent from the context the type indicator of a symbol will be dropped, i.e. $x$ instead of $x^{\tau}$ for some type $\tau$.\\
+
+From terms to formulas
+\begin{mydef}
+Let $L$ be an $e$-signature and $k>0$. Then the set of $L_k$-formulas, or short $\mathcal{L}_k$, is defined as
+\begin{itemize}
+\item $\bot \in \mathcal{L}_k$;
+\item If $t \in \mathrm{Term}_1(L_k)$ and $R$ is a relation symbol then $R(t)\in \mathcal{L}_k$;
+\item If $t \in \mathrm{Term}_{i}(L_k)$ and $X^{\tau}$  is a variable s.t. $|\tau|=i+1 \leq k$,  then $X(t) \in \mathcal{L}_k$;
+\item If $\varphi , \psi \in \mathcal{L}_k$, then $\varphi \circ \psi \in \mathcal{L}_k$ for $\circ \in \{\land, \lor , \to \}$ and $\neg \varphi \in \mathcal{L}_k$;
+\item If $\varphi \in  \mathcal{L}_k$ and for $\tau \in \mathbb{T}_1^k$, then $\forall X^{\tau} \varphi \in \mathcal{L}_k$ and $\exists X^{\tau} \varphi \in \mathcal{L}_k$.
+\end{itemize} 
+\end{mydef}
+
+Moving on to the semantics, as with the syntactic definition a restricted form of the semantics presented in \vanB  
+will be given.
+
+\begin{mydef}
+Let $L$ be an $e$-signature. Let  $D$ be a non-empty domain. Given $D$ and $\tau \in \mathbb{T}$ let $D_{\tau}$ be inductively defined as
+\begin{itemize}
+\item if $\tau=o$ then $D_{\tau}:=\{\mathit{true}, \mathit{false}\}$;
+\item if $\tau=\iota$ then $D_{\tau}:=D$;
+\item else $\tau := \sigma\to o$ then $D_{\tau} := \powerset(D_{\sigma})$.
+\end{itemize}
+\end{mydef} 
+
+%Holding on to the definition as presented in \vanB, variable assignments will be used.  
+%
+%\begin{mydef}
+%Let $L$ be a monadic, relational signature. Let $\mathcal{I}:=(D,I)$ be a L-structure and let $\alpha$ be a variable assignment such that when $x^{\tau}$ is a variable, $\alpha(x) \in D_{\tau}$.
+%\end{mydef} 
+
+\begin{mydef}
+Let $L$ be an $e$-signature and let $\varphi \in \mathcal{L}_k$. Let $\mathcal{I}:=\langle D,I \rangle$ be a $L_k$-structure. Let $\mathcal{I}$ interpret $\varphi$. The truth value of $\varphi$ wrt. $\mathcal{I}$ is defined inductively.
+\begin{itemize}
+\item for $P$ being a predicate symbol and $t\in \mathrm{Term}_1(L_k)$, $\mathcal{I} \models P(t)$ if and only if $I(t) \in I(P)$;
+\item for $X^{\tau}$ being a variable with $|\tau|=n>1$ and $t\in \mathrm{Term}_{n-1}(L_k)$, $\mathcal{I} \models X(t)$ if and only if $I(t) \in I(X)$ and $I(X) \in D_{\tau}$;
+\item for $\psi$ being a formula, $\mathcal{I} \models \forall x^{\tau} \; \psi$  if and only if for all $x^{\tau}$-variants $\mathcal{I}'$, i.e.  $\mathcal{I}' \in \{ \mathcal{I} \cup \{x^{\tau} \mapsto c\} \mid \forall c \in D_{\tau} \}$, $\mathcal{I}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{I} \models \forall x^{\tau} \; \psi$  if and only if for some $x^{\tau}$-variants $\mathcal{I}'$, i.e.  $\mathcal{I}' \in \{ \mathcal{I} \cup \{x^{\tau}\mapsto c\} \mid \forall c \in D_{\tau} \}$, $\mathcal{I}' \models \psi$;
+\item $\land$, $\lor$, $\to$, $\neg$ are interpreted as usual.
+\end{itemize}
+\end{mydef} 
+
+\subsection*{Third-Order Logic}
+Now the specific case for third-order logic. Clearly, the set of permissible types is $\mathbb{T}^3:= \{o, \iota, \iota	\to o, (\iota	\to o) \to o \}$
+\begin{mydef}
+Let $L$ be an $e$-signature. Then the set of $L_3$-terms is defined as $\mathrm{Term}(L_3):= \mathrm{Term}_{1} (L_3)\cup \mathrm{Term}_{2}(L_3) \cup \mathrm{Term}_{3}(L_3)$ such that
+\begin{itemize}
+\item  constant symbols, $c^{\of} \in \mathrm{Term}_1(L_3)$;
+\item  variable symbols, $x^{\of} \in \mathrm{Term}_1(L_3)$;
+\item  variable symbols, $X^{\os} \in \mathrm{Term}_2(L_3)$;
+\item  variable symbols, $\mathbf{X}^{\ot} \in \mathrm{Term}_3(L_3)$;
+\end{itemize} 
+\end{mydef}
+Notice, the stylistic separation based on the type of variable. \\
+
+For a given $e$-signature $L$ a $L_3$-formula is defined as follows:
+\begin{mydef}
+Let $L$ be an $e$-signature. Then the set of $\mathcal{L}_3$-formulas, or short $\mathcal{L}_3$, is defined as
+\begin{itemize}
+\item $\bot \in \mathcal{L}_k$;
+\item If $t \in \mathrm{Term}_1(L_3)$ and $R$ is a relation symbol then $R(t)\in \mathcal{L}_3$;
+\item If $t \in \mathrm{Term}_{1}(L_3)$ and $X^{\os}$ is a variable,  then $X(t) \in \mathcal{L}_3$;
+\item If $T \in \mathrm{Term}_{2}(L_3)$ and $\mathbf{X}^{\ot}$ is a variable,  then $\mathbf{X}(T) \in \mathcal{L}_3$;
+\item If $\varphi , \psi \in \mathcal{L}_3$, then $\varphi \circ \psi \in \mathcal{L}_3$ for $\circ \in \{\land, \lor , \to \}$ and $\neg \varphi \in \mathcal{L}_3$;
+\item If $\varphi \in  \mathcal{L}_3$, then 
+\begin{itemize}
+\item $\forall x^{\of} \varphi \in \mathcal{L}_3$ and $\exists x^{\of} \varphi \in \mathcal{L}_3$;
+\item $\forall X^{\os} \varphi \in \mathcal{L}_3$ and $\exists X^{\os} \varphi \in \mathcal{L}_3$;
+\item $\forall \mathbf{X}^{\ot} \varphi \in \mathcal{L}_3$ and $\exists \mathbf{X}^{\ot} \varphi \in \mathcal{L}_3$;
+\end{itemize}
+
+
+\end{itemize} 
+\end{mydef}
+
+
+Moving on to the semantics.
+
+\begin{mydef}
+Let $L$ be an $e$-signature. Let  $D$ is a non-empty domain, then let
+\begin{itemize}
+\item $D_{o}:=\{\mathit{true}, \mathit{false}\}$;
+\item $D_{\of}:=D$;
+\item $D_{\os }:=\powerset(D_{\of})$;
+\item $D_{\ot}:=\powerset(D_{\os})$.
+\end{itemize}
+\end{mydef} 
+
+
+\begin{mydef}
+Let $L$ be an $e$-signature and let $\varphi \in \mathcal{L}_3$. Let $\mathcal{I}:=\langle D,I \rangle$ be a $L_3$-structure. Let $\mathcal{I}$ interpret $\varphi$. The truth value of $\varphi$ wrt. $\mathcal{I}$ is defined inductively.
+\begin{itemize}
+\item for predicate symbol $P$ and $t\in \mathrm{Term}_1(L_3)$, $\mathcal{I} \models P(t) \iff I(t) \in I(P)$;
+\item for $X^{\os}$ and $t\in \mathrm{Term}_{1}(L_3)$, $\mathcal{I} \models X(t) \iff I(t) \in I(X) \subseteq D_{\of}$;
+\item for $\mathbf{X}^{\ot}$ and $T\in \mathrm{Term}_{2}(L_3)$, $\mathcal{I} \models X(t) \iff I(T) \in I(\mathbf{X}) \subseteq D_{\os}$;
+\item for $\psi$ being a formula, $\mathcal{I} \models \forall x^{\of} \; \psi$  if and only if for all $x$-variants $\mathcal{I}'$, $\mathcal{I}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{I} \models \forall X^{\os} \; \psi$  if and only if for all $X$-variants $\mathcal{I}'$, $\mathcal{I}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{I} \models \forall \mathbf{X}^{\ot} \; \psi$  if and only if for all $\mathbf{X}$-variants $\mathcal{I}'$, $\mathcal{I}' \models \psi$;
+%\item for $\psi$ being a formula, $\mathcal{I} \models \forall x^{\iota} \; \psi$  if and only if for some $x$-variants $\mathcal{I}'$, i.e.  $\mathcal{I}' \in \{ \mathcal{I} \cup \{x \mapsto c\} \mid \forall c \in D_{\iota} \}$, $\mathcal{I}' \models \psi$;
+%\item for $\psi$ being a formula, $\mathcal{I} \models \forall X^{\iota \to o} \; \psi$  if and only if for some $X$-variants $\mathcal{I}'$, i.e.  $\mathcal{I}' \in \{ \mathcal{I} \cup \{X \mapsto S\} \mid \forall S \in D_{\iota \to o} \}$, $\mathcal{I}' \models \psi$;
+%\item for $\psi$ being a formula, $\mathcal{I} \models \forall \mathbf{X}^{(\iota \to o) \to o} \; \psi$  if and only if for some $\mathbf{X}$-variants $\mathcal{I}'$, i.e.  $\mathcal{I}' \in \{ \mathcal{I} \cup \{\mathbf{X} \mapsto \mathbf{S}\} \mid \forall \mathbf{S} \in D_{(\iota \to o) \to o} \}$, $\mathcal{I}' \models \psi$;
+\item $\exists x^{\of} \; \psi$, $\exists X^{\os} \; \psi$ and $ \exists \mathbf{X}^{\ot} \; \psi$, analogue as above (replace "all" with "some");
+\item $\land$, $\lor$, $\to$, $\neg$ are interpreted as usual.
+\end{itemize}
+\end{mydef} 
+
+
+\section*{Exercise 3.2}
+\begin{quote}
+Show how third-order logic can be re-interpreted as first-order logic, by defining a Henkin semantics and restricting attention to the third- order formulae that are valid under those semantics. Deduce that this set of formulae is recursively enumerable.
+\end{quote}
+
+In a standard model the type structure is build by making the next level to be equal to the power set over previous level. This can be generalised, thereby obtaining the notion of a Henkin-$L_k$-prestructure .
+
+\begin{mydef}
+Let $L$ be an $e$-signature. Then $\mathcal{H}:=\langle D, I \rangle_{\mathfrak{H}}$ is a Henkin-$L_3$-prestructure  if
+\begin{itemize}
+\item $I(o)=D_o^{\mathfrak{H}}:=\{\mathrm{true}, \mathrm{false}\}$;
+\item $I(\of)=D_{\of}^{\mathfrak{H}}:=D$;
+\item $I(\os)=D_{\os}^{\mathfrak{H}}:\subseteq \powerset(D_{\of})$;
+\item $I(\ot)= D_{\ot}^{\mathfrak{H}}:\subseteq \powerset(D_{\os})$.
+\item $I$ interprets the constant symbols in the signature $L$, i.e.
+\begin{itemize}
+\item if $c$ is a constant symbol then $I(c) \in D_{\of}^{\mathfrak{H}}$;
+\item if $R$ is a relation symbol then $I(R) \in D_{\os}^{\mathfrak{H}}$ (or equally $I(R) \subseteq D_{\of}^{\mathfrak{H}}$).
+\end{itemize}
+\end{itemize}
+\end{mydef}
+
+
+What follows  adapts the definition of standard semantics by the generalisations introduced above. Essentially, the only thing that changed is changing the domain at each type level.
+
+\begin{mydef}
+Let $L$ be an $e$-signature and let $\varphi \in \mathcal{L}_3$. Let $\mathcal{H}:=\langle D, I \rangle_{\mathfrak{H}}$ be a Henkin-$L_3$-prestructure. Let $\mathcal{H}$ interpret $\varphi$. The truth value of $\varphi$ wrt. $\mathcal{I}$ is defined inductively.
+\begin{itemize}
+\item for predicate symbol $P$ and $t\in \mathrm{Term}_1(L_3)$, $\mathcal{H} \models P(t) \iff I(t) \in I(P)$;
+\item for $X^{\os}$ and $t\in \mathrm{Term}_{1}(L_3)$, $\mathcal{H} \models X(t) \iff I(t) \in I(X) \subseteq D_{\iota}^{\mathfrak{H}}$;
+\item for $\mathbf{X}^{\ot}$ and $T\in \mathrm{Term}_{2}(L_3)$, $\mathcal{H} \models X(t) \iff I(T) \in I(\mathbf{X}) \subseteq D_{\iota \to o}^{\mathfrak{H}}$;
+\item for $\psi$ being a formula, $\mathcal{H}\models \forall x^{\of} \; \psi$  if and only if for all $x$-variants $\mathcal{H}'$, i.e.  $\mathcal{H}' \in \{ \mathcal{H} \cup \{x \mapsto c\} \mid \forall c \in D_{\of}^{\mathfrak{H}} \}$, $\mathcal{H}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{H}\models \forall X^{\os} \; \psi$  if and only if for all $X$-variants $\mathcal{H}'$, i.e.  $\mathcal{H}' \in \{ \mathcal{H}\cup \{X \mapsto S\} \mid \forall S \in D_{\os}^{\mathfrak{H}} \}$, $\mathcal{H}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{H} \models \forall \mathbf{X}^{\ot} \; \psi$  if and only if for all $\mathbf{X}$-variants $\mathcal{H}'$, i.e.  $\mathcal{H}' \in \{ \mathcal{H}\cup \{\mathbf{X} \mapsto \mathbf{S}\} \mid \forall \mathbf{S} \in D_{\ot}^{\mathfrak{H}} \}$, $\mathcal{H}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{H}\models \exists x^{\of} \; \psi$  if and only if for some $x$-variants $\mathcal{H}'$, $\mathcal{H}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{H}\models \exists X^{\os} \; \psi$  if and only if for some $X$-variants $\mathcal{H}'$, $\mathcal{H}' \models \psi$;
+\item for $\psi$ being a formula, $\mathcal{H}\models \exists \mathbf{X}^{\ot} \; \psi$  if and only if for some $\mathbf{X}$-variants $\mathcal{H}'$, $\mathcal{H}' \models \psi$;
+\item $\land$, $\lor$, $\to$, $\neg$ are interpreted as usual.
+\end{itemize}
+\end{mydef} 
+
+The notion of a Henkin-prestructure can be strengthened to the notion of a Henkin-structure. 
+
+\begin{mydef}
+Let $L$ be an $e$-signature. Let $\mathcal{H}$ be a Henkin-$L_3$-prestructure. $\mathcal{H}$ is a  Henkin-$L_3$-structure if it is closed under definability\footnote{ alternative characterisation $ \forall t^{\tau} \in \mathrm{Term}(L_3)\; I(t) \in D_{\tau}^{\mathfrak{H}} $ for $\tau \in \mathbb{T}_1^3$.},  i.e. for each $\varphi \in\mathcal{L}_3$ and $\tau = (\sigma \to o)  \in \mathbb{T}_1^3$
+\begin{equation*}
+\{ x \mid \forall x \in D_{\sigma}, \mathcal{H}'\;  x^{\sigma}\textit{-variant} ,\; \mathcal{H}' \models \varphi\} \in D_{\tau}^{\mathfrak{H}}.
+\end{equation*}
+\end{mydef}
+
+Finally, leading to the definition of Henkin-validity.
+
+\begin{mydef}
+A formula $\varphi \in \mathcal{L}_3$ is called Henkin-valid, if it is true in all Henkin structures.
+\end{mydef}
+
+The first step towards, providing a first order semantics for third-order logic under Henkin-semantics, i.e. showing that Henkin-validity can be reduced to first-order logical consequence, is to define a translation of $\mathcal{L}_3$ to a  set of first-order formulas. 
+
+
+\begin{mydef}
+Let $L$ be an $e$-signature, then 
+\begin{equation*}
+L_3^{\tofo} := L \cup \{ E_{\os} / 2 , E_{\ot}/2\} \cup \{ T_{\of} / 1, T_{\os} / 1 , T_{\ot}/1\}
+\end{equation*}
+\end{mydef} 
+
+Building on this consider the following syntactic translation.
+
+\begin{mydef}
+Let $L$ be a $e$-signature and let $\varphi \in \mathcal{L}_3$ then $\cdot^{\tofo}$ is defined recursively 
+\begin{itemize}
+\item If $\varphi = X^{\os}(t)$ then $\varphi^{\tofo}:=E_{\os}(t, x)$;
+\item If $\varphi = \mathbf{X}^{\ot}(t)$ then $\varphi^{\tofo}:=E_{\ot}(x, t)$;
+\item If $\varphi = \psi \circ \chi$ then $\varphi^{\tofo}:=\psi^{\tofo} \circ \chi^{\tofo} $ for all $\circ \in \{ \land ,\lor, \to \}$;
+\item If $\varphi = \neg \psi$ then $\varphi^{\tofo}:=\neg \psi^{\tofo}$;
+\item If $\varphi = \forall X^{\os}  \psi$ then $\varphi^{\tofo}:=\forall x \; T_{\os}(x) \to \psi^{\tofo}$ where $x$ is fresh;
+\item If $\varphi = \forall \mathbf{X}^{\ot}  \psi$ then $\varphi^{\tofo}:=\forall x \; T_{\ot}(x) \to \psi^{\tofo}$ where $x$ is fresh;
+\item If $\varphi = \exists X^{\os}  \psi$ then $\varphi^{\tofo}:=\exists x \; T_{\os}(x) \land \psi^{\tofo}$ where $x$ is fresh;
+\item If $\varphi = \exists \mathbf{X}^{\ot}  \psi$ then $\varphi^{\tofo}:=\exists x \; T_{\ot}(x) \land \psi^{\tofo}$ where $x$ is fresh;
+\end{itemize}
+Moreover, let $\mathcal{L}_3^{\tofo}:=\{\varphi^{\tofo} \mid \forall \varphi \in \mathcal{L}_3\}$ be the set of formulas over $\mathcal{L}_3^{\tofo}$.
+\end{mydef} 
+It is easy to see that $\mathcal{L}_3^{\tofo} \subseteq \mathcal{L}_1$. Furthermore, this translation has a semantic counterpart. 
+
+\begin{mydef}
+Let $L$ be a $e$-signature and let $\mathcal{H}:=\langle D, I \rangle_{\mathfrak{H}}$ be a Henkin-$L_3$-prestructure. Then one obtains the following standard first-order $L_3^{\tofo}$-structure $\mathcal{H}^{\tofo}=\langle D^{\tofo}, I^{\tofo} \rangle$.
+\begin{itemize}
+\item $D^{\tofo}:=D_{\iota}^{\mathfrak{H}} \cup D_{\iota \to o}^{\mathfrak{H}} \cup D_{(\iota \to o) \to o}^{\mathfrak{H}}$ ;
+%\item $I^{\tofo}(c):=I(c)$ for $c$ constant $L$-symbol;
+%\item $I^{\tofo}(P):=I(P)$ for $P$ predicate $L$-symbol;
+\item $I^{\tofo}(T_{\tau}) := D_{\tau}^{\mathfrak{H}}$ for $\tau \in \mathbb{T}_1^3$;
+\item $I^{\tofo}(E_{\tau}) := \in$ for $\tau \in \mathbb{T}_2^3$, i.e. for $\tau:= \sigma \to o$, $I^{\tofo}(E_{\tau})(x,y)$ if and only if $x \in  D_{\sigma}^{\mathfrak{H}}$, $y \in  D_{\tau}^{\mathfrak{H}}$ and $x \in y$;
+\item the interpretation of $L_3$-symbols is the same as in $\mathcal{H}$.
+\end{itemize}
+\end{mydef} 
+
+
+Now consider the following lemma
+
+\begin{lemma}
+\label{lemma:x-variant}
+Let $\mathcal{H}$ be a Henkin-$L_3$-prestructure and $\tau \in \mathbb{T}_1^3$, then  $\mathcal{H}'$, $x^{\tau}$-variants of $\mathcal{H}$ if and only if  $\mathcal{H}'^{\tofo}$, $x$-variants of $\mathcal{H}^{\tofo}$ if restricted to $I^{\tofo}(x)\in  I^{\tofo}(T_{\tau})$. And where $x$ is the variable replacing $x^{\tau}$ after the transformation.
+\end{lemma}
+\begin{proof}
+Since $\mathcal{H}'= \mathcal{H} \cup \{ x^{\tau} \mapsto m\}$ for some $m \in D_{\tau}^{\mathfrak{H}}$, thus $(\mathcal{H}')^{\tofo}= \mathcal{H}^{\tofo} \cup \{ x \mapsto m\}$. Hence, $(\mathcal{H}')^{\tofo}$ differs from $ \mathcal{H}^{\tofo}$ by only $x$ and where $m \in  D_{\tau}^{\mathfrak{H}}$ implies that $I(x) \in I^{\tofo}(T_{\tau})$. Similar in the other direction.
+\end{proof}
+
+
+
+\begin{lemma}
+\label{lemma:tofo-equal}
+Let $\mathcal{H}$ be a Henkin-$L_3$-prestructure and $\varphi \in \mathcal{L}_3$. Then $\mathcal{H} \models \varphi$ if and only if $\mathcal{H}^{\tofo} \models \varphi^{\tofo}$.
+\end{lemma}
+\begin{proof}
+This will be done by induction on the structure on $\varphi$.
+
+\paragraph*{Induction Basis:}
+\begin{itemize}
+\item $\varphi= P(t)$ for $P$ predicate symbol. Trivial.
+\item $\mathcal{H} \models X^{\os}(t)$ for some term $t \in \mathrm{Term}_1(L_3)$. Meaning that $I(t) \in I(X)$, $I(X) \in D_{\os}^{\mathfrak{H}}$ and that $I(t) \in D_{\of}^{\mathfrak{H}}$. Hence, by construction of $I^{\tofo}$, this is equivalent to $I^{\tofo}(E)(I(t),I(X))$, since $I(t)=I^{\tofo}(t)$ and $I(X)=I^{\tofo}(x)$, it this is equivalent to $\mathcal{H}^{\tofo} \models E(t,x)$.
+\item $\mathcal{H} \models \mathbf{X}^{\ot}(T)$ for some term $T \in \mathrm{Term}_2(L_3)$. Analogue to above.
+%Meaning that $I(T) \in I(X)$, $I(X) \in D_{\ot}^{\mathfrak{H}}$ and that $I(T) \in D_{\os}^{\mathfrak{H}}$. Hence, by construction of $I^{\tofo}$, this is equivalent to $I^{\tofo}(E)(I(t),I(X))$, since $I(T)=I^{\tofo}(T)$ and $I(\mathbf{X})=I^{\tofo}(x)$, it this is equivalent to $\mathcal{H}^{\tofo} \models E(T,x)$.
+
+%Moreover, it is known that $(X(t))^{\tofo}= E_{\os}(t,x)$ is modelled by $\mathcal{H}^{\tofo}$ if and only if $I^{\mathcal{H}}(x) \in I^{\mathcal{H}}(X)$ and that $I^{\tofo}(x) \in D_{\os}^{\mathfrak{H}}$ as well as $I^{\tofo}(t) \in D_{\of}^{\mathfrak{H}}$
+
+\end{itemize}
+Thus all atoms are covered.
+
+\paragraph*{Induction Step:}
+\begin{itemize}
+\item $\varphi= \psi \circ \chi$ for $\circ \in \{ \land ,\lor, \to\}$. Follows by semantics as usual.
+\item $\varphi= \neg  \psi $.  Follows by semantics as usual.
+\item $\varphi = \forall x \; \psi$. Hence, $\mathcal{H}' \models \psi$ for all $x^{\of}$-variants of $\mathcal{H}$. Moreover, $(\forall x \; \psi)^{\tofo}=\forall x \, (T_{\of}(x) \to \psi^{\tofo})$. Take an arbitrary $x$-variant $(\mathcal{H}^{\tofo})'$ of $\mathcal{H}^{\tofo}$, such that $x$ is mapped to $m$. If $m \notin D_{\of}^{\mathfrak{H}}$, then $(\mathcal{H}^{\tofo})' \nmodels T_{\of}(x)$ and therefore $(\mathcal{H}^{\tofo})' \models T_{\of}(x) \to \psi^{\tofo}$. Otherwise, $(\mathcal{H}^{\tofo})'$ is a restricted $x$-variant. Thus there exists an $x^{\of}$-variant $\mathcal{H'}$ of $\mathcal{H}$ such that $(\mathcal{H}^{\tofo})'=(\mathcal{H}')^{\tofo}$ and then by IH $(\mathcal{H}^{\tofo})' \models \psi^{\tofo}$. Hence,  $T_{\of}(x) \to \psi^{\tofo}$ for all $x$-variants of $\mathcal{H}^{\tofo}$, thus resulting in  $\mathcal{H}^{\tofo}\models \forall x\; \psi^{\tofo}$. 
+
+In the other direction, $(\mathcal{H}^{\tofo})' \models \forall x (T_{\of}(x) \to \psi^{\tofo})$ for all $x$-variants of $\mathcal{H}^{\tofo}$. Hence, for all variants where $x$ maps to an element $m \in D_{\of}^{\mathfrak{H}}$,  $(\mathcal{H}^{\tofo})' \models \psi^{\tofo}$. Since, for each $x^{\of}$-variant of $\mathcal{H}$ there exists such an restricted variant and by IH it follows that, for all $x^{\of}$-variants $\mathcal{H}'$ of $\mathcal{H}$, $\mathcal{H}' \models \psi$. Therefore, resulting in $\mathcal{H} \models \forall x \; \psi$.
+
+\item  $\varphi = \forall X^{\os} \; \psi$ and $\varphi = \forall \mathbf{X} \; \psi$ analogue to above.
+
+\item $\varphi = \exists x^{\of} \; \psi$. Hence, $\mathcal{H}' \models \psi$ for some $x^{\of}$-variants of $\mathcal{H}$, let $x$ be mapped to $m$. By Lemma \ref{lemma:x-variant}, there exists an $x$-variant $(\mathcal{H}^{\tofo})'$ of $\mathcal{H}^{\tofo}$ such that $(\mathcal{H}')^{\tofo} =(\mathcal{H}^{\tofo})'$.  By IH $(\mathcal{H}')^{\tofo} \models \psi^{\tofo}$ and since $m \in D_{\of}^{\mathfrak{H}}$ by construction $(\mathcal{H}^{\tofo})'$ is a restricted variant such that $m\in I^{(\mathcal{H}^{\tofo})'}(T_{\of})$. Therefore, $(\mathcal{H}^{\tofo})' \models T_{\of}(x)\land \psi^{\tofo}$. Resulting in $\mathcal{H}^{\tofo} \models \exists x T_{\of}(x) \land \psi^{\tofo}$.
+
+Starting from $(\mathcal{H}^{\tofo})' \models T_{\of}(x) \land \psi^{\tofo}$ for some $x$-variants of $\mathcal{H}^{\tofo}$. Clearly, this variant must be restricted to those values in $I^{(\mathcal{H}^{\tofo})' }(T_{\of})$. Hence, by Lemma \ref{lemma:x-variant}, there exists an $x^{\of}$-variant $(\mathcal{H}')^{\tofo}$ of $\mathcal{H}$ such that $(\mathcal{H}')^{\tofo} =(\mathcal{H}^{\tofo})'$. Hence, resulting in $\mathcal{H} \models \exists x^{\of} \; \psi$.
+
+
+\item $\varphi = \exists X \; \psi$ and $\varphi = \exists \mathbf{X} \; \psi$, analogue to above.
+
+\end{itemize}
+\end{proof}
+
+
+Having the next step is to force arbitrary standard structures to behave as the translated Henkin-prestructure. This can be done syntactically.
+
+\begin{mydef}
+For the signature $L_3^{\tofo}$ with the underlying $e$-signature $L$, let $\Gamma$ contain
+\begin{enumerate}
+\item Non-emptiness: $\exists x\;T_{\of}(x)$;
+\item $L_3$-correctness: 
+\begin{enumerate}
+\item $T_{\of}(c)$ for all constant symbols $c$ in $L$;
+\item $\forall x (P(x) \to T_{\of}(x))$ for all predicate symbols $P$ in $L$;
+\end{enumerate}
+\item disjointness: $\forall \tau, \sigma \in \mathbb{T}_1^3$ s.t. $\tau \neq \sigma$, $\forall x (T_{\tau}(x) \to \neg T_{\sigma}(x))$;
+\item inclusion: $\forall x \;( T_{\of}(x) \lor T_{\os}(x) \lor T_{\ot}(x))$;
+\item elementhood:
+\begin{enumerate}
+\item  $\forall x\forall y E_{\os}(y,x) \to T_{\os}(x) \land T_{\of}(y)$ and
+\item$\forall x\forall y E_{\ot}(y,x) \to T_{\ot}(x) \land T_{\os}(y)$;
+\end{enumerate}
+\item extensionality: 
+\begin{equation*}
+\forall x \forall y \big(T_{\os}(x) \land T_{\os}(y)  \land \forall z ( E_{\os}(z,x)  \leftrightarrow  E_{\os}(z,y) ) \to  x = y\big)
+\end{equation*}
+and
+\begin{equation*}
+\forall x \forall y \big(T_{\ot}(x) \land T_{\ot}(y)  \land \forall z ( E_{\ot}(z,x)  \leftrightarrow  E_{\ot}(z,y) ) \to  x = y\big).
+\end{equation*}
+\end{enumerate}
+\end{mydef}
+
+Next, one has to check if those formulas are actually valid in every Henkin-prestructure.
+
+\begin{lemma}
+\label{lemma:gamma-sat}
+For any Henkin-$L_3$-prestructure $\mathcal{H}$  it holds that $\mathcal{H}^{\tofo} \models \Gamma$.
+\end{lemma}
+\begin{proof}
+Firstly, $\Gamma$ is clearly consistent. Now, consider an arbitrary Henkin-$L_3$-prestructure $\mathcal{H}$. Since $D_{\of}^{\mathfrak{H}}$ is not empty, $I^{\tofo}(T_{\of})$ is not empty as well, thus (1) is satisfied. Moreover, by definition (2) is also satisfied. Since all $D_{\tau}^{\mathfrak{H}}$ for $\tau \in \mathbb{T}_1^3$ are disjoint, (3) follows from the translation or the $D_{\tau}^{\mathfrak{H}}$ to $I^{\tofo}(T_{\tau})$ . Similarly, (4) follows from construction of the domain and the respective interpretations of the $T$'s. (5) follows again directly from the type hierarchy and the definition of the respective $E$'s. Lastly, from set theory it is known that two sets are equal if they have the same members. Hence, by construction of the interpretations of the $E$'s and $T$'s under $\mathcal{H}^{\tofo}$, (6) is satisfied.
+\end{proof}
+
+
+Now consider the following extension of $\Gamma$.
+
+
+\begin{mydef}
+For the signature $L_3^{\tofo}$, let $\Gamma_T$ be defined by adding all comprehension axioms of the form
+\begin{equation*}
+\big(\exists Y^{\os} \forall x^{\of} (Y(x) \leftrightarrow \varphi)\big)^{\tofo}
+\end{equation*}
+and
+\begin{equation*}
+\big(\exists \mathbf{Y}^{\ot} \forall X^{\os} (\mathbf{Y}(X) \leftrightarrow \varphi))^{\tofo}
+\end{equation*}
+where $\varphi \in \mathcal{L}_3$ such that $Y$ not free.
+
+\end{mydef}
+
+Those axioms are satisfied not by all Henkin-prestructures but only Henkin-structures.
+
+\begin{lemma}
+\label{lemma:gammaT-sat}
+For any Henkin-$L_3$-structure $\mathcal{H}$  it holds that $\mathcal{H}^{\tofo} \models \Gamma_T$.
+\end{lemma}
+\begin{proof}
+Firstly, $\Gamma$ is satisfied since $\mathcal{H}$ is a special case of a Henkin-$L_3$-prestructure. Consider $\varphi:=\big( \exists Y^{\tau} \forall x^{\sigma} (Y(x) \leftrightarrow \psi)\big)^{\tofo}$, where $\psi \in \mathcal{L}_3$,  $\tau:= (\sigma \to o) \in \mathbb{T}_1^3$ and such that $Y$ not free. By Lemma \ref{lemma:tofo-equal} it suffices to show that $\mathcal{H} \models \exists Y^{\tau} \forall x^{\sigma} (Y(x) \leftrightarrow \psi)$. Let  $I(Y):=\{x \mid \forall x \in D_{\sigma},\mathcal{H}' \; x^{\sigma}\textit{-variant} ,\; \mathcal{H}'\models \psi \}\in D_{\tau}^{\mathfrak{H}}$, the existence of which is guaranteed by closure wrt. definability.  
+%Which follows from $Y$  being an definable term and from the closure wrt. definability.  
+\end{proof}
+
+Additionally, the following lemma is needed.
+
+\begin{lemma}
+\label{lemma:compre-structure}
+For any Henkin-$L_3$-prestructure $\mathcal{H}$, if $\mathcal{H} \models \Gamma_T\setminus \Gamma$ then $\mathcal{H}$ is a Henkin-$L_3$-structure.
+\end{lemma}
+\begin{proof}
+Suppose $\mathcal{H}$ satisfies all comprehension axioms. Consider $\varphi:=\exists Y^{\tau} \forall x^{\sigma} (Y(x) \leftrightarrow \psi)^{\tofo}$, where $\psi \in \mathcal{L}_3$,  $\tau:= (\sigma \to o) \in \mathbb{T}_1^3$ and such that $Y$ not free. Hence, for an arbitrary $\psi$ there must be $\{x \mid \forall x \in D_{\sigma},\mathcal{H}' \; x^{\sigma}\textit{-variant} ,\; \mathcal{H}'\models \psi \}\in D_{\tau}^{\mathfrak{H}}$. Otherwise, there would not be an element in $ D_{\tau}^{\mathfrak{H}}$ that satisfies the requirements of demanded by syntactic claim of the existence of $Y$. From this it follows that $\mathcal{H}$ is closed wrt. definability.
+%Which follows from $Y$  being an definable term and from the closure wrt. definability.  
+\end{proof}
+
+Finally, allowing the first correspondence between third-order logic and first-order logic.
+
+\begin{lemma}
+\label{lemma:fo-iso}
+Let $\mathcal{I}$ be an $L_3^{\tofo}$-structure, then $\mathcal{I}\models \Gamma$ if and only if there exists a Henkin-$L_3$-prestructure $\mathcal{H}$ such that $\mathcal{H}^{\tofo}\cong\mathcal{I}$.
+\end{lemma}
+\begin{proof}
+Since, by Lemma \ref{lemma:gamma-sat} it is known that $\mathcal{H}^{\tofo}\models \Gamma^{\tofo}$ and from the assumption that $\mathcal{H}^{\tofo} \cong \mathcal{I}$ it follows that $\mathcal{I}\models \Gamma$ (see Homework 1). \\
+
+As for the other direction. First the construction of $\mathcal{H}$. From $\mathcal{I}$ the following domains can be extracted:
+\begin{itemize}
+\item Let $D_{\of}^{\mathfrak{H}}:=I^{\mathcal{I}}(T_{\of})$, which is possible since (1) requires $I^{\mathcal{I}}(T_{\of}) \neq \emptyset$.
+\item Let $D_{\os}^{\mathfrak{H}}:=\{ \mathcal{S}(y) \mid \forall  y \in I^{\mathcal{I}}(T_{\os})\}$, where $\mathcal{S}(y):= \{ x \mid \forall x \; I^{\mathcal{I}}(E_{\os})(x,y)\}$.
+\item Let $D_{\ot}^{\mathfrak{H}}:=\{\mathcal{T}(z) \mid \forall  z \in I^{\mathcal{I}}(T_{\ot})\}$, where $\mathcal{T}(z):=\{ \mathcal{S}(y) \mid \forall y \;   I^{\mathcal{I}}(E_{\ot})(y,z)\}$.
+\end{itemize}
+Now due to (2) one can simply re-use the interpretation of the constant and predicate symbols from $\mathcal{I}$ in $\mathcal{H}$. Now with an appropriate type hierarchy, i.e. $D_{\of}^{\mathfrak{H}} = D^{\mathcal{H}} \neq \emptyset$, $D_{\os}^{\mathfrak{H}} \subseteq  \powerset(D^{\mathcal{H}})$ as well as $D_{\ot}^{\mathfrak{H}} \subseteq  \powerset^2(D^{\mathcal{H}}):= \powerset(\powerset(D^{\mathcal{H}}))$, and a complete assignment of predicate and constant symbols, one can conclude that $\mathcal{H}$ is a Henkin-$L_3$-prestructure. \\
+
+What remains to show is the isomorphism. Normally, this can be constructed by induction. However, with only three levels, constructing the isomorphism $\pi: D^{\mathcal{I}} \to D^{\mathcal{H}^{\tofo}} $ can be done by hand.
+\begin{equation*}
+\pi(x) :=
+ \begin{cases}
+ x & \quad x \in I^{\mathcal{I}}(T_{\of}) \\
+\mathcal{S}(x) & \quad x \in I^{\mathcal{I}}(T_{\os}) \\
+\mathcal{T}(x)    & \quad x \in I^{\mathcal{I}}(T_{\ot}) \\
+ \end{cases}
+\end{equation*}
+Firstly, observe that through (4) $\pi$ covers the whole domain, and by (3) every element is mapped deterministically. Hence, $\pi$ is a well-defined function. By definition of $\mathcal{H}^{\tofo}$ and given the construction of $\mathcal{H}$, it is known that 
+\begin{equation*}
+D^{\mathcal{H}^{\tofo}}=I^{\mathcal{I}}(T_{\of}) \cup \{ \mathcal{S}(y) \mid \forall  y \in I^{\mathcal{I}}(T_{\os})\} \cup \{\mathcal{T}(z) \mid \forall  z \in I^{\mathcal{I}}(T_{\ot})\}
+\end{equation*}
+and since $\pi$ is well defined, one obtains surjectivity. Moreover, if there would be two $x,y \in D^{\mathcal{I}}$ mapping to the same element $z \in D^{\mathcal{H}^{\tofo}}$. Then this would mean that they are in the same $I^{\mathcal{I}}(T_{\tau})$ and that they always agree on $I^{\mathcal{I}}(E_{\tau})$. However, by (6) this implies that $x=y$, thus $\pi$ is injective. Hence, $\pi$ is bijective. Now, by (2) constant and predicate symbols assignment of the original $L$ is preserved. By construction, if $x\in I^{\mathcal{I}}(T_{\tau})$ holds then $h(x) \in  D_{\tau}^{\mathfrak{H}}$ and thus, by $\cdot^{\tofo}$, $h(x) \in I^{\mathcal{H}^{\tofo}}(T_{\tau})$. By (5) the appropriate "type structure" is enforced such that by construction, one can conclude that $I^{\mathcal{I}}(E_{\tau})(x,y)$ then $I^{\mathcal{H}^{\tofo}}(E_{\tau})(h(x),h(y))$. Thereby establishing that $\pi$ is isomorphic.
+\end{proof}
+
+This can be strengthened to Henkin-structures, leading to the following lemma
+
+\begin{lemma}
+\label{lemma:str-iso}
+Let $\mathcal{I}$ be a $L_3^{\tofo}$-structure. Then $\mathcal{I} \models \Gamma_T$ iff there is a  Henkin-$L_3$-structure $\mathcal{H}$ such that $\mathcal{H}^{\tofo} \cong \mathcal{I}$.
+\end{lemma}
+\begin{proof}
+If $\mathcal{H}^{\tofo} \cong \mathcal{I}$ for some Henkin-$L_3$-structure $\mathcal{H}$, then by isomorphism and by Lemma \ref{lemma:gammaT-sat}, $\mathcal{I} \models \Gamma_T$. 
+
+
+It is known that if $\mathcal{I} \models \Gamma$ then $\mathcal{I} \cong \mathcal{H}^{\tofo}$ for $ \mathcal{H}$ being a Henkin-$L_3$-prestructure. Additionally, assume that $\mathcal{I} \models  \Gamma_T$ since isomorphism preserves truth, it therefore follows that  $ \mathcal{H}^{\tofo}$ satisfies all comprehension axioms. Therefore, one can conclude, by Lemma \ref{lemma:tofo-equal} and Lemma \ref{lemma:compre-structure}, that $\mathcal{H}$ is a Henkin-$L_3$-structure.
+\end{proof}
+
+Which then culminates in 
+\begin{lemma}
+\label{lemma:fo-equ}
+The set of Henkin-valid formulas is equal to the set of logical first-order consequences from $\Gamma_T$. That is, let $\mathbb{H}$ be the set of all Henkin-$L_3$-structures and likewise let $\mathbb{I}$ be the set of all $L_3^{\tofo}$-structures $\mathcal{I}$ such that  $\mathcal{I} \models \Gamma_T $. For every $\varphi \in \mathcal{L}_3$ 
+\begin{equation*}
+\forall \mathcal{H} \in \mathbb{H} \; \mathcal{H} \models \varphi \; \iff \; \forall \mathcal{I} \in \mathbb{I} \; \mathcal{I} \models \varphi^{\tofo}
+\end{equation*}
+%\{ \varphi \mid \forall \varphi \in \mathcal{L}_3 \forall \mathcal{H} \in \mathbb{H}, \; \mathcal{H}\models \varphi\} =
+%\{ \varphi \mid \forall \varphi \in \mathcal{L}_3 \forall \mathcal{I} \in \mathbb{I} \; \mathcal{I}\models \varphi \} 
+\end{lemma}
+\begin{proof}
+By Lemma \ref{lemma:tofo-equal} one knows $\mathcal{H}\models \varphi$ for all $\mathcal{H}\in \mathbb{H}$, if and only if $\mathcal{H}^{\tofo}\models \varphi^{\tofo}$ for all $\mathcal{H}\in \mathbb{H}$. \\
+By Lemma \ref{lemma:str-iso} one knows $\mathcal{H}^{\tofo}\models \varphi^{\tofo}$ for all $\mathcal{H}\in \mathbb{H}$, if and only if $\mathcal{I}\models \varphi^{\tofo}$ for all $\mathcal{I}\in \mathbb{I}$ such that $\mathcal{I} \models \Gamma_T$.
+\end{proof}
+Thereby, reducing Henkin-validity to first-order consequence.\\
+
+The last remaining thing is to argue why the set of Henkin-valid formulas is recursively enumerable. 
+
+\begin{lemma}
+The set of Henkin-valid formulas is is recursively enumerable.
+\end{lemma}
+\begin{proof}
+By Lemma \ref{lemma:fo-equ}, one knows that that this is the same as the set of formulas $\mathit{Cl}(\Gamma_T):= \{\varphi\mid\forall \varphi \in \mathcal{L}_3\; \Gamma_T \models \varphi\}$. If $\Gamma_T$ were to be recursive then $\mathit{Cl}(\Gamma_T)$ would be recursively enumerable. Clearly, $\Gamma$ being finite, is recursive. Consider  $\varphi:=\big(\exists Y^{\os} \forall x^{\of} (Y(x) \leftrightarrow \psi)\big)^{\tofo}$. Clearly, checking if a third-order formula is well formed, i.e. checking if $\psi \in \mathcal{L}_3$, is decidable. Moreover, constructing $\varphi$ from $\psi$ is computable, and $\cdot^{\tofo}$ is also computable. Hence, there exists an algorithm that decides whether $\varphi$ is in the set $\Gamma_T \setminus \Gamma$ or whether it is not. Therefore, one can conclude that $\Gamma_T$ is recursive. Thereby, it follows that $\mathit{Cl}(\Gamma_T)$ is axiomatisable, and thus recursively enumerable.
+\end{proof}
+
+\section*{Exercise 3.3}
+\begin{quote}
+ Finally, show how third-order logic can be reduced to second-order logic, by effectively translating third-order formulae that are valid in the standard semantics to second-order formulae that are valid in the standard semantics.
+\end{quote}
+
+
+
+Consider the following extension of $\Gamma$.
+
+\begin{mydef}
+For the signature $L_3^{\tofo}$, let $\Gamma_R$ be defined over the extended signature $L_3^{2\tofo}$ by adding the representability axioms 
+\begin{equation*}
+\forall R^{\os} \exists x   \big( T_{\os}(x) \land  \forall y (T_{\of}(y)  \to (R(y) \leftrightarrow E_{\os}(y,x))\big)
+\end{equation*}
+and
+\begin{equation*}
+\forall R^{\os} \exists x   \big( T_{\ot}(x) \land  \forall y (T_{\os}(y)  \to (R(y) \leftrightarrow E_{\ot}(y,x))\big)
+\end{equation*}
+Moreover, let $\mathcal{L}_3^{2\tofo}$ be the first-order language extended to a second-order one by allowing for monadic second order variables only. 
+\end{mydef}
+
+Clearly, both representability axioms are part of $\mathcal{L}_3^{2\tofo}$.
+
+\begin{lemma}
+\label{lemma:gammaR-sat}
+For every full Henkin-prestructure $\mathcal{H}$, $\mathcal{H}^{\tofo} \models \Gamma_R$
+\end{lemma}
+\begin{proof}
+Let $\mathcal{H}$ be full Henkin-$L_3$-prestructure. By Lemma \ref{lemma:gamma-sat}, $\mathcal{H}^{\tofo} \models \Gamma$. Since $\mathcal{H}$ full, $D_{\os}^{\mathfrak{H}}=\powerset(D)$ and $D_{\ot}^{\mathfrak{H}}=\powerset^2(D)$. That is, all possible sets and sets of sets over $D^{\mathcal{H}}$ are in the domains of the type hierarchy. Now given the translation, those sets are translated into elements in $D^{\mathcal{H}^{\tofo}}$. That is, let $\tau=(\sigma \to o) \in \mathbb{T}_1^3$. Take an arbitrary subset of $X \subseteq D^{\mathcal{H}^{\tofo}}$. Let, $X_{\tau}:= I^{\tofo}(T_{\sigma})\cap X$ clearly, since $ I^{\tofo}(T_{\sigma})=D_{\sigma}^{\mathfrak{H}}=D_{\sigma}$, $X_{\tau} \in D_{\tau}$. By $\mathcal{H}$ being full, this is the same as $X_{\tau} \in D_{\tau}^{\mathfrak{H}}$ and therefore there must be a corresponding $x \in D^{\mathcal{H}^{\tofo}}$ such that $x \in I^{\tofo}(T_{\tau})$ and therefore by construction if follows that for all $y \in D^{\mathcal{H}^{\tofo}}$ such that  $y \in I^{\tofo}(T_{\sigma})$ then $I^{\tofo}(E_{\tau})(y,x)$ if and only if $y \in X_{\tau}$.
+%for some arbitrary $X^{\tau} \in D_{\tau}^{\mathfrak{H}}=D_{\tau}$. Moreover, there must be a corresponding element in $x \in D^{\mathcal{H}^{\tofo}}$ such that $I^{\tofo}(E_{\tau})(y,x)$ if and only if $y \in I^{\tofo}(T_{\sigma})$ and  $x \in I^{\tofo}(T_{\tau})$ and $y \in x$. Hence, 
+\end{proof}
+
+Notice that  a standard interpretation is the same as a full Henkin-prestructure.
+
+\begin{lemma}
+\label{lemma:full-iso}
+Let $\mathcal{I}$ be an $L_3^{2\tofo}$-structure, then $\mathcal{I}\models \Gamma_R$ if and only if there exists a full Henkin-$L_3$-prestructure $\mathcal{H}$ such that $\mathcal{H}^{\tofo}\cong\mathcal{I}$.
+\end{lemma}
+\begin{proof}
+Again, if there exists a full Henkin-$L_3$-prestructure $\mathcal{H}$ such that $\mathcal{H}^{\tofo}\cong\mathcal{I}$. By Lemma \ref{lemma:gammaR-sat}, it is known that $\mathcal{H}^{\tofo} \models \Gamma_R$ and since $\mathcal{H}^{\tofo}\cong\mathcal{I}$, one can conclude that $\mathcal{I}\models \Gamma_R$. \\
+
+On the other hand, if $\mathcal{I}\models \Gamma_R$, then $\mathcal{I}\models \Gamma$. Moreover, one can safely restrict $\mathcal{I}$
+to a $L_3^{\tofo}$-structure, as those languages are essentially the same, i.e. same constant, function and predicate symbols. By Lemma \ref{lemma:fo-iso}, it thus follows that there exists a Henkin-$L_3$-prestructure $\mathcal{H}$ such that $\mathcal{I} \cong \mathcal{H}^{\tofo}$. Now the representability axioms force that for any $\tau=(\sigma \to o) \in \mathbb{T}_1^3$, and any arbitrary subset $X \subseteq I^{\mathcal{I}}(T_{\sigma})$, there must be an $x \in D^{\mathcal{I}} \cap I^{\mathcal{I}}(T_{\tau})$ such that $\forall y \in D^{\mathcal{I}} \cap I^{\mathcal{I}}(T_{\sigma})$  it must be that $E_{\tau}(y,x)$ iff $y \in X$. That is, for any subset of $I^{\mathcal{I}}(T_{\sigma})$ there must be an element in $I^{\mathcal{I}}(T_{\tau})$ that represent this set. 
+%that for every possible set and set of sets over the set $\{x \mid \forall x \; I^{\mathcal{I}}(T_{\of})(x)\}$, there must be element in $D^{\mathcal{I}}$ representing that set (or set of sets) \footnote{That is, given $\tau=(\sigma \to o) \in \mathbb{T}_1^3$ }.
+Hence, through the isomorphism the same must hold for $\mathcal{H}^{\tofo}$ and by the definition of $\cdot^{\tofo}$ it therefore follows that $\mathcal{H}$ is full and therefore a standard model, i.e. since each set in the type hierarchy has a representative in $\mathcal{H}^{\tofo}$ the set must be present in $\mathcal{H}$. 
+\end{proof}
+%\footnote{That is, in the second-order case, take an arbitrary subset over $R$ the domain, then there must be an element $x$ representing a set over $T_{\of}$ elements, such that $E(y,x) $ agrees with $R(y)$ on all elements that are permitted to be in $x$, i.e. $T_{\of}$ elements. Since, $R$ can be arbitrary, there must be such an element for any subset of $T_{\of}$. Similar in the third-order case. However, one uses elements, i.e. sets, over the set build from $T_{\of}$. }
+Finally, one obtains the following
+
+\begin{lemma}
+\label{lemma:so-equ}
+Let $\mathbb{H}$ be the set of all full Henkin-$L_3$-prestructures (i.e. all standard structures) and likewise let $\mathbb{I}$ be the set of all $L_3^{2\tofo}$-structures $\mathcal{I}$ such that  $\mathcal{I} \models \Gamma_R $. For every $\varphi \in \mathcal{L}_3$ 
+\begin{equation*}
+\forall \mathcal{H} \in \mathbb{H} \; \mathcal{H} \models \varphi \; \iff \; \forall \mathcal{I} \in \mathbb{I} \; \mathcal{I} \models \varphi^{\tofo}
+\end{equation*}
+%\{ \varphi \mid \forall \varphi \in \mathcal{L}_3 \forall \mathcal{H} \in \mathbb{H}, \; \mathcal{H}\models \varphi\} =
+%\{ \varphi \mid \forall \varphi \in \mathcal{L}_3 \forall \mathcal{I} \in \mathbb{I} \; \mathcal{I}\models \varphi \} 
+\end{lemma}
+\begin{proof}
+By Lemma \ref{lemma:tofo-equal} one knows $\mathcal{H}\models \varphi$ for all $\mathcal{H}\in \mathbb{H}$, if and only if $\mathcal{H}^{\tofo}\models \varphi^{\tofo}$ for all $\mathcal{H}\in \mathbb{H}$. \\
+By Lemma \ref{lemma:full-iso} one knows $\mathcal{H}^{\tofo}\models \varphi^{\tofo}$ for all $\mathcal{H}\in \mathbb{H}$, if and only if $\mathcal{I}\models \varphi^{\tofo}$ for all $\mathcal{I}\in \mathbb{I}$ such that $\mathcal{I} \models \Gamma_R$.
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\begin{prooftree}
+%\tiny
+%	\AxiomC{$[\exists u \forall x \forall y (u(x) < y \lor u(x)=y)]$}
+%	
+%	\AxiomC{$[ \forall x \forall y (u(x) < y \lor u(x)=y)]$}
+%	\AxiomC{$[( \forall x \forall y (f(x) < y \lor f(x)=y)) \to \forall x f(x) = 0]$}
+%	\RightLabel{\scriptsize($\to_E$)}
+%	\BinaryInfC{$\forall x f(x) = 0$}
+%\RightLabel{\scriptsize($\exists_E^!$)}
+%\BinaryInfC{$\forall x f(x) = 0$}
+%\end{prooftree}
+
+
+%
+%
+%\section*{Exercise 2.2}
+%\begin{quote}
+%In this exercise we work in a language which contains a single binary predicate
+%symbol $E$ and two constant symbols $c$ and $d$. The structures of this language are (finite or
+%infinite) graphs with two designated vertices, a source $c$ and a sink $d$. A path is a finite list of vertices connected by edges. The length of a path is the number of edges it contains.
+%Show that:
+%
+%\begin{enumerate}
+%\item  For every $k \in \mathbb{N}$ the graphs containing a path of length k from c to d are definable by a
+%first-order sentence.
+%\item The graphs which do contain a path from $c$ to $d$,
+%\begin{enumerate}
+%\item are not first-order definable.
+%\item are definable by a second-order sentence.
+%\end{enumerate}
+%\item The graphs which do not contain a path from $c$ to $d$
+%\begin{enumerate}
+%\item are not definable by a first-order sentence.
+%\item are first-order definable.
+%\item are definable by a second-order sentence.
+%\end{enumerate}
+%\end{enumerate}
+%\end{quote}
+%
+%We fix $I(c)=c^{\mathcal{I}}$ and $I(d)=d^{\mathcal{I}}$. 
+%
+%\begin{enumerate}
+%\item  For every $k \in \mathbb{N}$ the graphs containing a path of length k from c to d are definable by a
+%first-order sentence. \\
+%
+%Consider the following sentence.
+%\begin{equation*}
+%C_k := \exists x_1  \dots \exists x_{k-1} \left(  E(c,x_1) \land \bigwedge_{i=1}^{k-2} E(x_i, x_{i+1}) \land E(x_{k-1}, d) \right) 
+%\end{equation*}
+%
+%Clearly, this sentence can only be true if there exists at least one list of length $k$ of the form $E^{\mathcal{I}}(c^{\mathcal{I}},x^{\mathcal{I}}_1), \dots E^{\mathcal{I}}(x^{\mathcal{I}}_{k-1},d^{\mathcal{I}})$ where the end point of the prior edge is the starting point of the latter, which is precisely the definition of a path.
+%
+%\item The graphs which do contain a path from $c$ to $d$,
+%\begin{enumerate}
+%\item are not first-order definable. \\
+%
+%Assume that this is the case. Hence, there exists a set of first order sentences $C$ (in this language) that is true if and only if there exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Let $D_k :=  \{\neg C_i \forall  0 \leq i \leq k \} $. 
+%%Clearly, $D_k$ expresses that there can not be a path between $c$ and $d$ that is of length smaller or equal $k$ (see below). Now consider the following set of sentences.
+%\begin{equation*}
+%C_{\omega} :=  D \cup P = \{\neg C_k  \mid \forall k \geq 0 \} \cup C
+%\end{equation*}
+%Consider the finite subset $X_k \underset{fin.}{\subset} C_{\omega}$ 
+%of the form $X_k = D' \cup C'$ with $C' \underset{fin.}{\subset} C$ and $D' \underset{fin.}{\subset} D$. Clearly, since $X_k$ is finite, there exists a maximal $k$ such that $D' \subseteq D_k$. Thus any model with a path greater $k$ can satisfy $D'$. That is, consider the following interpretation $\mathcal{G}:=\langle V, I \rangle$ such that $V=\{v_i \mid  0 \leq i \leq k+1\}$ such that $c^{\mathcal{I}}=v_0$, $d^{\mathcal{I}}=(v_{k+1})$ and $I(E):=\{(v_i, v_{i+1}) \mid 0 \leq i \leq k\}$.  Since there exists a path in $\mathcal{G}$ it follows by assumption that $\mathcal{G} \models C$ and thus especially $\mathcal{G} \models C'$. Hence, $\mathcal{G}$ satisfies $X_k$. Since this can be done for arbitrary $k$, one can conclude that any finite subset of $C_{\omega}$ is satisfiable. Hence, by compactness one obtains that there exists a model $\mathcal{G}_{\omega}$ that satisfies $C_{\omega}$. Clearly, it is impossible that there exists a finite path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$ in $\mathcal{G}_{\omega}$, i.e. otherwise there exists a $k$ such that a $C_k$ is violated thus $D$ would not be satisfied by the structure. However, since $\mathcal{G}_{\omega}\models C$, by assumption, there must exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Hence, one arrives at a contradiction. \\
+%
+%\item are definable by a second-order sentence.\\
+%
+%The intent is to formalise reachability, with respect to $E^{\mathcal{I}}$. That is, there exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$, if and only if, every set that contains the transitive closure of $E^{\mathcal{I}}$ contains the element $(c^{\mathcal{I}}, d^{\mathcal{I}})$.
+%That is, consider the following formulas
+%\begin{equation*}
+%\begin{split}
+%&R_{\subseteq}(X,Y):= \forall x \forall y (X(x,y) \to Y(x,y)) \\
+%&R_{\to}(X) := \forall x \forall y \forall z (X(x,y) \to X(y,z) \to X(x,z)) \\
+%\end{split}
+%\end{equation*}
+%The first formula forces that $X^{\mathcal{I}}$ is a sub-relation of $Y^{\mathcal{I}}$, i.e. if $(x,y) \in X^{\mathcal{I}}$ then it must be the case that $(x,y) \in Y^{\mathcal{I}}$ and therefore $X^{\mathcal{I}} \subseteq Y^{\mathcal{I}}$. The second formula requires the input binary relation $X^{\mathcal{I}}$ to be transitive. Using those two one can now construct the following sentence.
+%\begin{equation*}
+%\begin{split}
+%C := \forall X (R_{\subseteq}(E,Y) \to R_{\to}(X) \to R(c,d))
+%\end{split}
+%\end{equation*}
+%That is, $C$ requires that if an relation $R^{\mathcal{I}}$ that contains $E^{\mathcal{I}} \subseteq R^{\mathcal{I}}$ is also transitive closed then it must contain $(c^{\mathcal{I}},d^{\mathcal{I}})$. 
+%What remains to show is that this formula forces the required behaviour. \\
+%
+%Consider a structure $\mathcal{G}$, show that $\mathcal{G} \models C$ if and only if there exists a path in $\mathcal{G}$ from $c$ to $d$. Assume that there exists a path from $c^I$ to $d^I$. Then it must be the case that $(c^I,d^I)$ is in the transitive closure of $E^{\mathcal{I}}$, i.e. $E^{\mathcal{I}^*}$. Now, take an relation $R^{\mathcal{I}} \subset D^2$ such that $E^{\mathcal{I}} \subseteq R^{\mathcal{I}}$ and that $R^{\mathcal{I}}$ is closed transitively. Clearly, $E^{\mathcal{I}^* }\subseteq R^{\mathcal{I}}$ and therefore $(c^I, d^I) \in R^{\mathcal{I}}$. On the other hand, assume that there does not exists a path from $c^I$ to $d^I$. Then it must be the case that $(c^I, d^I) \nin I(E)^*$. However, due to the fact that $E^{\mathcal{I}} \subseteq E^{\mathcal{I}^*}$ and that $E^{\mathcal{I}^*}$ is closed transitively by definition, it follows that one has found a relation that invalidates the sentence $C$.
+%
+%\end{enumerate}
+%
+%\item The graphs which do not contain a path from $c$ to $d$
+%\begin{enumerate}
+%\item are not definable by a first-order sentence. \\
+%
+%Assume there exists such a sentence. Let this sentence be called $S$. Since $S$ expresses that there does not exists a path from $c$ to $d$ it follows that its negation $\neg S$ expresses that there does exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. However, consider the following set of sentences $\{\neg S\}$. Clearly, this set of sentences can only be satisfied if there exists a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$ in the respective structure. However, this would imply that the graphs which do contain a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$, are first-order definable. Which clearly contradicts the statement made above.
+%
+%\item are first-order definable.\\
+%
+%Recall that the sentence
+%\begin{equation*}
+%C_k := \exists x_1  \dots \exists x_{k-1} \left(  E(c,x_1) \land \bigwedge_{i=1}^{k-2} E(x_i, x_{i+1}) \land E(x_{k-1}, d) \right) 
+%\end{equation*}
+%expresses that there exists a path of length $k$ from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Hence, its negation
+%\begin{equation*}
+%\neg C_k = \forall x_1  \dots \forall x_{k-1} \left(  \neg E(c,x_1) \lor \bigvee_{i=1}^{k-2} \neg E(x_i, x_{i+1}) \lor \neg E(x_{k-1}, d) \right) 
+%\end{equation*}
+%expresses that no path of length $k$ exits from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Consider the following set of sentences 
+%\begin{equation*}
+%D_k := \{\neg C_i \mid \forall 0 \leq i \leq k \}
+%\end{equation*}
+%A structure $\mathcal{G}$ such that $\mathcal{G} \models D_k$, can not have a path of length $1, 2, \dots k$ from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. Therefore a structure $\mathcal{G}'$ that satisfies
+%\begin{equation*}
+%D :=  \{ D_k \mid \forall k \geq 0 \}
+%\end{equation*}
+%can not have a path of any finite length $k$ from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$. That is, for any $k$ there exists a $D_k \subseteq D$ that prevents due to $\mathcal{G}' \models D_k$ the existence of a path smaller that $k$ (from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$). However, since a path has to be finite it follows that if a structure satisfies $D$ it can not have a path from $c^{\mathcal{I}}$ to $d^{\mathcal{I}}$.\\
+%
+%\item are definable by a second-order sentence.
+%In a previous exercise it was already shown that the graphs which do contain a path from $c$ to $d$, are definable by a second-order sentence. Hence, its negation can only be true if the satisfying structure does not contain a path from $c$ to $d$. That is, 
+%\begin{equation*}
+%\begin{split}
+%\neg C = \exists X ( R_{\subseteq}(E,Y) \land R_{\to}(X) \land \neg R(c,d))
+%\end{split}
+%\end{equation*}
+%
+%\end{enumerate}
+%\end{enumerate}
+%
+%
+%
+%
+%
+%\section*{Exercise 3.2}
+%\begin{quote}
+%We have defined $\bot$ and $\neg$ as simply typed expressions. Analogously to these,
+%define binary disjunction $\lor$, binary conjunction $\land$, logical equivalence $\liff$ and the existential quantifier $\exists_{\tau}$ as simply typed expression. Give type derivations and show that the semantics has the expected behaviour.
+%\end{quote}
+%
+%Note: To increase readability, there are references to previously made statements. That is, 
+%if in the derivation $\neg$ is used, only an reference to the original derivation of the operator will be given. Similarly, $\land$ will be referenced by a derivation that occurs after the derivation of $\land$. Moreover, the same holds for the demonstration of the desired semantic behaviour. That is, once it was show that the term for $\land$ has the desired semantics, its semantics will be used directly in future demonstrations.
+%
+%\begin{prooftree}
+%\small
+%
+%	\AxiomC{ $\lto \; : \; o \to o \to o $}
+%
+%	\AxiomC{\scriptsize $(\mathit{see\; script)} $}
+%	\noLine
+%	\UnaryInfC{ $\lambda x^o . \lto \, x^o \; \bot \; : \; o \to o $}
+%	\dashedLine
+%	\UnaryInfC{ $\neg \; : \; o \to o $}
+%		
+%	\AxiomC{ $x^o \; : \; o $}
+%	\BinaryInfC{$  \neg x^o \; : \;  o $}
+%	
+%	\BinaryInfC{$ \lto \, \neg x^o \; : \; o \to o $}
+%
+%	\AxiomC{$y^o \; : \; o $}
+%
+%\BinaryInfC{$ \lto \, ( \neg x^o) \; y^o \; : \; o $}
+%\UnaryInfC{$ \lambda y^{o} . \lto \, ( \neg x^o) \; y^o \; : \; o \to o$}
+%\UnaryInfC{$\lambda x^{o} \lambda y^{o} . \lto \, ( \neg x^o) \; y^o \; : \; o \to o \to o$}
+%\dashedLine
+%\UnaryInfC{ $\lor \; : \;  o \to o \to o$}
+%\end{prooftree}
+%
+%\begin{align*}
+%I(\lor)(a,b)& = (I \cup \{ x^o \mapsto a, y^o \mapsto b\})(\lto \, ( \neg x^o) \; y^o)  \\
+%& = I'(\lto \, ( \neg x^o) \; y^o)  \\
+%& = I'(\lto) (I'( \neg x^o), I'(y^o))  \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(\neg x^o)=\text{false} \sor  I'(y^o)=\text{true} \\
+%\text{false} & \quad otw.\\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(x^o)=\text{true} \sor  I'(y^o)=\text{true} \\
+%\text{false} & \quad otw.\\
+%\end{cases}
+%\end{align*}
+%
+%\begin{prooftree}
+%\small
+%
+%	\AxiomC{$\neg \; : \; o \to o $}
+%
+%	\AxiomC{$\lto \; : \; o \to o  \to o$}
+%	\AxiomC{$x^o \; : \; o  $}
+%	\BinaryInfC{ $\lto \,  x^o \; : \; o \to o$}
+%
+%	\AxiomC{\scriptsize $(\mathit{see\; script)} $}
+%	\noLine
+%	\UnaryInfC{ $\lambda x^o . \lto \, x^o \; \bot \; : \; o \to o $}
+%	\dashedLine
+%	\UnaryInfC{ $\neg \; : \; o \to o $}
+%		
+%	\AxiomC{ $y^o \; : \; o $}
+%	\BinaryInfC{$  \neg y^o \; : \;  o $}
+%	
+%	\BinaryInfC{$ \lto \,  x^o \; ( \neg y^o) \; : \; o \to o $}
+%
+%
+%
+%\BinaryInfC{$\neg \; (\lto \,  x^o \; ( \neg y^o)) \; : \; o $}
+%\UnaryInfC{$ \lambda y^{o} . \neg \; (\lto \,  x^o \; ( \neg y^o)) \; : \; o \to o$}
+%\UnaryInfC{$\lambda x^{o} \lambda y^{o} . \neg \; (\lto \,  x^o \; ( \neg y^o)) \; : \; o \to o \to o$}
+%\dashedLine
+%\UnaryInfC{ $\land \; : \;  o \to o \to o$}
+%\end{prooftree}
+%\begin{align*}
+%I(\land)(a,b)& = (I \cup \{ x^o \mapsto a, y^o \mapsto b\})( \neg \; (\lto \,  x^o \; ( \neg y^o)))  \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(\lto \,  x^o \; ( \neg y^o)) = \text{false} \\
+%\text{false} & \quad \mathit{if}\, I'(\lto \,  x^o \; ( \neg y^o)) = \text{true}  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\,  \sneg (I'(x^o)=\text{false} \sand  I'(\neg y^o)=\text{true}) \\
+%\text{false} & \quad \mathit{if}\, I'(x^o)=\text{false} \sor  I'(\neg y^o)=\text{true}  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(x^o)=\text{true} \sand  I'(y^o)=\text{true} \\
+%\text{false} & \quad \mathit{if}\, I'(x^o)=\text{false} \sor  I'(y^o)=\text{false}  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(x^o)=\text{true} \sand  I'(y^o)=\text{true} \\
+%\text{false} & \quad otw.  \\
+%\end{cases} \\
+%\end{align*}
+%
+%\begin{prooftree}
+%\small
+%
+%
+%	\AxiomC{\scriptsize $(\mathit{see\; above)} $}
+%	\noLine
+%	\UnaryInfC{ $\land \; : \; o \to o \to o$}
+%
+%		\AxiomC{$\lto^o \; : \; o \to o \to o  $}
+%		\AxiomC{$x^o \; : \; o  $}
+%
+%		\BinaryInfC{$ \lto \,  x^o  \; : \; o $}
+%		
+%		\AxiomC{$y^o \; : \; o$}
+%	\BinaryInfC{$ \lto \,  x^o \;  y^o \; : \; o $}
+%
+%\BinaryInfC{$\land \, (\lto \,  x^o \;  y^o) \; : \; o \to o $}
+%
+%		\AxiomC{$\lto^o \; : \; o \to o \to o  $}
+%		\AxiomC{$y^o \; : \; o  $}
+%
+%		\BinaryInfC{$ \lto \,  y^o  \; : \; o $}
+%		
+%		\AxiomC{$x^o \; : \; o$}
+%	\BinaryInfC{$ \lto \,  y^o \;  x^o \; : \; o $}
+%
+%\BinaryInfC{$\land \, (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o) \; : \; o $}
+%\UnaryInfC{$\lambda y^{o} . \land \,  (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o) \; : \; o \to o $}
+%\UnaryInfC{$\lambda x^{o} \lambda y^{o} . \land \, (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o) \; : \; o \to o \to o$}
+%\dashedLine
+%\UnaryInfC{ $\liff \; : \; o \to o \to o$}
+%\end{prooftree}
+%\begin{align*}
+%I(\liff)(a,b)& = (I \cup \{ x^o \mapsto a, y^o \mapsto b\})( \land \, (\lto \,  x^o \;  y^o) \; (\lto \,  y^o \;  x^o))  \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(\lto \,  x^o \;  y^o) \sand I'(\lto \,  y^o \;  x^o)\\
+%\text{false} & \quad otw.  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad  \mathit{if}\, (I'(x^o)=\text{false} \sor  I'(y^o)=\text{true}) \sand (I'(y^o)=\text{false} \sor  I'(x^o)=\text{true}) \\
+%\text{false} & \quad otw.  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad  \mathit{if}\, (I'(x^o)=\text{false} \sand  I'(y^o)=\text{false}) \sor (I'(x^o)=\text{true} \sand  I'(x^o)=\text{true}) \\
+%\text{false} & \quad otw.  \\
+%\end{cases} \\
+%\end{align*}
+%
+%
+%\begin{prooftree}
+%\small
+%
+%	\AxiomC{$\neg \; : \; o \to o $}
+%	
+%		\AxiomC{$\forall_{\tau} \; : \; (\tau \to o) \to o $}
+%		
+%	\AxiomC{\scriptsize $(\mathit{see\; script)} $}
+%	\noLine
+%	\UnaryInfC{ $\lambda x^o . \lto \, x^o \; \bot \; : \; o \to o $}
+%	\dashedLine
+%	\UnaryInfC{ $\neg \; : \; o \to o $}
+%		
+%	\AxiomC{ $x^o \; : \; o $}
+%	\BinaryInfC{$  \neg x^o \; : \;  o $}
+%		
+%	\BinaryInfC{$\forall_{\tau} \neg x^{\tau \to o} \; : \; o $}
+%
+%\BinaryInfC{$\neg \, (\forall_{\tau} \neg x^{\tau \to o}) \; : \; o$}
+%\UnaryInfC{$\lambda x^{\tau \to o} . \neg \, (\forall_{\tau} \neg x^{\tau \to o}) \; : \; (\tau \to o) \to o$}
+%\dashedLine
+%\UnaryInfC{ $\exists_{\tau} \; : \;  (\tau \to o) \to o$}
+%\end{prooftree}
+%
+%\begin{align*}
+%I(\exists_{\tau})(\varphi)& = (I \cup \{ x^{\tau \to o}\mapsto \varphi\})( \neg \, (\forall_{\tau} x^{\tau \to o}))  \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, \sneg (I'(\varphi(m))=\text{true} \text{ for all } m \in D_{\tau}) \\
+%\text{false} & \quad otw.  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(\neg \varphi(m))=\text{false} \text{ for some } m \in D_{\tau} \\
+%\text{false} & \quad otw.  \\
+%\end{cases} \\
+%& = \begin{cases}
+%\text{true} & \quad \mathit{if}\, I'(\varphi(m))=\text{true} \text{ for some } m \in D_{\tau} \\
+%\text{false} & \quad otw.  \\
+%\end{cases}
+%\end{align*}
+%
+%\section*{Exercise 3.4}
+%\begin{quote}
+%Show that the following formulas are provable in $\mathbf{NK}_{\omega}$ for arbitrary types $\tau, \sigma$: 
+%\begin{enumerate}
+%\item \textit{reflexivity:} $\forall x^{\tau} x =_{\tau} x$
+%\item \textit{symmetry:} $\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto y =_{\tau} x)$
+%\item \textit{transitivity:}  $\forall x^{\tau} \forall y^{\tau} \forall z^{\tau} (x =_{\tau} y \lto y =_{\tau} z \lto x =_{\tau} z)$
+%\item \textit{compatibility:} $\forall f^{\tau \to \sigma} \forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto fx =_{\sigma} fy)$
+%\end{enumerate}
+%\end{quote}
+%
+%
+%
+%
+%\begin{prooftree}
+%\small
+%
+%\AxiomC{ $[ P^{\tau \to o} a^{\tau} ]^1$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} a^{\tau} $}
+%
+%
+%\AxiomC{ $[ P^{\tau \to o} a^{\tau} ]^1$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} a^{\tau} $}
+%
+%
+%\BinaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} a^{\tau}) \land (P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} a^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; a^{\tau})$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  a^{\tau}$}
+%\RightLabel{\tiny($Def.$)}
+%\UnaryInfC{$ a^{\tau} =_{\tau} a^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall x^{\tau} x =_{\tau} x$}
+%\end{prooftree}
+%
+%
+%
+%\begin{changemargin}{-1cm}{-1cm}
+%\begin{prooftree}
+%\small
+%
+%\AxiomC{ $[a =_{\tau} b]^1$}
+%\RightLabel{\tiny($Def.$)}
+%\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+%\RightLabel{\tiny($\forall_E$)}
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} b^{\tau} $}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+%\RightLabel{\tiny($\land_E$)}
+%\UnaryInfC{$ P^{\tau \to o} b^{\tau} \lto P^{\tau \to o} a^{\tau} $}
+%
+%\AxiomC{ $[a =_{\tau} b]^1$}
+%\RightLabel{\tiny($Def.$)}
+%\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+%\RightLabel{\tiny($\forall_E$)}
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} b^{\tau} $}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+%\RightLabel{\tiny($\land_E$)}
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau} $}
+%
+%
+%\RightLabel{\tiny($\land_I$)}
+%\BinaryInfC{$ (P^{\tau \to o} b^{\tau} \lto P^{\tau \to o} a^{\tau}) \land (P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}) $}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ P^{\tau \to o} b^{\tau} \liff P^{\tau \to o} a^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; b^{\tau} \liff Y \; a^{\tau})$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$ (\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; b^{\tau} \;  a^{\tau}$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ b^{\tau} =_{\tau} a^{\tau}$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$a^{\tau} =_{\tau} b^{\tau} \lto b^{\tau} =_{\tau} a^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall y^{\tau} (a^{\tau} =_{\tau} y \lto y =_{\tau} a^{\tau})$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto y =_{\tau} x)$}
+%\end{prooftree}
+%\end{changemargin}
+%
+%
+%
+%\begin{prooftree}
+%\small
+%\AxiomC{ $(a)$}
+%\noLine
+%\UnaryInfC{ $P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} c^{\tau}$}
+%
+%\AxiomC{ $(b)$}
+%\noLine
+%\UnaryInfC{ $P^{\tau \to o} c^{\tau} \lto P^{\tau \to o} a^{\tau}$}
+%
+%
+%
+%\RightLabel{\tiny($\land_I$)}
+%\BinaryInfC{$ (P^{\tau \to o} a^{\tau} \lto P^{\tau \to o} c^{\tau}) \land (P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} a^{\tau}) $}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ P^{\tau \to o} a^{\tau} \liff P^{\tau \to o} c^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; c^{\tau})$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$ (\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  c^{\tau}$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ a^{\tau} =_{\tau} c^{\tau}$}
+%\RightLabel{\tiny($\lto_I^2$)}
+%\UnaryInfC{$  b^{\tau} =_{\tau} c^{\tau}\lto a^{\tau} =_{\tau} c^{\tau}$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$ a^{\tau} =_{\tau}  b^{\tau} \lto  b^{\tau} =_{\tau} c^{\tau}\lto a^{\tau} =_{\tau} c^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall z^{\tau} (a^{\tau} =_{\tau}  b^{\tau} \lto  b^{\tau} =_{\tau} z \lto a^{\tau} =_{\tau} z)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall y^{\tau} \forall z^{\tau} (a^{\tau} =_{\tau} y \lto y =_{\tau} z \lto a^{\tau} =_{\tau} z)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} \forall z^{\tau} (x =_{\tau} y \lto y =_{\tau} z \lto x =_{\tau} z)$}
+%\end{prooftree}
+%
+%
+%\begin{changemargin}{-2cm}{-2cm}
+%\begin{prooftree}
+%\scriptsize
+%
+%	\AxiomC{ $[b =_{\tau} c]^2$}
+%	\LeftLabel{\tiny($Def.$)}
+%	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; b^{\tau} \;  c^{\tau}$}
+%	\LeftLabel{\tiny($=_{\alpha \beta}$)}
+%	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; b^{\tau} \liff Y \; c^{\tau}) $}
+%	\LeftLabel{\tiny($\forall_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \liff P^{\tau \to o} c^{\tau}$}
+%	\LeftLabel{\tiny($Def.$)}
+%	\UnaryInfC{ $(P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} c^{\tau}) \land (P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} b^{\tau})$}
+%	\LeftLabel{\tiny($\land_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} c^{\tau}$}
+%
+%
+%	\AxiomC{ $[a =_{\tau} b]^1$}
+%	\RightLabel{\tiny($Def.$)}
+%	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+%	\RightLabel{\tiny($=_{\alpha \beta}$)}
+%	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+%	\RightLabel{\tiny($\forall_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} a^{\tau}  \liff P^{\tau \to o} b^{\tau}$}
+%	\RightLabel{\tiny($Def.$)}
+%	\UnaryInfC{ $(P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau})$}
+%	\RightLabel{\tiny($\land_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}$}
+%
+%
+%	\AxiomC{ $[P^{\tau \to o} a^{\tau}]^{3a}$}
+%
+%
+%\RightLabel{\tiny($\lto_E$)}
+%\BinaryInfC{ $P^{\tau \to o} b^{\tau}$}
+%\RightLabel{\tiny($\to_E$)}
+%\BinaryInfC{ $P^{\tau \to o} c^{\tau}$}
+%\RightLabel{\tiny($\lto_{3a}$)}
+%\UnaryInfC{ $(a)$}
+%\end{prooftree}
+%\end{changemargin}
+%
+%
+%
+%\begin{changemargin}{-2cm}{-2cm}
+%\begin{prooftree}
+%\scriptsize
+%
+%	\AxiomC{ $[a =_{\tau} b]^1$}
+%	\LeftLabel{\tiny($Def.$)}
+%	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; a^{\tau} \;  b^{\tau}$}
+%	\LeftLabel{\tiny($=_{\alpha \beta}$)}
+%	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau} \liff Y \; b^{\tau}) $}
+%	\LeftLabel{\tiny($\forall_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} a^{\tau}  \liff P^{\tau \to o} b^{\tau}$}
+%	\LeftLabel{\tiny($Def.$)}
+%	\UnaryInfC{ $(P^{\tau \to o} a^{\tau}  \lto P^{\tau \to o} b^{\tau}) \land (P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau})$}
+%	\LeftLabel{\tiny($\land_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} a^{\tau}$}
+%
+%
+%	\AxiomC{ $[b =_{\tau} c]^2$}
+%	\RightLabel{\tiny($Def.$)}
+%	\UnaryInfC{$(\lambda x^{\tau}\lambda y^{\tau} . \forall Y^{\tau \to o} (Y \; x \liff Y \; y)) \; b^{\tau} \;  c^{\tau}$}
+%	\RightLabel{\tiny($=_{\alpha \beta}$)}
+%	\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; b^{\tau} \liff Y \; c^{\tau}) $}
+%	\RightLabel{\tiny($\forall_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} b^{\tau}  \liff P^{\tau \to o} c^{\tau}$}
+%	\RightLabel{\tiny($Def.$)}
+%	\UnaryInfC{ $(P^{\tau \to o} b^{\tau}  \lto P^{\tau \to o} c^{\tau}) \land (P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} b^{\tau})$}
+%	\RightLabel{\tiny($\land_E$)}
+%	\UnaryInfC{ $P^{\tau \to o} c^{\tau}  \lto P^{\tau \to o} b^{\tau}$}
+%
+%
+%	\AxiomC{ $[P^{\tau \to o} c^{\tau}]^{3b}$}
+%
+%
+%\RightLabel{\tiny($\lto_E$)}
+%\BinaryInfC{ $P^{\tau \to o} b^{\tau}$}
+%\RightLabel{\tiny($\to_E$)}
+%\BinaryInfC{ $P^{\tau \to o} a^{\tau}$}
+%\RightLabel{\tiny($\lto_{3b}$)}
+%\UnaryInfC{ $(b)$}
+%\end{prooftree}
+%\end{changemargin}
+%
+%
+%
+%\begin{prooftree}
+%\small
+%\AxiomC{ $[a =_{\tau} b]^1$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ (\lambda x^{\tau} \lambda y^{\tau} .\forall Y^{\tau \to o} (Y \; x \liff Y \; y )) \; a^{\tau } \; b^{\tau }$}
+%\RightLabel{\tiny($=_{\alpha\beta}$)}
+%\UnaryInfC{$ \forall Y^{\tau \to o} (Y \; a^{\tau }\liff Y \; b^{\tau} )$}
+%\RightLabel{\tiny($\forall_E$)}
+%\UnaryInfC{$ (\lambda x^{\tau }. P^{\sigma \to o}  (g^{\tau \to \sigma} x) )  \; a^{\tau }\liff (\lambda x^{\tau }. P^{\sigma \to o}  (g^{\tau \to \sigma} x) )  \; b^{\tau} $}
+%\RightLabel{\tiny($=_{\alpha\beta}$)}
+%\UnaryInfC{$ P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \liff P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) $}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall Y^{\sigma \to o} (Y (g^{\tau \to \sigma} a^{\tau }) \liff Y (g^{\tau \to \sigma}  b^{\tau})) $}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$(\lambda x^{\sigma} \lambda y^{\sigma} . \forall Y^{\sigma \to o} (Y x \liff Y y)) \; (g^{\tau \to \sigma} a^{\tau })   \; (g^{\tau \to \sigma}  b^{\tau})$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$a^{\tau }=_{\tau}  b^{\tau} \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall y^{\tau} (a^{\tau }=_{\tau} y \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma} y)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto g^{\tau \to \sigma} x =_{\sigma} g^{\tau \to \sigma} y)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall f^{\tau \to \sigma} \forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto fx =_{\sigma} fy)$}
+%\end{prooftree}
+%
+%
+%\section*{Exercise ?.4}
+%\begin{quote}
+%The set $\mathtt{fML}$ of formulae of (propositional) modal logic is defined as
+%follows where $\mathcal{PV}$ is a countably infinite set of propositional variables.
+%\begin{equation*}
+%\mathtt{fML} ::= \bot \mid p \in \mathcal{PV} \mid \mathtt{ML} \to \mathtt{ML} \mid \all \mathtt{ML}
+%\end{equation*}
+%
+%A Kripke frame is a pair $(W, R)$ where $W$ is a non-empty set and $R$ is
+%a binary relation on $W$. A Kripke model is a pair $(F, V )$ where $F$ is a
+%Kripke frame and $V$ is a valuation mapping each $p \in \mathcal{PV}$ to $ V(p) \subseteq W$.
+%
+%The satisfaction of a formula $A$ on a Kripke model $((W, R), V )$ at $x \in
+%W$ (denoted $((W, R), V ), x  \models A)$ is defined inductively on the structure
+%of $A$ as follows. (NB. its negation is denoted $((W, R), V ), x \nmodels A$).
+%\begin{equation*}
+%\begin{split}
+%&(F, V ), x \models \bot \text{ never} \\
+%&(F, V ), x \models p \text{ iff } x \in V(p)\\
+%&(F, V ), x \models  A \to B \text{ iff }  (F, V ), x \nmodels A \text{ or } (F, V ), x \models B\\
+%&(F, V ), x \models \all A \text{ iff } (F, V ), y \models A \text{ for every } y \text{ such that } Rxy\\
+%\end{split}
+%\end{equation*}
+%It is well-known that the set $\Gamma$ of modal formulae (defined below) is
+%exactly the set of theorems of the normal modal logic $\mathbf{K}$.
+%\begin{equation*}
+%\{ A \mid ((W, R), V ), x \models A \text{ for every Kripke model } ((W, R), V ) \text{ and } x \in W \}
+%\end{equation*}
+%Demonstrate that this is a second-order logic with respect to the semantics in Section 2 of the lecture notes. The modal logic $\mathbf{K}$ (and hence $\Lambda$) has a finite axiomatisation. How is this compatible with the “incompleteness of second-order logic” result that we established in
+%class?
+%\end{quote}
+%
+%Consider the translation $\tau : \mathtt{fML} \to \mathcal{L}$, where $\mathcal{L}$ is the set of second order formulas over the signature $\Sigma := \langle R/2 \rangle$, i.e. a signature with a single two-ary predicate, such that
+%\begin{equation*}
+%\begin{split}
+%&\tau(\bot)[x] := \bot \\
+%&\tau(p)[x] := P(x) \; \text{for } p \in \mathcal{PV} \\
+%&\tau(\neg \varphi)[x] := \neg \tau(\varphi)[x] \\
+%&\tau(\varphi \land \psi)[x]:= \tau(\varphi)[x]\land \tau(\psi)[x] \\
+%&\tau(\varphi \lor \psi)[x]:= \tau(\varphi)[x]\lor \tau(\psi)[x] \\
+%&\tau(\varphi \to \psi)[x] := \tau(\varphi)[x]\to \tau(\psi)[x] \\
+%&\tau(\all \varphi)[x] := \forall y (R(x,y) \to \tau(\varphi))[y] \; \text{ with } y \text{ fresh}
+%\end{split}
+%\end{equation*}
+%where $[x]$ indicates that $x$ is the only free variable in the formula. 
+%(In general let $[x_1 ,\dots,x_m , P_1 \dots P_n]$ indicate the free variables in a formula.)
+%
+%
+%Using $\tau$ one can define the mapping  $\tau^*: \mathtt{fML} \to \mathcal{L}$ which maps an arbitrary formula $\varphi \in \mathtt{fML} $ to the formula $ \tau^c(\varphi) \in \mathcal{L}$. With 
+%\begin{equation*}
+%\begin{split}
+%\tau^c(\varphi) :=\forall P_1 \dots \forall P_n \forall x_1 \dots \forall x_m\tau(\varphi[x_1, \dots ,x_m, P_1 ,\dots , P_n])
+%\end{split}
+%\end{equation*}
+%That is, $\tau^c$ is simply the universal closure of $\tau$, for the free variables $x_1, \dots, x_m$ and the free second order monadic variables $P_1 ,\dots , P_n $. 
+%First, notice that there can only be one free variable in $\varphi$. That is, in modal logic one starts to evaluate starting from a specific world and a world transition only happens via $\all$, which given the translations only introduces bound variables. Hence, 
+%\begin{equation*}
+%\begin{split}
+%\tau^c(\varphi) :=\forall P_1 \dots \forall P_n \forall x \; \tau(\varphi)[x, P_1 ,\dots , P_n]
+%\end{split}
+%\end{equation*}
+%Alternatively, one can view $s$ as free variable and only consider the following mapping
+%\begin{equation*}
+%\begin{split}
+%\tau^o(\varphi)[x] :=\forall P_1 \dots \forall P_n  \; \tau(\varphi)[x, P_1 ,\dots , P_n]
+%\end{split}
+%\end{equation*}
+%Note: For the sake of readability free predicate variables are suppressed if not required.
+%
+%I choose to pursuit the proof on basis of $\tau^o$, due to the fact that for example in $\mathbf{S5}$ there is a difference between local and global consequence, with local being stronger that global. (I took course in Dynamic Epistemic Logic)
+%Hence, to avoid pitfalls I choose to focus on the local case and then argue for the global one. Even though, I would conjecture that in this case there is probably no difference. 
+%
+%
+%In modal logic one often speaks of frames. That is, one abstracts away from the variable assignment of a model and speaks only of the underlying structure that is, for a model $\mathcal{M}:=\langle W, R , V\rangle$ the corresponding frame is $\mathcal{M}:=\langle W, R \rangle$. If a formula holds for every model over a specific $W$ and a corresponding $R$, then this formula will hold in a frame. Since $\mathbf{K}$ consists of formulas that hold in arbitrary models one can restate its definition as the set
+%\begin{equation*}
+%\{ A \mid \mathcal{F}, s \models A \text{ for every Kripke frame } \mathcal{F} \text{ and } s \in W \}
+%\end{equation*}
+%Furthermore, since it has to hold in every state it follows that this is the same as
+%\begin{equation*}
+%\{ A \mid \mathcal{F}\models A \text{ for every Kripke frame } \mathcal{F} \}
+%\end{equation*}
+%
+%Moreover, we observe that for a frame $\mathcal{F}:=\langle W, R\rangle$ there exists a standard second order structure $\mathcal{I}_{\mathcal{F}}:=\langle D, I\rangle$, where $I$ maps the symbol $R$ to the relation of the frame, i.e. $I(R):=R$. And vice versa. 
+%Hence, if not explicitly required I will not distinguish between those two and will write $\mathbb{F} \models_{K} \varphi$ for the inference in modal logic, and will write $\mathbb{F} \models \varphi$ for the inference $\mathcal{I}_{\mathcal{F}} \models \varphi$ in second order logic. \\
+%Similarly, for a model $\mathcal{M}:=\langle W, R, V\rangle$ of a frame $\mathcal{F}:=\langle W, R\rangle$. This frame has a corresponding interpretation $\mathcal{I}_{\mathcal{F}}$. Now using $V:= \{p_1 \mapsto S_1, \dots, p_n \mapsto S_n,\}$ where $S_1, \dots S_n \subseteq W$, one can construct an appropriate variable assignment $\{P_1 \mapsto V(p_1), \dots, P_n \mapsto V(p_n)\}$ with witch to extend $\mathcal{I}_{\mathcal{F}}$ to construct $\mathcal{I}_{\mathcal{M}} := \mathcal{I}_{\mathcal{F}} \cup \{P_1 \mapsto V(p_1), \dots, P_n \mapsto V(p_n)\}$. Clearly, this works in the other direction as well. Moreover, as above if clear, the same name will reference both structure.
+%
+%
+%
+%The aim is to show that for a formula $\varphi \in \mathtt{fML} $ and for an arbitrary $\mathcal{F}$ and arbitrary $s \in W$
+%\begin{equation*}
+%\begin{split}
+%\mathcal{F} ,s\models_{K} \varphi \iff \mathcal{F} \cup \{ x \mapsto s\}  \models \tau^c(\varphi)[x]
+%\end{split}
+%\end{equation*}
+%
+%To do this it will first be shown by induction on a formula $\varphi \in \mathtt{fML} $, that 
+%\begin{equation*}
+%\begin{split}
+%\mathcal{M} ,s\models_{K} \varphi \iff \mathcal{M} \cup \{x \mapsto s\} \models \tau(\varphi)[x]
+%\end{split}
+%\end{equation*}
+%
+%%Using this it is to be shown that for all $\varphi \in \mathtt{fML} $
+%%\begin{equation*}
+%%\begin{split}
+%%\models_{\mathbf{K}} \varphi \iff \models_{SO} \tau^*(\varphi)
+%%\end{split}
+%%\end{equation*}
+%%That is, one wants to show that one can simply use second order semantics to reason in the modal logic $\mathbf{K}$.
+%%This statement can be shown by induction on the structure of the formula $\varphi$. 
+%
+%\paragraph*{IB:}
+%Let $\varphi \in \mathtt{fML} $. There are two base cases to consider.
+%\begin{itemize}
+%\item if $\varphi = \bot$. $\mathcal{F} ,s\models_{K} \bot$ can never be the case. Similarly, no structure in SOL models $\tau(\bot)= \bot$.
+%
+%\item if $\varphi = p$. Starting from $\mathcal{M} ,s\models_{K} p $, which is equivalent to  $s \in V(p)$. By construction $\tau(P)[x]=P(x)$ and $I(P)=V(p)$. Hence, $s \in I(P)$ and from $I(x) = s$ it follows that $I(x) \in I(P)$. Which by semantics is $\mathcal{M} \cup \{x \mapsto s\} \models P(x)$, which is the same as $\mathcal{M} \cup \{x \mapsto s\} \models \tau(p)[x]$.
+%\end{itemize}
+%
+%\paragraph*{IS:}
+%Let $\varphi \in \mathtt{fML} $. There are two base cases to consider.
+%\begin{itemize}
+%\item $\varphi = \neg \psi$: Start from $\mathcal{M} ,s \models_{K} \neg \psi $. By semantics $\mathcal{M} ,s \nmodels_{K}  \psi $. By IH $\mathcal{M} \cup \{ x \mapsto s\} \nmodels  \tau(\psi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models  \neg \tau(\psi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models  \tau(\neg \psi)[x] $.
+%
+%
+%\item $\varphi = \psi \land \chi$: Start from $\mathcal{M} ,s \models_{K}  \psi \land \chi $. By semantics $\mathcal{M} ,s \models_{K}  \psi  \sand \mathcal{M} ,s \models_{K}  \chi$. By IH $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \sand \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\chi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \land \tau(\chi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi \land \chi )[x] $.
+%
+%\item $\varphi = \psi \lor \chi$: Start from $\mathcal{M} ,s \models_{K}  \psi \lor \chi $. By semantics $\mathcal{M} ,s \models_{K}  \psi  \sor \mathcal{M} ,s \models_{K}  \chi$. By IH $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \sor \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\chi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \lor \tau(\chi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi \lor \chi )[x] $.
+%
+%
+%\item $\varphi = \psi \to \chi$: Start from $\mathcal{M} ,s \models_{K}  \psi \to \chi $. By semantics $\mathcal{M} ,s \models_{K}  \psi  \sto \mathcal{M} ,s \models_{K}  \chi$. By IH $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \sto \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\chi)[x] $. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi)[x]  \to \tau(\chi)[x] $. By definition $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\psi \to \chi )[x] $.
+%
+%
+%\item $\varphi = \all \psi$: Start from $\mathcal{M} ,s \models_{K} \all \psi $. By semantics $\forall t (R(s,t) \sto \mathcal{M} ,t \models_{K}  \psi )$. By IH $\forall t (R(s,t)\sto \mathcal{M} \cup \{ y \mapsto t\} \models  \tau(\psi)[y] )$. By semantics  (definition of $\mathcal{M}=\mathcal{I}_{\mathcal{M}}$), $\forall t ( \mathcal{M} \cup \{ x \mapsto s, y \mapsto t\} \models R(x,y) \to  \tau(\psi)[y] )$. By semantics $\mathcal{M} \cup \{ x \mapsto s\} \models \forall y ( R(x,y) \to  \tau(\psi)[y] )$. By definition  $\mathcal{M} \cup \{ x \mapsto s\} \models \tau(\all \psi)[x]$.
+%\end{itemize}
+%
+%Using this consider the statement $\mathcal{M} \models_{K} \varphi $ for any $\varphi \in \mathtt{fML} $. This is the same as $\forall s \mathcal{M},s \models_{K} \varphi $. Which by the above observation is equal to $\forall s \mathcal{M} \cup \{ x \mapsto s\} \models \tau(\varphi)[x]$. Which incidentally is the semantics of $\mathcal{M}  \models \forall s \; \tau(\varphi) $. Hence,
+%\begin{equation*}
+%\begin{split}
+%\mathcal{M} \models_{K} \varphi \iff\mathcal{M}  \models \forall x\; \tau(\varphi) 
+%\end{split}
+%\end{equation*}
+%
+%Using this consider the statement $\mathcal{F} ,s\models_{K} \varphi $ for any $\varphi \in \mathtt{fML} $. This is the same as for all $V$, $ \langle \mathcal{F}, V \rangle , s \models_{K} \varphi $. That is, $\mathcal{M} , s \models_{K} \varphi $ for some model of the frame $\mathcal{F}$. Now this is the same as $\mathcal{M} \cup \{x \mapsto s\} \models \tau(\varphi)[x]$, which is the same as for all $V$, $\mathcal{F} \cup \{x \mapsto s,P_1 \mapsto V(p_1), \dots, P_n \mapsto V(p_n)\} \models \tau(\varphi)[x,P_1 ,\dots , P_n]$. Which by semantics is $\mathcal{F} \cup \{x \mapsto s\} \models \forall P_1 \dots \forall P_n \; \tau(\varphi)[x,P_1 ,\dots , P_n]$, i.e. since variable assignment for $p$ is simply a subset of $W$, thus one iterates over all of them to obtain all possible variable assignments. Hence,
+%\begin{equation*}
+%\begin{split}
+%\mathcal{F},s \models_{K} \varphi \iff \mathcal{F} \cup \{x \mapsto s\} \models \forall P_1 \dots \forall P_n \; \tau(\varphi)[x,P_1 ,\dots , P_n]
+%\iff \mathcal{F} \cup \{x \mapsto s\} \models \tau^o(\varphi)[x]
+%\end{split}
+%\end{equation*}
+%
+%By similar reasoning as above and by quantifier shift 
+%
+%\begin{equation*}
+%\begin{split}
+%\mathcal{F} \models_{K} \varphi \iff \mathcal{F} \models \forall P_1 \dots \forall P_n \forall x \; \tau(\varphi)[x,P_1 ,\dots , P_n]
+%\iff \mathcal{F} \models \tau^c(\varphi)
+%\end{split}
+%\end{equation*}
+%
+%Hence,  one obtains 
+%
+%\begin{equation*}
+%\{ \varphi \mid \mathcal{F}\models \varphi \text{ for every Kripke frame } \mathcal{F} \} =
+%\{ \varphi \mid \mathcal{F}\models \varphi \text{ for every structure }  \mathcal{F} \} 
+%\end{equation*}
+%
+%
+%
+%\begin{quote}
+%The modal logic $\mathbf{K}$ (and hence $\Lambda$) has a finite axiomatisation. How is this compatible with the “incompleteness of second-order logic” result that we established in
+%class?
+%\end{quote}
+%
+%
+%My conjecture would be, due to the fact that the language one operates over is just a fragment of full second order logic. That is, $\mathcal{L} \subset \mathcal{L}_{SO}$. Similar to the fact that $\mathcal{L}_{FO} \subset \mathcal{L}_{SO}$, meaning that one can use second order semantics to evaluate first order formulas, which are a fragment of the second order logic, and if one does so one regains completeness. Hence, in a similar vain if one investigates the transformation used, the only form of second order quantification is over sets. 
+%Hence, one deals with an MSO fragment of SOL. According to Daniel Leivant's Higher Order Logic from the course literature, MSO without function symbols is decidable. Similarly, in van Benthem  the same (similar) is stated, that is that monadic second order  predicate logic is decidable. This would explain that $\mathbf{K}$ is finitely axiomatiasible. Moreover, one would have a program that establishes if a formula is in $\mathbf{K}$, taking this as a proof system would result in completeness. HOWEVER. Functions can be encoded as relations, and I am unsure if the presence of the relation symbol $R$ results in a loss of this decidability. 
+%\begin{itemize}
+%\item $\varphi =  p$.  Firstly, $\tau^*(p)=\forall R \forall \forall s \tau(p) = \forall R \forall P \forall s P(s)$. Assume $\models_{\mathbf{K}}  p$. Hence, it is known that for any model $\mathcal{M}:=\langle W, R, V\rangle$ it must be the case that $\mathcal{M} \models p$, which is  a shorthand for $\forall S \in W \; \mathcal{M} , s \models_{\mathbf{K}} p$. By semantics of $\models_{\mathbf{K}}$, this is the same as $\forall S \in W \; s \in V_{\mathcal{M}}(p)$. Moreover, since this formula has to hold in every model it follows that, it has to hold for every variable assignment of $p$
+%\begin{equation*}
+%\begin{split}
+%\forall V_{\mathcal{M}}(p) \subseteq W_{\mathcal{M}}(p) \forall s \in W_{\mathcal{M}} \; s \in V(p)
+%\end{split}
+%\end{equation*}
+%Moreover, since dealing with an arbitrary model, one can go even further, and state that $p$ has to hold in every set of worlds with an arbitrary relation and an arbitrary variable assignment. Hence, one obtains that 
+%\begin{equation*}
+%\begin{split}
+%\models_{\mathbf{K}}  p \iff \forall W \forall R \subseteq W^2 \forall V(p) \subseteq W \forall s \in W \; s \in V(p)
+%\end{split}
+%\end{equation*}
+%(Note: The left side is a statement on the meta level)
+%Furthermore, it clearly does not matter how the set $V(p)$ is called. Hence, using th
+%
+%Now since only the variable assignment fro $p$ is relevant this is the same as 
+%\begin{equation*}
+%\begin{split}
+%\forall W_{\mathcal{M}} \forall R_{\mathcal{M}} \forall V_{\mathcal{M}}(p) \forall s \in W \; s \in V(p)
+%\end{split}
+%\end{equation*}
+%That is, one can treat $V_{\mathcal{M}}(p) $ as a predicate where $s$ holds. 
+%\begin{equation*}
+%\begin{split}
+%\forall W_{\mathcal{M}} \forall R_{\mathcal{M}} \forall V_{\mathcal{M}}(p) \forall s \in W \; s \in I(P)
+%\end{split}
+%\end{equation*}
+%\end{itemize}
+
+\end{document}
+
+
+%
+%
+%\begin{prooftree}
+%\small
+%\AxiomC{\scriptsize $(a)$}
+%\noLine
+%\UnaryInfC{$P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \lto P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau})$}
+%\AxiomC{\scriptsize $(b)$}
+%\noLine
+%\UnaryInfC{$P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) \lto P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) $}
+%\RightLabel{\tiny($\land_I$)}
+%\BinaryInfC{$ (P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \lto P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}))  \land   (P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) \lto P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau })  )$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \liff P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau}) $}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$ \forall Y^{\sigma \to o} (Y (g^{\tau \to \sigma} a^{\tau }) \liff Y (g^{\tau \to \sigma}  b^{\tau})) $}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$(\lambda x^{\sigma} \lambda y^{\sigma} . \forall Y^{\sigma \to o} (Y x \liff Y y)) \; (g^{\tau \to \sigma} a^{\tau })   \; (g^{\tau \to \sigma}  b^{\tau})$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$ g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+%\RightLabel{\tiny($\lto_I^1$)}
+%\UnaryInfC{$a^{\tau }=_{\tau}  b^{\tau} \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma}  b^{\tau}$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall y^{\tau} (a^{\tau }=_{\tau} y \lto g^{\tau \to \sigma} a^{\tau } =_{\sigma} g^{\tau \to \sigma} y)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto g^{\tau \to \sigma} x =_{\sigma} g^{\tau \to \sigma} y)$}
+%\RightLabel{\tiny($\forall_I$)}
+%\UnaryInfC{$\forall f^{\tau \to \sigma} \forall x^{\tau} \forall y^{\tau} (x =_{\tau} y \lto fx =_{\sigma} fy)$}
+%\end{prooftree}
+%
+%\begin{prooftree}
+%\small
+%\AxiomC{\scriptsize $a^{\tau} =_{\tau} b^{\tau}$}
+%\RightLabel{\tiny($Def.$)}
+%\dashedLine
+%\UnaryInfC{$(\lambda x^{\tau} \lambda y^{\tau} . \forall Y^{ \tau \to o} (Y \; x \lto Y \;  y) \; a^{\tau} \; b^{\tau}$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$\forall Y^{ \tau \to o} (Y \; a^{\tau} \lto Y \;  b^{\tau})$}
+%\RightLabel{\tiny($\forall_E$)}
+%\UnaryInfC{$(\lambda x^{\tau}. P^{\sigma \to o}  (g^{\tau \to \sigma} x)) \; a^{\tau} \lto (\lambda x^{\tau}. P^{\sigma \to o}  (g^{\tau \to \sigma} x))\;  b^{\tau}$}
+%\RightLabel{\tiny($=_{\alpha \beta}$)}
+%\UnaryInfC{$P^{\sigma \to o}  (g^{\tau \to \sigma} a^{\tau }) \lto P^{\sigma \to o}  (g^{\tau \to \sigma}  b^{\tau})$}
+%\end{prooftree}
