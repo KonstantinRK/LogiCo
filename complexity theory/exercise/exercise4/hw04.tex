@@ -1,0 +1,559 @@
+      \documentclass [11pt]{article}
+   \usepackage{latexsym}
+   \usepackage{amssymb}
+      \usepackage{amsmath}
+      \usepackage{amsthm}
+   \usepackage{url}
+
+   \textwidth      15cm
+   \textheight     23cm
+   \oddsidemargin 0.5cm
+   \topmargin    -0.5cm
+   \evensidemargin\oddsidemargin
+
+ \newcommand{\nop}[1]{}
+
+
+   \pagestyle{plain}
+   \bibliographystyle{plain}
+
+
+
+%  \newtheorem{theorem}{Theorem}
+%  \newtheorem{lemma}[theorem]{Lemma}
+%  \newtheorem{exercise}{Exercise}
+  \newtheorem{reduction}{Reduction}
+
+  \newcommand{\ra}{\rightarrow}
+  \newcommand{\Ra}{\Rightarrow}
+  \newcommand{\La}{\Leftarrow}
+  \newcommand{\la}{\leftarrow}
+  \newcommand{\LR}{\Leftrightarrow}
+
+  \renewcommand{\phi}{\varphi}
+  \renewcommand{\theta}{\vartheta}
+
+
+
+\newcommand{\ccfont}[1]{\protect\mathsf{#1}}
+\newcommand{\NP}{\ccfont{NP}}
+\newcommand{\SAT}{\mbox{\bf SAT}}
+\newcommand{\Ptime}{\ccfont{P}}
+\newcommand{\phs}[1]{\Sigma_{#1}\Ptime}
+\newcommand{\php}[1]{\Pi_{#1}\Ptime}
+\newcommand{\pht}[1]{\Theta_{#1}\Ptime}
+\newcommand{\QSAT}[1]{\ccfont{QSAT}_{#1}}
+\newcommand{\MINSAT}{\mbox{\bf MINIMAL MODEL SAT}}
+\newcommand{\True}{\mathbf{true}}
+\newcommand{\False}{\mathbf{false}}
+
+
+\newcommand{\MINCARDSAT}{\mbox{\bf CARD-MINIMAL MODEL SAT}}
+\newcommand{\MINWEIGHTSAT}{\mbox{\bf WEIGHT-MINIMAL MODEL SAT}}
+\newcommand{\MAXCARDSAT}{\mbox{\bf CARD-MAXIMAL MODEL SAT}}
+\newcommand{\MAXWEIGHTSAT}{\mbox{\bf WEIGHT-MAXIMAL MODEL SAT}}
+\newcommand{\MINLEXSAT}{\mbox{\bf LEX-MINIMAL MODEL SAT}}
+\newcommand{\MAXLEXSAT}{\mbox{\bf LEX-MAXIMAL MODEL SAT}}
+\newcommand{\LogMAXLEXSAT}{\mbox{\bf LogLEX-MAXIMAL MODEL SAT}}
+\newcommand{\LogMINLEXSAT}{\mbox{\bf LogLEX-MINIMAL MODEL SAT}}
+
+
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+%\newcommand{\True}{\mathbf{true}}
+%\newcommand{\False}{\mathbf{false}}
+%\newcommand{\QSAT}[1]{\mathit{QBF}_{\exists, 2}}
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+
+
+  \newcommand{\lto}{\rightarrow}
+  \newcommand{\sto}{\Rightarrow}
+  \newcommand{\snto}{\Leftarrow}
+  \newcommand{\lnto}{\leftarrow}
+  \newcommand{\siff}{\Leftrightarrow}
+   \newcommand{\liff}{\leftrightarrow}
+   \newcommand{\nmodels}{\not\models}
+
+\newcommand{\clau}{\mathit{Clause}}
+\newcommand{\var}{\mathit{Var}}
+\newcommand{\lit}{\mathit{Lit}}
+\newcommand{\dom}{\mathit{Dom}}
+
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+    \newtheorem{observation}[theorem]{Observation}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{example}[theorem]{Example}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem{exercise}[theorem]{Exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\noindent
+Recall from the lecture the following variants of the \SAT -problem:
+\begin{itemize}
+\item \MAXLEXSAT
+\item \MAXWEIGHTSAT
+\item \LogMAXLEXSAT
+\item \MAXCARDSAT
+\item \MINCARDSAT
+\end{itemize}
+
+\noindent
+And also recall the following problem reductions. 
+
+\begin{reduction}
+\label{red:1}
+{\em 
+From \MAXLEXSAT\ to 
+\\
+\MAXWEIGHTSAT: 
+
+\smallskip
+
+\noindent
+Consider an arbitrary instance 
+$\phi; (x_1, \dots, x_n)$ of 
+\MAXLEXSAT, \linebreak
+where
+$\phi$ is a Boolean formula over variables $X$ and 
+$(x_1, \dots, x_n)$  is an ordering  
+of the variables in $X$. 
+
+\smallskip
+
+\noindent
+We define the instance 
+$\phi; (x_1, \dots, x_n); (w(x_1), \dots, w(x_n)); z$ of 
+{\bf WEIGHT-MAXIMAL MODEL SAT} as follows:
+
+\begin{itemize}
+\item Formula $\phi$ (and, hence, also variable set $X$) is left unchanged.
+\item For every $i \in \{1, \dots, n\}$, we define
+the weight $w(x_i) = 2^{n-i}$. 
+\item We set $z = x_n$.
+\end{itemize}
+
+}
+\end{reduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{reduction}
+\label{red:2}
+{\em 
+From \LogMAXLEXSAT\ to 
+\\
+\MAXCARDSAT: 
+
+\smallskip
+
+\noindent
+Consider an arbitrary instance 
+$\phi; (x_1, \dots, x_n)$ of 
+\LogMAXLEXSAT, \linebreak
+where
+$\phi$ is a Boolean formula 
+and 
+$(x_1, \dots, x_n)$ is an ordering 
+of logarithmically many variables in $\phi$;
+moreover, let $Y = \{y_1, \dots, y_m\}$ denote the remaining variables in $\phi$.
+
+\smallskip
+
+\noindent
+We add the following fresh variables: 
+
+\begin{itemize}
+\item ``copies'' of each variable $x_i$, i.e.\, for every $i \in \{1, \dots, n\}$,  we introduce $2^{n-i}-1$ new variables 
+$x_i^{(1)}, x_i^{(2)},  \dots, x_i^{(r_i)}$ with $r_i = 2^{n-i}-1$. 
+%
+\item a primed copy of each variable in $Y$: 
+$Y' = \{y'_1, \dots, y'_m\}$. 
+\end{itemize}
+
+\noindent
+Then we construct 
+the instance $\psi; z$ of \MAXCARDSAT\ as follows:
+We set $z = x_n$ and we define $\psi$ as
+
+\[
+\psi  =  \phi  \wedge   
+%
+\bigwedge_{i=1}^n 
+\big( (x_i \leftrightarrow x_i^{(1)}) \wedge \dots
+\wedge (x_i \leftrightarrow x_i^{(r_i)})
+\big) \wedge  
+%
+\bigwedge_{i=1}^m 
+y_i  \leftrightarrow \neg y'_i 
+\]
+
+}
+\end{reduction}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{reduction}
+\label{red:3}
+{\em 
+From \MAXCARDSAT\ to 
+\\
+\MINCARDSAT: 
+
+\smallskip
+
+\noindent
+Consider an arbitrary instance 
+$\phi; x_i$ of \MAXCARDSAT\
+where  $\phi$ is a Boolean formula
+over the variables $X = \{x_1, \dots, x_n\}$.
+
+
+\smallskip
+
+\noindent
+We add 
+primed and double-primed copies of the variables, i.e.\, 
+$X'= \{x'_1, \dots, x'_n\}$ and $X''= \{x''_1, \dots, x''_n\}$. 
+
+\smallskip
+
+\noindent
+Then we construct 
+the instance 
+$\psi;  x_i$
+ of \MINCARDSAT\ as follows:
+
+\[
+\psi  =   \phi \wedge 
+\bigwedge_{i=1}^n 
+\big( ( x_i  \leftrightarrow \neg x'_i) 
+\wedge
+( x_i  \leftrightarrow \neg x''_i)
+\big)
+\]
+
+
+}
+\end{reduction}
+
+
+\medskip
+\newpage
+
+
+\begin{exercise}[4 credits]
+{\em 
+Prove the correctness of the above reduction
+from \\
+\MAXLEXSAT\ to 
+\MAXWEIGHTSAT.
+}%em
+\end{exercise}
+
+
+\paragraph*{Solution}
+
+%The transformation as defined above.
+%\begin{definition}
+%\label{def:red}
+%Let $\varphi$ be a propositional formula over the set of variables $X$ , let $(x_1,\dots,x_n)$ be a linear ordering of $X$. The let $\tau$ a transformation such that
+%\begin{equation*}
+%\tau(\varphi; (x_1,\dots,x_n)):=(\varphi; (w(x_1),\dots,w(x_n)); x_n)
+%\end{equation*}
+%where for some $i \in \{1,\dots ,n \}$ one has $w(x_i) := \mapsto 2^{n-i}$. 
+%Moreover, in a small abuse of notation let $w(x_1, \dots , x_n):=(w(x_1),\dots,w(x_n))$.
+%\end{definition}
+
+In a small abuse of notation let $w(x_1, \dots , x_n):=(w(x_1),\dots,w(x_n))$. Moreover, consider the following
+
+\begin{definition}
+Let $X$ be some set (or ordering) of variables, let $\mathcal{I}$ be an interpretation and let $w$ be the weight function as introduced in Reduction \ref{red:1} over the variables in $X$, then let $w^{\mathcal{I}}$ be defined as
+\begin{equation*}
+w^{\mathcal{I}}(x):= \begin{cases}
+w(x) \quad & \mathit{if}  \; \mathcal{I} \models x  \\
+0 \quad & \mathit{otw.}   \\
+\end{cases}
+\end{equation*}
+Moreover, for some $X' \subseteq X$ let $\omega^{\mathcal{I}}(X'):=\sum_{x \in X'} w^{\mathcal{I}}(x)$.
+\end{definition}
+
+%Subsequently, notation will further be mangled by using the !!!!!!!!
+%The following lemma demonstrates the correctness of Reduction \ref{red:1}
+\begin{lemma}
+Let $\varphi$ be a propositional formula over the set of variables $X$ , let $\overline{x}:=(x_1,\dots,x_n)$ be a linear ordering of $X$. Then
+\small
+\begin{equation*}
+(\varphi;\overline{x}) \in \MAXLEXSAT \iff \tau(\varphi;\overline{x}) \in \MAXWEIGHTSAT
+\end{equation*}
+where $\tau(\varphi;\overline{x})=(\varphi;w(\overline{x}); x_n)$, i.e. the transformation as presented in Reduction \ref{red:1}.
+\end{lemma}
+\begin{proof}
+ Let $I:= \{1,\dots ,n\}$. Each direction is shown separately.
+\begin{itemize}
+\item[$\Rightarrow$] Assume that $(\varphi;\overline{x}) \in \MAXLEXSAT$. Hence, there exists a lexicographical maximal model $\mathcal{I}$ of $\varphi$ such that $\mathcal{I}\models x_n$. Hence, for any other model $\mathcal{J}$ of $\varphi$ there must exist a $k \in I$ such that  $\forall i  \in \{1,\dots , k-1\}$, $\mathcal{I}(x_i)=\mathcal{J}(x_i)$ and $\mathcal{I} \models x_k$ and $\mathcal{J} \nmodels x_k$. If $\mathcal{J}$ does not exists, $\mathcal{I}$ is trivially weight maximal. Otherwise, it must be that
+\begin{equation*}
+\omega^{\mathcal{I}}(x_{k}, \dots , x_n) \geq w^{\mathcal{I}}(x_k)=2^{n-k}> \sum_{k+1}^n 2^{n-i}\geq \omega^{\mathcal{J}}(x_{k}, \dots , x_n)
+\end{equation*}
+That is, even if $\forall i \in \{k+1, \dots, n\}$ $\mathcal{J} \models x_i $ one would have at most $\omega^{\mathcal{J}}(x_{k}, \dots , x_n)= \sum_{k+1}^n 2^{n-i}$ and since both interpretations agree on all $x_i$ smaller $k$ it must be that$\omega^{\mathcal{I}}(\overline{x})> \omega^{\mathcal{J}}(\overline{x})$. Therefore, from $\mathcal{J}$ being arbitrary, it follows that $\mathcal{I}$ is weight maximal. Furthermore, since $\mathcal{I} \models x_n$ one can conclude that $x_n$ is true in a weight maximal model (w.r.t. $w(\overline{x})$). Hence, $\tau(\varphi;\overline{x})\in \MAXWEIGHTSAT$.
+
+\item[$\Leftarrow$]
+Assume that $\tau(\varphi;\overline{x}) \in \MAXWEIGHTSAT$. Hence, there exists a weight maximal model $\mathcal{I}$ of $\varphi$ such that $\mathcal{I}\models x_n$. Let $\mathcal{J}$ be an arbitrary model of $\varphi$ other than $\mathcal{I}$. If $\mathcal{J}$ does not exists, $\mathcal{I}$ is trivially lexicographically maximal. Consider the order imposed by the vector $\overline{x}$. Since $\mathcal{J}$ differs from $\mathcal{I}$ it must be that there exists a $k \in I $ where $\mathcal{I}(x_k)\neq \mathcal{J}(x_k)$ and where $\forall i  \in \{1,\dots , k-1 \}$, $\mathcal{I}(x_i)=\mathcal{J}(x_i)$. Now there are two cases. If $\mathcal{I} \models x_k $ and $\mathcal{J} \nmodels x_k$, then $\mathcal{I}$ is lexicographically greater than $\mathcal{J}$. If $\mathcal{I} \nmodels x_k $ and $\mathcal{J} \models x_k$, then
+\begin{equation*}
+\omega^{\mathcal{J}}(x_{k}, \dots , x_n) \geq w^{\mathcal{J}}(x_k)=2^{n-k}> \sum_{k+1}^n 2^{n-i}\geq \omega^{\mathcal{I}}(x_{k}, \dots , x_n)
+\end{equation*}
+However, as above, this directly implies that $\omega^{\mathcal{I}}(\overline{x}) < \omega^\mathcal{J}(\overline{x})$ causing a contradiction.
+With $\mathcal{J}$ being arbitrary, it follows that $\mathcal{I}$ is the lexicographically maximal model. Moreover, since $\mathcal{I}\models x_n$ it follows that $x_n$ is satisfied in the lexicographically maximal interpretation of $\varphi$, and thus $(\varphi;\overline{x}) \in \MAXLEXSAT$.
+
+
+%Let $I:= \{1,\dots ,n\}$. Assume that $\tau(\varphi;\overline{x}) \in \MAXWEIGHTSAT$. Hence, there exists a lexicographical model $\mathcal{I}$ of $\varphi$ such that $\mathcal{I}\models x_n$. 
+%Towards a contradiction, assume that there exists a model $\mathcal{J}$ of $\varphi$ such that $\mathcal{J}$ is lexicographically greater than $\mathcal{I}$ (w.r.t $\overline{x}$). Since, $\mathcal{J}$ is lexicographically greater than $\mathcal{I}$ it must be that there exist an $k \in I$ where $\mathcal{J} \models x_k $ and $\mathcal{I} \nmodels x_k$ and where $\forall i  \in I$ such that $i < k$, $\mathcal{I}(x_i)=\mathcal{J}(x_i)$. However, 
+%\begin{equation*}
+%\omega^{\mathcal{J}}(x_{k}, \dots , x_n) \geq \omega^{\mathcal{J}}(x_k)=2^{n-k}> \sum_{k+1}^n 2^{n-i}\geq \omega^{\mathcal{I}}(x_{k}, \dots , x_n)
+%\end{equation*}
+%However, this directly implies that $\omega^{\mathcal{I}}(\overline{x}) < \omega^\mathcal{J}(\overline{x})$, causing the desired contradiction. Therefore, $\mathcal{I}$ is the lexicographically maximal relation. Moreover, since $\mathcal{I}\models x_n$ it follows that $x_n$ is satisfied in the lexicographically maximal interpretation of $\varphi$, and thus $(\varphi;\overline{x}) \in \MAXLEXSAT$.
+\end{itemize}
+
+\end{proof}
+%\begin{proof}
+%Let $I:= \{1,\dots ,n\}$. Assume that $(\varphi;\overline{x}) \in \MAXLEXSAT$. Hence, there exists a lexicographical model $\mathcal{I}$ of $\varphi$ such that $\mathcal{I}\models x_n$. Towards a contradiction, assume that there exists a model $\mathcal{J}$ of $\varphi$ where $\mathcal{J} \models x_n$ such that $\omega^{\mathcal{I}}(\overline{x}) < \omega^{\mathcal{J}}(\overline{x})$. Since, $\mathcal{I}$ is lexicographical maximal and since $\omega^{\mathcal{I}}(\overline{x}) < \omega^{\mathcal{J}}(\overline{x})$, there must exist an $k \in I$ where $\mathcal{I} \models (x_k) $ and $\mathcal{J} \nmodels x_k$ and where $\forall i  \in I$ such that $i < k$, $\mathcal{I}(x_i)=\mathcal{J}(x_i)$.  However, 
+%\begin{equation*}
+%\omega^{\mathcal{I}}(x_{k}, \dots , x_n) \geq \omega^{\mathcal{I}}(x_k)=2^{n-k}> \sum_{k+1}^n 2^{n-i}\geq \omega^{\mathcal{J}}(x_{k}, \dots , x_n)
+%\end{equation*}
+%Hence, for $\mathcal{J}$ to be weight maximal it must be that $\mathcal{J} \models x_k$. Therefore, such a $k$ can not exists. Meaning that $\forall i \in I \; \mathcal{I}(x_i)=\mathcal{J}(x_i)$, contradicting $\omega^{\mathcal{I}}(\overline{x}) < \omega^{\mathcal{J}}(\overline{x})$. Thus, among all the models of $\varphi$ that satisfy $x_n$, $\mathcal{I}$ is weight maximal.
+%\end{proof}
+
+
+
+\newpage
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\begin{exercise}[3 credits]
+{\em 
+Prove the correctness of the above reduction
+from \\
+\LogMAXLEXSAT\ to 
+\MAXCARDSAT.
+}%em
+\end{exercise}
+
+
+\paragraph*{Solution}
+\begin{definition}
+Let $(\varphi;\overline{x}) \in \LogMAXLEXSAT$ then $\tau(\varphi;\overline{x})$ is defined as $\tau(\varphi;\overline{x}):= (\tau(\varphi), x_n)$, with $\tau(\varphi)$ being the construction from Reduction \ref{red:2}. Moreover, for some $k \in \{1, \dots , n\}$ let $\mathcal{X}_k:=\{ x_k, x_k^{(1)}, \dots, x_k^{(r_k)}\}$, where $r_k:=2^{n-k}-1$ (as defined in Reduction \ref{red:2}). Furthermore, let $\mathcal{X}_{\leq k}:= \bigcup_{i \in \{1, \dots, k\}} \mathcal{X}_k$. Analogously for $\mathcal{X}_{> k}$.
+\end{definition}
+
+\begin{definition}
+Let $\mathcal{I}$ be an interpretation, then $\mathfrak{S}(\mathcal{I}):=\{x \mid \mathcal{I}(x)=\True\}$. Moreover, if $\mathcal{I}$ is a model of the formula $\varphi$ then one can construct the interpretation $\tau(\mathcal{I})$ such that $\forall i \in \{1, \dots , m\} \;\tau(\mathcal{I})(y_i):=\mathcal{I}(y_i) \land \tau(\mathcal{I})(y_i'):=\neg \mathcal{I}(y_i)$, as well as $\forall i \in \{1, \dots , n\}  \; \tau(\mathcal{I})(x_i):=\mathcal{I}(x_i) \land \forall j \in \{1, \dots 2^{n-i}-1\} \; \tau(\mathcal{I})(x_i^{(j)}):=\mathcal{I}(x_i)$.
+%\begin{itemize}
+%\item $\forall i \in \{1, \dots , m\} \;\tau(\mathcal{I})(y_i):=\mathcal{I}(y_i)$
+%\item $\forall i \in \{1, \dots , m\} \; \tau(\mathcal{I})(y_i'):=\neg \mathcal{I}(y_i)$,
+%\item $\forall i \in \{1, \dots , n\}  \; \tau(\mathcal{I})(x_i):=\mathcal{I}(x_i)$ and
+%\item $\forall i \in \{1, \dots , n\} \forall j \in \{1, \dots 2^{n-i}-1\} \; \tau(\mathcal{I})(x_i^{(j)}):=\mathcal{I}(x_i)$.
+%\end{itemize}
+\end{definition}
+
+
+\begin{observation}
+\label{obs:1a}
+For an arbitrary $\mathcal{I}$ such that $ \mathcal{I} \models \bigwedge_{i=1}^n 
+\big( (x_i \leftrightarrow x_i^{(1)}) \wedge \dots
+\wedge (x_i \leftrightarrow x_i^{(r_i)})
+\big) $ then for any $i \in \{1, \dots , n\}$ one has $\mathcal{I} \models x_i$ if and only if $\mathcal{I} \models  x_i \land x_i^{(1)} \land \dots x_i^{(r_i)}$. 
+\end{observation}
+
+\begin{observation}
+\label{obs:1b}
+Take an arbitrary model $\mathcal{I}$ of $\tau(\varphi)$. For any $i \in \{1, \dots,n\}$ one has $\mathcal{I} \models y_i$ if and only if $\mathcal{I} \nmodels y_i'$. Hence, for any other model $\mathcal{J}$ of $\tau(\varphi)$ it must be that
+\begin{equation*}
+|\mathfrak{S}(\mathcal{J}) \cap (Y \cup Y')|=|\mathfrak{S}(\mathcal{I}) \cap (Y \cup Y')|
+\end{equation*}
+\end{observation}
+
+\begin{lemma}
+\label{lem:1c}
+For the models $\mathcal{I}$ and $\mathcal{J}$ of $\tau(\varphi)$, consider the order $\overline{x}:=(x_1, \dots , x_n)$ on the basis of which $\tau(\varphi)$ was constructed. Then it holds that, there exists $k \in \{1, \dots , n \}$ such that $\forall i \in  \{1, \dots , k-1 \}$ one has $\mathcal{I}(x_i)=\mathcal{J}(x_i)$, as well as $\mathcal{J} \nmodels x_k$ and $\mathcal{I}  \models x_k$ if and only if $|\mathfrak{S}(\mathcal{J})| < |\mathfrak{S}(\mathcal{I}) |$.
+\end{lemma}
+\begin{proof}
+
+\begin{itemize}
+\item[$\Rightarrow$]
+By Observation \ref{obs:1a}, this implies that $\mathcal{X}_k \subseteq \mathfrak{S}(\mathcal{I})$ and $\mathcal{X}_k \cap \mathfrak{S}(\mathcal{J})= \emptyset$. Meaning that, 
+\begin{equation*}
+|\mathcal{X}_{\leq k} \cap \mathfrak{S}(\mathcal{I})| = |\mathcal{X}_{\leq k} \cap \mathfrak{S}(\mathcal{J})|+ 2^{n-k}
+\end{equation*}
+However, by construction $|\mathcal{X}_{> k} |<2^{n-k}$. Thus it follows that $|\mathfrak{S}(\mathcal{J}) \cap \mathcal{X}_{\leq n}| < |\mathfrak{S}(\mathcal{I}) \cap \mathcal{X}_{\leq n} |$. By Observation \ref{obs:1b}, this implies that $|\mathfrak{S}(\mathcal{J})| < |\mathfrak{S}(\mathcal{I}) |$.
+
+\item[$\Leftarrow$] If $|\mathfrak{S}(\mathcal{J})| < |\mathfrak{S}(\mathcal{I}) |$, by Observation \ref{obs:1b}, there must exists an $k \in \{1, \dots , n\}$ such that $\mathcal{I} \models x_k$ and $\mathcal{J} \nmodels x_k$.  With respect to the ordering $\overline{x}$ let this be the first of its occurrences. Assume that there exists a $l< k$ such that $\mathcal{I} \nmodels x_l$ and $\mathcal{J} \models x_l$ If this is the case then this implies that $\mathcal{X}_{l} \subseteq \mathfrak{S}(\mathcal{J})$ and $\mathcal{X}_l \cap \mathfrak{S}(\mathcal{I})= \emptyset$. Meaning that, 
+\begin{equation*}
+|\mathcal{X}_{\leq l} \cap \mathfrak{S}(\mathcal{J})| \geq |\mathcal{X}_{\leq l} \cap \mathfrak{S}(\mathcal{I})|+ 2^{n-l}
+\end{equation*}
+However, by construction $|\mathcal{X}_{> l} |<2^{n-l}$, thus even if $k$ is satisfied by $\mathcal{I}$ this would not matter, as it would still be the case that $|\mathfrak{S}(\mathcal{I})| < |\mathfrak{S}(\mathcal{J}) |$, which is a contradiction. Hence, $l$ does not exist. Now with $k$ being the first of its occurrences, it must be the case that $\forall i \in  \{1, \dots , k-1 \}$ one has $\mathcal{I}(x_i)=\mathcal{J}(x_i)$. 
+\end{itemize}
+\end{proof}
+
+\begin{observation}
+\label{obs:1d}
+For the models $\mathcal{J}$ and $\mathcal{I}$ of $\tau(\varphi)$. Then $|\mathfrak{S}(\mathcal{I})|=|\mathfrak{S}(\mathcal{J})|$ if and only if $\mathfrak{S}(\mathcal{I}) \cap X= \mathfrak{S}(\mathcal{J}) \cap X$.
+\end{observation}
+\begin{proof}
+\begin{itemize}
+\item[$\Rightarrow$]
+Assume that $|\mathfrak{S}(\mathcal{I})|=|\mathfrak{S}(\mathcal{J})|$ and $\mathfrak{S}(\mathcal{I}) \cap X\neq \mathfrak{S}(\mathcal{J}) \cap X$.  Consider the order $\overline{x}$ on the basis of which $\tau(\varphi)$ was constructed. Given this order, and from Observation \ref{obs:1b}, there must be a $k \in \{1, \dots , n \}$ such that $\forall i \in  \{1, \dots , k-1 \}$ one has $\mathcal{I}(x_i)=\mathcal{J}(x_i)$, as well as $\mathcal{J}(x_k) \neq \mathcal{I}(x_k)$. W.l.o.g.\  $\mathcal{J} \nmodels x_k$ and $\mathcal{I}  \models x_k$, thus from Lemma \ref{lem:1c} it follows that $|\mathfrak{S}(\mathcal{J})| < |\mathfrak{S}(\mathcal{I}) |$, which is a contradiction.
+
+\item[$\Leftarrow$] This follows trivially from Observation \ref{obs:1a} \& \ref{obs:1b}.
+\end{itemize}
+
+\end{proof}
+
+
+%The following lemma demonstrates the correctness of Reduction \ref{red:2}
+
+\begin{lemma}
+Let $\varphi$ be a propositional formula over the set of variables $X \cup Y$ , let $\overline{x}:=(x_1,\dots,x_n)$ be a linear ordering of $X$ and let $Y:=\{y_1, \dots, y_m\}$. Then
+\small
+\begin{equation*}
+(\varphi;\overline{x}) \in \LogMAXLEXSAT \iff \tau(\varphi;\overline{x}) \in \MAXCARDSAT
+\end{equation*}
+%where $\tau(\varphi;\overline{x}):= (\tau(\varphi), x_n)$, with $\tau(\varphi)$ being the construction from the Reduction \ref{red:2}.
+\end{lemma}
+
+\begin{proof}
+Each direction is shown separately. 
+\begin{itemize}
+\item[$\Rightarrow$] Assume that $(\varphi;\overline{x}) \in \LogMAXLEXSAT $.  Hence, there exists a lexicographically maximal (w.r.t. $\overline{x}$) model $\mathcal{I}$ of $\varphi$ where $x_n$ evaluates to true. 
+%Using $\mathcal{I}$ one can construct $\mathcal{I}_{\tau}$ such that 
+%\begin{itemize}
+%\item $\forall i \in \{1, \dots , m\} \; \mathcal{I}_{\tau}(y_i):=\mathcal{I}(y_i)$,
+%\item $\forall i \in \{1, \dots , m\} \; \mathcal{I}_{\tau}(y_i'):=\neg \mathcal{I}(y_i)$,
+%\item $\forall i \in \{1, \dots , n\}  \; \mathcal{I}_{\tau}(x_i):=\mathcal{I}(x_i)$ and
+%\item $\forall i \in \{1, \dots , n\} \forall j \in \{1, \dots 2^{n-i}-1\} \; \mathcal{I}_{\tau}(x_i^{(j)}):=\mathcal{I}(x_i)$.
+%\end{itemize}
+Let $\mathcal{I}_{\tau}:=\tau(\mathcal{I})$. By construction $\mathcal{I}_{\tau} \models \tau(\varphi)$. Hence, it remains to be shown that $\mathcal{I}_{\tau}$ is a cardinal maximal 
+model. Take an arbitrary model $\mathcal{J}_{\tau}$ of $\tau(\varphi)$ other than $\mathcal{I}_{\tau}$. If none exists, then $\mathcal{I}_{\tau}$ is trivially maximal in cardinality. Firstly, by Observation \ref{obs:1b} it must be that
+$|\mathfrak{S}(\mathcal{J}_{\tau}) \cap (Y \cup Y')|=|\mathfrak{S}(\mathcal{I}_{\tau}) \cap (Y \cup Y')|$.
+Secondly, 
+%since $\mathcal{I}$ is a lexicographically maximal model of $\varphi$ w.r.t.\ $\overline{x}$, by construction this carries over to $\mathcal{I}_{\tau}$. 
+%Moreover, by construction it must be that $\mathcal{J} \models \varphi$.
+ two cases ought to be considered. On the one hand, if $\forall i \in \{1, \dots , n\}\; \mathcal{I}_{\tau}(x_i)=\mathcal{J}_{\tau}(x_i)$ it follows that $|\mathfrak{S}(\mathcal{I}_{\tau})|=|\mathfrak{S}(\mathcal{J}_{\tau})|$ by Observation \ref{obs:1d}. On the other hand, since $\mathcal{J}_{\tau}$ must model $\varphi$, one can restrict it to the variables in $X \cup Y$ to obtain $\mathcal{J}$ which still models $\varphi$. Since, $\mathcal{I}$ is lexicographically maximal with respect to $\overline{x}$, it follows that there must be a $k \in \{1, \dots , n \}$ such that $\forall i \in  \{1, \dots , k-1 \}$ one has $\mathcal{I}(x_i)=\mathcal{J}(x_i)$, as well as  $\mathcal{J} \nmodels x_k$ and $\mathcal{I} \models x_k$. However, since $\mathcal{I}_{\tau}$ agrees with $\mathcal{I}$ and since $\mathcal{J}_{\tau}$ agrees with $\mathcal{J}$ on all $X$'s (and $Y$'s), the same must hold for $\mathcal{I}_{\tau}$ and $\mathcal{J}_{\tau}$. Hence, from Lemma \ref{lem:1c} one obtains $|\mathfrak{S}(\mathcal{J}_{\tau})| < |\mathfrak{S}(\mathcal{I}_{\tau}) |$. Therefore, from the two cases one obtains $|\mathfrak{S}(\mathcal{J}_{\tau})|\leq |\mathfrak{S}(\mathcal{I}_{\tau}) |$ for some arbitrary model of $\tau(\varphi)$, and thus $\mathcal{I}_{\tau}$ is cardinal maximal. Finally, since $\mathcal{I}_{\tau} \models x_n$ it follows that $(\tau(\varphi), x_n) \in \MAXCARDSAT$.
+%
+%By Observation \ref{obs:1a}, this implies that $\mathcal{X}_k \subseteq \mathfrak{S}(\mathcal{I}_{\tau})$ and $\mathcal{X}_k \cap \mathfrak{S}(\mathcal{J}_{\tau})= \emptyset$. Meaning that, 
+%\begin{equation*}
+%|\mathcal{X}_{\leq k} \cap \mathfrak{S}(\mathcal{I}_{\tau})| = |\mathcal{X}_{\leq k} \cap \mathfrak{S}(\mathcal{J}_{\tau})|+ 2^{n-k}
+%\end{equation*}
+%However, by construction $|\mathcal{X}_{> k} |<2^{n-k}$, thus it follows that $|\mathfrak{S}(\mathcal{J}_{\tau})| < |\mathfrak{S}(\mathcal{I}_{\tau}) |$.  
+%
+
+\item[$\Leftarrow$] Assume that $(\tau(\varphi), x_n)  \in \MAXCARDSAT $.  Hence, there must exits a model $\mathcal{I}_{\tau}$ of $\tau(\varphi)$ that is maximal in its cardinality. Clearly, by restricting $\mathcal{I}_{\tau}$ to the variables in $X\cup Y$, one can construct an interpretation $\mathcal{I}$ such that $\mathcal{I} \models \varphi$. Now, take any arbitrary model $\mathcal{J}$ of $\varphi$ other than $\mathcal{I}$. Again, if $\mathcal{J}$ would not exists then $\mathcal{I}$ must be lexicographically maximal (w.r.t. $\overline{x}$). Then $\mathcal{J}_{\tau}:=\tau(\mathcal{J})$ is a model of $\tau(\varphi)$. Moreover, by maximality of $\mathcal{I}_{\tau}$ it is known that $|\mathfrak{S}(\mathcal{J}_{\tau})| \leq |\mathfrak{S}(\mathcal{I}_{\tau})|$.
+Clearly, by Observation \ref{obs:1b} it must be that $|\mathfrak{S}(\mathcal{J}_{\tau}) \cap (Y \cup Y')|=|\mathfrak{S}(\mathcal{I}_{\tau}) \cap (Y \cup Y')|$.
+Hence, by Observation \ref{obs:1a}, the only difference in cardinality can occur due to the respective evaluation of the variables in $X$.  Thereby, inducing two cases. On the one hand, if $|\mathfrak{S}(\mathcal{J}_{\tau})|=|\mathfrak{S}(\mathcal{I}_{\tau})|$, then it follows by Observation \ref{obs:1d}, that $\mathfrak{S}(\mathcal{J}_{\tau}) \cap X=\mathfrak{S}(\mathcal{I}_{\tau}) \cap X$, implying that $\mathcal{I}$ is lexicographically equivalent to $\mathcal{J}$, i.e. they only differ on their assignments on the variables in $Y$. On the other hand, if $|\mathfrak{S}(\mathcal{J}_{\tau})|<|\mathfrak{S}(\mathcal{I}_{\tau})|$, then it follows from Lemma \ref{lem:1c} that there exists a $k \in \{1, \dots , n \}$ such that $\forall i \in  \{1, \dots , k-1 \}$ one has $\mathcal{I}_{\tau}(x_i)=\mathcal{J}_{\tau}(x_i)$, as well as $\mathcal{J}_{\tau} \nmodels x_k$ and $\mathcal{I}_{\tau}  \models x_k$. However, this means that $\mathcal{I}_{\tau}$ is lexicographically greater than $\mathcal{J}_{\tau}$ w.r.t.\ the order $\overline{x}$. Since this carries over to $\mathcal{I}$ and $\mathcal{J}$ and since $\mathcal{I} \models x_n$ by assumption, it follows that $(\varphi, \overline{x}) \in  \LogMAXLEXSAT$.
+
+
+%
+%
+%Assume towards a contradiction that there exists a model $\mathcal{J}$ of $\tau(\varphi)$ that is lexicographically greater that $\mathcal{I}$ on the variables $\overline{x}$. Hence, there must be a $k \in \{1, \dots , n \}$ such that $\forall i \in  \{1, \dots , n \}$ with $i<k$ one has $\mathcal{I}(x_i)=\mathcal{J}(x_i)$, as well as  $\mathcal{J} \models x_k$ and $\mathcal{I}  \nmodels x_k$. However, this implies that $\{ x_k, x_k^{(1)} , \dots, x_k^{(r_k)}\} \subseteq \mathfrak{S}(\mathcal{J})$ and $\{ x_k, x_k^{(1)} , \dots, x_k^{(r_k)}\} \cap \mathfrak{S}(\mathcal{I})= \emptyset$. Meaning that, 
+%\begin{equation*}
+%|\mathcal{X}_{\leq k} \cap \mathfrak{S}(\mathcal{J})| = |\mathcal{X}_{\leq k} \cap \mathfrak{S}(\mathcal{I})|+ 2^{n-k}
+%\end{equation*}
+%However, by construction $|\mathcal{X}_{> k} |<2^{n-k}$, thus it follows that $|\mathfrak{S}(\mathcal{J})| > |\mathfrak{S}(\mathcal{I}) |$ which is clearly a contradiction. Therefore, the $\mathcal{I}$ is a lexicographically maximal model of $\tau(\varphi)$ with respect to the ordering $\overline{x}$. Now since $\mathcal{I} \models \varphi$, one can conclude that $\mathcal{I}$ is a lexicographically maximal model of $\varphi$ that satisfies $x_n$. Hence, $(\varphi, \overline{x}) \in  \LogMAXLEXSAT$.
+\end{itemize}
+
+\end{proof}
+
+
+\newpage
+
+
+\begin{exercise}[3 credits]
+{\em 
+Prove the correctness of the above 
+reduction
+from \\
+\MAXCARDSAT\ to 
+\MINCARDSAT.
+}%em
+\end{exercise}
+\paragraph*{Solution}
+
+\begin{definition}
+Let $\varphi$ be a propositional formula over the set of variables $X:=\{x_1,\dots , x_n\}$, then $\tau(\varphi)$ the formula as defined in Reduction \ref{red:3}.
+Moreover, consider a model $\mathcal{I}$ of $\varphi$, then $\tau(\mathcal{I})$ is the interpretation $ \forall i \in \{1,\dots, n\}$ $\tau(\mathcal{I})(x_i):=\mathcal{I}(x_i) \;  \land  \; \tau(\mathcal{I})(x_i'):=\neg \mathcal{I}(x_i)  \;  \land \;  \tau(\mathcal{I})(x_i''):=\neg \mathcal{I}(x_i)$. 
+
+\end{definition}
+
+\begin{observation}
+\label{obs:2}
+Let $\varphi$ be a propositional formula over the set of variables $X:=\{x_1,\dots , x_n\}$. Let $\mathcal{I}$ be a model of $\tau(\varphi)$. Then $|\mathfrak{S}(\mathcal{I})\cap\tau(X)| = 2n-|\mathfrak{S}(\mathcal{I}) \cap X|$
+\end{observation}
+\begin{proof}
+Clearly, $\forall i \in \{1,\dots , n\}  \; x_i \notin \mathfrak{S}(\mathcal{I}) \iff x_i' \in \mathfrak{S}(\mathcal{I}) \land x_i'' \in \mathfrak{S}(\mathcal{I})$. 
+Hence, 
+\begin{equation*}
+|\mathfrak{S}(\mathcal{I})| = |\mathfrak{S}(\mathcal{I})\cap\tau(X)|  = |\mathfrak{S}(\mathcal{I}) \cap X| + 2(|X| -  |\mathfrak{S}(\mathcal{I}) \cap X|) = 2n- |\mathfrak{S}(\mathcal{I}) \cap X|
+\end{equation*}
+where the first equality holds, if one considers only interpretations restricted to the variables in $\tau(X)$.\footnote{as is required to obtain any notion of maximality}
+\end{proof}
+
+The following lemma demonstrates the correctness of Reduction \ref{red:3}
+
+\begin{lemma}
+Let $\varphi$ be a propositional formula over the set of variables $X:=\{x_1,\dots , x_n\}$. Then,
+\small
+\begin{equation*}
+(\varphi;x_i) \in \MAXCARDSAT \iff (\tau(\varphi); x_i) \in \MINCARDSAT
+\end{equation*}
+
+\end{lemma}
+\begin{proof}
+Each direction is shown separately.
+\begin{itemize}
+\item[$\Rightarrow$] Assume that $(\varphi;x_i) \in \MAXCARDSAT$. Hence, $x_i$ is satisfied in a cardinal maximal model $\mathcal{I}$ of $\varphi$. Using this, construct the interpretation $\mathcal{I}_{\tau}:=\tau(\mathcal{I})$. By construction, $\mathcal{I}_{\tau} \models  \tau(\varphi)$, thus it remains to be shown that it is cardinal minimal. Consider an arbitrary model $\mathcal{J}_{\tau}$ of $\tau(\varphi)$. Restrict $\mathcal{J}_{\tau}$ to the variables in $X$ in order to create $\mathcal{J}$. Clearly, $\mathcal{J} \models \varphi$. By maximality of $\mathcal{I}$, any interpretation that satisfies $\varphi$ must satisfy fewer or equally as many $x \in X$, i.e.
+\begin{equation*}
+r=|\mathfrak{S}(\mathcal{J}_{\tau}) \cap X| = |\mathfrak{S}(\mathcal{J})| \leq |\mathfrak{S}(\mathcal{I})| =|\mathfrak{S}(\mathcal{I}_{\tau})\cap X|= o
+\end{equation*}
+However, by Observation \ref{obs:2}, this implies that 
+\begin{equation*}
+|\mathfrak{S}(\mathcal{J}_{\tau})| =|\mathfrak{S}(\mathcal{J}_{\tau}) \cap \tau(X)|=2n-r \geq 2n-o = |\mathfrak{S}(\mathcal{I}_{\tau}) \cap \tau(X) |=|\mathfrak{S}(\mathcal{I}_{\tau})|
+\end{equation*}
+Now with $\mathcal{J}_{\tau}$ being arbitrary $\mathcal{I}_{\tau}$ is a cardinal minimal model of $\tau(\varphi)$. Moreover, by assumption $x_i$ is satisfied by $\mathcal{I}$ and thus also by $\mathcal{I}_{\tau}$. 
+
+\noindent
+Hence,  $(\tau(\varphi); x_i) \in \MINCARDSAT$.
+
+
+\item[$\Leftarrow$] Assume that $(\tau(\varphi); x_i) \in \MINCARDSAT$. Hence, $x_i$ is satisfied in a cardinal minimal model $\mathcal{I}_{\tau}$ of $\tau(\varphi)$. Using this construct the interpretation $\mathcal{I}$ by restricting $\mathcal{I}_{\tau}$ to the set of variables in $X$. By construction, $\mathcal{I} \models \varphi$, thus it remains to be shown that $\mathcal{I}$ is cardinal maximal.
+By minimality of $\mathcal{I}_{\tau}$, any interpretation that satisfies $\tau(\varphi)$ must satisfy more or equally as many $x \in \tau(X)$. Now consider an arbitrary model $\mathcal{J}$ of $\varphi$ and construct $\mathcal{J}_{\tau}:=\tau(\mathcal{J})$. Clearly, $\mathcal{J}_{\tau} \models \tau(\varphi)$ and thus
+\begin{equation*}
+2n-|\mathfrak{S}(\mathcal{J}_{\tau}) \cap X| =|\mathfrak{S}(\mathcal{J}_{\tau}) \cap \tau(X)|=|\mathfrak{S}(\mathcal{J}_{\tau})|   \geq |\mathfrak{S}(\mathcal{I}_{\tau})|  =|\mathfrak{S}(\mathcal{I}_{\tau}) \cap \tau(X) | = 2n-|\mathfrak{S}(\mathcal{I}_{\tau}) \cap X|
+\end{equation*}
+which clearly is equivalent to $|\mathfrak{S}(\mathcal{J}_{\tau}) \cap X| \leq |\mathfrak{S}(\mathcal{I}_{\tau}) \cap X|$. However, by construction this is equivalent to $|\mathfrak{S}(\mathcal{J}) | \leq |\mathfrak{S}(\mathcal{I}) |$.
+Therefore, $\mathcal{I}$ is a cardinal maximal model of $\varphi$. Moreover, by assumption $x_i$ is satisfied by $\mathcal{I}_{\tau}$ and thus also by $\mathcal{I}$. Hence,  $(\varphi;x_i) \in \MAXCARDSAT$.
+
+%
+%\item[$\Leftarrow$] Assume that $(\tau(\varphi); x_i) \in \MINCARDSAT$. Hence, $x_i$ is satisfied in a cardinal minimal model $\mathcal{I}$ of $\tau(\varphi)$. Let $\mathcal{I}'$ be the interpretation $\forall x \in X\; \mathcal{I}'(x):= \mathcal{I}(x)$. Clearly, $\mathcal{I}' \models \varphi$. Hence, it remains to be shown that $\mathcal{I}'$ is cardinal maximal. Assume that there exists a model $\mathcal{J}$ of $\varphi$, such that $|\mathfrak{S}(\mathcal{J})|> |\mathfrak{S}(\mathcal{I}')|$.
+%This implies that there exists a model $\mathcal{J}':=\tau(\mathcal{J})$
+%However, since $|\mathfrak{S}(\mathcal{J})|>|\mathfrak{S}(\mathcal{I}')|$, it follows, by Observation \ref{obs:2}, that $|\mathfrak{S}(\mathcal{J}')|= 2n - |\mathfrak{S}(\mathcal{J})| < 2n - |\mathfrak{S}(\mathcal{I}')| =|\mathfrak{S}(\mathcal{I})|$, which clearly is a contradiction.
+%Hence, there exists cardinal maximal model of $\varphi$ under which $x_i$ is satisfied, i.e.\ $(\varphi;x_i) \in \MAXCARDSAT$.
+\end{itemize}
+
+\end{proof}
+\end{document}
+
+

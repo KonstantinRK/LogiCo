@@ -1,0 +1,274 @@
+   \documentclass [11pt]{article}
+   \usepackage{latexsym}
+   \usepackage{amssymb}
+      \usepackage{amsmath}
+      \usepackage{amsthm}
+   \usepackage{url}
+
+   \textwidth      15cm
+   \textheight     23cm
+   \oddsidemargin 0.5cm
+   \topmargin    -0.5cm
+   \evensidemargin\oddsidemargin
+
+ \newcommand{\nop}[1]{}
+
+
+   \pagestyle{plain}
+   \bibliographystyle{plain}
+
+
+%  \newtheorem{theorem}{Theorem}
+%  \newtheorem{lemma}[theorem]{Lemma}
+%  \newtheorem{exercise}{Exercise}
+
+  \newcommand{\ra}{\rightarrow}
+  \newcommand{\Ra}{\Rightarrow}
+  \newcommand{\La}{\Leftarrow}
+  \newcommand{\la}{\leftarrow}
+  \newcommand{\LR}{\Leftrightarrow}
+
+  \renewcommand{\phi}{\varphi}
+  \renewcommand{\theta}{\vartheta}
+
+
+
+\newcommand{\ccfont}[1]{\protect\mathsf{#1}}
+\newcommand{\NP}{\ccfont{NP}}
+\newcommand{\SAT}{\mbox{\bf SAT}}
+\newcommand{\Ptime}{\ccfont{P}}
+\newcommand{\phs}[1]{\Sigma_{#1}\Ptime}
+\newcommand{\php}[1]{\Pi_{#1}\Ptime}
+\newcommand{\QSAT}[1]{\ccfont{QSAT}_{#1}}
+\newcommand{\MINSAT}{\mbox{\bf MINIMAL MODEL SAT}}
+\newcommand{\True}{\mathbf{true}}
+\newcommand{\False}{\mathbf{false}}
+
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+
+  \newcommand{\lto}{\rightarrow}
+  \newcommand{\sto}{\Rightarrow}
+  \newcommand{\snto}{\Leftarrow}
+  \newcommand{\lnto}{\leftarrow}
+  \newcommand{\siff}{\Leftrightarrow}
+   \newcommand{\liff}{\leftrightarrow}
+   \newcommand{\nmodels}{\not\models}
+
+\newcommand{\clau}{\mathit{Clause}}
+\newcommand{\var}{\mathit{Var}}
+\newcommand{\lit}{\mathit{Lit}}
+\newcommand{\dom}{\mathit{Dom}}
+
+
+
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+    \newtheorem{observation}[theorem]{Observation}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{example}[theorem]{Example}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem{exercise}[theorem]{Exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\noindent
+\begin{exercise}[5 credits]
+{\em 
+Recall the $\phs{2}$-hardness proof of the Abduction Solvability problem by reduction from $\QSAT{2}$:
+Let an arbitrary instance of the $\QSAT{2}$ problem be given by the formula 
+$\phi =  (\exists X) (\forall Y) \psi(X,Y)$
+with $X = \{x_1, \dots, x_k \}$ and $Y = \{y_1, \dots, y_l\}$. Moreover, let 
+$X' = \{x'_1, \dots, x'_k \}$, $R = \{r_1, \dots, r_k \}$, and $t$ be fresh variables. 
+Then we define an instance of Solvability as
+$\mathcal{P}=\langle V,H,M,T \rangle$ with
+%
+\begin{eqnarray*}
+V &=& X \cup Y  \cup X' \cup R \cup \{t\}\\
+H &=& X \cup X' \\
+M &=& R \cup \{t\}\\
+T &=& \{ \psi(X,Y)\ra t \} 
+\cup \{\neg x_i \vee \neg x'_i, x_i \ra r_i, x'_i \ra r_i \mid 1 \leq i \leq k\} 
+\end{eqnarray*}
+%
+
+\smallskip
+\noindent
+Give a rigorous correctness proof of this problem reduction, i.e., 
+$\phi \equiv \True$ $\LR$ $Sol(\mathcal{P}) \neq \emptyset$.
+
+}%em
+\end{exercise}
+
+\noindent
+{\bf Hint.} As usual, prove both directions of the equivalence separately. It is convenient to use the notation from the lecture: For 
+$A \subseteq X$, let $A'$  denote
+the set $\{x' \mid x \in A\}$.
+
+\begin{itemize}
+\item 
+For the ``$\Ra$''-direction, you start off with a partial assignment $I$ on $X$.
+Let $A = I^{-1}(\True)$. Then it can be shown that $S = A \cup (X \setminus A)'$ 
+is a solution of $\mathcal{P}$. In order to show that $S$ is indeed a solution, you must prove carefully the two conditions that (1) $T \cup S$ is satisfiable
+and (2) $T \cup S \models M$. 
+
+\item For the ``$\La$''-direction, first show that a solution $S$ of $\mathcal{P}$
+contains exactly one  of $\{x_i, x'_i\}$. Why?  Hence, $S$ must be of the form
+$S = A \cup (X \setminus A)'$ for some $A \subseteq X$.
+It remains to show that for the assignment $I$ on $X$ with $I^{-1}(\True) = A$, 
+every extension $J$ of $I$ to the variables $Y$ satisfies the formula $\psi(X,Y)$.
+\end{itemize}
+
+
+\paragraph*{Solution}
+
+
+\begin{lemma}
+Let $\varphi := \exists X \forall Y \;  \psi(X,Y)$ be a $\mathrm{QBF}_{\exists,2}$-formula, with $X = \{x_1, \dots, x_k \}$ and $Y = \{y_1, \dots, y_l\}$. Moreover, let $\tau(\varphi)$ the abduction instance presented in the reduction.
+Then  $\phi \equiv \True \;  \iff \; Sol(\mathcal{P}) \neq \emptyset$.
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+\item[$\Rightarrow$] Assume $\phi \equiv \True $ then there exists a partial assignment $\mathcal{I}_{|X}$ for the variables in $X$ such that for any extension $\mathcal{I}_{|X \cup Y}$ by the variables in $Y$ one has $\mathcal{I}_{|X \cup Y} \models \psi(X,Y)$. Using the partial assignment $\mathcal{I}_{|X}$ one can build the set $A:=\{x \mid \mathcal{I}_{|X} \models x\}$. Now consider the set $S:= A \cup (X \setminus A)'$. As suggested, the claim to be demonstrated is that $S$ is a solution for $\tau(\varphi)$. To that end consider $T \cup S$, take an arbitrary model $\mathcal{J}$ satisfying $T \cup S$. Notice that currently it is not known that such a model actually exist. 
+Firstly, since $\mathcal{J} \models S$ it must be that by construction one has $\forall x \in A\; \mathcal{J} \models x$ and $\forall x \in X\setminus A \; \mathcal{J}\models x'$. Since $x \in S$ if and only if $x' \notin S$, and the fact that  for some $i \in \{1, \dots k\}$ $\mathcal{J} \models \neg x_i \lor \neg x_i'$, one has $\mathcal{J} \models x$ if and only if $\mathcal{J} \nmodels x'$. Therefore, for every $i \in \{1, \dots  , k\}$ $\mathcal{J}$ models either $x_i$ or $x_i'$, and thus it follows that $\mathcal{J} \models r_i$. 
+%Moreover, one has for some $i \in \{1, \dots k\}$ that $\mathcal{J} \models \neg x_i \lor \neg x_i' $, thus $\mathcal{J} \models x$ implies $\mathcal{J} \nmodels x'$ and vice versa.
+Secondly, by virtue of $A$ being constructed from $\mathcal{I}_{|X}$ and by the fact that $\mathcal{J} \models A$, every $x_i$ satisfied by $\mathcal{I}_{|X}$ must be satisfied by $\mathcal{J}$. Moreover, if there would exist an $x_i$ such that $\mathcal{J} \models x_i$ but $\mathcal{I}_{|X} \nmodels x_i$, then $x_i' \in S$ and thus $\mathcal{J} \models x_i'$. Thereby, violating the fact that $\mathcal{J} \models \neg x_i \lor \neg x_i'$. Hence, it is known that $J$ agrees on $I_{|X}$ on the variables $X$. Therefore, it follows $\mathcal{J} \models \psi(X,Y)$ regardless of the truth values of the variables in $ Y$ under $\mathcal{J}$. Hence, it must be that $\mathcal{J} \models t$, which was the last piece required to establish that $\mathcal{J} \models M$. Thus one can conclude that $T \cup S \models M$. What remains is to verify that such a model actually exists, that is let $\mathcal{J}_e$ be the interpretation
+\begin{itemize}
+\item $\forall x \in A \; \mathcal{J}_e(x) := \True$;
+\item $\forall x \in X \setminus A \; \mathcal{J}_e(x') := \True$;
+\item $\forall r \in R \; \mathcal{J}_e(r) := \True$;
+\item $\forall y \in Y \; \mathcal{J}_e(y) := \True$;
+\item $\mathcal{J}_e(t) := \True$.
+\end{itemize}
+Since, $\mathcal{J}_e$ agrees with $\mathcal{I}_{|X}$ on all variables on $X$, the assignment of $y \in Y$ is irrelevant and thus it follows that $\mathcal{J}_e \models \psi(X,Y)$. With $\mathcal{J}_e \models \psi(X,Y) \land t$, it must be that $\mathcal{J}_e \models \psi(X,Y) \to t$. By construction, for an arbitrary $i \in \{1, \dots , k\}$, $\mathcal{J}_e \models x_i$ iff $\mathcal{J}_e \nmodels x_i'$ and thus $\mathcal{J}_e \models \neg x_i \lor \neg x_i'$. Lastly, since for any $i \in i \in \{1, \dots , k\}$ one has, $\mathcal{J}_e \models x_i \lor x_i'$ it follows  that $x_i \lto r$ and $x_i' \lto r$ are satisfied. Hence, $\mathcal{J}_e \models T \cup S$. Thereby, establishing that $S$ is indeed a solution. 
+
+
+\item[$\Leftarrow$] Assume that there exists a solution $S$ for $\tau(\varphi)$. For $S$ to be a solution it must that $S \subseteq H$,  $T \cup S$ is satisfiable and that $T \cup S \models M$. Hence, it is known that there exists an interpretation $\mathcal{I}$ that $\mathcal{I} \models T \cup S$ and $\mathcal{I} \models M$. Now restrict $\mathcal{I}$ by removing the 
+assignments concerning the variables in $Y$ to create $\mathcal{J}$. Furthermore, assume that $\mathcal{J}'$ is an extension of $\mathcal{J}$ by the variables in $Y$ such that $\mathcal{J}' \nmodels \psi(X,Y)$. Since $\mathcal{J}'$ agrees with $\mathcal{I}$ on all variables in $R, X$ and $X'$, $\mathcal{J}' \models S \cup \{\neg x_i \vee \neg x'_i, x_i \ra r_i, x'_i \ra r_i \mid 1 \leq i \leq k\} $. However, since by assumption, $\mathcal{J}' \nmodels \psi(X,Y)$, it must be that $\mathcal{J}' \models \psi(X,Y) \to t$ holds. Therefore, it follows that $\mathcal{J}' \models T \cup S$. Moreover, with $\psi(X,Y) \to t$ being vacuously true under $\mathcal{J}'$, there must exists an interpretation where $t$ is not satisfied. W.l.o.g. let $\mathcal{J}'$ be this interpretation. Therefore, $\mathcal{J}' \models T \cup S$ but $\mathcal{J}' \nmodels M$, which is clearly a contradiction. Hence, in every extension of $\mathcal{J}$ to the variables in $Y$, it must be that $\psi(X,Y)$ is satisfied. Now, by restricting $\mathcal{J}$ to the variables in $X$ one has found a partial assignments for the variables in $X$ where every extension by the variables $Y$ satisfies the formula $\psi(X,Y)$. Meaning that $\phi \equiv \True $.
+%
+%
+%
+%\item[$\Leftarrow$]  Assume that there exists a solution $S$ for $\tau(\varphi)$. For $S$ to be a solution it must that $S \subseteq H$,  $T \cup S$ is satisfiable and that $T \cup S \models M$. 
+%Hence, there exists an interpretation $\mathcal{I}$ such that for any $i \in I$ one has $\mathcal{I} \models r_i$, thus $\mathcal{I} \models x_i \lor x_i'$. Together with $\mathcal{I} \models \neg x_i \lor \neg x_i'$ it follows that $\mathcal{I} \models x_i$ if and only if $\mathcal{I} \models x_i'$. Now consider $A:= S \cap X$, due to the previous observation, it must be that $S = A \cup (X \setminus A)'$. Consider the partial assignment $\mathcal{I}_{|X}$ such that $\forall x \in A  \; \mathcal{I}_{|X}(x):= \True$ and $\forall x \in X \setminus A  \; \mathcal{I}_{|X}(x):= \False$. By the fact that $S = A \cup (X \setminus A)'$ all $x$ are assigned a truth value by $\mathcal{I}_{|X}$. One knows that $T \cup S \models t$. 
+%Therefore, any model of $T \cup S$ must model $\psi(X,Y)$. Especially, any model that agrees on all $x \in X$ with the constructed interpretation $\mathcal{I}_{|X}$. Moreover, considering the fact that the variables in $Y$ occur only in $\psi(X,Y)$ the there are no restrictions on their truth values. Hence, the truth values of $y \in Y$ is immaterial. And thus one can conclude that for any arbitrary extension $\mathcal{I}_{|X \cup Y}$ of $\mathcal{I}_{|X}$ it must be that $\mathcal{I}_{|X\cup Y} \models \psi(X,Y)$. Thus $\varphi \equiv \True$.
+\end{itemize}
+
+\end{proof}
+\medskip
+
+\newpage
+
+
+\noindent
+\begin{exercise}[5 credits]
+{\em Recall the $\phs{2}$-hardness proof of 
+the Abduction Relevance problem by reduction from 
+the Solvability problem:
+Let an arbitrary instance of the Solvability problem be given 
+by the PAP  $\mathcal{P}=\langle V,H,M,T \rangle$. 
+W.l.o.g., let $T$ consist of a single formula $\phi$ and
+let $h, h',m'$ be fresh variables. Then we define an 
+instance of the Relevance (resp.\ the Necessity) problem with the 
+following PAP
+ $\mathcal{P}'=\langle V', H',M',T' \rangle$:
+%
+\begin{eqnarray*}
+V' &=& V\cup\{h,h',m'\} \\
+H' &=& H\cup\{h,h'\} \\
+M' &=& M\cup\{m'\}\\
+T' &=& \{\neg h \vee \phi\} \cup \{h'\ra m \mid m\in M\} \cup \{\neg h \vee \neg h', h \ra m', h' \ra m'\}
+\end{eqnarray*}
+%
+This reduction fulfills the following equivalences: 
+
+\begin{quote}
+$\mathcal{P}$ has at least one
+solution iff $h$ is relevant in $\mathcal{P}'$ iff 
+$h'$ is not necessary in $\mathcal{P}'$.%
+\end{quote}
+
+\smallskip
+\noindent
+Give a rigorous proof of these equivalences.
+} % em
+\end{exercise}
+
+
+\noindent
+{\bf Hint.} 
+The second equivalence is easy to show. For Then first equivalence, 
+show both directions separately:
+
+
+\begin{itemize}
+\item 
+For the ``$\Ra$''-direction, you start off with a
+solution $S$ of $\mathcal{P}$ and construct a solution $S'$ of $\mathcal{P}'$ with $h \in S'$. Prove carefully that $S'$ is indeed a solution of $\mathcal{P}'$, i.e. (1) $T' \cup S'$ is satisfiable
+and (2) $T' \cup S' \models M'$. 
+
+\item For the ``$\La$''-direction, you start off with a
+solution $S'$ of $\mathcal{P}'$, s.t.\ $h \in S'$ and construct a solution $S$ of $\mathcal{P}$.
+Prove carefully that $S$ is indeed a solution of $\mathcal{P}$, i.e. (1) $T \cup S$ is satisfiable
+and (2) $T \cup S \models M$. 
+
+\end{itemize}
+
+\paragraph*{Solution}
+
+
+\begin{observation}
+\label{obs:2-h-distinct}
+Take an arbitrary PAP  $\mathcal{P}=\langle V,H,M,T \rangle$. Let $\mathcal{P}_{\tau}$ be the PAP as constructed in the reduction. Then for any solution $S \in Sol(\mathcal{P}_{\tau})$ it must be the case that $h \in S$ if and only if $h' \notin S$.
+\end{observation}
+\begin{proof}
+For any solution $S \in Sol(\mathcal{P}_{\tau})$ it must hold that $T \cup S \models m'$. However, this requires that either $h \in S$ or $h' \in S$. Assume that $h \in S$. Hence, any interpretation $\mathcal{I}$ satisfying $T \cup S$ must satisfy $h$. Moreover, it must also satisfy $\neg h \lor \neg h'$, which can only be the case if $\mathcal{I} \nmodels h'$. Now assume that $h' \in S$ if this is the case $\mathcal{I} \models h'$, which is impossible. That is, there can not be an interpretation modelling $S$. However, since $S$ is a solution, it must be that there exists at least one model of $S$. Thus the only possible conclusion is that  $h' \notin S$. Due to symmetry the other direction can be done in analogue.
+\end{proof}
+
+
+\begin{lemma}
+\label{lemma:2-equiv2}
+Take an arbitrary PAP  $\mathcal{P}=\langle V,H,M,T \rangle$. Let $\mathcal{P}_{\tau}$ be the PAP as constructed in the reduction.  Then $h$ is relevant in $\mathcal{P}_{\tau}$ iff 
+$h'$ is not necessary in $\mathcal{P}_{\tau}$.
+\end{lemma}
+\begin{proof}
+%\begin{itemize}
+%\item[$\Rightarrow$]
+%By definition, $h$ is relevant in $\mathcal{P}_{\tau}$ if there exists a solution $S \in Sol(\mathcal{P}_{\tau})$ such that $h\in S$. By Observation \ref{obs:2-h-distinct}, this implies that there exists a solution $S \in Sol(\mathcal{P}_{\tau})$ such that $h'\notin S$. By definition, this means that $h'$ is not necessary in $\mathcal{P}_{\tau}$.
+%\item[$\Leftarrow$] 
+%\end{itemize}
+By definition, $h$ is relevant in $\mathcal{P}_{\tau}$ there exists a solution $S \in Sol(\mathcal{P}_{\tau})$ such that $h\in S$. By Observation \ref{obs:2-h-distinct}, this is equivalent to there exists a solution $S \in Sol(\mathcal{P}_{\tau})$ such that $h'\notin S$. By definition, this is equivalent to $h'$ is not necessary in $\mathcal{P}_{\tau}$.
+\end{proof}
+
+
+
+\begin{lemma}
+\label{lemma:2-equiv1}
+Take an arbitrary PAP  $\mathcal{P}=\langle V,H,M,T \rangle$. Let $\mathcal{P}_{\tau}$ be the PAP as constructed in the reduction.  Then $\mathcal{P}$ has at least one
+solution iff 
+$h$ is relevant in $\mathcal{P}_{\tau}$.
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+\item[$\Rightarrow$] Let $S \in Sol(\mathcal{P})$. That is, $S \subseteq H$, $T \cup S \models M$ and that there exists an interpretation $\mathcal{I}$ such that $\mathcal{I} \models T \cup S$. Consider $S_{\tau}:=S \cup \{h\}$. The claim is that $S_{\tau}$ is a solution of $\mathcal{P}'$ where $h \in S$. Firstly, $S_{\tau} \subseteq H \cup\{h, h'\}$ and $h\in S$ by construction. Secondly, take some model $\mathcal{I}$ of $T \cup S$, extend it to the interpretation $\mathcal{I}_{\tau}$ by the variables $\{h,h',m'\}$ such that $\mathcal{I}_{\tau} \models h \land m'$ and $\mathcal{I}_{\tau} \nmodels h'$. The claim is that $\mathcal{I}_{\tau} \models T_{\tau} \cup S_{\tau}$.
+Since $\mathcal{I} \models \varphi$ and $\mathcal{I}_{\tau}$ agrees with $\mathcal{I}$ on all variables in $\varphi$ one has $\mathcal{I}_{\tau} \models \neg h \lor \varphi$. Due to  $\mathcal{I}_{\tau}\nmodels h'$ the implications $h' \lto m$ for all $m \in M$ hold vacuously. 
+By construction one has $\mathcal{I}_{\tau}\models \neg h \lor \neg h'$. From $\mathcal{I}_{\tau}\models m'$ it follows that $h \lto m'$ and $h' \lto m'$ hold. Since $\mathcal{I} \models S$ and $\mathcal{I}_{\tau}$ agrees with $\mathcal{I}$ on all variables in $S$ and since $\mathcal{I}_{\tau}\models h$ it follows that $\mathcal{I}_{\tau}\models S_{\tau}$. Hence, one can conclude that $\mathcal{I}_{\tau} \models T_{\tau} \cup S_{\tau}$.
+Thirdly, consider an arbitrary model  $\mathcal{J}$ of  $T_{\tau} \cup S_{\tau}$. By construction, it is known that $h \in S$. Hence, $\mathcal{J} \models h$ and by extension $\mathcal{J} \models \varphi$. Moreover, since $T = \varphi$ and $S_{\tau}=S \cup  \{h\}$, it must be that $\mathcal{J} \models T \cup S$. However, it is known that $T \cup S \models M$. Hence, it follows that $\mathcal{J} \models M$. Furthermore, due to the fact that $\mathcal{J} \models h$ it must be the case that $\mathcal{J} \models m'$. Hence, $\mathcal{J} \models M_{\tau}$. 
+Having checked all conditions, one can conclude that $S_{\tau}$ is a solution of $\mathcal{P}'$ with $h \in S_{\tau}$.
+
+
+\item[$\Leftarrow$]  Let $S_{\tau} \in Sol(\mathcal{P}')$ such that $h \in S_{\tau}$. Moreover, it is known that $S_{\tau} \subseteq H_{\tau}$, $T_{\tau} \cup S_{\tau} \models M_{\tau}$ and that there exists an interpretation $\mathcal{I}_{\tau}$ such that $\mathcal{I}_{\tau} \models T_{\tau} \cup S_{\tau}$. Consider $S:=S_{\tau} \cap H$.  Restrict $\mathcal{I}_{\tau}$ by removing the assignments of the variables $h,h'$ and $m'$, thereby creating $\mathcal{I}$. Claim $\mathcal{I} \models T\cup S$. Since $S \subset S_{\tau}$ it follows that $\mathcal{I}_{\tau} \models S$, and thus by construction $\mathcal{I} \models S$. From the fact that $\mathcal{I}_{\tau} \models T_{\tau}$ and the fact that $h \in S_{\tau}$ it must be that $\mathcal{I}_{\tau} \models \varphi$. Again with $\mathcal{I}$ and $\mathcal{I}_{\tau}$ agreeing on all variables in $\varphi$ it follows that
+$\mathcal{I} \models \varphi$. Hence, $\mathcal{I} \models T \cup S$. Now one has to check whether $T \cup S \models M$. To that end, take an arbitrary $\mathcal{J} \models T \cup S$. Extend it by the variables $h,h',m'$ to obtain $\mathcal{J}_{\tau}$ such that $\mathcal{J}_{\tau} \models h \land m'$ and  $\mathcal{J}_{\tau} \nmodels h'$. Clearly, $\mathcal{J}_{\tau} \models T_{\tau} \cup S_{\tau}$ (see above). However, this implies that $\mathcal{J}_{\tau} \models M_{\tau}$ and 
+especially $\mathcal{J}_{\tau} \models M$. However, since $\mathcal{J}$ and $\mathcal{J}_{\tau}$ agree on all variables in $M$ it follows that $\mathcal{J} \models M$ and therefore, $T \cup S \models M$. Having checked all conditions, one can conclude that $S$ is a solution of $\mathcal{P}$.
+\end{itemize}
+\end{proof}
+\end{document}
+
+
