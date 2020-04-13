@@ -50,7 +50,7 @@ class Paper(Base):
         secondaryjoin=key == citation_table.c.paper_key,
         backref=backref("cited_by"))
 
-    def transform_to_dic(self):
+    def transform_to_dict(self):
         dic = {}
         dic["key"] = self.key
         dic["name"] = self.name
@@ -74,7 +74,7 @@ class Author(Base):
     json = Column(String)
     papers = relationship("Paper", secondary=authorship_table, back_populates="authors")
 
-    def transform_to_dic(self):
+    def transform_to_dict(self):
         dic = {}
         dic["key"] = self.key
         dic["name"] = self.name
@@ -92,7 +92,7 @@ class Tag(Base):
 
     papers = relationship("Paper", secondary=tag_table, back_populates="tags")
 
-    def transform_to_dic(self):
+    def transform_to_dict(self):
         dic = {}
         dic["key"] = self.key
         dic["name"] = self.name
@@ -107,7 +107,7 @@ class Venue(Base):
     json = Column(String)
     papers = relationship("Paper", back_populates="venue")
 
-    def transform_to_dic(self):
+    def transform_to_dict(self):
         dic = {}
         dic["key"] = self.key
         dic["name"] = self.name

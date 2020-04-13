@@ -1,15 +1,15 @@
 from database import *
 import os
-from fuzzywuzzy import fuzz
+from string_processing import StringClassifier
 
 
 class DBManager:
-    
+
     @staticmethod
-    def clean_parameter(parameter):
-        if parameter.get("self", None) is not None:
-            del parameter["self"]
-        return parameter
+    def __clean_string(string):
+        if isinstance(string, str):
+            string = string.strip().lower()
+        return string
 
     def __init__(self, download_dir="/Users/krk/Downloads", name='sqlite:///PaperDB.db'):
         self.download_dir = download_dir
@@ -18,6 +18,7 @@ class DBManager:
         self.Session = sessionmaker(bind=engine)
         self.session = None
         self.archive_path = "archive"
+        self.str_classifier = StringClassifier()
         if not os.path.exists(self.archive_path):
             os.mkdir(self.archive_path)
 
@@ -31,12 +32,13 @@ class DBManager:
             if open_session:
                 self.session.commit()
             return result
-        except FileNotFoundError as e:
+        except Exception as e:
             print("#"*100)
             print(e)
             print("#" * 100)
             print("")
             self.session.rollback()
+            return []
         finally:
             self.session.close()
             self.session = None
@@ -66,8 +68,8 @@ class DBManager:
     # ---------------------------------------------------------------
 
     def __add_author(self, name, surname, comment=None):
-        name = name.lower().strip()
-        surname = surname.lower().strip()
+        name = DBManager.__clean_string(name)
+        surname = DBManager.__clean_string(surname)
         author = Author(name=name, surname=surname, comment=comment)
         self.session.add(author)
 
@@ -79,15 +81,11 @@ class DBManager:
     # ---------------------------------------------- Author: Get Functions
 
     def __get_author(self, name=None, surname=None, comment=None, author_key=None, as_dict=False):
-        name = name.lower().strip()
-        surname = surname.lower().strip()
+        name = DBManager.__clean_string(name)
+        surname = DBManager.__clean_string(surname)
         if author_key is not None:
             q = self.session.query(Author).filter(Author.key == author_key)
         else:
-            if name is not None:
-                name = name.lower().strip()
-            if surname is not None:
-                surname = surname.lower().strip()
             q = self.session.query(Author).filter((Author.name == name) & (Author.surname == surname))
             if comment is not None:
                 q = q.filter(Author.comment == comment)
@@ -97,8 +95,8 @@ class DBManager:
         return result
 
     def __get_author_key(self, name,  surname, comment=None):
-        name = name.lower().strip()
-        surname = surname.lower().strip()
+        name = DBManager.__clean_string(name)
+        surname = DBManager.__clean_string(surname)
         result = self.__get_author(name, surname, comment)
         author_key = result.key
         return author_key
@@ -108,9 +106,9 @@ class DBManager:
     def __edit_author(self, author_key, name=None, surname=None, comment=None):
         author = self.__get_author(author_key=author_key)
         if name is not None:
-            author.name = name.strip().lower()
+            author.name = DBManager.__clean_string(name)
         if surname is not None:
-            author.surname = surname.strip().lower()
+            author.surname = DBManager.__clean_string(surname)
         if comment is not None:
             author.comment = comment
 
@@ -118,11 +116,9 @@ class DBManager:
     # ---------------------------------------------- Paper: Functions
     # ---------------------------------------------------------------
 
-    def __list_papers(self, tags=None, authors=None, not_tags=None, invert=False, as_dict=True):
-        if invert:
-            q = self.session.query(Paper.key)
-        else:
-            q = self.session.query(Paper)
+    def __list_papers(self, tags=None, authors=None, not_tags=None, invert=False, relevant=None, as_dict=False):
+
+        q = self.session.query(Paper.key)
         if tags is not None or not_tags is not None:
             q = q.join(tag_table).join(Tag)
             if tags is not None:
@@ -131,15 +127,20 @@ class DBManager:
                 q = q.filter(~ Tag.key.in_(not_tags))
         if authors is not None:
             q = q.join(authorship_table).join(Author).filter(Author.key.in_(tags))
+        if relevant is not None:
+            q = q.filter(Paper.relevant == relevant)
+
         if invert:
             q = self.session.query(Paper).filter(~Paper.key.in_(q))
+        else:
+            q = self.session.query(Paper).filter(Paper.key.in_(q))
         papers = q.all()
         if as_dict:
             papers = [i.transform_to_dict() for i in papers]
         return papers
 
     def __add_paper(self, name, year=None, month=None, doi=None):
-        name = name.lower().strip()
+        name = DBManager.__clean_string(name)
         paper = Paper(name=name, doi=doi, year=year, month=month)
         self.session.add(paper)
 
@@ -148,9 +149,9 @@ class DBManager:
         self.session.delete(paper)
 
     def __search_paper(self, name, author_name=None):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         if author_name is not None:
-            author_name = author_name.strip().lower()
+            author_name = DBManager.__clean_string(author_name)
             authors = self.session.query(Author).all()
             result = []
             for i in authors:
@@ -161,14 +162,14 @@ class DBManager:
                 if i.surname is not None:
                     i_name = i_name + " " + i.surname
 
-                if fuzz.token_set_ratio(i_name, author_name) > 90:
+                if self.str_classifier.equal(i_name, author_name):
                     result.append(i.key)
             paper = self.session.query(Paper).join(authorship_table).join(Author).filter(Author.key.in_(result)).all()
         else:
             paper = self.session.query(Paper).all()
         result = []
         for i in paper:
-            if fuzz.token_set_ratio(i.name, name) > 90:
+            if self.str_classifier.equal(i.name, name):
                 result.append((i.key, i.name))
         return result
 
@@ -180,20 +181,18 @@ class DBManager:
     # ---------------------------------------------- Paper: Get Functions
 
     def __get_paper_key(self, name, doi=None):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         result = self.__get_paper(name, doi)
         paper_key = result.key
         return paper_key
 
     def __get_paper(self, name=None, doi=None, paper_key=None, as_dict=False):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         if paper_key is not None:
             result = self.session.query(Paper).filter(Paper.key == paper_key).one()
         elif doi is not None:
             result = self.session.query(Paper).filter(Paper.doi == doi).one()
         else:
-            if name is not None:
-                name = name.lower().strip()
             result = self.session.query(Paper).filter(Paper.name == name).one()
         if as_dict:
             result.transform_to_dict()
@@ -246,7 +245,7 @@ class DBManager:
                      append_comment=True):
         paper = self.__get_paper(paper_key=paper_key)
         if name is not None:
-            paper.name = name.strip().lower()
+            paper.name = DBManager.__clean_string(name)
         if doi is not None:
             paper.doi = doi
         if year is not None:
@@ -287,12 +286,14 @@ class DBManager:
                              if file[0] != "."]
                 if len(downloads) > 0:
                     pdf_path = max(downloads, key=os.path.getatime)
-                    path = os.path.join(self.archive_path, str(paper.key) + ".pdf")
-                    os.rename(pdf_path, path)
-                    paper.pdf_path = path
-                    paper.accessible = True
+
                 else:
                     print("Error: No file found.")
+            path = os.path.join(self.archive_path, str(paper.key) + ".pdf")
+            os.rename(pdf_path, path)
+            paper.pdf_path = path
+            paper.access = True
+
 
     def __add_tag_to_paper(self, paper_key, tag_key):
         paper = self.__get_paper(paper_key=paper_key)
@@ -308,7 +309,7 @@ class DBManager:
         return tags
 
     def __add_tag(self, name):
-        name = name.lower().strip()
+        name = DBManager.__clean_string(name)
         tag = Tag(name=name)
         self.session.add(tag)
 
@@ -320,12 +321,10 @@ class DBManager:
     # ---------------------------------------------- Venue: Get Functions
 
     def __get_tag(self, name=None, tag_key=None, as_dict=False):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         if tag_key is not None:
             q = self.session.query(Tag).filter(Tag.key == tag_key)
         else:
-            if name is not None:
-                name = name.lower().strip()
             q = self.session.query(Tag).filter(Tag.name == name)
         result = list(q)[-1]
         if as_dict:
@@ -333,7 +332,7 @@ class DBManager:
         return result
 
     def __get_tag_key(self, name):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         result = self.__get_tag(name)
         tag_key = result.key
         return tag_key
@@ -347,7 +346,7 @@ class DBManager:
         return tags
 
     def __add_venue(self, name):
-        name = name.lower().strip()
+        name = DBManager.__clean_string(name)
         venue = Venue(name=name)
         self.session.add(venue)
 
@@ -359,18 +358,18 @@ class DBManager:
     # ---------------------------------------------- Venue: Get Functions
 
     def __get_venue_key(self, name):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         result = self.__get_venue(name)
         venue_key = result.key
         return venue_key
 
     def __get_venue(self, name=None, venue_key=None, as_dict=False):
-        name = name.strip().lower()
+        name = DBManager.__clean_string(name)
         if venue_key is not None:
             q = self.session.query(Venue).filter(Venue.key == venue_key)
         else:
             if name is not None:
-                name = name.lower().strip()
+                name = DBManager.__clean_string(name)
             q = self.session.query(Venue).filter(Venue.name == name)
         result = q.one()
         if as_dict:
@@ -416,7 +415,7 @@ class DBManager:
     # ---------------------------------------------- Paper: Functions
     # ---------------------------------------------------------------
 
-    def list_papers(self, tags=None, authors=None, not_tags=None, invert=False, names=True):
+    def list_papers(self, tags=None, authors=None, not_tags=None, invert=False, names=True, relevant=None):
         if tags is not None:
             if not isinstance(tags, list):
                 tags = [tags]
@@ -429,7 +428,7 @@ class DBManager:
         if not isinstance(authors, list) and authors is not None:
             authors = [authors]
         result = self.execute(True, self.__list_papers, tags=tags, authors=authors, not_tags=not_tags,
-                              invert=invert, as_dict=True)
+                              invert=invert, relevant=relevant, as_dict=True)
         if names:
             result = [i["name"] for i in result]
         return result
@@ -485,28 +484,28 @@ class DBManager:
     def get_paper_ref(self, paper_key):
         return self.execute(True, self.__get_paper_ref, paper_key=paper_key)
 
-    # ---------------------------------------------- Paper: Add Functions
+    # ---------------------------------------------- Paper: Set Functions
 
     def edit_paper(self, paper_key, name=None, doi=None, year=None, month=None):
         return self.execute(True, self.__edit_paper, paper_key=paper_key, name=name, doi=doi, year=year, month=month)
 
-    def add_paper_accessible(self, paper_key, accessible):
+    def set_paper_accessible(self, paper_key, accessible):
         return self.execute(True, self.__edit_paper, paper_key=paper_key, accessible=accessible)
 
-    def add_paper_bibtex(self, paper_key, bibtex):
+    def set_paper_bibtex(self, paper_key, bibtex):
         return self.execute(True, self.__edit_paper, paper_key=paper_key, bibtex=bibtex)
 
-    def add_paper_comment(self, paper_key, comment, append_comment=True):
+    def set_paper_comment(self, paper_key, comment, append_comment=True):
         return self.execute(True, self.__edit_paper, paper_key=paper_key, comment=comment,
                             append_comment=append_comment)
 
-    def add_paper_json(self, paper_key, json_string):
+    def set_paper_json(self, paper_key, json_string):
         return self.execute(True, self.__edit_paper, paper_key=paper_key, json_string=json_string)
 
-    def add_paper_relevance(self, paper_key, relevant):
+    def set_paper_relevance(self, paper_key, relevant):
         return self.execute(True, self.__edit_paper, paper_key=paper_key, relevant=relevant)
 
-    # ---------------------------------------------- Paper: Relation Functions
+    # ---------------------------------------------- Paper: Add Functions
 
     def add_author_to_paper(self, paper_key, author_key):
         return self.execute(True, self.__add_author_to_paper, paper_key=paper_key, author_key=author_key)
