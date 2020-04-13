@@ -3,13 +3,6 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 import csv
 import pickle
-import pdftotext
-from wand.image import Image
-from PIL import Image as PI
-import pyocr
-import pyocr.builders
-import io
-import re
 import os
 
 
@@ -29,9 +22,7 @@ class StringClassifier:
         else:
             self.classifier = None
 
-        if self.classifier is None:
-            self.model = self.strong_trivial_model
-        else:
+        if self.classifier is not None:
             self.model = self.learned_model
 
     def set_classifier(self):
@@ -39,26 +30,35 @@ class StringClassifier:
             if self.model_path is not None and self.data_path is not None and os.path.exists(self.model_path):
                 self.learn_classifier()
 
-    def set_model(self, model):
+    def get_model(self, model):
         if model == "very-strong":
-            self.model = self.very_strong_trivial_model
+            return self.very_strong_trivial_model
         elif model == "strong":
-            self.model = self.strong_trivial_model
+            return self.strong_trivial_model
         elif model == "learn" and self.model_path is not None:
-            self.model = self.learned_model
+            return self.learned_model
+        elif model == "weak":
+            return self.weak_trivial_model
         else:
-            self.model = self.weak_trivial_model
+            return self.default_model
 
-    def equal(self, s1, s2, learn=False):
+    def set_model(self, model):
+        self.model = self.get_model(model)
+
+    def equal(self, s1, s2, learn=False, model=None):
+        if model is not None:
+            model = self.get_model(model)
+        else:
+            model = self.model
         if learn:
             values = np.array(self.equal_array(s1, s2)).reshape(1, -1)
             if self.learn_from_weak:
                 decision = self.weak_trivial_model(values)
             else:
-                decision = self.model(values)
+                decision = model(values)
             self.learn_decision(s1, s2, values, decision)
         else:
-            return self.model(self.equal_array(s1, s2))
+            return model(self.equal_array(s1, s2))
 
     def equal_array(self, s1, s2):
         s1 = self.preprocess_string(s1)
@@ -131,21 +131,21 @@ class StringClassifier:
 
     @staticmethod
     def strong_trivial_model(values):
-        if values[0] > 0.95 and values[0] > 0.99 and values[0] > 0.99 and values[0] > 0.9:
+        if values[0] > 0.90 and values[1] > 0.90 and values[2] > 0.90 and values[3] > 0.90:
             return True
         else:
             return False
 
     @staticmethod
     def default_model(values):
-        if values[0] > 0.92 or values[0] > 0.98 or values[0] > 0.95 or values[0] > 0.92:
+        if values[0] > 0.90 or values[1] > 0.90 or values[2] > 0.90 or values[3] > 0.90:
             return True
         else:
             return False
 
     @staticmethod
     def very_strong_trivial_model(values):
-        if values[0] > 0.97 and values[0] > 0.98 and values[0] > 0.98 and values[0] > 0.96:
+        if values[0] > 0.97 and values[1] > 0.98 and values[2] > 0.98 and values[3] > 0.96:
             return True
         else:
             return False
@@ -157,91 +157,3 @@ class StringClassifier:
             val = True
         return val
 
-
-class PDFScorer:
-
-    def __init__(self, pdf_path=None, ocr_threshold=1000, use_ocr=True):
-        self.path = None
-        self.ocr_threshold = ocr_threshold
-        self.raw_pages = None
-        self.clean_pages = None
-        self.ocr = False
-        self.use_ocr = use_ocr
-
-        if pdf_path is not None:
-            self.load_pdf(pdf_path)
-
-    def load_pdf(self, path):
-        self.path = path
-
-    def get_pages(self):
-        if self.raw_pages is None:
-            self.compute_pdf_text()
-        return len(self.raw_pages)
-
-    def get_raw_text(self, pages=None):
-        if self.raw_pages is None:
-            self.compute_pdf_text()
-        if pages is None:
-            pages = range(len(self.raw_pages))
-        return "\n".join([self.raw_pages[i] for i in pages])
-
-    def get_clean_text(self, pages=None):
-        if self.clean_pages is None:
-            self.compute_clean_pages()
-        if pages is None:
-            pages = range(len(self.clean_pages))
-        return "".join([self.clean_pages[i] for i in pages])
-
-    def compute_clean_pages(self, lower=True):
-        if self.raw_pages is None:
-            self.compute_pdf_text()
-        if lower:
-            clean_pages = [re.sub(r"[\W_]+", "", i) for i in self.raw_pages]
-        else:
-            clean_pages = [re.sub(r"[\W_]+", "", i).lower() for i in self.raw_pages]
-        self.clean_pages = clean_pages
-
-    def compute_pdf_text(self):
-        self.compute_pdf_text_normal()
-        if len("".join(self.raw_pages)) < self.ocr_threshold:
-            self.ocr = True
-            if self.use_ocr:
-                self.compute_pdf_text_ocr()
-
-    def compute_pdf_text_normal(self):
-        with open(self.path, "rb") as f:
-            pages = pdftotext.PDF(f)
-            self.raw_pages = pages
-
-    def compute_pdf_text_ocr(self):
-        tool = pyocr.get_available_tools()[0]
-        lang = tool.get_available_languages()[1]
-
-        req_image = []
-        final_text = []
-
-        image_pdf = Image(filename=self.path, resolution=300)
-        image_jpeg = image_pdf.convert('jpeg')
-        for img in image_jpeg.sequence:
-            img_page = Image(image=img)
-            req_image.append(img_page.make_blob('jpeg'))
-
-        for img in req_image:
-            txt = tool.image_to_string(
-                PI.open(io.BytesIO(img)),
-                lang=lang,
-                builder=pyocr.builders.TextBuilder()
-            )
-            final_text.append(txt)
-        self.raw_pages = final_text
-
-    def count_keywords(self, keywords, pages=None):
-        return self.count_text_keywords(self.get_clean_text(pages), keywords)
-
-    @staticmethod
-    def count_text_keywords(text, keywords):
-        count = {}
-        for k in keywords:
-            count[k] = text.count(k)
-        return count

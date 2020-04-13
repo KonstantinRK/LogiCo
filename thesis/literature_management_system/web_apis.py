@@ -3,7 +3,8 @@ import json
 import requests
 import os
 import shutil
-from string_processing import StringClassifier, PDFScorer
+from string_processing import StringClassifier
+from pdf_processing import PDFScorer
 from subprocess import run, PIPE
 from bs4 import BeautifulSoup
 import re
@@ -17,6 +18,7 @@ _HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36',
     'accept': 'text/html,application/xhtml+xml,application/xml'
 }
+
 
 class PaperMeta:
 

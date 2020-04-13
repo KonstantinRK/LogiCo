@@ -148,7 +148,7 @@ class DBManager:
         paper = self.session.query(Paper).filter(Paper.key == paper_key).one()
         self.session.delete(paper)
 
-    def __search_paper(self, name, author_name=None):
+    def __search_paper(self, name, author_name=None, model="default"):
         name = DBManager.__clean_string(name)
         if author_name is not None:
             author_name = DBManager.__clean_string(author_name)
@@ -162,14 +162,14 @@ class DBManager:
                 if i.surname is not None:
                     i_name = i_name + " " + i.surname
 
-                if self.str_classifier.equal(i_name, author_name):
+                if self.str_classifier.equal(i_name, author_name, model=model):
                     result.append(i.key)
             paper = self.session.query(Paper).join(authorship_table).join(Author).filter(Author.key.in_(result)).all()
         else:
             paper = self.session.query(Paper).all()
         result = []
         for i in paper:
-            if self.str_classifier.equal(i.name, name):
+            if self.str_classifier.equal(i.name, name, model=model):
                 result.append((i.key, i.name))
         return result
 
@@ -435,7 +435,7 @@ class DBManager:
 
     def add_paper(self, name, year=None, month=None, doi=None, check=True):
         if check:
-            result = self.search_paper(name)
+            result = self.search_paper(name, model="strong")
             if len(result) == 1:
                 print("!!!", result[0])
                 return result[0][0]
@@ -449,8 +449,8 @@ class DBManager:
     def delete_paper(self, paper_key):
         return self.execute(True, self.__delete_paper, paper_key=paper_key)
 
-    def search_paper(self, name, author_name=None):
-        return self.execute(True, self.__search_paper, name=name, author_name=author_name)
+    def search_paper(self, name, author_name=None, model="default"):
+        return self.execute(True, self.__search_paper, name=name, author_name=author_name, model=model)
 
     def paper_to_dict(self, paper_key):
         return self.execute(True, self.__paper_to_dict, paper_key=paper_key)
