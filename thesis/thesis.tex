@@ -75,6 +75,9 @@
 \newcommand{\cbinfoos}{\mathbb{F}_{\mathbb{B}}}
 
 
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
 
 \begin{document}
 
@@ -105,24 +108,16 @@ That is, the notion of causality has enchanted humanity since the inception of p
 Especially, since an investigation, even a small one, into the various traditions and approaches to causation in the philosophical literature provides additional context for the more computationally minded approaches discussed in 
 Chapter \ref{ch:comp_causality}. In this particular case, it serves as a foundation from which the fist classification scheme for formalisms is erected. 
 Moreover, when discussing (mostly) rigorously defined formalisms one needs a measure of aptitude.  Unfortunately, as of now it seems that the best method for assessing the capabilities of a formalism is by running it against an array of examples, each trying to cover some pitfall of causal reasoning. In Chapter \ref{ch:comp_causality}, those examples will be used as a second classification scheme. 
-Therefore, the chapter will be structured as follows.
-Section \ref{sec:causation:history_of_causation} and Section \ref{sec:causation:approaches_to_causation}, both of which rely heavily on \cite{beebee2009oxford}, provide a brief overview over the history of and the approaches to causation from a philosophical point of view. Section \ref{sec:causation:examples} is presents a collection of examples used to capture the peculiarities of human (actual) causal inference and discusses their relationships. 
+Therefore, the chapter will be structured as follows. Section \ref{sec:causation:approaches_to_causation} relies heavily on \cite{beebee2009oxford} and provides a brief overview over the history of and the approaches to causation from a philosophical point of view. Section \ref{sec:causation:examples} is presents a collection of examples used to capture the peculiarities of human (actual) causal inference and discusses their relationships. 
 Finally, Section \ref{sec:causation:classify_causation} proposed a schemata for classifying formalisms  with
-
-
-will briefly discuss the history of causation, 
- provides an overview over the various approaches
-
-
-\section{History of Causation}
-\label{sec:causation:history_of_causation}
 
 \section{Approaches to Causation}
 \label{sec:causation:approaches_to_causation}
 According to \cite{beebee2009oxford} there are standard and alternative approaches to causation. The prior including regularity theories, counter-factual theories, probabilistic theories, causal process theories and agency interventionist theories, while the latter includes theories about causal power and capacities, an anti-reductionist approach, the field of causal modelling, an approach requiring the existence of causal mechanism and one that embraces pluralism. Moreover, in \cite{halpern2016actual} distinguishes between two separate notions of causality, i.e. type (or general) causality and token (or actual) causality. 
 
 
-\paragraph{Type and token causality} is a distinction rooted in the metaphysical distinction between types and tokens, i.e. the distinction between a general sort of thing and its particular occurrence \cite{wetzel2018typetoken}.
+\subsection{Type and token causality} i
+The classification of causality into type and token causality is rooted in the metaphysical distinction between types and tokens, which is used to differentiate a general sort of thing and its particular occurrence \cite{wetzel2018typetoken}.
 
 \begin{example}[\cite{hausman2005causal}]
 Consider the statement 
@@ -134,7 +129,15 @@ How many different words does this sentence have.  Depending on what one may und
 
 This distinction, can be used to distinguish two (possibly distinct) notions of  causality. \emph{Type causality}, is concerned with forward looking statements such as ``smoking causes lung cancer'', granting their wielder some predictive capabilities. Hence, establishing type causality is often the pursuit of scientific enquiry. However, often type-causal relations do not establish a strong causal connection, but rather a causal tendency. Meaning, while smoking may cause lung cancer, it is not necessary the case that a smoker will develop lung cancer, thus one may be better suited with the statement ``smoking tends cause lung cancer''. By contrast, if one wants to establish that the act of smoking caused lung cancer in a particular person, one speaks of token causality. Meaning \emph{token causality} tries to establish a connection between events that explains a certain outcome arose, thus it tends to be backwards looking.
 Unfortunately, it does not seem clear whether those two notion of causation are distinct; whether type causation is merely a generalisation token causal relations, which are assumed to be fundamental, whether token causation is merely an instantiation of type level laws, which are considered as the fundamental element; whether type and token causality are simple different expression of a singular causal relation. 
-For example, as will be observed in Chapter \ref{ch:comp_causality}  Halpern defines token causality in terms of type causal statements \cite{hausman2005causal,halpern2016actual}. 
+For example, as will be observed in Chapter \ref{ch:comp_causality},  Halpern defines token causality in terms of type causal statements \cite{hausman2005causal,halpern2016actual}. 
+
+
+The debate of what constitutes token or type causality can be extended to variables. Within this context, there is a clear difference in considering relationships between variables and relationships between variable values.
+Although debated, one can classify the prior as a type-level relation, due to the fact that variables are not particulars but properties. An argument which attributes the latter as the only token-level relation \cite{hausman2005causal}.
+For example, many of the formalisms using structural equations to token capture causality according to counterfactual tradition internalise this distinction as follows.
+For a given causal model of the world (see causal models XXXXX), a variable $X$ is a type-level cause of a variable $Y$, if and only if there is some state of the model for which an intervention on $X$ would change the value of $Y$. An intervention on $X$, being an external change to the value of $X$ ceteris paribus all other variables. 
+Whereas, the value $x$ of $X$ is an actual cause for the actual value $y$ of $Y$ (wrt.\ the model), if and only if an intervention setting $X$ to $x'$ ($x \neq x$), with other variables in the model held fixed by interventions at some combination of permissible possible values, would result in $Y$ being $y'$ ($y\neq y'$). What constitutes permissible being subject of discussion and particular for each formalism \cite{Weslake2015partialtheory}.
+
 
 
 \paragraph{Regularity theories}
@@ -150,34 +153,75 @@ Currently amidst the quest of formally capturing causation, the literature conce
 Those examples, increasingly complex, attempt to capture fragments of causality, as intuitively understood by humans. With many authors proposing new examples to highlight points of failures for previously established formalisms, the literature concerning causation has amassed a wealth of such examples. Unfortunately, as far as I am aware, no attempt was made to collect and classify those examples. Hence, the subsequent section shall be an approximation of precisely that. However, being fully aware that a mere list of possibly redundant examples is of little use, thus only prominent examples will be discussed while the remaining examples will be relegated to the database accompanying this work.
 
 
-Before \cite{Weslake2015partialtheory}, a suitable approach would be present the examples striped down to their structure, as it is for example presented in \cite{hitchcock2009structural,baumgartner2013regularity}. However, 
-he found examples that while seemingly exhibiting identical structural patterns, give rise to different intuitions.
+In the literature it is common to represent the underlying causal structures of an example using directed acyclic graphs, with vertices encoding the variables involved and edges representing causal relations between those variables.
+It is important to recognise that such diagrams obscure the inner workings of such a relation, i.e.\ it is only possible to deduce that variable $X$ causes $Y$, but not how the change of the value $X$ influences the value of $Y$.
+Hence, such diagrams, not to be confused with neuron diagrams, provide only inside into the type-level causal relations in an example. 
+
+Before \cite{hiddleston2005causal}, a suitable approach would have been be to present the examples striped down to their structure, as it is for example done in \cite{hitchcock2009structural,baumgartner2013regularity}. However, 
+he found examples that while seemingly exhibiting identical structural patterns, give rise to different intuitions. Hence, it is seems necessary to present the all examples, as conceived, enveloped in a story. 
+As eluded to in \cite{baumgartner2013regularity,halpern2016actual,Weslake2015partialtheory}, this requirement may arise from a seeming reliance on some notion of normality in human causal inference.
 
 
-
-
-
-
-
-
-\begin{example}(Backup \cite{Weslake2015partialtheory})
-If Trainee shoots his gun ($T$), the bullet will hit Victim ($V$). If Trainee does not shoot, Supervisor will shoot and hit Victim herself ($S$). In fact, Trainee shoots and hits Victim while Supervisor stands by.
-\begin{equation*}
-\begin{split}
-&T := 1, \quad S:= \neg T, \\
-& V := T \lor S
-\end{split}
-\end{equation*}
+\begin{example}(Counterfactual Dependence XXXX)
+\label{ex:dependence}
+Suzy throws a rock at a bottle ($ST$). Regardless of whether Billy throws a rock or not, he will not hit the bottle. Suzy’s rock hits the bottle, at which point it shatters ($BS$).
+%Billy ($BT$) and Suzy ($ST$) both throw rocks at a bottle, each with sufficient force to shatter it. The rocks strike the bottle at exactly the same time. The bottle shatters ($BS$).
 \begin{center}
 \begin{tikzpicture}
   \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
   \tikzset{edge/.style = {->,- = latex'}}
 
-  
-  
-	\node[vertex] (T) at (0,0) {$T$};
-	\node[vertex] (V) at (4,0) {$V$};
-	\node[vertex] (S) at (2,1.5) {$S$};
+	\node[vertex] (B) at (0,0) {$BT$};
+	\node[vertex] (W) at (4,1.5) {$BS$};
+	\node[vertex] (S) at (0,3) {$ST$};
+	
+       \foreach \from/\to in {S/W}
+    \path[->](\from) edge node [above]{} (\to);
+\end{tikzpicture}
+\end{center}
+\end{example}
+
+
+Example \ref{ex:dependence} demonstrates counterfactual dependence, i.e.\ to assess whether $ST$ was the cause of $BT$, one simply considers a scenario where $ST$ did not occur.
+This aligns well with our intuitive understanding of causation, as it is sensible to assume that most people would answer this question with ``yes''.
+
+
+
+\begin{example}(Symmetric Overdetermination XXX)
+\label{ex:sym-overdetermination}
+Billy ($BT$) and Suzy ($ST$) both throw rocks at a bottle, each with sufficient force to shatter it. The rocks strike the bottle at exactly the same time. The bottle shatters ($BS$).
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+
+	\node[vertex] (B) at (0,0) {$BT$};
+	\node[vertex] (W) at (4,1.5) {$BS$};
+	\node[vertex] (S) at (0,3) {$ST$};
+	
+       \foreach \from/\to in {B/W, S/W}
+    \path[->](\from) edge node [above]{} (\to);
+\end{tikzpicture}
+\end{center}
+\end{example}
+
+Example \ref{ex:sym-overdetermination} is often called upon to demonstrate the concept of symmetric overdetermination. The  answer to the question, whether $ST$ the cause of $BS$, is as eluded to in \cite{hiddleston2005causal} somewhat unclear, i.e.\ some authors argue for ``yes'' and some for ``no''. However, there many of the paper considered side with declaring both $ST$ and $BT$ as causes of $BS$.
+By contrast, \cite{hiddleston2005causal} embraces the ambiguous nature of this example and argues that it would be truly a victory to devise a formalisms explaining this unclairy.
+
+%% XXXXXX Maybe example with both BT ST being required.
+
+
+\begin{example}(Early Preemption)
+\label{ex:backup}
+Suzy throws a rock at a bottle ($ST$). The rock hits it, and the bottle shatters ($BS$). However Billy was watching Suzy, and would have thrown a rock ($BT$) just in case Suzy did not throw.
+%If Trainee shoots his gun ($T$), the bullet will hit Victim ($V$). If Trainee does not shoot, Supervisor will shoot and hit Victim herself ($S$). In fact, Trainee shoots and hits Victim while Supervisor stands by.
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
+  \tikzset{edge/.style = {->,- = latex'}}
+	\node[vertex] (T) at (0,0) {$ST$};
+	\node[vertex] (V) at (4,0) {$BS$};
+	\node[vertex] (S) at (2,1.5) {$BT$};
 	
        \foreach \from/\to in {T/S, T/V, S/V}
     \path[->](\from) edge node [above]{} (\to);
@@ -186,33 +230,13 @@ If Trainee shoots his gun ($T$), the bullet will hit Victim ($V$). If Trainee do
 \end{example}
 
 
-\begin{example}(Window \cite{Weslake2015partialtheory})
-Billy ($B=1$) and Suzy ($S=1$) both throw rocks at a window, each with sufficient force to shatter it. The rocks strike the window at exactly the same time. The window breaks ($W=1$).
-\begin{equation*}
-\begin{split}
-&S:=1 , \quad B:=1, \\
-& W:= B \lor S
-\end{split}
-\end{equation*}
-\begin{center}
-\begin{tikzpicture}
-  \tikzset{vertex/.style = {shape=circle,draw,minimum size=2em,inner sep=1pt}}
-  \tikzset{edge/.style = {->,- = latex'}}
-
-  
-  
-	\node[vertex] (B) at (0,0) {$B$};
-	\node[vertex] (W) at (4,1.5) {$W$};
-	\node[vertex] (S) at (0,3) {$S$};
-	
-       \foreach \from/\to in {B/W, S/W}
-    \path[->](\from) edge node [above]{} (\to);
-\end{tikzpicture}
-\end{center}
-\end{example}
+\cite{bochman2018actual,batusov2018situation,beckers2018principled} call the phenomena in question, \emph{early preemption}.
+The challenge in Example  \ref{ex:backup}  is, that the value of $BS$ does, at first glance, not depend on the value of $ST$. Because, even If $ST$ does not hold, $BT$ ensures that $BS$ remains true.
+However, since Suzie's rock hit the bottle, the literature (CITE XXXX) seems to agree upon $ST$ causing $BT$. 
+Interestingly, \cite{beckers2018principled} disagrees with this assessment. They argue that this scenario is virtually identical to the one in Example (XXXXSWITCH), i.e.\ $ST$ only determines how the bottle is shattered and is immaterial in determining the value of $BS$. They argue that it is the uncertainty of the processes at hand, that cause intuition to differ from Example (XXXXSWITCH).\footnote{Common alternatives use either a firing squad or assassins in their stories.}
 
 
-\begin{example}(Bottle \cite{Weslake2015partialtheory})
+\begin{example}(Late Preemption)
 Suzy ($ST$) and Billy ($BT$) both throw rocks at a bottle, Suzy’s rock arrives first and hits the bottle ($SH$), the bottle shatters ($BS$), Billy’s arrives second and does not hit the bottle ($BH$). 
 Both throws are accurate, Billy’s would have shattered the bottle if Suzy’s had not.
 \begin{equation*}
@@ -241,6 +265,11 @@ Both throws are accurate, Billy’s would have shattered the bottle if Suzy’s 
 \end{tikzpicture}
 \end{center}
 \end{example}
+
+
+
+
+
 
 
 \begin{example}(Vote Machine \cite{Weslake2015partialtheory})
@@ -536,21 +565,28 @@ A lamp ($L$) is controlled by three switches ($A$, $B$ and $C$), each of which h
 
 
 
-
-
-\subsection{Preemption }
-
-\paragraph*{Early Preemption}
-
-\paragraph*{Late Preemption}
-
-\subsection{Overdetermination}
-
-\paragraph*{Symmetric Overdetermination}
-
-\subsection{Short-Circuiting}
-
-
+\subsection{Summary}
+\begin{table}[]
+\begin{tabular}{ | c | c | c | c | c | c | c |}
+\hline 
+& \cite{batusov2018situation} & \cite{beckers2018principled} & \cite{bochman2018actual}  & \cite{hiddleston2005causal} & \cite{hitchcock2007three}  & \cite{Weslake2015partialtheory}  \\
+\hline 
+Backup & &  &  &  &  &  1 \\
+Window  & &  &  &  &  &  1 \\
+Bottle  & &  &  &  &  &  1 \\
+Vote Machine  & &  &  &  &  &  1 \\
+Loader  & &  &  &  &  &  1 \\
+Switch  & &  &  &  &  &  1 \\
+Shock  & &  &  &  &  &  1 \\
+Command  & &  &  &  &  &  1 \\
+Combination Lamp  & &  &  &  &  &  1 \\
+Careful Antidote  & &  &  &  &  &  1 \\
+Careful Poisoning & & &  &  &  &   1 \\
+Push  & &  &  &  &  &  1 \\
+Fancy Lamp  & &  &  &  &  &  1 \\
+\hline 
+\end{tabular}
+\end{table}
 
 \chapter{Computational Causality}
 
@@ -865,93 +901,94 @@ $F_{X}^{\cmodel}(\dots , y^{\cmodel}, \dots ) \neq F_{X}^{\cmodel}(\dots , y'^{\
 \end{definition}
 
 
+\chapter{Literature Review}
 
-\chapter{Computational Causality}
-\label{ch:comp_causality}
-\begin{quote}
-But what's really hard about this area, I'm going to give you a definition and I would love to be able to prove a theorem that says ``this is the right definition''. I'm a theoretician that's what I do. I prove theorems. If I only knew the statement of the theorem I might have a shot of proving it, but I don't know what it means to have the right definition of causality. [\dots] I don't know what the theorem should say and so what's traditional in the literature [\dots]
-%and frankly what I'll be doing as well 
-is the philosophers and the lawyers have come up with hundreds of examples and the way you show your definition is good is to show that ``gee look at how well it does it all in all the examples'' and that works fine until somebody comes along and constructs an example to show your definition maybe wasn't as good as you thought it was [\dots].
-\end{quote}
+\section{Methodology}
+\label{sec:methodology}
+
+It is vital to build an adequate repository of papers upon which this survey shall draw upon. Inherent in this construction is the tension between scope and depth, as all else equal, one compromises the other. Positioning a survey on this spectrum in a justifiable manner is rather difficult. Therefore, the scope of this survey shall be determined by rigorously adhering to the mechanics of reproducible methodology. This approach is an attempt to alleviate the temptation of individually justifying why a certain paper was selected or discarded. 
+
+The methodology underlying this systematic literature review employs a snowball search strategy to construct its set of relevant papers. 
+In general, according to \cite{wohlin2014guidelines} any snowball search strategy should construct a start set and employ forward and backward snowballing at each iteration to construct the final set of papers. 
+Moreover, starting set should satisfied the following criteria.
+\begin{itemize}
+\item The start set should cover a diversity of communities, especially if they may from independent cluster.
+\item The number of papers in the start set should not be too small.
+\item The number of papers in the start set should not be too big.
+\item The start set should cover several different publishers, years and authors.
+\item The start set ought to be formulated from keywords (and their synonyms) in the research question.
+\end{itemize}
+Furthermore, using this start set the final set of papers is constructed iteratively by employing backward snowballing, i.e.\ for every unprocessed paper add all relevant references to the set of papers, and forward snowballing, i.e.\ for every unprocessed paper use Google Scholar to identify every relevant paper citing the current article \cite{wohlin2014guidelines}. Using this as a template, the actual methodology is constructed accordingly.
+
+
+Firstly, reproducibility being a primary objective the notion of relevancy requires special attention, i.e.
+\begin{definition}
+A paper is \emph{potentially relevant} (within the context of literature search), if
+\begin{itemize}
+\item  its title contains a word starting with the characters \emph{``caus''} or 
+\item  its abstract contains a word starting with the characters \emph{``causal''}. 
+\end{itemize}
+\end{definition}
+%Those criteria where selected as ``caus'' can easily be extended to causes, causal, causality, causing, etc. 
+Obviously this criteria may lead to some unnecessary considerations. Hence, if a paper classified as potentially relevant is deemed irrelevant under closer inspection, it will discarded. All remaining papers will be considered as relevant. 
+\begin{definition}
+A paper is \emph{relevant}, if it is potentially relevant and not irrelevant.  
+\end{definition}
+Unfortunately, the the notion or irrelevance can not be properly defined. Precisely because of this, one is able to use it to prevent unnecessary exploration. However, to ensure transparency, the classification of any potentially relevant paper as irrelevant, will be argued for on a case by case basis in the Appendix \ref{ch:appendix}.
+
+Secondly, ACCESSIBILITY
+
+
+Thirdly, to further ensure reproducibility any dynamic tools for search (e.g.\ results of literature search engines, number of citations) must be rejected, thus prohibiting the application of forward snowballing. To compensate for this, the start set is constructed accordingly, i.e.
+\begin{definition}
+The \emph{start set} contains every relevant and accessible paper published in 
+\begin{itemize}
+\item \href{https://www.journals.elsevier.com/knowledge-based-systems}{Journal Knowledge-Bases Systems}
+\item \href{https://www.journals.elsevier.com/artificial-intelligence}{Journal Artificial Intelligence}
+\item \href{https://www.springer.com/journal/10506}{Journal Artificial Intelligence and Law}
+\item \href{https://www.ijcai.org/}{International Joint Conferences on Artificial Intelligence Organization}
+\end{itemize}
+between 01.01.2017 and 31.1.2019.
+\end{definition}
+Being primarily concerned with publications discussing causality within the context of artificial intelligence, with possible applications in law, this starting set should provide a sufficient strong directive.
+Moreover, due to the fact that forward snowballing will not be employed, only very recent publications will be considered.
+
+Fourthly, as eluded to earlier, an iteration consists only of backwards snowballing.
+\begin{definition}
+The function $\mathit{snowball}$ maps a paper $x$ to the set containing every relevant and accessible paper cited by $x$.
+\end{definition}
+
+
+Lastly, the following characterisation of the paper repository can be constructed.
+\begin{definition}
+Let $\mathfrak{P}_0$ be the start set, and let $\mathfrak{P}_{n+1}=\mathfrak{P}_{n} \cup \{x \mid \forall y \in \mathfrak{P}_{n} \; x \in \mathit{snowball}(y) \}$, i.e. the set of papers after $n+1$ iterations is constructed by adding all papers obtained through snowballing over the set of papers after $n$ iterations to said set.
+\end{definition}
+
+%!!!No books but book chapters !!!!
+\section{Paper Repository}
+
+Using the methodology outlined in Section \ref{sec:methodology} the start set contains $37$ papers, i.e. 
 
 
 
 
 %
-%
-%
-%
-%\chapter{Literature Review}
-%
-%\section{Methodology}
-%\label{sec:methodology}
-%
-%It is vital to build an adequate repository of papers upon which this survey shall draw upon. Inherent in this construction is the tension between scope and depth, as all else equal, one compromises the other. Positioning a survey on this spectrum in a justifiable manner is rather difficult. Therefore, the scope of this survey shall be determined by rigorously adhering to the mechanics of reproducible methodology. This approach is an attempt to alleviate the temptation of individually justifying why a certain paper was selected or discarded. 
-%
-%The methodology underlying this systematic literature review employs a snowball search strategy to construct its set of relevant papers. 
-%In general, according to \cite{wohlin2014guidelines} any snowball search strategy should construct a start set and employ forward and backward snowballing at each iteration to construct the final set of papers. 
-%Moreover, starting set should satisfied the following criteria.
-%\begin{itemize}
-%\item The start set should cover a diversity of communities, especially if they may from independent cluster.
-%\item The number of papers in the start set should not be too small.
-%\item The number of papers in the start set should not be too big.
-%\item The start set should cover several different publishers, years and authors.
-%\item The start set ought to be formulated from keywords (and their synonyms) in the research question.
-%\end{itemize}
-%Furthermore, using this start set the final set of papers is constructed iteratively by employing backward snowballing, i.e.\ for every unprocessed paper add all relevant references to the set of papers, and forward snowballing, i.e.\ for every unprocessed paper use Google Scholar to identify every relevant paper citing the current article \cite{wohlin2014guidelines}. Using this as a template, the actual methodology is constructed accordingly.
-%
-%
-%Firstly, reproducibility being a primary objective the notion of relevancy requires special attention, i.e.
-%\begin{definition}
-%A paper is \emph{potentially relevant} (within the context of literature search), if
-%\begin{itemize}
-%\item  its title contains a word starting with the characters \emph{``caus''} or 
-%\item  its abstract contains a word starting with the characters \emph{``causal''}. 
-%\end{itemize}
-%\end{definition}
-%%Those criteria where selected as ``caus'' can easily be extended to causes, causal, causality, causing, etc. 
-%Obviously this criteria may lead to some unnecessary considerations. Hence, if a paper classified as potentially relevant is deemed irrelevant under closer inspection, it will discarded. All remaining papers will be considered as relevant. 
-%\begin{definition}
-%A paper is \emph{relevant}, if it is potentially relevant and not irrelevant.  
-%\end{definition}
-%Unfortunately, the the notion or irrelevance can not be properly defined. Precisely because of this, one is able to use it to prevent unnecessary exploration. However, to ensure transparency, the classification of any potentially relevant paper as irrelevant, will be argued for on a case by case basis in the Appendix \ref{ch:appendix}.
-%
-%Secondly, ACCESSIBILITY
-%
-%
-%Thirdly, to further ensure reproducibility any dynamic tools for search (e.g.\ results of literature search engines, number of citations) must be rejected, thus prohibiting the application of forward snowballing. To compensate for this, the start set is constructed accordingly, i.e.
-%\begin{definition}
-%The \emph{start set} contains every relevant and accessible paper published in 
-%\begin{itemize}
-%\item \href{https://www.journals.elsevier.com/knowledge-based-systems}{Journal Knowledge-Bases Systems}
-%\item \href{https://www.journals.elsevier.com/artificial-intelligence}{Journal Artificial Intelligence}
-%\item \href{https://www.springer.com/journal/10506}{Journal Artificial Intelligence and Law}
-%\item \href{https://www.ijcai.org/}{International Joint Conferences on Artificial Intelligence Organization}
-%\end{itemize}
-%between 01.01.2017 and 31.1.2019.
-%\end{definition}
-%Being primarily concerned with publications discussing causality within the context of artificial intelligence, with possible applications in law, this starting set should provide a sufficient strong directive.
-%Moreover, due to the fact that forward snowballing will not be employed, only very recent publications will be considered.
-%
-%Fourthly, as eluded to earlier, an iteration consists only of backwards snowballing.
-%\begin{definition}
-%The function $\mathit{snowball}$ maps a paper $x$ to the set containing every relevant and accessible paper cited by $x$.
-%\end{definition}
-%
-%
-%Lastly, the following characterisation of the paper repository can be constructed.
-%\begin{definition}
-%Let $\mathfrak{P}_0$ be the start set, and let $\mathfrak{P}_{n+1}=\mathfrak{P}_{n} \cup \{x \mid \forall y \in \mathfrak{P}_{n} \; x \in \mathit{snowball}(y) \}$, i.e. the set of papers after $n+1$ iterations is constructed by adding all papers obtained through snowballing over the set of papers after $n$ iterations to said set.
-%\end{definition}
-%
-%%!!!No books but book chapters !!!!
-%\section{Paper Repository}
-%
-%Using the methodology outlined in Section \ref{sec:methodology} the start set contains $37$ papers, i.e. 
+%\chapter{Computational Causality}
+%\label{ch:comp_causality}
+%\begin{quote}
+%But what's really hard about this area, I'm going to give you a definition and I would love to be able to prove a theorem that says ``this is the right definition''. I'm a theoretician that's what I do. I prove theorems. If I only knew the statement of the theorem I might have a shot of proving it, but I don't know what it means to have the right definition of causality. [\dots] I don't know what the theorem should say and so what's traditional in the literature [\dots]
+%%and frankly what I'll be doing as well 
+%is the philosophers and the lawyers have come up with hundreds of examples and the way you show your definition is good is to show that ``gee look at how well it does it all in all the examples'' and that works fine until somebody comes along and constructs an example to show your definition maybe wasn't as good as you thought it was [\dots].
+%\end{quote}
 %
 %
 
-    
+
+%
+%
+%
+%
+
 
 %##################################################################################################################
 %
@@ -1375,8 +1412,7 @@ is the philosophers and the lawyers have come up with hundreds of examples and t
 %%\end{itemize} 
 %
 
-\bibliographystyle{plain}
-\bibliography{bib}
+\printbibliography
 
 \end{document}
 
