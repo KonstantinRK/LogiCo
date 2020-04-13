@@ -22,11 +22,6 @@ citation_table = Table("citation_table", Base.metadata,
                        Column("paper_key", Integer, ForeignKey("paper.key")),
                        Column("citation_key", Integer, ForeignKey("paper.key")))
 
-model_table = Table("model_table", Base.metadata,
-                       Column("model_citation_key", Integer, primary_key=True),
-                       Column("paper_key", Integer, ForeignKey("paper.key")),
-                       Column("citation_key", Integer, ForeignKey("paper.key")))
-
 
 class Paper(Base):
     __tablename__ = "paper"
@@ -39,6 +34,8 @@ class Paper(Base):
     access = Column(Boolean)
     comment = Column(String)
     pdf_path = Column(String)
+    bibtex = Column(String)
+    json = Column(String)
 
     venue_key = Column(Integer, ForeignKey("venue.key"))
     venue = relationship("Venue", back_populates="papers")
@@ -53,13 +50,19 @@ class Paper(Base):
         secondaryjoin=key == citation_table.c.paper_key,
         backref=backref("cited_by"))
 
-    references = relationship(
-        "Paper",
-        secondary=model_table,
-        primaryjoin=key == model_table.c.citation_key,
-        secondaryjoin=key == model_table.c.paper_key,
-        backref=backref("referenced_by"))
-
+    def transform_to_dic(self):
+        dic = {}
+        dic["key"] = self.key
+        dic["name"] = self.name
+        dic["doi"] = self.doi
+        dic["year"] = self.year
+        dic["month"] = self.month
+        dic["relevant"] = self.relevant
+        dic["access"] = self.access
+        dic["comment"] = self.comment
+        dic["json"] = self.json
+        dic["pdf_path"] = self.pdf_path
+        return dic
 
 
 class Author(Base):
@@ -68,21 +71,46 @@ class Author(Base):
     name = Column(String)
     surname = Column(String)
     comment = Column(String)
+    json = Column(String)
     papers = relationship("Paper", secondary=authorship_table, back_populates="authors")
+
+    def transform_to_dic(self):
+        dic = {}
+        dic["key"] = self.key
+        dic["name"] = self.name
+        dic["surname"] = self.surname
+        dic["comment"] = self.comment
+        dic["json"] = self.json
+        return dic
 
 
 class Tag(Base):
     __tablename__ = "tag"
     key = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
+    json = Column(String)
 
     papers = relationship("Paper", secondary=tag_table, back_populates="tags")
+
+    def transform_to_dic(self):
+        dic = {}
+        dic["key"] = self.key
+        dic["name"] = self.name
+        dic["json"] = self.json
+        return dic
 
 
 class Venue(Base):
     __tablename__ = "venue"
     key = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
-
+    json = Column(String)
     papers = relationship("Paper", back_populates="venue")
+
+    def transform_to_dic(self):
+        dic = {}
+        dic["key"] = self.key
+        dic["name"] = self.name
+        dic["json"] = self.json
+        return dic
 

@@ -1,7 +1,7 @@
 from database import *
 import os
-from pprint import pprint
 from fuzzywuzzy import fuzz
+
 
 class DBManager:
 
@@ -14,6 +14,26 @@ class DBManager:
         self.archive_path = "archive"
         if not os.path.exists(self.archive_path):
             os.mkdir(self.archive_path)
+
+    def execute(self, open_session, foo, parameter):
+        if open_session:
+            if self.session is not None:
+                raise Exception("Session is already open")
+            self.session = self.Session()
+        try:
+            result = foo(**parameter, session=True)
+            if open_session:
+                self.session.commit()
+            return result
+        except Exception as e:
+            print("#"*100)
+            print(e)
+            print("#" * 100)
+            print("")
+            self.session.rollback()
+        finally:
+            self.session.close()
+            self.session = None
 
     def open_session(self, open_session=True):
         if open_session:
@@ -35,86 +55,28 @@ class DBManager:
                 self.session.close()
                 self.session = None
 
-    def __add_author(self, name, surname, comment=None, session=True):
-        self.open_session(session)
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Author: Functions
+    # ---------------------------------------------------------------
+
+    def __add_author(self, name, surname, comment=None):
+        name = name.lower().strip()
+        surname = surname.lower().strip()
         author = Author(name=name, surname=surname, comment=comment)
         self.session.add(author)
-        self.close_session(session)
 
-    def add_author(self, name, surname, comment=None):
-        self.__add_author(name.lower().strip(),  surname.lower().strip(), comment)
-        return self.get_author_key(name, surname, comment)
+    def __author_to_dict(self, author_key):
+        author = self.__get_author(author_key=author_key)
+        dic = author.transform_to_dict()
+        return dic
 
-    def __add_paper(self, name, year=None, month=None, doi=None, session=True):
-        self.open_session(session)
-        paper = Paper(name=name, doi=doi, year=year, month=month)
-        self.session.add(paper)
-        self.close_session(session)
+    # ---------------------------------------------- Author: Get Functions
 
-    def add_paper(self, name, year=None, month=None, doi=None, check=True):
-        if check:
-            result = self.search_paper(name)
-            if len(result) == 1:
-                print("!!!", result[0])
-                return result[0][0]
-            if len(result) > 0:
-                for i in result:
-                    print("!!!", i)
-                return None
-
-        self.__add_paper(name.lower().strip(), year, month, doi)
-        return self.get_paper_key(name, doi)
-
-    def __add_tag(self, name, session=True):
-        self.open_session(session)
-        tag = Tag(name=name)
-        self.session.add(tag)
-        self.close_session(session)
-
-    def add_tag(self, name):
-        self.__add_tag(name.lower().strip())
-        return self.get_tag_key(name)
-
-    def __add_venue(self, name, session=True):
-        self.open_session(session)
-        venue = Venue(name=name)
-        self.session.add(venue)
-        self.close_session(session)
-
-    def add_venue(self, name):
-        self.__add_venue(name.lower().strip())
-        return self.get_venue_key(name)
-
-    def __get_paper(self, name=None, doi=None, key=None):
-        if key is not None:
-            result = self.session.query(Paper).filter(Paper.key == key).one()
-        elif doi is not None:
-            result = self.session.query(Paper).filter(Paper.doi == doi).one()
-        else:
-            if name is not None:
-                name = name.lower().strip()
-            result = self.session.query(Paper).filter(Paper.name == name).one()
-        return result
-
-    def __get_paper_key(self, name, doi=None, session=True):
-        self.open_session(session)
-        result = self.__get_paper(name, doi)
-        key = result.key
-        self.close_session(session)
-        return key
-
-    def get_paper_key(self, name, doi=None):
-        return self.__get_paper_key(name, doi)
-
-    def get_paper(self, key):
-        self.open_session()
-        paper = self.__paper_to_dic(self.__get_paper(key=key))
-        self.close_session()
-        return paper
-
-    def __get_author(self, name=None, surname=None, comment=None, key=None):
-        if key is not None:
-            q = self.session.query(Author).filter(Author.key == key)
+    def __get_author(self, name=None, surname=None, comment=None, author_key=None, as_dict=False):
+        name = name.lower().strip()
+        surname = surname.lower().strip()
+        if author_key is not None:
+            q = self.session.query(Author).filter(Author.key == author_key)
         else:
             if name is not None:
                 name = name.lower().strip()
@@ -124,311 +86,33 @@ class DBManager:
             if comment is not None:
                 q = q.filter(Author.comment == comment)
         result = list(q)[-1]
+        if as_dict:
+            result.transform_to_dict()
         return result
 
-    def __get_author_key(self, name,  surname, comment=None, session=True):
-        self.open_session(session)
+    def __get_author_key(self, name,  surname, comment=None):
+        name = name.lower().strip()
+        surname = surname.lower().strip()
         result = self.__get_author(name, surname, comment)
-        key = result.key
-        self.close_session(session)
-        return key
+        author_key = result.key
+        return author_key
 
-    def get_author_key(self, name,  surname, comment=None):
-        return self.__get_author_key(name, surname, comment)
+    # ---------------------------------------------- Author: Edit Functions
 
-    def get_author(self, key):
-        self.open_session()
-        author = self.__author_to_dic(self.__get_author(key=key))
-        self.close_session()
-        return author
-
-    def __get_tag(self, name=None, key=None):
-        if key is not None:
-            q = self.session.query(Tag).filter(Tag.key == key)
-        else:
-            if name is not None:
-                name = name.lower().strip()
-            q = self.session.query(Tag).filter(Tag.name == name)
-        result = list(q)[-1]
-        return result
-
-    def __get_tag_key(self, name, session=True):
-        self.open_session(session)
-        result = self.__get_tag(name)
-        key = result.key
-        self.close_session(session)
-        return key
-
-    def get_tag_key(self, name):
-        return self.__get_tag_key(name)
-
-    def get_tag(self, key):
-        self.open_session()
-        tag = self.__tag_to_dic(self.__get_tag(key=key))
-        self.close_session()
-        return tag
-
-    def __get_venue(self, name=None, key=None):
-        if key is not None:
-            q = self.session.query(Venue).filter(Venue.key == key)
-        else:
-            if name is not None:
-                name = name.lower().strip()
-            q = self.session.query(Venue).filter(Venue.name == name)
-        result = q.one()
-        return result
-
-    def __get_venue_key(self, name, session=True):
-        self.open_session(session)
-        result = self.__get_venue(name)
-        key = result.key
-        self.close_session(session)
-        return key
-
-    def get_venue_key(self, name):
-        return self.__get_venue_key(name)
-
-    def get_venue(self, key):
-        self.open_session()
-        venue = self.__venue_to_dic(self.__get_venue(key=key))
-        self.close_session()
-        return venue
-
-    def __edit_paper(self, paper_key, name=None, doi=None, year=None, month=None,
-                     relevant=None, accessible=None, comment=None, append_comment=True, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
+    def __edit_author(self, author_key, name=None, surname=None, comment=None):
+        author = self.__get_author(author_key=author_key)
         if name is not None:
-            paper.name = name
-        if doi is not None:
-            paper.doi = doi
-        if year is not None:
-            paper.year = year
-        if month is not None:
-            paper.month = month
-        if relevant is not None:
-            paper.relevant = relevant
-        if accessible is not None:
-            paper.access = accessible
-        if comment is not None:
-            if append_comment and paper.comment is not None:
-                paper.comment = paper.comment + "\n" + comment
-            else:
-                paper.comment = comment
-        self.close_session(session)
-
-    def edit_paper(self, paper_key, name=None, doi=None, year=None, month=None):
-        self.__edit_paper(paper_key, name, doi, year, month)
-
-    def paper_relevance(self, paper_key, status):
-        self.__edit_paper(paper_key, relevant=status)
-
-    def paper_accessible(self, paper_key, status):
-        self.__edit_paper(paper_key, accessible=status)
-
-    def paper_comment(self, paper_key, comment, append=True):
-        self.__edit_paper(paper_key, comment=comment, append_comment=append)
-
-    def __edit_author(self, author_key, name=None, surname=None, comment=None, session=True):
-        self.open_session(session)
-        author = self.__get_author(key=author_key)
-        if name is not None:
-            author.name = name
+            author.name = name.strip().lower()
         if surname is not None:
-            author.surname = surname
+            author.surname = surname.strip().lower()
         if comment is not None:
             author.comment = comment
-        self.close_session(session)
 
-    def edit_author(self, paper_key, author_key, name=None, surname=None, comment=None):
-        self.__edit_paper(paper_key, author_key, name, surname, comment)
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Paper: Functions
+    # ---------------------------------------------------------------
 
-    def __add_author_to_paper(self, paper_key, author_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        author = self.__get_author(key=author_key)
-        paper.authors.append(author)
-        self.close_session(session)
-
-    def add_author_to_paper(self, paper_key, author_key):
-        self.__add_author_to_paper(paper_key, author_key)
-
-    def __add_tag_to_paper(self, paper_key, tag_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        tag = self.__get_tag(key=tag_key)
-        paper.tags.append(tag)
-        self.close_session(session)
-
-    def add_tag_to_paper(self, paper_key, tag_key):
-        if isinstance(tag_key, str):
-            tag_key = self.get_tag_key(tag_key)
-        self.__add_tag_to_paper(paper_key, tag_key)
-
-    def __add_paper_to_venue(self, venue_key, paper_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        venue = self.__get_venue(key=venue_key)
-        venue.papers.append(paper)
-        self.close_session(session)
-
-    def add_paper_to_venue(self, venue_key, paper_key):
-        self.__add_paper_to_venue(venue_key, paper_key)
-
-    def __add_citation_to_paper(self, paper_key, citation_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        citation = self.__get_paper(key=citation_key)
-        paper.cites.append(citation)
-        self.close_session(session)
-
-    def add_citation_to_paper(self, paper_key, citation_key):
-        self.__add_citation_to_paper(paper_key, citation_key)
-
-    def __add_model_reference_to_paper(self, paper_key, citation_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        citation = self.__get_paper(key=citation_key)
-        paper.references.append(citation)
-        self.close_session(session)
-
-    def add_model_reference_to_paper(self, paper_key, citation_key):
-        self.__add_model_reference_to_paper(paper_key, citation_key)
-
-    def __add_pdf_to_paper(self, paper_key, pdf_path=None, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        if paper.access is not True:
-            if pdf_path is None:
-                downloads = [os.path.join(self.download_dir, file) for file in os.listdir(self.download_dir)
-                             if file[0] != "."]
-                if len(downloads) > 0:
-                    pdf_path = max(downloads, key=os.path.getatime)
-                    path = os.path.join(self.archive_path, str(paper.key) + ".pdf")
-                    os.rename(pdf_path, path)
-                    paper.pdf_path = path
-                    paper.accessible = True
-                else:
-                    print("Error: No file found.")
-        self.close_session(session)
-
-    def add_pdf_to_paper(self, paper_key, pdf_path=None):
-        self.__add_pdf_to_paper(paper_key, pdf_path)
-
-    @staticmethod
-    def __paper_to_dic(paper):
-        dic = {}
-        dic["key"] = paper.key
-        dic["name"] = paper.name
-        dic["doi"] = paper.doi
-        dic["year"] = paper.year
-        dic["month"] = paper.month
-        dic["relevant"] = paper.relevant
-        dic["access"] = paper.access
-        dic["comment"] = paper.comment
-        dic["pdf_path"] = paper.pdf_path
-        return dic
-
-    def paper_to_dic(self, paper_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        dic = self.__paper_to_dic(paper)
-        self.close_session(session)
-        return dic
-
-    def __paper_bib(self, paper_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        bib = []
-        for entry in paper.cites:
-            bib.append(self.__paper_to_dic(entry))
-        self.close_session(session)
-        return bib
-
-    def paper_bib(self, paper_key):
-        return self.__paper_bib(paper_key)
-
-    def __paper_ref(self, paper_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        bib = []
-        for entry in paper.references:
-            bib.append(self.__paper_to_dic(entry))
-        self.close_session(session)
-        return bib
-
-    def paper_ref(self, paper_key):
-        return self.__paper_ref(paper_key)
-
-    def __paper_authors(self, paper_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        authors = []
-        for entry in paper.authors:
-            authors.append(self.__author_to_dic(entry))
-        self.close_session(session)
-        return authors
-
-    def paper_authors(self, paper_key):
-        return self.__paper_authors(paper_key)
-
-    @staticmethod
-    def __author_to_dic(author):
-        dic = {}
-        dic["key"] = author.key
-        dic["name"] = author.name
-        dic["surname"] = author.surname
-        dic["comment"] = author.comment
-        return dic
-
-    def author_to_dic(self, author_key, session=True):
-        self.open_session(session)
-        author = self.__get_author(key=author_key)
-        dic = self.__author_to_dic(author)
-        self.close_session(session)
-        return dic
-
-    @staticmethod
-    def __venue_to_dic(venue):
-        dic = {}
-        dic["key"] = venue.key
-        dic["name"] = venue.name
-        return dic
-
-    def venue_to_dic(self, venue_key, session=True):
-        self.open_session(session)
-        venue = self.__get_venue(key=venue_key)
-        dic = self.__venue_to_dic(venue)
-        self.close_session(session)
-        return dic
-
-    @staticmethod
-    def __tag_to_dic(tag):
-        dic = {}
-        dic["key"] = tag.key
-        dic["name"] = tag.name
-        return dic
-
-    def tag_to_dic(self, tag_key, session=True):
-        self.open_session(session)
-        tag = self.__get_tag(key=tag_key)
-        dic = self.__tag_to_dic(tag)
-        self.close_session(session)
-        return dic
-
-    def __open_pdf(self, paper_key, session=True):
-        self.open_session(session)
-        paper = self.__get_paper(key=paper_key)
-        paper_pdf_path = paper.pdf_path
-        self.close_session(session)
-        path = os.path.abspath(paper_pdf_path)
-        os.system("open {0}".format(path))
-
-    def open_pdf(self, paper_key):
-        self.__open_pdf(paper_key)
-
-    def __list_papers(self, tags=None, authors=None, not_tags=None, invert=False, as_dict=True, session=True):
-        self.open_session(session)
+    def __list_papers(self, tags=None, authors=None, not_tags=None, invert=False, as_dict=True):
         if invert:
             q = self.session.query(Paper.key)
         else:
@@ -445,9 +129,288 @@ class DBManager:
             q = self.session.query(Paper).filter(~Paper.key.in_(q))
         papers = q.all()
         if as_dict:
-            papers = [self.__paper_to_dic(i) for i in papers]
-        self.close_session(session)
+            papers = [i.transform_to_dict() for i in papers]
         return papers
+
+    def __add_paper(self, name, year=None, month=None, doi=None):
+        name = name.lower().strip()
+        paper = Paper(name=name, doi=doi, year=year, month=month)
+        self.session.add(paper)
+
+    def __delete_paper(self, paper_key):
+        paper = self.session.query(Paper).filter(Paper.key == paper_key).one()
+        self.session.delete(paper)
+
+    def __search_paper(self, name, author_name=None):
+        name = name.strip().lower()
+        if author_name is not None:
+            author_name = author_name.strip().lower()
+            authors = self.session.query(Author).all()
+            result = []
+            for i in authors:
+                if i.name is None:
+                    i_name = ""
+                else:
+                    i_name = i.name
+                if i.surname is not None:
+                    i_name = i_name + " " + i.surname
+
+                if fuzz.token_set_ratio(i_name, author_name) > 90:
+                    result.append(i.key)
+            paper = self.session.query(Paper).join(authorship_table).join(Author).filter(Author.key.in_(result)).all()
+        else:
+            paper = self.session.query(Paper).all()
+        result = []
+        for i in paper:
+            if fuzz.token_set_ratio(i.name, name) > 90:
+                result.append((i.key, i.name))
+        return result
+
+    def __paper_to_dict(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        dic = paper.transform_to_dict()
+        return dic
+
+    # ---------------------------------------------- Paper: Get Functions
+
+    def __get_paper_key(self, name, doi=None):
+        name = name.strip().lower()
+        result = self.__get_paper(name, doi)
+        paper_key = result.key
+        return paper_key
+
+    def __get_paper(self, name=None, doi=None, paper_key=None, as_dict=False):
+        name = name.strip().lower()
+        if paper_key is not None:
+            result = self.session.query(Paper).filter(Paper.key == paper_key).one()
+        elif doi is not None:
+            result = self.session.query(Paper).filter(Paper.doi == doi).one()
+        else:
+            if name is not None:
+                name = name.lower().strip()
+            result = self.session.query(Paper).filter(Paper.name == name).one()
+        if as_dict:
+            result.transform_to_dict()
+        return result
+
+    def __get_paper_authors(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        authors = []
+        for entry in paper.authors:
+            authors.append(entry.transform_to_dict())
+        return authors
+
+    def __get_paper_bib(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        bib = []
+        for entry in paper.cites:
+            bib.append(entry.transform_to_dict())
+        return bib
+
+    def __get_paper_bibtex(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        return paper.bibtex
+
+    def __get_paper_json(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        return paper.json
+
+    def __get_paper_pdf(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        paper_pdf_path = paper.pdf_path
+        path = os.path.abspath(paper_pdf_path)
+        os.system("open {0}".format(path))
+
+    def __get_paper_tags(self, paper_key):
+        tags = self.session.query(Tag).join(tag_table).join(Paper).filter(Paper.key == paper_key).all()
+        tags = [i.transform_to_dict() for i in tags]
+        return tags
+
+    def __get_paper_ref(self, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        bib = []
+        for entry in paper.references:
+            bib.append(entry.transform_to_dict())
+        return bib
+
+    # ---------------------------------------------- Paper: Edit Functions
+
+    def __edit_paper(self, paper_key, name=None, doi=None, year=None, month=None,
+                     relevant=None, accessible=None, comment=None, json_string=None,append_comment=True):
+        paper = self.__get_paper(paper_key=paper_key)
+        if name is not None:
+            paper.name = name.strip().lower()
+        if doi is not None:
+            paper.doi = doi
+        if year is not None:
+            paper.year = year
+        if month is not None:
+            paper.month = month
+        if relevant is not None:
+            paper.relevant = relevant
+        if accessible is not None:
+            paper.access = accessible
+        if comment is not None:
+            if append_comment and paper.comment is not None:
+                paper.comment = paper.comment + "\n" + comment
+            else:
+                paper.comment = comment
+        if json_string is not None:
+            paper.json = json_string
+
+    # ---------------------------------------------- Paper: Relation Functions
+
+    def __add_author_to_paper(self, paper_key, author_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        author = self.__get_author(author_key=author_key)
+        paper.authors.append(author)
+
+    def __add_citation_to_paper(self, paper_key, citation_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        citation = self.__get_paper(paper_key=citation_key)
+        paper.cites.append(citation)
+
+    def __add_pdf_to_paper(self, paper_key, pdf_path=None):
+        paper = self.__get_paper(paper_key=paper_key)
+        if paper.access is not True:
+            if pdf_path is None:
+                downloads = [os.path.join(self.download_dir, file) for file in os.listdir(self.download_dir)
+                             if file[0] != "."]
+                if len(downloads) > 0:
+                    pdf_path = max(downloads, key=os.path.getatime)
+                    path = os.path.join(self.archive_path, str(paper.key) + ".pdf")
+                    os.rename(pdf_path, path)
+                    paper.pdf_path = path
+                    paper.accessible = True
+                else:
+                    print("Error: No file found.")
+
+    def __add_tag_to_paper(self, paper_key, tag_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        tag = self.__get_tag(tag_key=tag_key)
+        paper.tags.append(tag)
+
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Tag: Functions
+    # ---------------------------------------------------------------
+
+    def __list_tags(self):
+        tags = [i.name for i in self.session.query(Tag)]
+        return tags
+
+    def __add_tag(self, name):
+        name = name.lower().strip()
+        tag = Tag(name=name)
+        self.session.add(tag)
+
+    def __tag_to_dict(self, tag_key):
+        tag = self.__get_tag(tag_key=tag_key)
+        dic = tag.transform_to_dict()
+        return dic
+
+    # ---------------------------------------------- Venue: Get Functions
+
+    def __get_tag(self, name=None, tag_key=None, as_dict=False):
+        name = name.strip().lower()
+        if tag_key is not None:
+            q = self.session.query(Tag).filter(Tag.key == tag_key)
+        else:
+            if name is not None:
+                name = name.lower().strip()
+            q = self.session.query(Tag).filter(Tag.name == name)
+        result = list(q)[-1]
+        if as_dict:
+            result.transform_to_dict()
+        return result
+
+    def __get_tag_key(self, name):
+        name = name.strip().lower()
+        result = self.__get_tag(name)
+        tag_key = result.key
+        return tag_key
+
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Venue: Functions
+    # ---------------------------------------------------------------
+
+    def __list_venues(self):
+        tags = [i.name for i in self.session.query(Venue)]
+        return tags
+
+    def __add_venue(self, name):
+        name = name.lower().strip()
+        venue = Venue(name=name)
+        self.session.add(venue)
+
+    def __venue_to_dict(self, venue_key):
+        venue = self.__get_venue(venue_key=venue_key)
+        dic = venue.transform_to_dict()
+        return dic
+
+    # ---------------------------------------------- Venue: Get Functions
+
+    def __get_venue_key(self, name):
+        name = name.strip().lower()
+        result = self.__get_venue(name)
+        venue_key = result.key
+        return venue_key
+
+    def __get_venue(self, name=None, venue_key=None, as_dict=False):
+        name = name.strip().lower()
+        if venue_key is not None:
+            q = self.session.query(Venue).filter(Venue.key == venue_key)
+        else:
+            if name is not None:
+                name = name.lower().strip()
+            q = self.session.query(Venue).filter(Venue.name == name)
+        result = q.one()
+        if as_dict:
+            result.transform_to_dict()
+        return result
+
+    # ---------------------------------------------- Venue: Relation Functions
+
+    def __add_paper_to_venue(self, venue_key, paper_key):
+        paper = self.__get_paper(paper_key=paper_key)
+        venue = self.__get_venue(venue_key=venue_key)
+        venue.papers.append(paper)
+
+    # ##########################################################################################
+    # ------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------
+    # ##########################################################################################
+
+    def add_author(self, name, surname, comment=None):
+        parameter = locals()
+        self.execute(True, self.__add_author, parameter)
+        return self.get_author_key(name, surname, comment)
+
+    def author_to_dict(self, author_key, session=True):
+        parameter = locals()
+        return self.execute(True, self.__author_to_dict, parameter)
+
+    # ---------------------------------------------- Author: Get Functions
+
+    def get_author(self, author_key):
+        parameter = locals()
+        parameter["as_dict"] = True
+        return self.execute(True, self.__get_author, parameter).transform_to_dict()
+
+    def get_author_key(self, name, surname, comment=None):
+        parameter = locals()
+        return self.execute(True, self.__get_author_key, parameter)
+
+    # ---------------------------------------------- Author: Edit Functions
+
+    def edit_author(self, paper_key, author_key, name=None, surname=None, comment=None):
+        parameter = locals()
+        return self.execute(True, self.__edit_author, parameter)
+
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Paper: Functions
+    # ---------------------------------------------------------------
 
     def list_papers(self, tags=None, authors=None, not_tags=None, invert=False, names=True):
         if tags is not None:
@@ -461,277 +424,177 @@ class DBManager:
 
         if not isinstance(authors, list) and authors is not None:
             authors = [authors]
-        result = self.__list_papers(tags, authors, not_tags, invert)
+        parameter = locals()
+        result = self.execute(True, self.__list_papers, parameter)
         if names:
             result = [i["name"] for i in result]
         return result
 
-    def __list_tags(self, session=True):
-        self.open_session(session)
-        tags = [i.name for i in self.session.query(Tag)]
-        self.close_session(session)
-        return tags
+    def add_paper(self, name, year=None, month=None, doi=None, check=True):
+        if check:
+            result = self.search_paper(name)
+            if len(result) == 1:
+                print("!!!", result[0])
+                return result[0][0]
+            if len(result) > 0:
+                for i in result:
+                    print("!!!", i)
+                return None
+        parameter = locals()
+        self.execute(True, self.__add_paper, parameter)
+        return self.get_paper_key(name, doi)
+
+    def delete_paper(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__delete_paper, parameter)
+
+    def search_paper(self, name, author_name=None):
+        parameter = locals()
+        return self.execute(True, self.__search_paper, parameter)
+
+    def paper_to_dict(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__paper_to_dict, parameter)
+
+    # ---------------------------------------------- Paper: Get Functions
+
+    def get_paper(self, paper_key):
+        parameter = locals()
+        parameter["as_dict"] = True
+        return self.execute(True, self.__get_paper, parameter)
+
+    def get_paper_key(self, name, doi=None):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_key, parameter)
+
+    def get_paper_authors(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_authors, parameter)
+
+    def get_paper_bib(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_bib, parameter)
+
+    def get_paper_bibtex(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_bibtex, parameter)
+
+    def get_paper_json(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_json, parameter)
+
+    def get_paper_pdf(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_pdf, parameter)
+
+    def get_paper_tags(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_tags, parameter)
+
+    def get_paper_ref(self, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__get_paper_ref, parameter)
+
+    # ---------------------------------------------- Paper: Edit Functions
+
+    def edit_paper(self, paper_key, name=None, doi=None, year=None, month=None):
+        parameter = locals()
+        return self.execute(True, self.__edit_paper, parameter)
+
+    def edit_paper_accessible(self, paper_key, accessible):
+        parameter = locals()
+        return self.execute(True, self.__edit_paper, parameter)
+
+    def edit_paper_comment(self, paper_key, comment, append_comment=True):
+        parameter = locals()
+        return self.execute(True, self.__edit_paper, parameter)
+
+    def edit_paper_relevance(self, paper_key, relevant):
+        parameter = locals()
+        return self.execute(True, self.__edit_paper, parameter)
+
+    # ---------------------------------------------- Paper: Relation Functions
+
+    def add_author_to_paper(self, paper_key, author_key):
+        parameter = locals()
+        return self.execute(True, self.__add_author_to_paper, parameter)
+
+    def add_citation_to_paper(self, paper_key, citation_key):
+        parameter = locals()
+        return self.execute(True, self.__add_citation_to_paper, parameter)
+
+    def add_tag_to_paper(self, paper_key, tag_key):
+        if isinstance(tag_key, str):
+            tag_key = self.get_tag_key(tag_key)
+        parameter = locals()
+        return self.execute(True, self.__add_tag_to_paper, parameter)
+
+    def add_pdf_to_paper(self, paper_key, pdf_path=None):
+        parameter = locals()
+        return self.execute(True, self.__add_pdf_to_paper, parameter)
+
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Tag: Functions
+    # ---------------------------------------------------------------
+
+    def add_tag(self, name):
+        parameter = locals()
+        self.execute(True, self.__add_tag, parameter)
+        return self.get_tag_key(name)
 
     def list_tags(self):
-        return self.__list_tags()
+        parameter = locals()
+        return self.execute(True, self.__list_tags, parameter)
 
-    def __list_venues(self, session=True):
-        self.open_session(session)
-        tags = [i.name for i in self.session.query(Venue)]
-        self.close_session(session)
-        return tags
+    def tag_to_dict(self, tag_key, session=True):
+        parameter = locals()
+        return self.execute(True, self.__tag_to_dict, parameter)
+
+    # ---------------------------------------------- Venue: Get Functions
+
+    def get_tag(self, tag_key):
+        parameter = locals()
+        parameter["as_dict"] = True
+        return self.execute(True, self.__get_tag, parameter)
+
+    def get_tag_key(self, name):
+        parameter = locals()
+        return self.execute(True, self.__get_tag_key, parameter)
+
+    # ---------------------------------------------------------------
+    # ---------------------------------------------- Venue: Functions
+    # ---------------------------------------------------------------
 
     def list_venues(self):
-        return self.__list_tags()
+        parameter = locals()
+        return self.execute(True, self.__list_venues, parameter)
 
-    def __delete_paper(self, key, session=True):
-        self.open_session(session)
-        paper = self.session.query(Paper).filter(Paper.key == key).one()
-        self.session.delete(paper)
-        self.close_session(session)
+    def add_venue(self, name):
+        parameter = locals()
+        self.execute(True, self.__add_venue, parameter)
+        return self.get_venue_key(name)
 
-    def delete_paper(self, key):
-        self.__delete_paper(key)
+    def venue_to_dict(self, venue_key, session=True):
+        parameter = locals()
+        return self.execute(True, self.__venue_to_dict, parameter)
 
-    def __search_paper(self, name, session=True):
-        self.open_session(session)
-        paper = self.session.query(Paper).all()
-        result = []
-        for i in paper:
-            if fuzz.token_set_ratio(i.name, name) > 90:
-                result.append((i.key, i.name))
-        self.close_session(session)
-        return result
+    # ---------------------------------------------- Venue: Get Functions
 
-    def search_paper(self, name):
-        return self.__search_paper(name)
+    def get_venue(self, venue_key):
+        parameter = locals()
+        parameter["as_dict"] = True
+        return self.execute(True, self.__get_venue, parameter)
 
-    def __paper_list_tag(self, paper_key, session=True):
-        self.open_session(session)
-        tags = self.session.query(Tag).join(tag_table).join(Paper).filter(Paper.key == paper_key).all()
-        tags = [self.__tag_to_dic(i) for i in tags]
-        self.close_session(session)
-        return tags
+    def get_venue_key(self, name):
+        parameter = locals()
+        return self.execute(True, self.__get_venue_key, parameter)
 
-    def paper_lits_tag(self, paper_key):
-        return self.__paper_list_tag(paper_key)
-    #
-    # def add_paper(self, name, year=None, month=None, doi=None, session=True):
-    #     self.open_session(session)
-    #     paper = Paper(name=name, doi=doi, year=year, month=month)
-    #     self.session.add(paper)
-    #     self.close_session(session)
-    #     return self.get_paper_key(name)
-    #
-    # def edit_paper(self, paper_key, name=None, doi=None, year=None, month=None, session=True):
-    #     self.open_session(session)
-    #     paper = self.session.query(Paper).filter(Paper.key == paper_key)
-    #     if name is not None:
-    #         paper.name = name
-    #     if doi is not None:
-    #         paper.doi = doi
-    #     if year is not None:
-    #         paper.year = year
-    #     if month is not None:
-    #         paper.month = month
-    #     self.close_session(session)
-    #
-    # def get_paper(self, paper, doi=None, session=True):
-    #     self.open_session(session)
-    #     if isinstance(paper, Paper):
-    #         result = paper
-    #     elif isinstance(paper, int):
-    #         result = self.get_paper_by_key(paper, False)
-    #     else:
-    #         result = self.get_paper_by_name(paper, doi, False)
-    #     self.close_session(session)
-    #     return result
-    #
-    # def get_paper_by_name(self, name, doi=None, session=True):
-    #     self.open_session(session)
-    #     if doi is None:
-    #         q = self.session.query(Paper).filter(Paper.name == name)
-    #     else:
-    #         q = self.session.query(Paper).filter(Paper.doi == doi)
-    #     result = q.one()
-    #     if session:
-    #         result = result.__dict__
-    #     self.close_session(session)
-    #     return result
-    #
-    # def get_paper_key(self, name, doi=None, session=True):
-    #     result = self.get_paper(name, doi, session)
-    #     try:
-    #         return result.key
-    #     except AttributeError:
-    #         return result["key"]
-    #
-    # def get_paper_by_key(self, key, session=True):
-    #     self.open_session(session)
-    #     q = self.session.query(Paper).filter((Paper.key == key))
-    #     result = q.one()
-    #     if session:
-    #         result = result.__dict__
-    #     self.close_session(session)
-    #     return result
-    #
-    # def add_author(self, name, surname, comment=None, session=True):
-    #     self.open_session(session)
-    #     author = Author(name=name, surname=surname, comment=comment)
-    #     self.session.add(author)
-    #     self.close_session(session)
-    #     return self.get_author_key(name, surname, comment)
-    #
-    # def edit_author(self, author_key, name=None, surname=None, comment=None, session=True):
-    #     self.open_session(session)
-    #     author = self.session.query(Author).filter(Author.key == author_key)
-    #     if name is not None:
-    #         author.name = name
-    #     if surname is not None:
-    #         author.surname = surname
-    #     if comment is not None:
-    #         author.comment = comment
-    #     self.close_session(session)
-    #
-    # def get_author(self, name, surname, comment=None, session=True):
-    #     self.open_session(session)
-    #     q = self.session.query(Author).filter((Author.name == name) & (Author.surname == surname))
-    #     if comment is not None:
-    #         q = q.filter(Author.comment == comment)
-    #     result = q.one()
-    #     if session:
-    #         result = result.__dict__
-    #     self.close_session(session)
-    #     return result
-    #
-    # def get_author_key(self, name, surname, comment=None, session=True):
-    #     result = self.get_author(name, surname, comment, session)
-    #     try:
-    #         return result.key
-    #     except AttributeError:
-    #         return result["key"]
-    #
-    # def get_author_by_key(self, key, session=True):
-    #     self.open_session(session)
-    #     q = self.session.query(Author).filter((Author.key == key))
-    #     result = q.one()
-    #     if session:
-    #         result = result.__dict__
-    #     self.close_session(session)
-    #     return result
-    #
-    # def add_venue(self, name, session=True):
-    #     self.open_session(session)
-    #     venue = Venue(name=name)
-    #     self.session.add(venue)
-    #     self.close_session(session)
-    #     return self.get_venue_key(name)
-    #
-    # def get_venue(self, name, session=True):
-    #     self.open_session(session)
-    #     q = self.session.query(Venue).filter((Venue.name == name))
-    #     result = q.one()
-    #     if session:
-    #         result = result.__dict__
-    #     self.close_session(session)
-    #     return result
-    #
-    # def get_venue_key(self, name, session=True):
-    #     result = self.get_venue(name, session)
-    #     try:
-    #         return result.key
-    #     except AttributeError:
-    #         return result["key"]
-    #
-    # def get_venue_by_key(self, key, session=True):
-    #     self.open_session(session)
-    #     q = self.session.query(Venue).filter((Venue.key == key))
-    #     result = q.one()
-    #     if session:
-    #         result = result.__dict__
-    #     self.close_session(session)
-    #     return result
-    #
-    # def add_author_to_paper(self, paper, author, session=True):
-    #     self.open_session(session)
-    #     if not isinstance(paper, Paper):
-    #         paper = self.get_paper_by_key(paper, False)
-    #     if not isinstance(author, Author):
-    #         paper = self.get_author_by_key(author, False)
-    #     paper.authors.append(author)
-    #     self.close_session(session)
-    #
-    # def add_paper_to_venue(self, venue, paper, session=True):
-    #     self.open_session(session)
-    #     if not isinstance(paper, Paper):
-    #         paper = self.get_paper_by_key(paper, False)
-    #     if not isinstance(venue, Venue):
-    #         paper = self.get_venue_by_key(venue, False)
-    #     venue.papers.append(paper)
-    #     self.close_session(session)
-    #
-    # def add_pdf_to_paper(self, paper, pdf_path=None, session=True):
-    #     if pdf_path is None:
-    #         downloads = [os.path.join(self.download_dir, file) for file in os.listdir(self.download_dir)
-    #                      if file[0] != "."]
-    #         if len(downloads) > 0:
-    #             pdf_path = max(downloads, key=os.path.getatime)
-    #         else:
-    #             raise FileNotFoundError
-    #     self.open_session(session)
-    #     if not isinstance(paper, Paper):
-    #         paper = self.get_paper_by_key(paper, False)
-    #     path = os.path.join(self.archive_path, str(paper.key) + ".pdf")
-    #     os.rename(pdf_path, path)
-    #     paper.pdf_path = path
-    #     self.close_session(session)
-    #
-    # def add_citation_to_paper(self, paper, citation, session=True):
-    #     self.open_session(session)
-    #     if not isinstance(paper, Paper):
-    #         paper = self.get_paper_by_key(paper, False)
-    #     if not isinstance(citation, Paper):
-    #         citation = self.get_paper_by_key(citation, False)
-    #     paper.cites.append(citation)
-    #     self.close_session(session)
-    #
-    # def get_paper_bibliography(self, paper, session=True):
-    #     self.open_session(session)
-    #     paper = self.get_paper(paper, session=False)
-    #
-    #
-    #     self.close_session()
-    #
-    # def print_paper(self, key):
-    #     self.sprint(self.get_paper_by_key(key))
-    #
-    # def print_author(self, key):
-    #     self.sprint(self.get_author_by_key(key))
-    #
-    # def print_venue(self, key):
-    #     self.sprint(self.get_venue_by_key(key))
-    #
-    # @staticmethod
-    # def sprint(result, non_values=False):
-    #     if not isinstance(result, list):
-    #         result = [result]
-    #     for i in result:
-    #         if not isinstance(i, dict):
-    #             entry = i.__dict__
-    #         else:
-    #             entry = i
-    #         if not non_values:
-    #             data = {k: v for k, v in entry.items() if v is not None}
-    #         else:
-    #             data = entry
-    #         pprint(data)
-    #
-    # @staticmethod
-    # def open_comment(paper):
-    #     path = os.path.abspath(paper.comment_path)
-    #     os.system("open {0}".format(path))
-    #
-    # @staticmethod
-    # def open_pdf(paper):
-    #     path = os.path.abspath(paper.pdf_path)
-    #     os.system("open {0}".format(path))
+    # ---------------------------------------------- Venue: Relation Functions
+
+    def add_paper_to_venue(self, venue_key, paper_key):
+        parameter = locals()
+        return self.execute(True, self.__add_paper_to_venue, parameter)
+
+
+
+
