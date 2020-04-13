@@ -4,6 +4,12 @@ from fuzzywuzzy import fuzz
 
 
 class DBManager:
+    
+    @staticmethod
+    def clean_parameter(parameter):
+        if parameter.get("self", None) is not None:
+            del parameter["self"]
+        return parameter
 
     def __init__(self, download_dir="/Users/krk/Downloads", name='sqlite:///PaperDB.db'):
         self.download_dir = download_dir
@@ -15,17 +21,17 @@ class DBManager:
         if not os.path.exists(self.archive_path):
             os.mkdir(self.archive_path)
 
-    def execute(self, open_session, foo, parameter):
+    def execute(self, open_session, foo, *args, **kwargs):
         if open_session:
             if self.session is not None:
                 raise Exception("Session is already open")
             self.session = self.Session()
         try:
-            result = foo(**parameter, session=True)
+            result = foo(*args, **kwargs)
             if open_session:
                 self.session.commit()
             return result
-        except Exception as e:
+        except FileNotFoundError as e:
             print("#"*100)
             print(e)
             print("#" * 100)
@@ -236,7 +242,8 @@ class DBManager:
     # ---------------------------------------------- Paper: Edit Functions
 
     def __edit_paper(self, paper_key, name=None, doi=None, year=None, month=None,
-                     relevant=None, accessible=None, comment=None, json_string=None,append_comment=True):
+                     relevant=None, accessible=None, comment=None, json_string=None, bibtex=None,
+                     append_comment=True):
         paper = self.__get_paper(paper_key=paper_key)
         if name is not None:
             paper.name = name.strip().lower()
@@ -257,6 +264,8 @@ class DBManager:
                 paper.comment = comment
         if json_string is not None:
             paper.json = json_string
+        if bibtex is not None:
+            paper.bibtex = bibtex
 
     # ---------------------------------------------- Paper: Relation Functions
 
@@ -383,30 +392,25 @@ class DBManager:
     # ##########################################################################################
 
     def add_author(self, name, surname, comment=None):
-        parameter = locals()
-        self.execute(True, self.__add_author, parameter)
+        self.execute(True, self.__add_author, name=name, surname=surname, comment=comment)
         return self.get_author_key(name, surname, comment)
 
-    def author_to_dict(self, author_key, session=True):
-        parameter = locals()
-        return self.execute(True, self.__author_to_dict, parameter)
+    def author_to_dict(self, author_key):
+        return self.execute(True, self.__author_to_dict, author_key=author_key)
 
     # ---------------------------------------------- Author: Get Functions
 
     def get_author(self, author_key):
-        parameter = locals()
-        parameter["as_dict"] = True
-        return self.execute(True, self.__get_author, parameter).transform_to_dict()
+        return self.execute(True, self.__get_author, author_key=author_key, as_dict=True).transform_to_dict()
 
     def get_author_key(self, name, surname, comment=None):
-        parameter = locals()
-        return self.execute(True, self.__get_author_key, parameter)
+        return self.execute(True, self.__get_author_key, name=name, surname=surname, comment=comment)
 
     # ---------------------------------------------- Author: Edit Functions
 
     def edit_author(self, paper_key, author_key, name=None, surname=None, comment=None):
-        parameter = locals()
-        return self.execute(True, self.__edit_author, parameter)
+        return self.execute(True, self.__edit_author, paper_key=paper_key, author_key=author_key,
+                            name=name, surname=surname, comment=comment)
 
     # ---------------------------------------------------------------
     # ---------------------------------------------- Paper: Functions
@@ -424,8 +428,8 @@ class DBManager:
 
         if not isinstance(authors, list) and authors is not None:
             authors = [authors]
-        parameter = locals()
-        result = self.execute(True, self.__list_papers, parameter)
+        result = self.execute(True, self.__list_papers, tags=tags, authors=authors, not_tags=not_tags,
+                              invert=invert, as_dict=True)
         if names:
             result = [i["name"] for i in result]
         return result
@@ -440,160 +444,133 @@ class DBManager:
                 for i in result:
                     print("!!!", i)
                 return None
-        parameter = locals()
-        self.execute(True, self.__add_paper, parameter)
+        self.execute(True, self.__add_paper, name=name, year=year, month=month, doi=doi)
         return self.get_paper_key(name, doi)
 
     def delete_paper(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__delete_paper, parameter)
+        return self.execute(True, self.__delete_paper, paper_key=paper_key)
 
     def search_paper(self, name, author_name=None):
-        parameter = locals()
-        return self.execute(True, self.__search_paper, parameter)
+        return self.execute(True, self.__search_paper, name=name, author_name=author_name)
 
     def paper_to_dict(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__paper_to_dict, parameter)
+        return self.execute(True, self.__paper_to_dict, paper_key=paper_key)
 
     # ---------------------------------------------- Paper: Get Functions
 
     def get_paper(self, paper_key):
-        parameter = locals()
-        parameter["as_dict"] = True
-        return self.execute(True, self.__get_paper, parameter)
+        return self.execute(True, self.__get_paper, paper_key=paper_key, as_dict=True)
 
     def get_paper_key(self, name, doi=None):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_key, parameter)
+        return self.execute(True, self.__get_paper_key, name=name, doi=doi)
 
     def get_paper_authors(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_authors, parameter)
+        return self.execute(True, self.__get_paper_authors, paper_key=paper_key)
 
     def get_paper_bib(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_bib, parameter)
+        return self.execute(True, self.__get_paper_bib, paper_key=paper_key)
 
     def get_paper_bibtex(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_bibtex, parameter)
+        return self.execute(True, self.__get_paper_bibtex, paper_key=paper_key)
 
     def get_paper_json(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_json, parameter)
+        return self.execute(True, self.__get_paper_json, paper_key=paper_key)
 
     def get_paper_pdf(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_pdf, parameter)
+        return self.execute(True, self.__get_paper_pdf, paper_key=paper_key)
 
     def get_paper_tags(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_tags, parameter)
+        return self.execute(True, self.__get_paper_tags, paper_key=paper_key)
 
     def get_paper_ref(self, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__get_paper_ref, parameter)
+        return self.execute(True, self.__get_paper_ref, paper_key=paper_key)
 
-    # ---------------------------------------------- Paper: Edit Functions
+    # ---------------------------------------------- Paper: Add Functions
 
     def edit_paper(self, paper_key, name=None, doi=None, year=None, month=None):
-        parameter = locals()
-        return self.execute(True, self.__edit_paper, parameter)
+        return self.execute(True, self.__edit_paper, paper_key=paper_key, name=name, doi=doi, year=year, month=month)
 
-    def edit_paper_accessible(self, paper_key, accessible):
-        parameter = locals()
-        return self.execute(True, self.__edit_paper, parameter)
+    def add_paper_accessible(self, paper_key, accessible):
+        return self.execute(True, self.__edit_paper, paper_key=paper_key, accessible=accessible)
 
-    def edit_paper_comment(self, paper_key, comment, append_comment=True):
-        parameter = locals()
-        return self.execute(True, self.__edit_paper, parameter)
+    def add_paper_bibtex(self, paper_key, bibtex):
+        return self.execute(True, self.__edit_paper, paper_key=paper_key, bibtex=bibtex)
 
-    def edit_paper_relevance(self, paper_key, relevant):
-        parameter = locals()
-        return self.execute(True, self.__edit_paper, parameter)
+    def add_paper_comment(self, paper_key, comment, append_comment=True):
+        return self.execute(True, self.__edit_paper, paper_key=paper_key, comment=comment,
+                            append_comment=append_comment)
+
+    def add_paper_json(self, paper_key, json_string):
+        return self.execute(True, self.__edit_paper, paper_key=paper_key, json_string=json_string)
+
+    def add_paper_relevance(self, paper_key, relevant):
+        return self.execute(True, self.__edit_paper, paper_key=paper_key, relevant=relevant)
 
     # ---------------------------------------------- Paper: Relation Functions
 
     def add_author_to_paper(self, paper_key, author_key):
-        parameter = locals()
-        return self.execute(True, self.__add_author_to_paper, parameter)
+        return self.execute(True, self.__add_author_to_paper, paper_key=paper_key, author_key=author_key)
 
     def add_citation_to_paper(self, paper_key, citation_key):
-        parameter = locals()
-        return self.execute(True, self.__add_citation_to_paper, parameter)
+        return self.execute(True, self.__add_citation_to_paper, paper_key=paper_key, citation_key=citation_key)
 
     def add_tag_to_paper(self, paper_key, tag_key):
         if isinstance(tag_key, str):
             tag_key = self.get_tag_key(tag_key)
-        parameter = locals()
-        return self.execute(True, self.__add_tag_to_paper, parameter)
+        return self.execute(True, self.__add_tag_to_paper, paper_key=paper_key, tag_key=tag_key)
 
     def add_pdf_to_paper(self, paper_key, pdf_path=None):
-        parameter = locals()
-        return self.execute(True, self.__add_pdf_to_paper, parameter)
+        return self.execute(True, self.__add_pdf_to_paper, paper_key=paper_key, pdf_path=pdf_path)
 
     # ---------------------------------------------------------------
     # ---------------------------------------------- Tag: Functions
     # ---------------------------------------------------------------
 
+    def list_tags(self):
+        return self.execute(True, self.__list_tags)
+
     def add_tag(self, name):
-        parameter = locals()
-        self.execute(True, self.__add_tag, parameter)
+        self.execute(True, self.__add_tag, name=name)
         return self.get_tag_key(name)
 
-    def list_tags(self):
-        parameter = locals()
-        return self.execute(True, self.__list_tags, parameter)
-
-    def tag_to_dict(self, tag_key, session=True):
-        parameter = locals()
-        return self.execute(True, self.__tag_to_dict, parameter)
+    def tag_to_dict(self, tag_key):
+        parameter = DBManager.clean_parameter(locals())
+        return self.execute(True, self.__tag_to_dict, tag_key=tag_key)
 
     # ---------------------------------------------- Venue: Get Functions
 
     def get_tag(self, tag_key):
-        parameter = locals()
-        parameter["as_dict"] = True
-        return self.execute(True, self.__get_tag, parameter)
+        return self.execute(True, self.__get_tag, tag_key=tag_key, as_dict=True)
 
     def get_tag_key(self, name):
-        parameter = locals()
-        return self.execute(True, self.__get_tag_key, parameter)
+        return self.execute(True, self.__get_tag_key, name=name)
 
     # ---------------------------------------------------------------
     # ---------------------------------------------- Venue: Functions
     # ---------------------------------------------------------------
 
     def list_venues(self):
-        parameter = locals()
-        return self.execute(True, self.__list_venues, parameter)
+        return self.execute(True, self.__list_venues)
 
     def add_venue(self, name):
-        parameter = locals()
-        self.execute(True, self.__add_venue, parameter)
+        self.execute(True, self.__add_venue, name=name)
         return self.get_venue_key(name)
 
-    def venue_to_dict(self, venue_key, session=True):
-        parameter = locals()
-        return self.execute(True, self.__venue_to_dict, parameter)
+    def venue_to_dict(self, venue_key):
+        return self.execute(True, self.__venue_to_dict, venue_key=venue_key)
 
     # ---------------------------------------------- Venue: Get Functions
 
     def get_venue(self, venue_key):
-        parameter = locals()
-        parameter["as_dict"] = True
-        return self.execute(True, self.__get_venue, parameter)
+        return self.execute(True, self.__get_venue, venue_key=venue_key, as_dict=True)
 
     def get_venue_key(self, name):
-        parameter = locals()
-        return self.execute(True, self.__get_venue_key, parameter)
+        return self.execute(True, self.__get_venue_key, name=name)
 
     # ---------------------------------------------- Venue: Relation Functions
 
     def add_paper_to_venue(self, venue_key, paper_key):
-        parameter = locals()
-        return self.execute(True, self.__add_paper_to_venue, parameter)
+        return self.execute(True, self.__add_paper_to_venue, venue_key=venue_key, paper_key=paper_key)
 
 
 
