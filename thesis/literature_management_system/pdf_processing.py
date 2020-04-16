@@ -5,6 +5,10 @@ import pyocr
 import pyocr.builders
 import io
 import re
+import os
+from subprocess import run, PIPE
+import json
+
 
 class PDFScorer:
 
@@ -93,3 +97,35 @@ class PDFScorer:
         for k in keywords:
             count[k] = text.count(k)
         return count
+
+    def anystyle(self, command, inp):
+        path = os.path.join("anystyle.txt")
+        path = os.path.abspath(path)
+        with open(path, "w") as f:
+            f.write(inp)
+        try:
+            result = run("anystyle {0} {1}".format(command, path),
+                         shell=True, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            result = json.loads(result.stdout)
+        except Exception:
+            result = None
+        finally:
+            os.remove(path)
+        return result
+
+    def extract_bib(self, pages=None):
+        raw_text = self.get_raw_text(pages)
+        result_bib = self.anystyle("find", raw_text)
+        bib = []
+        if result_bib is not None:
+            for i, ref in enumerate(result_bib):
+                try:
+                    title = ref["title"][0]
+                except KeyError:
+                    title = str(i)
+                try:
+                    date = ref["date"][0]
+                except KeyError:
+                    data = str(i)
+                bib.append((title, date))
+        return bib

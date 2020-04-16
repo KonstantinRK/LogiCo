@@ -131,7 +131,8 @@ class StringClassifier:
 
     @staticmethod
     def strong_trivial_model(values):
-        if values[0] > 0.90 and values[1] > 0.90 and values[2] > 0.90 and values[3] > 0.90:
+        check = int(values[0] > 0.90) + int(values[1] > 0.90) + int(values[2] > 0.90) + int(values[3] > 0.90)
+        if check > 1:
             return True
         else:
             return False

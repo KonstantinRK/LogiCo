@@ -50,39 +50,6 @@ class PaperMeta:
             return author
 
     @staticmethod
-    def __get_pdf_url_scholar(scholar_obj):
-        urls = PaperMeta.__get_field(scholar_obj, "eprint")
-        if urls is not None:
-            urls = [i[0] if type(i) is list else i for i in urls]
-            for i in urls:
-                if ".pdf" in i:
-                    return i
-            for i in urls:
-                if "scholar.google.com" in i:
-                    x = myscholarly._get_page(i)
-                    soup = BeautifulSoup(x, "html.parser")
-                    data = soup.findAll("script")[0]
-                    return re.findall(r"'(.*?)'", data.text)[0]
-            if len(urls) > 0:
-                return urls[0]
-        return None
-
-    @staticmethod
-    def __get_pdf_url_other(inp_doc, base_url, keyword=None):
-        if not bool(BeautifulSoup(inp_doc, "html.parser").find()):
-            return inp_doc
-        soup = BeautifulSoup(inp_doc, "html.parser")
-        pdf_links = []
-        for i in soup.find_all("a"):
-            if ".pdf" in i.get("href"):
-                pdf_links.append(i.get("href"))
-        if len(pdf_links) > 0:
-            return PaperMeta.__validate_url_results(pdf_links, keyword)
-        else:
-            return None
-
-
-    @staticmethod
     def __get_authors_crossref(crossref_obj):
         authors_meta = PaperMeta.__get_field(crossref_obj, "author")
         authors = []
@@ -145,18 +112,10 @@ class PaperMeta:
             return None
         return first, itertools.chain([first], iterable)
 
-
-    def __init__(self, mail_to=None, classifier=None, temp_path=None,
-                 default_meta_name="meta.json", default_pdf_name="paper.pdf", break_length=30, inp=True):
+    def __init__(self, mail_to=None, classifier=None, inp=True, scholar_break_length=30):
         self.inp = inp
         self.mail_to = mail_to
-        self.break_length = break_length
-
-        self.default_meta_name = default_meta_name
-        self.default_pdf_name = default_pdf_name
-        self.temp_path = temp_path
-        if self.temp_path is None:
-            self.temp_path = os.path.join("temp", "api")
+        self.break_length = scholar_break_length
 
         self.classifier = classifier
         if self.classifier is None:
@@ -173,10 +132,8 @@ class PaperMeta:
         self.paper_type = None
         self.venue = None
         self.bib = None
-        self.pdf = None
 
         self.bib_access = None
-        self.pdf_access = None
         self.crossref_meta_access = None
         self.scholar_meta_access = None
 
@@ -273,19 +230,10 @@ class PaperMeta:
         self.paper_type = None
         self.venue = None
         self.bib = None
-        self.pdf = None
 
         self.bib_access = None
-        self.pdf_access = None
         self.crossref_meta_access = None
         self.scholar_meta_access = None
-
-        if os.path.exists(self.temp_path):
-            if len(os.listdir(self.temp_path)) > 0:
-                shutil.rmtree(self.temp_path)
-                os.makedirs(self.temp_path)
-        else:
-            os.makedirs(self.temp_path)
 
     def get_meta_dic(self):
         meta_dic = {
@@ -318,12 +266,9 @@ class PaperMeta:
         except TypeError:
             self.crossref_meta = None
             return None
-
         count = 0
-        # print(keyword)
         for i in result:
             title = self.__get_title_crossref(i)
-            # print("   ", self.classifier.equal(keyword, title), self.classifier.equal_array(keyword, title), title)
             if title is not None and self.classifier.equal(keyword, title):
                 self.crossref_meta = i
                 count += 1
@@ -340,10 +285,6 @@ class PaperMeta:
         result = self.peek(myscholarly.search_pubs_query(request))
         if result is None:
             print("DETECTED")
-            n = 30
-            for i in range(n):
-                print(n-i)
-                time.sleep(60)
             result = self.peek(myscholarly.search_pubs_query(request))
             if result is None:
                 return None
@@ -413,101 +354,37 @@ class PaperMeta:
         if self.venue is None and self.crossref_meta is not None:
             self.venue = self.__get_venue_crossref(self.crossref_meta)
 
-    def load_bib(self, load_from_pdf=True, safe_meta=False, safe_pdf=True):
+    def load_bib(self, safe_meta=False):
         bib = None
-        if self.bib_access is None:
-            if self.crossref_meta is not None:
-                references = self.__get_field(self.crossref_meta, "reference")
-                if references is not None:
-                    bib = []
-                    for i, ref in enumerate(references):
-                        title = None
-                        doi = None
+        if self.bib_access is None and self.crossref_meta is not None:
+            references = self.__get_field(self.crossref_meta, "reference")
+            if references is not None:
+                bib = []
+                for i, ref in enumerate(references):
+                    title = None
+                    doi = None
 
-                        if ref.get("unstructured", None) is not None:
-                            title = self.anystyle("parse", ref["unstructured"])
-                            try:
-                                title = title[0]["title"][0]
-                                if safe_meta and self.inp:
-                                    title = self.__check_title(ref, title, i)
-                            except KeyError:
-                                if self.inp:
-                                    title = self.__check_title(ref["unstructured"], title, i)
-                                else:
-                                    title = str(i)
-                        if ref.get("DOI", None) is not None:
-                            doi = ref["DOI"]
-                        bib.append({"doi": doi, "title": title})
+                    if ref.get("unstructured", None) is not None:
+                        title = self.anystyle("parse", ref["unstructured"])
+                        try:
+                            title = title[0]["title"][0]
+                            if safe_meta and self.inp:
+                                title = self.__check_title(ref, title, i)
+                        except KeyError:
+                            if self.inp:
+                                title = self.__check_title(ref["unstructured"], title, i)
+                            else:
+                                title = str(i)
+                    if ref.get("DOI", None) is not None:
+                        doi = ref["DOI"]
+                    bib.append({"doi": doi, "title": title})
 
-                elif self.pdf is not None and load_from_pdf:
-                    pdf_extract = PDFScorer(self.pdf)
-                    raw_text = pdf_extract.get_raw_text()
-                    result_bib = self.anystyle("find", raw_text)
-
-                    bib = []
-                    if result_bib is not None:
-                        for i, ref in enumerate(result_bib):
-                            try:
-                                title = ref["title"][0]
-                                if safe_pdf and self.inp:
-                                    title = self.__check_title(ref, title)
-                            except KeyError:
-                                if self.inp and safe_pdf:
-                                    title = self.__check_title(ref, "??")
-                                else:
-                                    title = str(i)
-                            bib.append({"doi": None, "title": title})
             self.bib = bib
         if self.bib is None:
             self.bib_access = False
         else:
             self.bib_access = True
 
-    def check_pdf(self):
-        if self.pdf is not None:
-            with open(os.path.join(self.temp_path, self.default_pdf_name), "rb") as f:
-                doc = f.read()
-            check = self.__get_pdf_url_other(doc, self.title)
-            if check is None:
-                self.pdf = None
-            elif doc != check:
-                url = check
-                session = requests.Session()
-                with open(os.path.join(self.temp_path, self.default_pdf_name), "wb") as f:
-                    file = session.get(url, headers=_HEADERS)
-                    f.write(file.content)
-                    self.pdf = os.path.join(self.temp_path, self.default_pdf_name)
-
-    def load_pdf(self, name=None, doi=None, pdf=None):
-        if self.pdf_access is None:
-            if pdf is not None:
-                shutil.copy(pdf, os.path.join(self.temp_path, self.default_pdf_name))
-                self.pdf = os.path.join(self.temp_path, self.default_pdf_name)
-            else:
-                self.load_scholar_meta_from_query(name, doi)
-                self.pdf = None
-                if self.scholar_meta is not None:
-                    url = self.__get_pdf_url_scholar(self.scholar_meta)
-
-                    if url is not None:
-                        session = requests.Session()
-                        with open(os.path.join(self.temp_path, self.default_pdf_name), "wb") as f:
-                            file = session.get(url, headers=_HEADERS)
-                            doc = file.content
-                            try:
-                                dec_url = doc.decode("utf-8")
-                                if not bool(BeautifulSoup(dec_url, "html.parser").find()):
-                                    f.write(doc)
-                                    self.pdf = os.path.join(self.temp_path, self.default_pdf_name)
-                            except UnicodeDecodeError:
-                                f.write(doc)
-                                self.pdf = os.path.join(self.temp_path, self.default_pdf_name)
-        if self.pdf is None:
-            # print("False |", self.title)
-            self.pdf_access = False
-        else:
-            # print("True |", self.title)
-            self.pdf_access = True
 
     def load_meta(self):
         self.load_doi()
@@ -562,22 +439,15 @@ class PaperMeta:
             elif name is not None:
                 self.query_scholar(name, author)
 
-    def load_paper_from_input(self, crossref_meta, scholar_meta=None, pdf=None, reset=True):
+    def load_paper_from_input(self, crossref_meta, scholar_meta=None, reset=True):
         if reset:
             self.reset()
         self.crossref_meta = crossref_meta
         self.scholar_meta = scholar_meta
-        self.pdf = os.path.join(self.temp_path, self.default_pdf_name)
-        if os.path.exists(self.pdf):
-            os.remove(self.pdf)
-        if pdf is not None:
-            shutil.copy(pdf, self.pdf)
-        else:
-            self.pdf = None
         self.load_meta()
 
     def anystyle(self, command, inp):
-        path = os.path.join(self.temp_path, "anystyle.txt")
+        path = os.path.join("anystyle.txt")
         path = os.path.abspath(path)
         with open(path, "w") as f:
             f.write(inp)
@@ -587,4 +457,8 @@ class PaperMeta:
             result = json.loads(result.stdout)
         except Exception:
             result = None
+        finally:
+            os.remove(path)
         return result
+
+

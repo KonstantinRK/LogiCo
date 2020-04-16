@@ -1,8 +1,8 @@
 from database import *
 import os
 from string_processing import StringClassifier
-
-
+from web_apis import PaperMeta
+import json
 class DBManager:
 
     @staticmethod
@@ -11,14 +11,16 @@ class DBManager:
             string = string.strip().lower()
         return string
 
-    def __init__(self, download_dir="/Users/krk/Downloads", name='sqlite:///PaperDB.db'):
+    def __init__(self, download_dir="/Users/krk/Downloads", name='sqlite:///PaperDB.db',
+                 string_classifier=None, web_api=None):
         self.download_dir = download_dir
         engine = create_engine(name, echo=False)
         Base.metadata.create_all(engine)
         self.Session = sessionmaker(bind=engine)
         self.session = None
         self.archive_path = "archive"
-        self.str_classifier = StringClassifier()
+        self.str_classifier = StringClassifier() if string_classifier is None else string_classifier
+        self.web_api = web_api
         if not os.path.exists(self.archive_path):
             os.mkdir(self.archive_path)
 
@@ -116,19 +118,27 @@ class DBManager:
     # ---------------------------------------------- Paper: Functions
     # ---------------------------------------------------------------
 
-    def __list_papers(self, tags=None, authors=None, not_tags=None, invert=False, relevant=None, as_dict=False):
-
+    def __list_papers(self, tags=None, authors=None, not_tags=None, invert=False,
+                      start_year=None, end_year=None, relevant=None, access=None, as_dict=False):
         q = self.session.query(Paper.key)
         if tags is not None or not_tags is not None:
             q = q.join(tag_table).join(Tag)
             if tags is not None:
                 q = q.filter(Tag.key.in_(tags))
             if not_tags is not None:
-                q = q.filter(~ Tag.key.in_(not_tags))
+                q2 = self.session.query(Paper.key).join(tag_table).join(Tag).filter(Tag.key.in_(not_tags))
+                q = q.filter(~Paper.key.in_(q2))
         if authors is not None:
             q = q.join(authorship_table).join(Author).filter(Author.key.in_(tags))
         if relevant is not None:
             q = q.filter(Paper.relevant == relevant)
+        if access is not None:
+            q = q.filter(Paper.access == access)
+
+        if start_year is not None:
+            q = q.filter(Paper.year >= start_year)
+        if end_year is not None:
+            q = q.filter(Paper.year <= end_year)
 
         if invert:
             q = self.session.query(Paper).filter(~Paper.key.in_(q))
@@ -148,7 +158,7 @@ class DBManager:
         paper = self.session.query(Paper).filter(Paper.key == paper_key).one()
         self.session.delete(paper)
 
-    def __search_paper(self, name, author_name=None, model="default"):
+    def __search_paper(self, name, author_name=None, model="default", print_values=False):
         name = DBManager.__clean_string(name)
         if author_name is not None:
             author_name = DBManager.__clean_string(author_name)
@@ -169,8 +179,12 @@ class DBManager:
             paper = self.session.query(Paper).all()
         result = []
         for i in paper:
+
             if self.str_classifier.equal(i.name, name, model=model):
-                result.append((i.key, i.name))
+                if not (" " in name and " " not in i.name):
+                    if print_values:
+                        print(i.name, self.str_classifier.equal_array(i.name, name))
+                    result.append((i.key, i.name))
         return result
 
     def __paper_to_dict(self, paper_key):
@@ -195,7 +209,7 @@ class DBManager:
         else:
             result = self.session.query(Paper).filter(Paper.name == name).one()
         if as_dict:
-            result.transform_to_dict()
+            result = result.transform_to_dict()
         return result
 
     def __get_paper_authors(self, paper_key):
@@ -300,6 +314,57 @@ class DBManager:
         tag = self.__get_tag(tag_key=tag_key)
         paper.tags.append(tag)
 
+    # ---------------------------------------------- Paper: Set Functions
+
+    def __fill_paper_from_webapi(self, paper_key):
+        if self.web_api is not None:
+            paper = self.__get_paper(paper_key=paper_key)
+            self.web_api.load_paper_from_query(paper.name, load_scholar=False)
+            print("Load Bib")
+            self.web_api.load_bib()
+            meta_dic = self.web_api.get_meta_dic()
+            meta_dic["title"] = meta_dic["title"].lower().strip()
+            if meta_dic["venue"] is not None:
+                try:
+                    venue = self.__get_venue(meta_dic["venue"])
+                except Exception:
+                    self.__add_venue(meta_dic["venue"])
+                    venue = self.__get_venue(meta_dic["venue"])
+                venue.papers.append(paper)
+
+            authors = []
+            for i in meta_dic["authors"]:
+                try:
+                    author = self.__get_author(name=i["name"], surname=i["surname"])
+                except Exception:
+                    self.__add_author(name=i["name"], surname=i["surname"])
+                    author = self.__get_author(name=i["name"], surname=i["surname"])
+                authors.append(author)
+            for i in authors:
+                paper.authors.append(i)
+
+            try:
+                tag = self.__get_tag("auto_filled")
+            except Exception:
+                self.__add_tag("auto_filled")
+                tag = self.__get_tag("auto_filled")
+            paper.tags.append(tag)
+
+            paper.doi = meta_dic["doi"]
+            paper.year = meta_dic["year"]
+            paper.month = meta_dic["month"]
+            paper.json = json.dumps(meta_dic)
+
+            if paper.name != meta_dic["title"]:
+                print("Rename: '{0}' -> '{1}'".format(paper.name, meta_dic["title"]))
+                inp = input("y / [n]: ")
+                if inp.strip() == "y":
+                    paper.name = meta_dic["title"]
+            print("#"*100)
+            print("")
+            print("")
+            return meta_dic
+
     # ---------------------------------------------------------------
     # ---------------------------------------------- Tag: Functions
     # ---------------------------------------------------------------
@@ -328,7 +393,7 @@ class DBManager:
             q = self.session.query(Tag).filter(Tag.name == name)
         result = list(q)[-1]
         if as_dict:
-            result.transform_to_dict()
+            result = result.transform_to_dict()
         return result
 
     def __get_tag_key(self, name):
@@ -373,7 +438,7 @@ class DBManager:
             q = self.session.query(Venue).filter(Venue.name == name)
         result = q.one()
         if as_dict:
-            result.transform_to_dict()
+            result = result.transform_to_dict()
         return result
 
     # ---------------------------------------------- Venue: Relation Functions
@@ -415,7 +480,8 @@ class DBManager:
     # ---------------------------------------------- Paper: Functions
     # ---------------------------------------------------------------
 
-    def list_papers(self, tags=None, authors=None, not_tags=None, invert=False, names=True, relevant=None):
+    def list_papers(self, tags=None, authors=None, not_tags=None, invert=False,
+                    start_year=None, end_year=None, relevant=None, access=None,names=True):
         if tags is not None:
             if not isinstance(tags, list):
                 tags = [tags]
@@ -428,7 +494,8 @@ class DBManager:
         if not isinstance(authors, list) and authors is not None:
             authors = [authors]
         result = self.execute(True, self.__list_papers, tags=tags, authors=authors, not_tags=not_tags,
-                              invert=invert, relevant=relevant, as_dict=True)
+                              invert=invert, start_year=start_year, end_year=end_year,
+                              relevant=relevant, access=access, as_dict=True)
         if names:
             result = [i["name"] for i in result]
         return result
@@ -449,8 +516,9 @@ class DBManager:
     def delete_paper(self, paper_key):
         return self.execute(True, self.__delete_paper, paper_key=paper_key)
 
-    def search_paper(self, name, author_name=None, model="default"):
-        return self.execute(True, self.__search_paper, name=name, author_name=author_name, model=model)
+    def search_paper(self, name, author_name=None, model="default", print_values=False):
+        return self.execute(True, self.__search_paper, name=name, author_name=author_name, model=model,
+                            print_values=print_values)
 
     def paper_to_dict(self, paper_key):
         return self.execute(True, self.__paper_to_dict, paper_key=paper_key)
@@ -520,6 +588,11 @@ class DBManager:
 
     def add_pdf_to_paper(self, paper_key, pdf_path=None):
         return self.execute(True, self.__add_pdf_to_paper, paper_key=paper_key, pdf_path=pdf_path)
+
+    # ---------------------------------------------- Paper: Set Functions
+
+    def fill_paper_from_webapi(self, paper_key):
+        return self.execute(True, self.__fill_paper_from_webapi, paper_key=paper_key)
 
     # ---------------------------------------------------------------
     # ---------------------------------------------- Tag: Functions
