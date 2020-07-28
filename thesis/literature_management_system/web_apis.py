@@ -269,7 +269,7 @@ class PaperMeta:
         count = 0
         for i in result:
             title = self.__get_title_crossref(i)
-            if title is not None and self.classifier.equal(keyword, title):
+            if title is not None and self.classifier.equal(keyword, title, model="strong"):
                 self.crossref_meta = i
                 count += 1
         if count == 0:

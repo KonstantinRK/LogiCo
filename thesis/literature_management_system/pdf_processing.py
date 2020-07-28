@@ -113,19 +113,23 @@ class PDFScorer:
             os.remove(path)
         return result
 
-    def extract_bib(self, pages=None):
-        raw_text = self.get_raw_text(pages)
-        result_bib = self.anystyle("find", raw_text)
+    def extract_bib(self, pages=None, override=None):
+        if override is not None:
+            raw_text = override
+            result_bib = self.anystyle("parse", raw_text)
+        else:
+            raw_text = self.get_raw_text(pages)
+            result_bib = self.anystyle("find", raw_text)
         bib = []
         if result_bib is not None:
             for i, ref in enumerate(result_bib):
                 try:
                     title = ref["title"][0]
                 except KeyError:
-                    title = str(i)
+                    title = None
                 try:
                     date = ref["date"][0]
                 except KeyError:
-                    data = str(i)
+                    date = None
                 bib.append((title, date))
         return bib
