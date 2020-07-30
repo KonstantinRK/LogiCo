@@ -131,54 +131,54 @@
 \newcommand{\crel}{\mathcal{E}}
 \newcommand{\cbinfoos}{\mathbb{F}_{\mathbb{B}}}
 
-\newcommand{\butfor}{\texttt{But-For}}
-\newcommand{\crf}{\texttt{CRF}}
-\newcommand{\inus}{\texttt{INUS}}
-\newcommand{\ness}{\texttt{NESS}}
-\newcommand{\hitch}{\texttt{Hitch-01}}
-\newcommand{\hpo}{\texttt{HP-01}}
-\newcommand{\wood}{\texttt{Wood-03}}
-\newcommand{\hallp}{\texttt{Hall-04p}}
-\newcommand{\halld}{\texttt{Hall-04d}}
-\newcommand{\hpu}{\texttt{HP-05}}
-\newcommand{\hall}{\texttt{Hall-07}}
-\newcommand{\hpud}{\texttt{HP-05d}}
-\newcommand{\simple}{\texttt{Simple}}
-\newcommand{\simplej}{\texttt{SimpleJ}}
-\newcommand{\pap}{\texttt{PAP}}
-\newcommand{\bvo}{\texttt{BV-11}}
-\newcommand{\bvu}{\texttt{BV-12}}
-\newcommand{\breg}{\texttt{BReg}}
-\newcommand{\ptc}{\texttt{PTC}}
-\newcommand{\hpm}{\texttt{HP-15 }}
-\newcommand{\hhcp}{\texttt{HH-CP }}
-\newcommand{\hpuc}{\texttt{HP-05c }}
-\newcommand{\hpup}{\texttt{HP-05p}}
-\newcommand{\hmm}{\texttt{HmM}}
-\newcommand{\mbm}{\texttt{MbM}}
-\newcommand{\bvcm}{\texttt{BV-CM}}
-\newcommand{\bci}{\texttt{BCI}}
-\newcommand{\scacc}{\texttt{SC-ACC}}
-\newcommand{\pcps}{\texttt{PCPS}}
-\newcommand{\at}{\texttt{AT}}
-\newcommand{\sccf}{\texttt{SC-CF}}
-\newcommand{\caec}{\texttt{CAEC}}
+\newcommand{\butfor}{\texttt{But-For}\,}
+\newcommand{\crf}{\texttt{CRF}\,}
+\newcommand{\inus}{\texttt{INUS}\,}
+\newcommand{\ness}{\texttt{NESS}\,}
+\newcommand{\hitch}{\texttt{Hitch-01}\,}
+\newcommand{\hpo}{\texttt{HP-01}\,}
+\newcommand{\wood}{\texttt{Wood-03}\,}
+\newcommand{\hallp}{\texttt{Hall-04p}\,}
+\newcommand{\halld}{\texttt{Hall-04d}\,}
+\newcommand{\hpu}{\texttt{HP-05}\,}
+\newcommand{\hall}{\texttt{Hall-07}\,}
+\newcommand{\hpud}{\texttt{HP-05d}\,}
+\newcommand{\simple}{\texttt{Simple}\,}
+\newcommand{\simplej}{\texttt{SimpleJ}\,}
+\newcommand{\pap}{\texttt{PAP}\,}
+\newcommand{\bvo}{\texttt{BV-11}\,}
+\newcommand{\bvu}{\texttt{BV-12}\,}
+\newcommand{\breg}{\texttt{BReg}\,}
+\newcommand{\ptc}{\texttt{PTC}\,}
+\newcommand{\hpm}{\texttt{HP-15}\,}
+\newcommand{\hhcp}{\texttt{HH-CP}\,}
+\newcommand{\hpuc}{\texttt{HP-05c}\,}
+\newcommand{\hpup}{\texttt{HP-05p}\,}
+\newcommand{\hmm}{\texttt{HmM}\,}
+\newcommand{\mbm}{\texttt{MbM}\,}
+\newcommand{\bvcm}{\texttt{BV-CM}\,}
+\newcommand{\bci}{\texttt{BCI}\,}
+\newcommand{\scacc}{\texttt{SC-ACC}\,}
+\newcommand{\pcps}{\texttt{PCPS}\,}
+\newcommand{\at}{\texttt{AT}\,}
+\newcommand{\sccf}{\texttt{SC-CF}\,}
+\newcommand{\caec}{\texttt{CAEC}\,}
 
 
-\newcommand{\nl}{\texttt{NL}}
-\newcommand{\cp}{\texttt{CP}}
-\newcommand{\cpp}{\texttt{CP2}}
-\newcommand{\atsc}{\texttt{SC}}
-\newcommand{\al}{\texttt{AL}}
-\newcommand{\ct}{\texttt{CT}}
-\newcommand{\fca}{\texttt{FCA}}
-\newcommand{\fol}{\texttt{FOL}}
+\newcommand{\nl}{\texttt{NL}\,}
+\newcommand{\cp}{\texttt{CP}\,}
+\newcommand{\cpp}{\texttt{CP2}\,}
+\newcommand{\atsc}{\texttt{SC}\,}
+\newcommand{\al}{\texttt{AL}\,}
+\newcommand{\ct}{\texttt{CT}\,}
+\newcommand{\fca}{\texttt{FCA}\,}
+\newcommand{\fol}{\texttt{FOL}\,}
 
-\newcommand{\cm}{\texttt{CM}}
-\newcommand{\cmn}{\texttt{CM+N}}
-\newcommand{\cmp}{\texttt{CM+P}}
-\newcommand{\cmd}{\texttt{CM+D}}
-\newcommand{\cmt}{\texttt{CM+T}}
+\newcommand{\cm}{\texttt{CM}\,}
+\newcommand{\cmn}{\texttt{CM+N}\,}
+\newcommand{\cmp}{\texttt{CM+P}\,}
+\newcommand{\cmd}{\texttt{CM+D}\,}
+\newcommand{\cmt}{\texttt{CM+T}\,}
 
 
 
@@ -210,24 +210,6 @@ A directed graph $G$ is the pair $(V,E)$ with $V$ being a set of vertices and $E
 
 
 \paragraph{Centralities}
-To asses the importance of a vertex in a graph, it is common to fall back on a set of measures called centrality measures.
-In general, those measures are used to rank vertices based on some notion of importance. In particular, they can be used to understand diffusion processes, assess an individuals risk of infection or explain the influence of a 
-person in a social network \parencite{bloch2019centrality}. According to \parencite{del2011centrality} Degree, Closeness and Betweenness centralities are the most popular ones. Additionally, there exists a family of centralities based on the rooted in the field of spectral graph theory (see \parencite{spielman2012spectral}) using eigenvalues and eigenvectors, those include the Eigenvector Centrality, Alpha Centrality, Page Rank and Katz-Bonacich Centrality  \parencite{bloch2019centrality}. 
-The following is taken from \parencite{segarra2015stability,del2011centrality,bloch2019centrality,bonacich2001eigenvector,page1999pagerank}.
-
-\emph{Degree centrality} is a local measure of importance based on the degree of a vertex. In the case of a weighted graph, the weighted degree of a vertex is taken for this measurement, thus implying that the weight of an edge must reflect some notion of similarity. That is, a higher weight implies a stronger connection, e.g.\ number of interactions. If one is confronted with an directed graph, the degree centrality dissolves into an in- and out-degree centrality.
-Although it can be used to assess the popularity of a vertex or the interaction frequency of a vertex, due to its locality it neglects the remaining structure of the network. 
-
-\emph{Closeness centrality }is constructed around the sum of all shortest path lengths. Hence, it is a measure for assessing the importance of a vertex based on how quick such a vertex can reach every other vertex. 
-Moreover, this implies that edge weights must indicated a notion of dissimilarity, e.g.\ distance between vertices. Unfortunately, this measure assumes a graph to be strongly connected. Hence, it is not suitable for directed graphs in general.  
-
-\emph{Betweenness centrality} gives higher values to vertices that are part of many shortest paths between pairs of vertices. Meaning it attempts to assess the importance of a vertex based how vital a vertex is for the flow of information between the other vertices in the graph. As this centrality builds upon the notion of a shortest path, it requires the weights of a graph to represent a dissimilarity between vertices. However, a benefit of this centrality is that it is suitable for both directed and undirected graphs
-
-\emph{Eigenvector centrality} is similar to the degree centrality, as it assess the importance of a vertex based on the number of neighbours, thus it requires weights to denote similarities. However, it differs in the valuation of those neighbours, valuing vertices based in the importance of vertices in its neighbourhood. That is, the Eigenvector centrality is computed by assuming that the centrality of vertex is proportional to the sum of centrality of the vertex's neighbours. Hence, it is a self-referential process. Unfortunately, common implementations requires graphs to be undirected and connected.
-
-
- \emph{Alpha centrality} is a generalisation of the Eigenvector centrality for directed graphs. The idea behind this centrality is that it assumes that a vertex has some exogenously defined value. \emph{Katz-Bonacich centrality} generalises the Eigenvector centrality by reducing the importance of distant vertices. 
-\emph{Page Rank} revitalises the centrality score passed on by a vertex, based on the number if neighbours. Hence, a vertex having a directed edge to an important vertex must not necessarily have a high importance itself, e.g.\ a webpage linking to an important webpage must not necessarily be important itself. Furthermore, to ensure sensible results in directed graphs, dead ends are avoided by jumping to a random vertex.
 
 
 
@@ -393,56 +375,60 @@ Whereas, the value $x$ of $X$ is an actual cause for the actual value $y$ of $Y$
 It is vital to build an adequate repository of papers upon which this survey shall draw upon. Inherent in this construction is the tension between scope and depth, as all else equal, one compromises the other. Positioning a survey on this spectrum in a justifiable manner is rather difficult. To alleviate this tension, this section is concerned with providing a broad overview over a wide arrange of formalisms, while Chapter \ref{ch:comp_causality} discusses and analysis a narrow selection of those formalisms. The objectives of this section are accomplished by systematically constructing a literature database.
 This database is analysed to obtain a structural overview of the literature, allowing for an educated selection of relevant formalisms for the subsequent discussion in Chapter \ref{ch:comp_causality}.
 
-\chapter{Structural Literature Review}
+\chapter{The Causation Literature Landscape: A rough Picture}
 
 \section{Methodology}
 \label{sec:methodology}
-
-The methodology underlying this systematic literature review employs a snowball search strategy to construct its set of relevant papers. 
-In general, according to \parencite{wohlin2014guidelines} any snowball search strategy should construct a start set and employ forward and backward snowballing at each iteration to construct the final set of papers. 
-Moreover, starting set should satisfied the following criteria.
+The methodology underlying this systematic literature review employs a snowball search strategy. 
+In general, according to \parencite{wohlin2014guidelines} any snowball search strategy should characterise an appropriate initial set of publications, i.e.\ the start set, which is then iteratively expanded by either forward or backward snowballing until a desirable final set of publications is obtained.
+Furthermore, starting set should satisfied the following criteria.
 \begin{itemize}
-\item The start set should cover a diversity of communities, especially if they may from independent cluster.
+\item The start set should cover a diversity of communities, to detect possible cluster.
 \item The number of papers in the start set should not be too small.
 \item The number of papers in the start set should not be too big.
 \item The start set should cover several different publishers, years and authors.
 \item The start set ought to be formulated from keywords (and their synonyms) in the research question.
 \end{itemize}
-Furthermore, using this start set the final set of papers is constructed iteratively by employing backward snowballing, i.e.\ for every unprocessed paper add all relevant references to the set of papers, and forward snowballing, i.e.\ for every unprocessed paper use Google Scholar to identify every relevant paper citing the current article \parencite{wohlin2014guidelines}. Using this as a template, the actual methodology is constructed according to the following objectives,
+Any snowball step, on a given set of publications consists of both backward and forward snowballing.
+The prior, adds all relevant references from all unprocessed publications to the set of publications. By contrast, the latter leverages modern technologies, such as \href{https://scholar.google.at/}{Google Scholar} to identify every relevant publication that references any unprocessed publication in the provided set \parencite{wohlin2014guidelines}.
+Using this as a template, the actual methodology is constructed as follows.
+
+
+
+\paragraph{Objectives} The snowball search should satisfy the following objectives.
 \begin{itemize}
 \item focus on token causality publications;
-\item focus on publications related to computer science and artificial intelligence;
-\item focus on publications emerging from the fields, logic, philosophy or law, i.e.\ avoid publications emerging from the machine learning community;
+\item focus primarily on publications related to computer science and artificial intelligence, with publications related to philosophy being of secondary priority;
+\item focus on publications emerging from the fields, computer science, logic, philosophy or law, i.e.\ avoid publications emerging from the machine learning community;
 \item focus on the recent literature, i.e.\ publications between 2010 and (early) 2020.
 \end{itemize}
 Being a snowball search, the growth rate of the publications to consider is exponential. Hence, to serve the outlined objectives it is vital to construct a \emph{starting set} that provides a sufficient strong directive.
 \bigskip
 
-\emph{Step 1:} Since one objective is to remain within the greater context of computer science and (symbolic) artificial intelligence, all articles from  
+\paragraph{Step 1:} Since one objective is to remain within the greater context of computer science and (symbolic) artificial intelligence, all articles from  
 \begin{itemize}
 \item \href{https://www.journals.elsevier.com/knowledge-based-systems}{Journal Knowledge-Bases Systems} (KBS)
 \item \href{https://www.journals.elsevier.com/artificial-intelligence}{Journal Artificial Intelligence} (AI)
 \item \href{https://www.springer.com/journal/10506}{Journal Artificial Intelligence and Law} (AI\&Law)
 \item \href{https://www.ijcai.org/}{International Joint Conferences on Artificial Intelligence Organization} (IJCAI)
 \end{itemize}
-that where publicised between 01.2017 and 3.2020 are considered. Focusing on such recent publications, should serve the recency bias established in the methodology's objectives. 
+that where published between 01.2017 and 3.2020 are considered. Focusing on such recent publications, should serve the recency bias established in the methodology's objectives. 
 
 \medskip
 
-Artificial Intelligence International Joint Conferences on Artificial Intelligence Organization
-\emph{Step 2:}  Anticipating the volume of publications, some computer aided preprocessing is required. Hence, the first necessary condition for being in the start set is 
+\paragraph{Step 2:}  Anticipating the volume of publications, some computer aided preprocessing is required. Hence, the first necessary condition for being in the start set is 
 \begin{itemize}
-\item  that its title contains a word starting with the string \emph{``caus''} or 
-\item  its abstract contains a word starting with the string \emph{``causal''}. 
+\item  that its title contains a string starting with the character sequence \emph{``caus''} or 
+\item  its abstract contains a string starting with the character sequence \emph{``causal''}. 
 \end{itemize}
 Let $\tpsetz$ be the set of all publications still under consideration after Step 2.
 \medskip
 
 
-\emph{Step 3:}  To focus on logic and rule based approaches, all paper that are deemed irrelevant under closer inspection or are inaccessible
-will be removed. The classification as relevant is done based on a list of soft criteria (only the first one is a strictly necessary). By satisfying positive criteria the publication increases its chance of being deemed relevant, satisfying negative ones decreases its chance.
+\paragraph{Step 3:}  To focus on logic and rule based approaches, all publications that are deemed irrelevant under closer inspection or are inaccessible
+will be removed. The classification as relevant is done based on a list of soft criteria (only the first one is strictly necessary). By satisfying positive criteria the publication increases its chance of being deemed relevant, satisfying negative ones decreases its chance.
 \begin{itemize}
-\item[+] Does the publication discuss causality? 
+\item[+] Does the publication discuss causality or any related concept, e.g.\ counterfactuals? 
 \item[+] Does the publication engage with the philosophical aspects of causality?
 \item[+] Does the publication try to formalise causality using logic (or another symbolic formalism)?
 \item[+] Does the publication's title explicitly mention logic and/or causality?
@@ -453,50 +439,69 @@ will be removed. The classification as relevant is done based on a list of soft 
 \end{itemize}
 Let the final start set be denoted with $\psetz$ and let $\npsetz:=\tpsetz \setminus \psetz $, i.e.\ all publications discarded in Step 3 that were deemed relevant in Step 2. 
 Using $\psetz$ the actual paper repository $\pset$ is constructed by using a varied combination of forward and backward snowballing steps.
-In general, for some $x \in \{ \mathit{+1}, \mathit{+1-1}, \mathit{+2}, \mathit{+2-1}, \mathit{-1}, \mathit{-2}\}$, let $\tpset_x$ be the set of all considered publications, then $\pset_x \subseteq \tpset_x$ is the set of all publications considered relevant and $\npset_x := \tpset_x \setminus \pset_x$ 
+Moreover, for some Step $x$,
+%$x \in \{ \mathit{+1}, \mathit{+1-1}, \mathit{+2}, \mathit{+2-1}, \mathit{-1}, \mathit{-2}\}$, l
+let $\tpset_x$ be the set of all publications obtained by snowballing on a previous set $\tpset_y$. Then $\pset_x \subseteq \tpset_x$ is the set of all publications considered relevant according to the criteria established in Step 3 and $\npset_x := \tpset_x \setminus \pset_x$ is the set of publications from $\tpset_x$ that are deemed irrelevant. 
 
 \begin{itemize}
-\item $\pset_1:= \psetz \cup \psetb$; $\tpsetb$ contains all publications that are not in $\psetz$, which were obtained by backwards snowballing on all accessible papers in $\psetz$; 
-\item $\pset_2:= \pset_1 \cup \psetbb$; $\tpsetbb$ contains all publications that are not in $\pset_1$, which were obtained by backwards snowballing on all accessible papers in $\psetb$ published after (and including) $2010$.
-\item $\pset_3:= \pset_2 \cup \psetf$; $\tpsetf$ contains all publications that are not in $\pset_2$, which were obtained by forwards snowballing\footnote{using Google Scholar on the 16.04.2020} on all papers in $\psetz$.
-\item $\pset_4:= \pset_3 \cup \psetfb$; $\tpsetfb$ contains all publications that are not in $\pset_3$, which were obtained by backwards snowballing on all papers in $\psetf$.
-\item $\pset_5:= \pset_4 \cup \psetff$; $\tpsetff$ contains all publications that are not in $\pset_4$, which were obtained by forwards snowballing on all papers in $\psetf$.
-\item $\pset:= \pset_5 \cup \psetffb$; $\tpsetffb$ contains all publications that are not in $\pset_5$, which were obtained by backwards snowballing on all papers in $\psetff$.
+\item $\pset_1:= \psetz \cup \psetb$; $\tpsetb$ contains all publications that are not in $\psetz$, which were obtained by backwards snowballing on all accessible articles in $\psetz$; 
+\item $\pset_2:= \pset_1 \cup \psetbb$; $\tpsetbb$ contains all publications that are not in $\pset_1$, which were obtained by backwards snowballing on all accessible articles in $\psetb$ published after (and including) $2010$.
+\item $\pset_3:= \pset_2 \cup \psetf$; $\tpsetf$ contains all publications that are not in $\pset_2$, which were obtained by forwards snowballing\footnote{using Google Scholar on the 16.04.2020} on all articles in $\psetz$.
+\item $\pset_4:= \pset_3 \cup \psetfb$; $\tpsetfb$ contains all publications that are not in $\pset_3$, which were obtained by backwards snowballing on all articles in $\psetf$.
+\item $\pset_5:= \pset_4 \cup \psetff$; $\tpsetff$ contains all publications that are not in $\pset_4$, which were obtained by forwards snowballing on all articles in $\psetf$.
+\item $\pset:= \pset_5 \cup \psetffb$; $\tpsetffb$ contains all publications that are not in $\pset_5$, which were obtained by backwards snowballing on all articles in $\psetff$.
 \end{itemize}
 % XXXX paperb vs publication straiten out.
+
+In an ideal world, the methodology would provide a perfectly reproducible algorithm that reliably and deterministically produces the same set of publications on each execution.
+Unfortunately, this property can not be satisfied by the constructed methodology, as any employment of forward snowballing introduces variability into the system. Considering the importance of forward snowballing to identify the most recent literature, foregoing the application of this tool in the construction of $\pset$ would not have been feasible. Having already parted with this desirable property, additional subjectivity, i.e. the soft categorisation of relevance and the removal of inaccessible publications, could be added without concerns.
 
 
 \subsection{Data Collection}
 
-Using the outlined methodology (see \ref{subsec:definition}) the following literature database was constructed. 
-In \emph{Step 1} one obtains a set containing $4223$\footnote{Journal Artificial Intelligence: $267$; Journal Artificial Intelligence and Law:  $60$; Journal Knowledge-Bases Systems: $1281$; International Joint Conferences on Artificial Intelligence Organization: $2615$} papers. Which is in \emph{Step 2} subsequently narrowed down to just $37$ papers.\footnote{\parencite{van2019separators,verheij2017proof,chen2019judicial,neil2019modelling,li2019context,lu2018mining,zhang2018collective,
+Using the outlined methodology the following literature database was constructed. 
+In Step 1 one obtains a set containing $4223$ publications\footnote{Journal Artificial Intelligence: $267$; Journal Artificial Intelligence and Law:  $60$; Journal Knowledge-Bases Systems: $1281$; International Joint Conferences on Artificial Intelligence Organization: $2615$}. 
+Which is in \emph{Step 2} subsequently narrowed down to just $37$ articles\parencite{van2019separators,verheij2017proof,chen2019judicial,neil2019modelling,li2019context,lu2018mining,zhang2018collective,
 constantinou2017towards,liang2017evaluation,zhang2017characterizing,mu2018measuring,kronegger2019backdoors,hyttinen2017core,
 zhang2017transfer,zhang2017causal,liu2017cause,summerville2017charda,zhang2016causal,albrecht2016exploiting,chai2018language,
 bochman2018actual,ibeling2018conditional,laurent2018counterfactual,chikahara2018causal,zhang2017achieving,backstrom2018novel,
 jaber2018graphical,sridhar2018scalable,wenjuan2018mixed,xu2019achieving,zhang2019asp,Cai2019CausalDW,Sridhar2019EstimatingCE,
-xie2019boosting,hassanzadeh2019answering,shankar2019three,Liepina2019ArguingAC}}
-Finally, after executing \emph{Step 3} one obtains the specified starting set containing Proof with and without probabilities \parencite{verheij2017proof}; Characterizing causal action theories and their implementations in answer set programming\footnote{Since \parencite{zhang2017characterizing} was not accessible ``Characterizing causal action theories and their implementations in answer set programming: Action languages b, c, and beyond" \parencite{zhang2015characterizing} will be used for the snowballing step.} \parencite{zhang2017characterizing}; Actual Causality in a Logical Setting \parencite{bochman2018actual}; On the conditional logic of simulation models \parencite{ibeling2018conditional}; Counterfactual Resimulation for Causal Analysis of Rule-Based Models \parencite{laurent2018counterfactual};  Scalable Probabilistic Causal Structure Discovery \parencite{sridhar2018scalable}; ASP-based discovery of semi-Markovian causal models under weaker assumptions \parencite{zhang2019asp} and Arguing about causes in law: a semi-formal framework for causal arguments \parencite{Liepina2019ArguingAC}
-Starting from the constructed $\psetz$, which contains $8$ relevant papers (out of $37$ closer candidates) one execute the snowballing process. During the construction of $\pset$, $872$ papers were considered out of which $294$ (around $34 \%$) were deemed relevant (for a detailed overview see Figure \ref{fig:pgraph-relevant_publications_per_step}).
+xie2019boosting,hassanzadeh2019answering,shankar2019three,Liepina2019ArguingAC}.
 
 
-\begin{figure}[h]
+Finally, after executing \emph{Step 3} one obtains the specified starting set containing $8$ articles. Namely,
+\begin{itemize}
+\item Proof with and without probabilities \parencite{verheij2017proof},
+\item Characterizing causal action theories and their implementations in answer set programming\footnote{Since \parencite{zhang2017characterizing} was not accessible ``Characterizing causal action theories and their implementations in answer set programming: Action languages b, c, and beyond" \parencite{zhang2015characterizing} will be used for the snowballing step. This departure from the methodology, is justified due to its initially high reprieved relevancy.}  \parencite{zhang2017characterizing},
+\item Actual Causality in a Logical Setting \parencite{bochman2018actual},
+\item On the conditional logic of simulation models \parencite{ibeling2018conditional},
+\item  Counterfactual Resimulation for Causal Analysis of Rule-Based Models \parencite{laurent2018counterfactual},
+\item Scalable Probabilistic Causal Structure Discovery \parencite{sridhar2018scalable},
+\item  ASP-based discovery of semi-Markovian causal models under weaker assumptions \parencite{zhang2019asp} and 
+\item Arguing about causes in law: a semi-formal framework for causal arguments \parencite{Liepina2019ArguingAC}.
+\end{itemize}
+
+Executing the described snowballing steps on the start set, one has to parse a total of $872$ publications. Out of which only $294$ (around $34 \%$) are categorised as relevant. The relationship between relevant and irrelevant publications at each setp of the process can be observed in Figure \ref{fig:pgraph-relevant_publications_per_step}.
+
+
+\begin{figure}[h!]
 \includegraphics[width=\textwidth]{relevant_publications_per_step.png}
 \caption{Number of publications contained in each $\pset_x$ for $x \in \{ \mathit{+1}, \mathit{+1-1}, \mathit{+2}, \mathit{+2-1}, \mathit{-1}, \mathit{-2}\}$}
 \label{fig:pgraph-relevant_publications_per_step}
 \end{figure}
 
 
+Although great effort was taken to make the data collection sufficiently accurate. Some mistakes were discovered the data collection was already completed.
+Firstly, there are two publications titled ``Causes and explanations: a structural-model approach: part i: causes'' by the same authors, i.e.\ \parencite{halpern2001causes} and \parencite{halpern2005causes}.
+During the data collection process those two publication were unfortunately conflated. Fortunately, the similarities between those two publications, the latter provides an updated to definition presented in the prior, relativise this mistake.
 
 \subsection{Database}
-
-The dataset constructed using this methodology will be made publicly available. Doing so does not only provide other researchers access to this snapshot of the literature, but also enhances transparency. Allowing for the detection of erroneous inferences and the identification of sloppy data collection. The data is stored in a \href{https://www.sqlite.org/index.html}{SQLite-database}. This database can store publications, authors, venues and tags. Its structure is depicted in figure XXX as an ER-diagram using Chen notation \parencite{chen1976entity}.
+\label{subsec:database}
+The dataset constructed using this methodology will be made publicly available. Doing so does not only provide other researchers access to this snapshot of the literature, but also enhances transparency. Allowing for the detection of erroneous inferences and the identification of sloppy data collection. The data are stored in a \href{https://www.sqlite.org/index.html}{SQLite-database}. This database can store publications, authors, venues and tags. Its structure is depicted in Figure \ref{fig:er-diagram-publication-db} as an ER-diagram using Chen notation \parencite{chen1976entity}.
 
 The table ``Venue'' stores platforms that publish research, e.g.\ journals such as AI or conferences such as IJCAI. This table is rather sparse, having only a column for the names of the venues and a column reserved for a \href{https://www.json.org/json-en.html}{JSON-string} for additional data. 
-
 Similar in structure is the ``Tag'' table. It's intended purpose is to store tags that can be used to further categorise publications, e.g.\ they are used to identify which publications were added to the database at which snowballing step.
-
 Slightly more complex is the ``Author'' table, which contains an additional column for surnames, as well as a column reserved for comments. 
-
 By far the most extensive one is the Table ``Paper''. 
 Firstly, it provides columns for basic information such as the title, the DOI, the publication year and month, as well as its bibtex sting.
 Moreover, it contains columns to track whether a publication was accessible and whether it is deemed relevant. 
@@ -510,7 +515,7 @@ Secondly, the ``Author''- and the ``Paper''-table are in an m:n-relation. The sa
 Thirdly, to store the citation relations between publications, the table ``Paper'' is in an m:n-relation with itself.
 
 
-
+\begin{figure}[h!]
 \begin{center}
 \begin{tikzpicture}
   \tikzset{entity/.style = {shape=rectangle,draw,minimum size=3em,minimum width=6em,inner sep=5pt}}
@@ -585,6 +590,9 @@ Thirdly, to store the citation relations between publications, the table ``Paper
 
 \end{tikzpicture}
 \end{center}
+\caption{ER-Diagram of the Publication Database.}
+\label{fig:er-diagram-publication-db}
+\end{figure}
 
 
 
@@ -652,8 +660,62 @@ Thirdly, to store the citation relations between publications, the table ``Paper
 
 
 
-\subsection{Citation Graph}
-The set of publications $\tpset$ and their stated references naturally induce a directed (acyclic\footnote{The graph in question does contain cycles. This is due to the fact that sometimes unpublished works are cited, which contain a reference back to the original publication.}) graph containing 872 vertices and 2052 edges, which can be observed in Figure \ref{fig:pgraph-whole_graph}.
+\section{Citation Analysis}
+The objective of this section is to identify publications provide significant contributions in the quest of illuminating the concept of causality. Unfortunately, the discovery of such literature is rather difficult, in particular when the total amount of publications exceeds a certain threshold. Hence, this section attempts to identify particularly relevant authors and publications by through the use of several heuristics.
+That is, using the citation relationship stored in the constructed database (see Subsection \ref{subsec:database}) one can build various graphs to obtain a macro level view of the literature landscape and the communities within. In particular, although problematic, the use of centrality measures will allow for the identification of important vertices, i.e. authors and publications  \parencite{meho2007rise,mingers2015review,leydesdorff2012scientometrics}.
+
+
+
+An approach leveraging such techniques falls under the term citation analysis. This technique is concerned with the discovery and management of literature through by analysing its references to evaluate scholarly contributions, track the flow of knowledge, study the structure of research field, etc. \parencite[p.~1-5]{zhao2015analysis}. While useful, this approach is founded on several assumptions that ought to be laid bare.
+\begin{itemize}
+\item Citation of a document implies use of that document by the citing author.
+\item Citation of a document (author, journal, etc.) reflects the merit (quality, significance, impact)
+\item Citations are made to the best possible works.
+\item A cited document is related in content to the citing document
+\item All citations are equal.
+\end{itemize}
+While accepting those rather strong assumptions is problematic on its own, additional concerns with this technique arise when one also considers that there can be various problems in the data, e.g.\ errors, self-citations or multiple authors. However, due to the fact that the those techniques are only used in a rudimentary manner to provide a heuristic ranking of publications and authors, a proper justification of applicability of those assumptions with respect to the given data will be omitted. Moreover, for detailed discussion about the validity of those assumption the reader may be referred to \parencite{smith1981citation}.\\
+
+
+The primary technique used in this work to assess the importance of a vertex in a graph, relies on the use of centrality measures.
+In general, those measures are used to rank vertices based on some notion of importance. In particular, they can be used to understand diffusion processes, assess an individuals risk of infection or explain the influence of a 
+person in a social network \parencite{bloch2019centrality}. According to \parencite{del2011centrality} Degree, Closeness and Betweenness centralities are the most popular ones. Additionally, there exists a family of centralities based on the rooted in the field of spectral graph theory (see \parencite{spielman2012spectral}) using eigenvalues and eigenvectors, those include the Eigenvector Centrality, Alpha Centrality, Page Rank and Katz-Bonacich Centrality  \parencite{bloch2019centrality}. 
+The following is taken from \parencite{segarra2015stability,del2011centrality,bloch2019centrality,bonacich2001eigenvector,page1999pagerank}.
+
+\emph{Degree centrality} is a local measure of importance based on the degree of a vertex. In the case of a weighted graph, the weighted degree of a vertex is taken for this measurement, thus implying that the weight of an edge must reflect some notion of similarity. That is, a higher weight implies a stronger connection, e.g.\ number of interactions. If one is confronted with an directed graph, the degree centrality dissolves into an in- and out-degree centrality.
+Although it can be used to assess the popularity of a vertex or the interaction frequency of a vertex, due to its locality it neglects the remaining structure of the network. 
+\medskip
+
+\emph{Closeness centrality }is constructed around the sum of all shortest path lengths. Hence, it is a measure for assessing the importance of a vertex based on how quick such a vertex can reach every other vertex. 
+Moreover, this implies that edge weights must indicated a notion of dissimilarity, e.g.\ distance between vertices. Unfortunately, this measure assumes a graph to be strongly connected. Hence, it is not suitable for directed graphs in general.  
+\medskip
+
+\emph{Betweenness centrality} gives higher values to vertices that are part of many shortest paths between pairs of vertices. Meaning it attempts to assess the importance of a vertex based how vital a vertex is for the flow of information between the other vertices in the graph. As this centrality builds upon the notion of a shortest path, it requires the weights of a graph to represent a dissimilarity between vertices. However, a benefit of this centrality is that it is suitable for both directed and undirected graphs
+\medskip
+
+\emph{Eigenvector centrality} is similar to the degree centrality, as it assess the importance of a vertex based on the number of neighbours, thus it requires weights to denote similarities. However, it differs in the valuation of those neighbours, valuing vertices based in the importance of vertices in its neighbourhood. That is, the Eigenvector centrality is computed by assuming that the centrality of vertex is proportional to the sum of centrality of the vertex's neighbours. Hence, it is a self-referential process. Unfortunately, common implementations requires graphs to be undirected and connected. 
+\medskip
+
+
+ \emph{Alpha centrality} is a generalisation of the Eigenvector centrality for directed graphs. The idea behind this centrality is that it assumes that a vertex has some exogenously defined value. \emph{Katz-Bonacich centrality} generalises the Eigenvector centrality by reducing the importance of distant vertices. 
+\emph{Page Rank} revitalises the centrality score passed on by a vertex, based on the number if neighbours. Hence, a vertex having a directed edge to an important vertex must not necessarily have a high importance itself, e.g.\ a webpage linking to an important webpage must not necessarily be important itself. Furthermore, to ensure sensible results in directed graphs, dead ends are avoided by jumping to a random vertex.
+
+\subsection{Citation Graphs}
+
+
+Before analysing the various citation graphs, one can already use the publications found in $\pset$ to track the number of publications throughout the years. This distribution can be observed in Figure \ref{fig:pgraph-relevant_publications_per_year}. 
+Furthermore, according to the data collected, the decade ranging between $2000$ and $2010$ was the most productive period, i.e.\ $\pset$ contains $73$ publications before 2000, $114$ between 2000 and 2010 and $107$ publications from 2010 onwards. Additionally, it can be observed that 2004, 2009 and 2007 were the most productive years over all. Containing notable publications such as 
+``Nonmonotonic Causal Theories'' \parencite{giunchiglia2004nonmonotonic}, ``Causes and Norms'' \parencite{hitchcock2009cause}, ``Prevention, Preemption, and the Principle of Sufficient Reason'' \parencite{hitchcock2007prevention}, ``Two Concepts of Causation'' \parencite{hall2004two} and ``Structural Equations and Causation'' \parencite{hall2007structural}, 
+discussing and using formalisms such as Neuron Diagrams, Structural Equations and some variant of McCain and Turner's Causal Logic.
+
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{relevant_publications_per_year.png}
+\caption{Number of relevant publications per year (a negligible amount publications occur before 1970)}
+\label{fig:pgraph-relevant_publications_per_year}
+\end{figure}
+
+As discussed earlier, the set of publications $\tpset$ and their stated references naturally induce a directed (acyclic\footnote{The graph in question does contain cycles. This is due to the fact that sometimes not yet publicised works are cited, which contain a reference back to the original publication.}) graph containing 872 vertices and 2052 edges, which can be observed in Figure \ref{fig:pgraph-whole_graph}.
 
 
 \begin{figure}[h]
@@ -662,7 +724,25 @@ The set of publications $\tpset$ and their stated references naturally induce a 
 \label{fig:pgraph-whole_graph}
 \end{figure}
 
-By construction, only the publications in $\pset$ that were published after (and including) $2010$ contain a complete mapping of their citations. As this obviously distorts the relative relevance between the analysed publications, all other publications must be discarded from the analysis. Hence, reducing the set of considered publications to only $107$. The subgraph induced by the set containing relevant publications from the year 2010 onwards, constitutes the bedrock of the paper selection and the analysis presented in Section \ref{sec:analysis}. It is named $\pgraph$ or ``Publication Graph'' and can be observed in Figure \ref{fig:pgraph-actual_graph}. 
+Using this graph alone it is possible to provide some initial literature recommendations based on the number of citation a publications has received. 
+Starting with the five articles with the greatest amount of citations, i.e.\ 
+``Causes and explanations: A structural-model approach. Part I: Causes'' \parencite{halpern2005causes}, 
+``Causation'' \parencite{lewis1974causation},
+``The intransitivity of causation revealed in equations and graphs'' \parencite{hitchcock2001intransitivity}, 
+``Structural Equations and Causation'' \parencite{hall2007structural} and 
+``Two Concepts of Causation'' \parencite{hall2004two}.
+Particularly of note is \parencite{lewis1974causation}, as it is is one of the foundational publication responsible for the current surge of interest in the counterfactual approach to causation \parencite{beebee2009oxford}.
+It's perceived influence is further supported by the fact that all authors represented in this above list build upon Lewis'es legacy by discussing causation from a counterfactual point of view. 
+However, they differ in their preferred language to represent causal dependencies and in their specific definition of token causality. 
+
+
+Moreover, some book recommendations can be given as well. The top five most cited books on the topic of causation are, ``Causality: Models, Reasoninig and Inference'' \parencite{pearl2009causality}, ``Making things happen: A theory of causal explanation'' \parencite{woodward2005making},
+``Causation, prediction, and search'' \parencite{spirtes2000causation}, ``Causation, prediction, and search'' \parencite{spirtes2000causation}, ``Causation in the Law'' \parencite{hart1985causation}  and ``Counterfactuals'' \parencite{lewis2013counterfactuals}. An honourable mentions should be given to the sixth place ``Actual Causality'' \parencite{halpern2016actual}, which provides a great summery over the vast amount of work put forward by Halpern
+on the topic of causation.
+
+
+
+Unfortunately, only the publications in $\pset$ that were published after (and including) $2010$ contain a complete mapping of their citations. As this obviously distorts the relative relevance between the analysed publications, all other publications must be discarded from the analysis. Hence, reducing the set of considered publications to only $107$. The subgraph induced by the set containing relevant publications from the year 2010 onwards, constitutes the bedrock for the subsequent analysis and paper selection. It is named $\pgraph$ or ``Publication Graph'' and can be observed in Figure \ref{fig:pgraph-actual_graph}. 
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{actual_graph.png}
@@ -675,7 +755,7 @@ The vertex size correlates with vertex degree. The vertices are numbered based o
 
 
 
-Using the collected data several other insightful graphs can be constructed. The first, $\agraph$  or ``Author Graph'', seen in \ref{fig:agraph-actual_graph} encodes the citations between authors, rather than between publications. Every vertex in $\agraph$ represents an author, who has at least one publication represented in $\pgraph$. Every edge in $\agraph$ between an author $A$ and an author $B$ represents that there exists at least one publication of $A$ that cites at least one publication of $B$ (with respect to $\pgraph$), while its weight represent the frequency of this occurrence. To account for multiple citations, as well as self-references, $\acgraph$ must a directed, weighted graph containing loops.
+Using the collected data several other insightful graphs can be constructed. The first, $\agraph$  or ``Author Graph'', seen in \ref{fig:agraph-actual_graph} encodes the citations between authors, rather than between publications. Every vertex in $\agraph$ represents an author, who has at least one publication represented in $\pgraph$. Every edge in $\agraph$ between an author $A$ and an author $B$ indicates that there exists at least one publication of $A$ that cites at least one publication of $B$ (with respect to $\pgraph$), while its weight represent the frequency of this occurrence. To account for multiple citations, as well as self-references, $\agraph$ must a be directed, weighted graph containing loops.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{author_graph.png}
@@ -694,7 +774,7 @@ The second, $\cgraph$ or ``Collaboration Graph'', encodes the collaborations bet
 \includegraphics[width=\textwidth]{collab_graph.png}
 \caption{The Collaboration Graph  $\cgraph$ $\agraph$ based on $\pgraph$. It consists of  $130$ vertices and $192$ edges. 
 Darker colors indicate a higher number of publications in $\pgraph$. Vertex size correlates with the weighted vertex degree.
-Edge width correlates with edge weight. An edge with color red has weight grater than 1. The vertices are numbered based on the weighted degree ranking in Table XXXX}
+Edge width correlates with edge weight. An edge with color red has weight greater than 1. The vertices are numbered based on the weighted degree ranking in Table XXXX}
 \label{fig:cgraph-actual_graph}
 \end{figure}
 
@@ -709,7 +789,7 @@ edge width correlates with edge weight. The vertices are numbered based on the w
 \label{fig:acgraph-actual_graph}
 \end{figure}
 
-To summarise, $\pgraph$ is a directed graph; $\agraph$ and $\acgraph$ is a directed, weighted graph containing loops and $\cgraph$ is an undirected, weighted graph. 
+To summarise, $\pgraph$ is a directed graph; $\agraph$ and $\acgraph$ are directed, weighted graph containing loops and $\cgraph$ is an undirected, weighted graph. 
 
 
 %This section analyses the collected data and the constructed graphs to provide insights into the literature discussing causation. In particular, those constructs will 
@@ -763,7 +843,7 @@ $\cgraph$  & 130  & 192 &  0.0229 &  0.7843 \\
 $\agraph$  & 130  & 755 & 0.045 &  0.5141 \\
 \bottomrule
 \end{tabular}
-\caption{General properties of the discussed graphs. Measures such as average path length, radius and diameter, as well as vertex- and edge connectivity are omitted as all graphs in question are disconnected.} 
+\caption{General properties of the discussed graphs. Other common measures such as average path length, radius and diameter, as well as vertex- and edge connectivity are omitted as all graphs in question are disconnected.} 
 \label{tab:graph-stat}
 \end{table}
 \end{center}
@@ -814,50 +894,19 @@ Weighted Out-Degree &  0 &    32 & 8.80769 &   5.5 \\
 \end{table}
 \end{center}
 
-
-Focusing the set $\pset$ one can track the number of publications throughout the years. This distribution can be observed in Figure \ref{fig:pgraph-relevant_publications_per_year}. 
-Furthermore, according to the data collected, the decade ranging between $2000$ and $2010$ was the most productive period, i.e.\ $\pset$ contains $73$ publications before 2000, $114$ between 2000 and 2010 and $107$ publications from 2010 onwards. Additionally, it can be observed that 2004, 2009 and 2007 were the most productive years over all. Containing notable publications such as 
-``Nonmonotonic Causal Theories'' \parencite{giunchiglia2004nonmonotonic}, ``Causes and Norms'' \parencite{hitchcock2009cause}, ``Prevention, Preemption, and the Principle of Sufficient Reason'' \parencite{hitchcock2007prevention}, ``Two Concepts of Causation'' \parencite{hall2004two} and ``Structural Equations and Causation'' \parencite{hall2007structural}, 
-discussing and using formalisms such as Neuron Diagrams, Structural Equations and some variant of McCain and Turner's Causal Logic.
+\clearpage
 
 
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{relevant_publications_per_year.png}
-\caption{Number of relevant publications per year (a negligible amount publications occur before 1970)}
-\label{fig:pgraph-relevant_publications_per_year}
-\end{figure}
 
-
-When considering the whole of $\pset$ some literature recommendations can be given based on the number of citation a publications has received. 
-Starting with the five articles with the greatest amount of citations, i.e.\ 
-``Causes and explanations: A structural-model approach. Part I: Causes'' \parencite{halpern2005causes}, 
-``Causation'' \parencite{lewis1974causation},
-``The intransitivity of causation revealed in equations and graphs'' \parencite{hitchcock2001intransitivity}, 
-``Structural Equations and Causation'' \parencite{hall2007structural} and 
-``Two Concepts of Causation'' \parencite{hall2004two}.
-Particularly of note is \parencite{lewis1974causation}, as it is is one of the foundational publication responsible of popularising the counterfactual approach to causation \parencite{beebee2009oxford}.
-Furthermore, all authors represented in this list build upon Lewis'es legacy by discussing causation from a counterfactual point of view. 
-However, they differ in their preferred language to represent causal dependencies. For example, in \parencite{hall2007structural} Hall criticises the structural equations approach, especially due to its failure to distinguish between default and deviant behaviour. Moreover, while acknowledging their value, he perceives their status as inflated, favouring neuron diagrams instead. In particular he endorses them due to their simplicity and their ability to encode a default/deviant distinction. By contrast, Hitchcock clearly opposes neuron diagrams as a general representation tool, arguing extensively in \parencite{hitchcock2007s} why structural equations should be preferred instead.
+XXXX WICHTIG For example, in \parencite{hall2007structural} Hall criticises the structural equations approach, especially due to its failure to distinguish between default and deviant behaviour. Moreover, while acknowledging their value, he perceives their status as inflated, favouring neuron diagrams instead. In particular he endorses them due to their simplicity and their ability to encode a default/deviant distinction. By contrast, Hitchcock clearly opposes neuron diagrams as a general representation tool, arguing extensively in \parencite{hitchcock2007s} why structural equations should be preferred instead.
 Halpern, also favouring structural equations, is one of the most prominent figure in the contemporary token causality literature (see Section XXXX). This prominence in part can be attributed to his (and Judea Pearl's) definition of token causality (see Section XXX). This definition has its origin in \parencite{halpern2005causes} and is, unsurprisingly, the article with the highest citation count.
 
 
-Concluding with some book recommendations. The top five most cited books on the topic of causation are, ``Causality: Models, Reasoninig and Inference'' \parencite{pearl2009causality}, ``Making things happen: A theory of causal explanation'' \parencite{woodward2005making},
-``Causation, prediction, and search'' \parencite{spirtes2000causation}, ``Causation, prediction, and search'' \parencite{spirtes2000causation}, ``Causation in the Law'' \parencite{hart1985causation}  and ``Counterfactuals'' \parencite{lewis2013counterfactuals}. An honourable mentions should be given to the sixth place ``Actual Causality'' \parencite{halpern2016actual}, which provides a great summery over the vast amount of work put forward by Halpern
-on the topic of causation.
 
-
-
-\section{Important Publications}
-\label{subsec:important_pubs}
-
-Due to the exponential nature of a snowball search proceeder the size of $\pset$ is unreasonable for a detailed investigation. Hence, some further automatic filter proceeder is necessary.
-Therefore, although problematic in its own right, an assessment of the relative importance of a publication will be made based on the 
-structure of the citation relation, thus providing a rough filter for reducing the volume of publications down to a manageable size \parencite{meho2007rise,mingers2015review,leydesdorff2012scientometrics}. 
-
-This assessment can be made by using centrality measures (see Subsection \ref{subsec:graph_theory}). 
-However, due to the fact that the citation relation is asymmetric, the Closeness or Eigenvector centrality are ill suited for such a task.
-Furthermore, the Degree centrality decomposes into two separate  measures. Thus while initially excluded, a analysis of $\pgraph$ led to a post hoc adaptation of the methodology. That is, in the context of this particular dataset, the regular degree distribution actually provides a rough compromise between the recency bias of the out-degree, as well as the conservative tendencies associated with the in-degree measure (this can be observed in Figure \ref{fig:pgraph-avgr_degree_year}). Unfortunately, due to their locality Degree centralities provide a rather limiting picture, thus in an attempt to compensate for this shortcoming an alternative to the Eigenvector centrality, namely Page Rank, is used. Although it is somewhat unusual to use this algorithm for citation graphs, this approach is not unheard of, see \parencite{ding2009pagerank,ma2008bringing,chen2007finding,maslov2008promise,nykl2014pagerank} for an in-depth discussions. One particular benefit of determining the importance of a publication in such a manner, is that under Page Rank simply referencing an important publication, does not indicate a publications own importance. The last remaining common centrality measure, the Betweenness centrality, can and thus will be applied. Providing yet another dimension for selecting publications. 
-
+\subsection{Important Authors and Publications}
+Both $\agraph$ and $\pgraph$ can be analysed to identify influential authors.
+In the case of $\pgraph$, one is faced with a asymmetric citation relation. Therefore, the Closeness or Eigenvector centrality are ill suited for such a task.
+Furthermore, the Degree centrality decomposes into two separate  measures. Moreover, in the context of this particular dataset, the regular degree distribution actually provides a rough compromise between the recency bias of the out-degree, as well as the conservative tendencies associated with the in-degree measure (this can be observed in Figure \ref{fig:pgraph-avgr_degree_year}). Hence, the undirected degree measure will be used as well. Unfortunately, due to their locality Degree centralities provide a rather limiting picture, thus in an attempt to compensate for this shortcoming an alternative to the Eigenvector centrality, namely Page Rank, is used. Although it is somewhat unusual to use this algorithm for citation graphs, this approach is not unheard of, see \parencite{ding2009pagerank,ma2008bringing,chen2007finding,maslov2008promise,nykl2014pagerank} for an in-depth discussions. One particular benefit of determining the importance of a publication in such a manner, is that under Page Rank simply referencing an important publication, does not indicate a publications own importance. The last remaining common centrality measure, the Betweenness centrality, can and thus will be applied. Providing yet another dimension for selecting publications. 
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{average_degree_year.png}
@@ -865,8 +914,56 @@ Furthermore, the Degree centrality decomposes into two separate  measures. Thus 
 \label{fig:pgraph-avgr_degree_year}
 \end{figure}
 
-Hence, the construction of the set of important publication, called $\prset$, is constructed as follows. From each of the four proposed orderings, the $15$  publication deemed most important are then selected and aggregated into a single set.  Moreover, this set of publications will be increased by considering all publication from $\psetz$, as well as all publication with $0$ references or citations that have a higher that average (with respect to their respective cohort) degree are considered important as well. Lastly, if an author has more than two important publications, only the two most recent publications will be accepted into $\prset$.
-Given the outlined approach, Table \ref{tab:pub_ranking} is constructed. It depicts the 15 highest ranked vertices for each centrality measure.
+
+In the case of $\agraph$, one is faced with a directed, weighted graph with loops. Hence, modifications to the graph are required. Firstly, while included for the sake of completion in the graph $\agraph$, it seems sensible discount self-referential behaviour for the ranking. Secondly, all centrality measures used to classify publications
+can accommodate weights in their assessment. However, the Betweenness Centrality requires the weight of an edge to express dissimilarity, thus it is necessary to convert the weights such that they express dissimilarity rather than similarity between vertices (see \cite[p.~13]{runkler2012data}). Moreover, in addition to the centralities it is reasonable to include the number of publications (in the examined field) as an additional measure. 
+
+
+
+By aggregating the top 15 authors, see Table \ref{tab:author_ranking}, across all 6 rankings into a single set, $33$ important authors can be identified. 
+
+\begin{sidewaystable}
+\centering
+\scriptsize
+\begin{tabular}{lllllll}
+\toprule
+{} &     Degree Centrality &    In-Degree Centrality &   Out-Degree Centrality &  Betweenness Centrality &   Page Rank & Publications \\
+\midrule
+1  &       halpern joseph y &       halpern joseph y &           icard thomas &       halpern joseph y &           claassen tom &        vennekens joost \\
+2  &  hitchcock christopher &        lagnado david a &      bochman alexander &        lagnado david a &             heskes tom &       halpern joseph y \\
+3  &      bochman alexander &     gerstenberg tobias &       halpern joseph y &    eberhardt frederick &       halpern joseph y &        lagnado david a \\
+4  &        lagnado david a &  hitchcock christopher &           liepina ruta &     gerstenberg tobias &        lagnado david a &             bex floris \\
+5  &           icard thomas &     lifschitz vladimir &        sartor giovanni &      bochman alexander &     gerstenberg tobias &     gerstenberg tobias \\
+6  &     gerstenberg tobias &    eberhardt frederick &             wyner adam &  hitchcock christopher &           lee joohyung &           verheij bart \\
+7  &    eberhardt frederick &           claassen tom &  hitchcock christopher &             bex floris &     lifschitz vladimir &           icard thomas \\
+8  &           liepina ruta &             heskes tom &        ibeling duligur &             zhang jiji &         lierler yuliya &           lee joohyung \\
+9  &        sartor giovanni &            zultan ro'i &       blanchard thomas &          fenton norman &           yang fangkai &         beckers sander \\
+10  &             wyner adam &         hyttinen antti &    baumgartner michael &      schaffer jonathan &            zultan ro'i &  hitchcock christopher \\
+11 &        ibeling duligur &         hoyer patrik o &      schaffer jonathan &     lifschitz vladimir &  hitchcock christopher &        ibeling duligur \\
+12 &      schaffer jonathan &        jarvisalo matti &    eberhardt frederick &           lee joohyung &    eberhardt frederick &    eberhardt frederick \\
+13 &          fenton norman &          fenton norman &     gerstenberg tobias &           verheij bart &         hyttinen antti &     lifschitz vladimir \\
+14 &     lifschitz vladimir &           lee joohyung &         keppens jeroen &           icard thomas &         hoyer patrik o &      schaffer jonathan \\
+15 &          chockler hana &         lierler yuliya &        lagnado david a &       blanchard thomas &        jarvisalo matti &         goodman noah d \\
+\bottomrule
+\end{tabular}
+\caption{Top 15 authors according to the Degree Centrality, the In- and Out-Degree Centrality, the Betweenness Centrality, the Page Rank algorithm and the number of publication.}
+\label{tab:author_ranking}
+\end{sidewaystable}
+
+
+
+Authors such as Lifschitz, Icard, Bochman, Eberhardt, Hitchcock, Gerstenberg, Lagnado and Halpern consistently score high along each ranking and are thus of note.
+Using $\cgraph$ one can observe there have been collaborations between Bochman and Lifschitz; Halpern and Hitchcock; Gerstenberg and Icard. 
+This also reflects in the kind of approaches those authors ascribe to when studying causation. That is, 
+Both Lifschitz and Bochman focus on variants of the Causal Theory put forward in \cite{mccain1997causal} and tend to approach causality from a regularity theoretic point of view. By contrast, Halpern and Hichcock strongly adhere to the structural equation framework. Their investigations into causality, while emerging out of the counterfactual tradition, recently incorporate some regularity theoretic tools, e.g.\ extending causal models with defaults.
+As opposed to all other authors mentioned, Gerstenberg and Icard, set themselves apart. Rather than approaching causation on a purely theoretic level, they conducted empirical studies investigating how humans form their causal judgements and what role the attribution of responsibility play in those judgements. Additionally, they investigate the role of causation in the legal domain. Moreover, similar to Halpern they tend to follow the counterfactual approach to causation and sometimes use structural equations for their modelling.
+Eberhardt, who cooperated with Clark Glymour on \parencite{glymour2010actual}, focuses on the discovery of causal structures. This includes formalisms such as causal Bayes networks and seems to align closer with the part of the literature centring around machine learning. Lastly, Icard seems to argue for the need of an expressive formalism that emphasises the for him apparent procedural character of causation, thus his latest publications introduce and discuss simulations models, which share a close relationship to Turing machines.
+Having the highest number of relevant publications, an honourable mention must be given to Vennekens Joost, who worked on and with structural equations, CP-logic, action languages. Hence, he approached causality from a counterfactual, probabilistic and procedural point of view.
+\bigskip
+
+
+%The construction of the set of important publication, called $\prset$, is constructed as follows. 
+From each of the five proposed orderings, the $15$ publication deemed most important, see Table \ref{tab:pub_ranking}, are then selected and aggregated into a single set, resulting in a total of $36$ unique publications.
 
 \begin{sidewaystable}
 \centering
@@ -899,16 +996,19 @@ Given the outlined approach, Table \ref{tab:pub_ranking} is constructed. It depi
 
 Particularly of note are the articles \cite{weslake2015partial}, \cite{blanchard2017cause}, \cite{halpern2011actual}, \cite{glymour2010actual} and \cite{halpern2015graded}, all of which are ranked highly across all measures. 
 All publications use structural equations (and causal models in particular) as their preferred method of encoding causal relations.  
-While all of those publications follow take on a counterfactual perspective,   \parencite{halpern2011actual}, \parencite{weslake2015partial} and \parencite{halpern2015graded} expand the causal model framework to allow for normality, thus incorporating some aspects of the regulatory theory of causation.
+While all of those publications take on a counterfactual perspective, \parencite{halpern2011actual}, \parencite{weslake2015partial} and \parencite{halpern2015graded} expand the causal model framework to allow for normality, thus incorporating some aspects of the regulatory theory of causation.
 By contrast, \parencite{blanchard2017cause} argues that being more conservative when selecting appropriate causal models, should be preferred over incorporating additional widgets into causal models.
 As in particular allowing for defaults in causal models not only increases their complexity, but also provides to much flexibility. 
-\parencite{glymour2010actual} does not engage with the debate about normality in causal inference. Instead it heavily criticises the attempt of inductively defining causal models from small examples alone, a strategy employed 
-throughout most of the literature.
+\parencite{glymour2010actual} does not engage with the debate about normality in causal inference. Instead it heavily criticises the attempt of inductively defining causal models from small examples alone, a strategy employed  throughout most of the literature.
 
 
+Moreover, this set of publications will be increased by considering all publication from $\psetz$, as well as all publication with $0$ references or citations that have a higher that average (with respect to their respective cohort) degree are considered important as well.
 
-Collecting all those, results in a total of $36$ unique publications. Furthermore, by adding all publication from $\pset$ and all publication with $0$ references and citations that have a higher that average (with respect to their respective cohort) degree, the set $\prset$ would contain $44$ publications. Among those, causal reasoning in a logic with possible causal process semantics', 'on the conditional logic of simulation models', 'evaluation of causal arguments in law: the case of overdetermination', 'explaining actual causation via reasoning about actions and change', 'probabilistic reasoning across the causal hierarchy' and 'arguing about causes in law: a semi-formal framework for causal arguments' are also under consideration, were added in the second step. 
-Finally, after removing books from this set, i.e.\ removing  counterfactuals,  causation: a user's guide and actual causality, as well as removing publications from authors having more than two important publications, i.e.\ removing older publications from Denecker, Halpern, Hitchcock, Icard, Lagnado and Vennekens,  $\prset$ contains only $36$ publications\footnote{\parencite{vennekens2010embracing,
+
+While already expansive, further analysis will be conducted using a slightly modified set of publications. That is, this set of publications will be increased by considering all publication from $\psetz$, as well as all publication with $0$ references or citations that have a higher that average. 
+This result in a set of $44$ publications. Among those, causal reasoning in a logic with possible causal process semantics', 'on the conditional logic of simulation models', 'evaluation of causal arguments in law: the case of overdetermination', 'explaining actual causation via reasoning about actions and change', 'probabilistic reasoning across the causal hierarchy' and 'arguing about causes in law: a semi-formal framework for causal arguments' are also under consideration, were added in the second step. 
+
+Finally, after removing books from this set, i.e.\ removing  ``Counterfactuals'',  ``Causation: A User's Guide'' and ``Actual Causality'', as well as removing publications from authors having more than two important publications, i.e.\ removing older publications from ``Denecker'', ``Halpern'', ``Hitchcock'', ``Icard'', ``Lagnado'' and ``Vennekens'',  $\prset$ contains only $36$ publications\footnote{\parencite{vennekens2010embracing,
 bex2010hybrid,
 lee2010representing,
 lifschitz2010translating,
@@ -951,117 +1051,24 @@ ibeling2020probabilistic}}. The relationship among them can be observed in Figur
 \label{fig:pgraph-important}
 \end{figure}
 
+
+
+%Lastly, it should be noted that around $80\%$ of them are in the set of relevant publication. Whereas the set of relevant publications constitutes only $51\%$ of all publication of the relevant authors in $\pgraph$. 
+%
+
+
 \clearpage
 
 
 
 
-\section{Important Authors}
-
-Similarly as done with the publications, $\agraph$ can be analysed to identify influential authors. However, as one is faced with a different kind of graph, namely a directed, weighted graph with loops, some the centrality measures have to adapted appropriately. Firstly, while included for the sake of completion in the graph $\agraph$, it seems sensible discount self-referential behaviour for the ranking. Secondly, all centrality measures used to classify publications
-can accommodate weights in their assessment. However, the Betweenness Centrality requires the weight of an edge to express dissimilarity, thus it is necessary to convert the weights such that they express dissimilarity rather than similarity between vertices (see \cite[p.~13]{runkler2012data}). Moreover, in addition to the centralities it is reasonable to include the number of publications (in the examined field) as an additional measure. 
-
-\begin{sidewaystable}
-\centering
-\scriptsize
-\begin{tabular}{lllllll}
-\toprule
-{} &     Degree Centrality &    In-Degree Centrality &   Out-Degree Centrality &  Betweenness Centrality &   Page Rank & Publications \\
-\midrule
-1  &       halpern joseph y &       halpern joseph y &           icard thomas &       halpern joseph y &           claassen tom &        vennekens joost \\
-2  &  hitchcock christopher &        lagnado david a &      bochman alexander &        lagnado david a &             heskes tom &       halpern joseph y \\
-3  &      bochman alexander &     gerstenberg tobias &       halpern joseph y &    eberhardt frederick &       halpern joseph y &        lagnado david a \\
-4  &        lagnado david a &  hitchcock christopher &           liepina ruta &     gerstenberg tobias &        lagnado david a &             bex floris \\
-5  &           icard thomas &     lifschitz vladimir &        sartor giovanni &      bochman alexander &     gerstenberg tobias &     gerstenberg tobias \\
-6  &     gerstenberg tobias &    eberhardt frederick &             wyner adam &  hitchcock christopher &           lee joohyung &           verheij bart \\
-7  &    eberhardt frederick &           claassen tom &  hitchcock christopher &             bex floris &     lifschitz vladimir &           icard thomas \\
-8  &           liepina ruta &             heskes tom &        ibeling duligur &             zhang jiji &         lierler yuliya &           lee joohyung \\
-9  &        sartor giovanni &            zultan ro'i &       blanchard thomas &          fenton norman &           yang fangkai &         beckers sander \\
-10  &             wyner adam &         hyttinen antti &    baumgartner michael &      schaffer jonathan &            zultan ro'i &  hitchcock christopher \\
-11 &        ibeling duligur &         hoyer patrik o &      schaffer jonathan &     lifschitz vladimir &  hitchcock christopher &        ibeling duligur \\
-12 &      schaffer jonathan &        jarvisalo matti &    eberhardt frederick &           lee joohyung &    eberhardt frederick &    eberhardt frederick \\
-13 &          fenton norman &          fenton norman &     gerstenberg tobias &           verheij bart &         hyttinen antti &     lifschitz vladimir \\
-14 &     lifschitz vladimir &           lee joohyung &         keppens jeroen &           icard thomas &         hoyer patrik o &      schaffer jonathan \\
-15 &          chockler hana &         lierler yuliya &        lagnado david a &       blanchard thomas &        jarvisalo matti &         goodman noah d \\
-\bottomrule
-\end{tabular}
-\caption{Top 15 authors according to the Degree Centrality, the In- and Out-Degree Centrality, the Betweenness Centrality, the Page Rank algorithm and the number of publication.}
-\label{tab:author_ranking}
-\end{sidewaystable}
-
-
-Using this method $33$ important authors are detected. Furthermore, when relating the publication of this selected group of authors back to the selection of publication, one can
-observe that around $80\%$ of them are in the set of relevant publication. Whereas the set of relevant publications constitutes only $51\%$ of all publication of the relevant authors  in $\pgraph$. 
-
-Among the identified important authors such as Lifschitz, Icard, Bochman, Eberhardt, Hitchcock, Gerstenberg, Lagnado and Halpern consistently score high along each ranking and are thus of note.
-Using $\cgraph$ one can observe there have been collaborations between Bochman and Lifschitz; Halpern and Hitchcock; Gerstenberg and Icard. 
-This also reflects in the kind of approaches those authors ascribe to when studying causation. That is, 
-Both Lifschitz and Bochman focus on variants of the Causal Theory put forward in \cite{mccain1997causal} and tend to approach causality from a regularity theoretic point of view. By contrast, Halpern and Hichcock strongly adhere to the structural equation framework. Their investigations into causality, while emerging out of the counterfactual tradition, recently incorporate some regularity theoretic tools, e.g.\ extending causal models with defaults.
-As opposed to all other authors mentioned, Gerstenberg and Icard, set themselves apart. Rather than approaching causation on a purely theoretic level, they frequently conduct empirical studies investigating how humans form their causal judgements and what role the attribution of responsibility play in those judgements. Additionally, they investigate the role of causation in the legal domain. Moreover, similar to Halpern they tend to follow the counterfactual approach to causation and sometimes use structural equations for their modelling.
-Eberhardt, who cooperated with Clark Glymour on \parencite{glymour2010actual}, focuses on the discovery of causal structures. This includes formalisms such as causal Bayes networks and seems to align closer with the part of the literature centring around machine learning. Lastly, Icard seems to argue for the need of an expressive formalism that preserves a procedural character, thus his publications tend to discuss with simulations models.
-Having the highest number of relevant publications, an honourable mention must be given to Vennekens Joost, who worked on and with structural equations, CP-logic, action languages. Hence, he approached causality from a counterfactual, probabilistic and procedural point of view.
-
-
-
-\chapter{Literature Review}
-\label{ch:literature_review}
-
-
+\chapter{Approaches to Causation: An Overview}
 \section{Modelling Languages}
 
 The important publications as contained in $\prset$ (see Subsection \ref{subsec:important_pubs}) rely on a variety of languages to encode causal relations. Table \ref{tab:language} provides insight into which publications discuss which language family.
 However, it must be remarked that some liberty with respect to aggregation was taken, e.g.\ causal models with and without defaults are considered part of the same language family. 
 Here it is important to point out that by far the most discussed framework are causal models, with CP-Logic and Causal Logic tying for a distant second place. 
 
-
-\begin{sidewaystable}
-\centering
-\tiny
-\begin{tabular}{lp{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1.1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
-\toprule
-Articles & Causal Models	& CP-Logic	& Situation Calculus	&  Non-Monotonic Causal Theory & FOL & Neuron Diagrams & 	Conditional Logic	& $\mathcal{AL}$	& SFCA &  Abductive Causal Theory \\   
-\midrule        
-\cite{vennekens2010embracing} 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{bex2010hybrid} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
- \cite{lee2010representing}	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
- \cite{lifschitz2010translating} 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
- \cite{glymour2010actual}	& X	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
- \cite{claassen2010causal} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{gerstenberg2010spreading}	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{halpern2011actual} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{shulz2011if} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{briggs2012interventionist}	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{baumgartner2013regularity} 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	\\
- \cite{hyttinen2013discovering} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{halpern2015graded} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{weslake2015partial} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{chockler2015causal}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{beckers2016general} 	& 	& X	& 	& 	& 	& X	& 	& 	& 	& 	\\
- \cite{schaffer2016grounding}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{halpern2016appropriate} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{blanchard2017cause}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{wright2017ness}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{icard2017normality} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{aleksandrowicz2017computational}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{fenton2017proposed}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{lagnado2017causation}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{bochman2018actual}  	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
- \cite{ibeling2018conditional}  	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
- \cite{beckers2018principled} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{bochman2018laws}  	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
- \cite{denecker2018causal}  	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{batusov2018situation}  	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{denecker2019explaining}  	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{liepicna2019evaluation}  	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
- \cite{leblanc2019explaining} 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
- \cite{liepicna2020arguing} 	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
- \cite{khannecessary}  	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{ibeling2020probabilistic}  	& X	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
-\bottomrule
-\end{tabular}
-\caption{Depicts which publication discuss which languages families}
-\label{tab:language}
-\end{sidewaystable}
 
 \subsection{Causal Models}
 Spear headed by Pearl, see  \parencite{pearl1995causal}, causal models are the most common method for encoding the causal structures. This is, especially true in the context of token causality. 
@@ -1118,13 +1125,64 @@ Shafer formalises this intuition by relying of probability trees. In such a tree
 
  Starting with the definition provided in \parencite{liepicna2020arguing}, which is categorised by its authors as semi-formal. That is, rather than being concerned with capturing the notion of causation within a single definition, they propose a framework with enough modularity to substitute one definition of token causality with another. This choice is a reflection of the fact that the purpose of this framework is to bridge the gap between the formal literature on causation and legal analysis. Moving fully into the informal realm
  
- 
 
-\section{Token Causality Definitions}
+\begin{sidewaystable}
+\centering
+\tiny
+\begin{tabular}{lp{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1.1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
+\toprule
+Articles & Causal Models	& CP-Logic	& Situation Calculus	&  Non-Monotonic Causal Theory & FOL & Neuron Diagrams & 	Conditional Logic	& $\mathcal{AL}$	& SFCA &  Abductive Causal Theory \\   
+\midrule        
+\cite{vennekens2010embracing} 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bex2010hybrid} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
+ \cite{lee2010representing}	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{lifschitz2010translating} 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{glymour2010actual}	& X	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
+ \cite{claassen2010causal} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{gerstenberg2010spreading}	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2011actual} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{shulz2011if} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{briggs2012interventionist}	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{baumgartner2013regularity} 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	\\
+ \cite{hyttinen2013discovering} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2015graded} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{weslake2015partial} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{chockler2015causal}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{beckers2016general} 	& 	& X	& 	& 	& 	& X	& 	& 	& 	& 	\\
+ \cite{schaffer2016grounding}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2016appropriate} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{blanchard2017cause}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{wright2017ness}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{icard2017normality} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{aleksandrowicz2017computational}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{fenton2017proposed}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{lagnado2017causation}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bochman2018actual}  	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{ibeling2018conditional}  	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+ \cite{beckers2018principled} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bochman2018laws}  	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{denecker2018causal}  	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{batusov2018situation}  	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{denecker2019explaining}  	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{liepicna2019evaluation}  	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+ \cite{leblanc2019explaining} 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
+ \cite{liepicna2020arguing} 	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+ \cite{khannecessary}  	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{ibeling2020probabilistic}  	& X	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+\bottomrule
+\end{tabular}
+\caption{Depicts which publication discuss which languages families}
+\label{tab:modelling-languages}
+\end{sidewaystable}
 
-The formalisms summarised in Table \ref{tab:language} can be used to express causal dependence in one way or another. Unfortunately, this alone is not sufficient to make inferences about token causality.
+\clearpage
+\section{Token Causality Definition}
+
+Right after causal models, which clearly are the dominating formalism used in the context of token causality, is the language family called CP-Logic.
+
+The formalisms summarised in Table \ref{tab:modelling-languages} can be used to express causal dependence in one way or another. Unfortunately, this alone is not sufficient to make inferences about token causality.
 For example, the structural equations in an acyclic causal models allow one to encode causal relationships on the type level. Using those equations and a description of the world it is possible to determine the precise value 
-of each variable in the model \parencite{halpern2015cause}. However, when it comes to token causality one is interested in the question of what caused variable $X$ to have its particular value $x$. Therefore, a good part of the literature is concerned in finding the appropriate conditions to construct a set of variables explain why $X=x$. Finding an appropriate definition of this kind of causality, proofs to be rather difficult. Hence, given the $9$ formal languages used, a total of $28$\footnote{Four of them But-For, INUS, NESS, ``causally relevant factor'' tend to be defined using natural language.} definition are discussed in the articles from $\prset$.
+of each variable in the model \parencite{halpern2015cause}. However, when it comes to token causality one is interested in the question of what caused variable $X$ to have its particular value $x$. Therefore, a good part of the literature is concerned in finding the appropriate conditions to construct a set of variables explain why $X=x$. Finding an appropriate definition of this kind of causality, proofs to be rather difficult. Hence, given the $9$ formal languages used, a total of $32$\footnote{Four of them But-For, INUS, NESS, ``causally relevant factor'' tend to be defined using natural language.} definition are discussed in the articles from $\prset$.
 
 %To preview the amount of definitions discussed in each of the important publications, please consult Table \ref{tab:definition_paper_count}.
 %
@@ -1177,265 +1235,167 @@ of each variable in the model \parencite{halpern2015cause}. However, when it com
 %\caption{Depicts the number of token causality definitions discussed in the articles found in $\prset$. }
 %\label{tab:definition_paper_count}
 %\end{table}
+To do justice to all of the discovered formalisms, the subsequent paragraphs will provide a brief summary. However, for a quick overview consult Table \ref{tab:definition_overview}.
+
+%\newcommand{\butfor}{\texttt{But-For}}
+%\newcommand{\crf}{\texttt{CRF}}
+%\newcommand{\inus}{\texttt{INUS}}
+%\newcommand{\ness}{\texttt{NESS}}
+%\newcommand{\hitch}{\texttt{Hitch-01}}
+%\newcommand{\hpo}{\texttt{HP-01}}
+%\newcommand{\wood}{\texttt{Wood-03}}
+%\newcommand{\hallp}{\texttt{Hall-04p}}
+%\newcommand{\halld}{\texttt{Hall-04d}}
+%\newcommand{\hpu}{\texttt{HP-05}}
+%\newcommand{\hall}{\texttt{Hall-07}}
+%\newcommand{\hpud}{\texttt{HP-05d}}
+%\newcommand{\simple}{\texttt{Simple}}
+%\newcommand{\simplej}{\texttt{SimpleJ}}
+%\newcommand{\pap}{\texttt{PAP}}
+%\newcommand{\bvo}{\texttt{BV-11}}
+%\newcommand{\bvu}{\texttt{BV-12}}
+%\newcommand{\breg}{\texttt{BReg}}
+%\newcommand{\ptc}{\texttt{PTC}}
+%\newcommand{\hpm}{\texttt{HP-15 }}
+%\newcommand{\hhcp}{\texttt{HH-CP }}
+%\newcommand{\hpuc}{\texttt{HP-05c }}
+%\newcommand{\hpup}{\texttt{HP-05p}}
+%\newcommand{\hmm}{\texttt{HmM}}
+%\newcommand{\mbm}{\texttt{MbM}}
+%\newcommand{\bvcm}{\texttt{BV-CM}}
+%\newcommand{\bci}{\texttt{BCI}}
+%\newcommand{\scacc}{\texttt{SC-ACC}}
+%\newcommand{\pcps}{\texttt{PCPS}}
+%\newcommand{\at}{\texttt{AT}}
+%\newcommand{\sccf}{\texttt{SC-CF}}
+%\newcommand{\caec}{\texttt{CAEC}}
+
+\subsection{Overview}
+The chronologically first definition, referenced by \hpo, is due to Haplern and Pearl (HP). It was originally formulated in \parencite{halpern2001causes}, inspired by Pearl's causal beam notion (see \parencite{pearl1998definition}) and uses counterfactuals to identify token causes.
+Being seminal it became quickly apparent that further improvements are not only necessary but also possible. In particular, \parencite{hopkins2003clarifying} proposed an example, that seemingly demonstrated that this definition is insufficient. Leading to the formulation of the updated HP-definition, abbreviated as \hpu. It originated in \parencite{halpern2005causes} and is by far the most popular, i.e.\ the most widely used and discussed, formalism yet. Being merely an update of the original, \hpu remains firmly rooted in the counterfactual tradition. 
+Unfortunately, it was demonstrated in that the computational complexity of finding causes with \hpu is $D_2^P
+$-complete\footnote{$D_k^P$ is defined in \parencite{aleksandrowicz2017computational} as the set of all languages $L_3$ such that there exists a language $L_1 \in \Sigma_k^P$ and a language $L_2 \in \Pi_k^P$ such that $L_3= L_1 \cap L_2$. $\Sigma_k^P$ and $\Pi_k^P$ are simply levels on the polynomial hierarchy (see \parencite[p.~97-99]{arora2009computational}). This complexity class is a generalised version of the $k=1$ case coined in \parencite{papadimitriou1982complexity}} for both binary and general causal models \parencite{aleksandrowicz2017computational}. By contrast, \parencite{eiter2002complexity} demonstrated that \hpo is merely NP-complete in the binary and $\Sigma_2^P$-complete in the general case. Fortunately, the necessity of \hpu was challenged in \parencite{halpern2016appropriate}, where it is argued that the model used to discredit \hpo neglected to properly formalise the provided scenario, thus that a small, but unfortunately not always natural, expansion of said model is sufficient for \hpo to produce the desired judgement. 
+In \parencite{halpern2015modification} an new variant of this family was formulated. This definition is referred to as the modified HP definition and is therefore abbreviated here with \hpm.
+According to Halpern this definition is not only conceptually and computationally simpler, but also provides the more preferable answers. That is, it deals with the critique raised in \parencite{hopkins2003clarifying} and it handles various examples better that \hpu, e.g.\ Hall's non-existent threat example found in\parencite{hall2007structural} \parencite[p.~27]{halpern2015modification,halpern2016actual}. 
+With respect to computational complexity, \hpm is only NP-complete in the binary and $D_1^P$-complete in the general case, making it the most efficient HP-definition yet \parencite[p.~153-154]{halpern2016actual}.
+Another extension of the HP-definition, was presented in \parencite{fenton2017proposed}. The purpose of which was to adjust \hpu to make contrastive causal judgement.
+This extension is based on the view that causation is contrastive in nature, thus is not a binary, but a tertiary relation. For example, administering one does of medicine saves the patients live and administering a second dose is absolutely redundant, i.e.\ same outcome as giving only a single dose. Hence, giving two doses instead of zero caused the patient to survive, while giving two doses instead of one is immaterial to the persons survival. For a detailed discussion see Section XXXX.
 
 
-To do justice to all of the discovered formalisms, the subsequent paragraphs will provide a brief summary. This summary will start with the more popular definitions, move towards the less popular ones and conclude with the few semi-formal definition. For a quick overview consult Table \ref{tab:definition_overview}.
-There exists a plethora of definitions coined within the causal model framework. 
-% Wood03
-Starting with a definition from Woodward provided in \parencite{woodward2005making}. This account, abbreviated here with \texttt{Wood-03}, is discussed by \parencite{weslake2015partial,glymour2010actual}. 
-% Hitch01
-The articles \parencite{weslake2015partial, blanchard2017cause} discuss another causal model based definition provided in \parencite{hitchcock2001intransitivity} and called here \texttt{Hitch-01}.
-% HP-01, HP-05, HP-08d
-Without question the by far most discussed definition is attributed to Haplern and Pearl, it was originally formulated in 2001 (\texttt{HP-01}) and revised in 2005 (\texttt{HP-01}) in the article \parencite{halpern2005causes}. With respect to $\prset$ this definition was discussed in \parencite{glymour2010actual,gerstenberg2010spreading,weslake2015partial,chockler2015causal,
-ibeling2018conditional,beckers2018principled,denecker2018causal,batusov2018situation,liepicna2020arguing,khannecessary,halpern2011actual,halpern2015graded,beckers2016general,halpern2016appropriate}. Furthermore, its extension incorporating normality, formulated in \parencite{halpern2008defaults} and referenced here under the name \texttt{HP-08d}, is discussed in \parencite{halpern2011actual,halpern2015graded,beckers2016general,halpern2016appropriate}. 
-% BCI
- While the previously mentioned definition heavily rely on the counterfactual tradition, Bochman provides a definition emerging out of the regularity theoretic tradition. That is, in  \parencite{bochman2018laws,bochman2018actual} he discusses a definition (\texttt{BCI}) relying on the causal theories introduced in \parencite{mccain1997causal} and his logic of causal rules introduced in \parencite{bochman2004causal}.
- % SC-ACC 
-Switching towards a more process oriented perspective on causation, \parencite{batusov2018situation} introduces a new definition of token causality using situation calculus. Further discussion of this definition can be found in \parencite{khannecessary}. They define the notion of \emph{achievement causal chains} (\texttt{SC-ACC}) to identify token causes.  With respect to the set $\prset$ this definition is one of the few that can identify causes expressed in first-order logic, as many of the other approaches are, as of now, limited by the expressibility of their underlying language, which for the most part is bound to propositional logic, e.g.\ causal models. 
- % SC-CF 
-In \parencite{khannecessary} the authors remain faithful, relying on situation calculus once more. However, they introduce a revised (but equivalent) definition that is not only build in the shadows of the counterfactual tradition, but also can illustrate some of the accounts found in the regularity tradition. This definition will be referenced under the name \texttt{SC-CF}.
-% 
-Another process orientated definition can be found in \parencite{denecker2018causal,denecker2019explaining}, their definition is constructed with a regularity theoretical perspective in mind. This is possible, as the CP-Logic variant allows one to reference causal processes within the language. They call the semantic underpinning their approach the possible causal process semantics, thus their definition will be abbreviated with \texttt{PCPS}
+There are also independent definitions that use only the basic causal model variant.
+Firstly, there is \hitch which was provided in \parencite{hitchcock2001intransitivity}. Secondly, there is \wood formulated in \parencite{woodward2005making}.
+Thirdly, in \parencite{glymour2010actual} two simplified versions of \hpu called, \emph{Simple} and \emph{SimpleJ}, or abbreviated \simple and \simplej, are proposed. 
+However, all of the above disagree with \hpu on some of the traditional examples found in the literature. 
+Lastly and particularly of note is the ``Partial Theory of Actual Causation'', or abbreviated \ptc, put forward by Weslake in \parencite{weslake2015partial}, as he claims that his version improves upon the \hpu definition. This is partially accomplished by incorporating some tools from the regularity theoretic tradition without extending the causal model by some additional structure.
 
 
-There are other rather rudimentary definitions using causal models, which can be found in \parencite{halpern2011actual}, \parencite{halpern2015graded}, \parencite{schaffer2016grounding} and \parencite{weslake2015partial}. 
-%Simple SimpleJ
-In \parencite{glymour2010actual} two simplified versions of HP-05 called, \emph{Simple} and \emph{SimpleJ}, or abbreviated \texttt{S} and \texttt{SJ}, are proposed. However, they disagree with HP-05 on some of the traditional examples found in the literature. 
-% Partial Theory
-Particularly of note is the \emph{Partial Theory of Actual Causation},  or abbreviated \texttt{PTC}, put forward by Weslake in \parencite{weslake2015partial}, as he claims that his version improves upon the HP-2005 definition. This is partially accomplished by incorporating some tools from the regularity theoretic tradition.
-% HmM and MbM
-Two definitions fuse normality assessments with causal models are discussed in \parencite{blanchard2017cause}, both require a slight extension of regular causal models. The first one is called \emph{Hitchcock-meets-Menzies} or \texttt{HmM}, and is a modified version of the one found in \parencite{hitchcock2007prevention}. It incorporates normality assumptions by simply partitioning the range of each variable in a causal model into default and deviant values. 
-% MbM
+Although their necessity is subject of contention, e.g.\ see \parencite{blanchard2017cause}, during there years \hpu was extended by some form of default reasoning, i.e.\ they incorporated a normality ordering over various contexts. This extension was motivated by the discovery of several so called non-structural examples, i.e.\ examples that have the same causal model and yet exhibit different intuitive answers. Hence, it using such extended causal models provides the necessary flexibility, possibly an excessive amount of flexibility, to resolve the issues put forward by those examples. Additionally, this notion of normality brings forth the possibility of introducing normative reasoning into causal judgements. In the selected literature only \hpud, i.e.\ the extension of \hpu with default reasoning was mentioned. However, it is possible to extend \hpm in a similar fashion. Moreover, the discussed approach is not the only method of extension \parencite]p.~97-103]{halpern2016actual}.
+Apart from the HP-definition, there are other definitions that use causal models and incorporate some notion of normality. Given characterised literature, both, \hmm and \hpm can be found in \parencite{blanchard2017cause}. The first one is called \emph{Hitchcock-meets-Menzies} or \texttt{HmM}, and is a modified version of a definition found in \parencite{hitchcock2007prevention}. It incorporates normality assumptions by simply partitioning the range of each variable in a causal model into default and deviant values. 
 The second one is called \emph{Menzies-by-Menzies} or \texttt{MbM}, it builds on the ideas proposed in \parencite{menzies2007causation}, requires one to rank the possible states of the world based on their normality. 
-% BV-CM
-The last approach formulated using causal models is one proposed in \parencite{beckers2018principled}, let it be called \texttt{BV-CM}. What distinguishes this particular approach is that it is build according to an collection necessary and sufficient conditions derived from common examples that are allegedly inherent to causation. This approach builds heavily on Hall's separation of causality into production and counterfactual dependence. 
-% BV11 BV12
-In \parencite{beckers2016general} several formalisms are discussed. That is, they discuss their own definition of token causality in CP-Logic, which was defined in \parencite{vennekens2011actual} and will be called \texttt{BV-11} and modified in \parencite{beckers2012counterfactual}, which will be called \texttt{BV-12}. They achieve this by introducing a probabilistic account of causation, thus imbuing CP-Logic with tools that permit counterfactual reasoning.
-% Hall07, Hall04d, Hall04p
-Moreover, they discuss three definitions put forward by Hall, one termed \texttt{Hall-07} was coined in \parencite{hall2007structural} and the other two, called here \texttt{Hall-04p} and \texttt{Hall-04d}, are taken from \parencite{hall2004two}. Those definition were originally defined using neuron diagrams and structural equations. The fact that two definitions are taken from \parencite{hall2004two} arises from the fact that this article argues for the separation of causation into two relations, namely production and dependence.
-% HH-CP
-Furthermore, they extend their definition of token causality in CP-Logic akin to the normality extension of HP-05, creating the \texttt{HH-CP} definition.
-%BReg
-While most definition of token causality rely a specialised language with a complicated and heavy semantic machinery, Baumgartner takes a rather unorthodox approach, which will be abbreviated with \texttt{B-Reg}. That is, in 
-\parencite{baumgartner2013regularity} he proposes a definition that relies on material implication and some minimality constraint, thus allowing him to construct his definition using first-order logic.
-%AT
-The approach presented in \parencite{leblanc2019explaining}, which shall be abbreviated with \texttt{AT}, uses the action language $\mathcal{AL}$ and is therefore related to the approaches relying on situation calculus. However, when contrasted against those approaches $\mathcal{AL}$ is not only better equipped for representing indirect effects, but also accommodates an (arguably) simple semantic.
+
+Naturally, there are definitions that require causal models to be extended and generalised to capture other notions than normality. 
+Firstly, \bvcm proposed in \parencite{beckers2018principled}, distinguishes itself by extending causal models with a timing function. Thereby, allowing it to deal with a large range of controversial examples with time critical scenarios. Moreover, rather than just building on the Halpern and Perl definitions, this approach builds heavily on Hall's separation of causality into production and counterfactual dependence. From there they construct their definition according to an collection necessary and sufficient conditions derived from common examples that are allegedly inherent to causation. 
+Secondly, \parencite{fenton2017proposed} generalises \hpu, which is solely concerned with deterministic cases, to the probabilistic case. While not demonstrated in the article in question, they conjecture that their natural probabilistic extension is set up to deal with a wide range of examples circulating in the literature. Furthermore, they claim that they improved upon a previous attempt by \parencite{twardy2011actual} where they tried to generalise causal models to the probabilistic level using ``Probabilistic Active Paths'', thus their approach is abbreviated here with \pap. 
+
+
+
+Before discussing definitions that use languages other than causal models, it must be noted that there are additional, but rather rudimentary definitions of token causality. For reference see \parencite{halpern2011actual}, \parencite{halpern2015graded}, \parencite{schaffer2016grounding} and \parencite{weslake2015partial}. 
+Among those token causality definition that do not utilise causal models, there exists one block of formalisms using some kind of action language and another one that utilises CP-Logic. Apart from that there are two additional formal definitions and a multitude of (semi-)formal definitions.
+
+Starting with the definitions that utilise action languages. In particular, there are two apparently equivalent definitions, \scacc and \sccf introduced in \parencite{batusov2018situation} and \parencite{khannecessary}  respectively, that leverage the expressive capabilities of situation calculus. Hence, both of them approach causality from a more procedural point of view.
+They define the notion of achievement causal chains to identify token causes.  With respect to the set $\prset$ this definition is one of the few that can identify causes expressed in first-order logic, as many of the other approaches are, as of now, limited by the expressibility of their underlying language, which for the most part is bound to propositional logic with no natural path for generalisation in sight, e.g.\ causal models. In \parencite{khannecessary} the authors remain faithful, relying on situation calculus once more. However, they introduce a revised definition that is while build in the shadows of the counterfactual tradition, still capable of of illustrating some of the accounts found in the regularity tradition, e.g. INUS.
+The approach presented in \parencite{leblanc2019explaining}, which shall be abbreviated with \at uses the action language $\mathcal{AL}$ and is therefore related to the approaches relying on situation calculus. However, when contrasted against those approaches $\mathcal{AL}$ is, according to \parencite{leblanc2019explaining} not only better equipped for representing indirect effects, but also commands an (arguably) simple semantic.
+
+
+
+Within the family of CP-Logic there are three definitions to be found. 
+The first one is a definition of token causality in the original CP-Logic, which was defined in \parencite{vennekens2011actual} and will be called \bvo. Later the same authors presented a modified version of said definition, called here \bvu in the article \parencite{beckers2012counterfactual}. Those two definitions are take an inherent probabilistic view on causation. Moreover, given the semantics of CP-Logic it can be argued that those definitions contain a procedural element as well.
+Akin to the definitions form Halpern and Pearl they later extended \bvu to keep on par with \hpu after its normality extension, thus creating \hhcp in the process.
+Moving away from a probabilistic conception of causality, and more towards a process orientated view. 
+Another definition in the wider context of CP-Logic can be found in \parencite{denecker2018causal,denecker2019explaining}, their definition is according to its creators constructed with a regularity theoretical perspective in mind. Furthermore, another benefit of this language is that the CP-Logic variant used allows one to reference causal processes within the language. Since they call the semantic underpinning their approach the possible causal process semantics, thus their definition will be abbreviated with \pcps.
+
+
+The definitions \bci formulated in \parencite{bochman2018actual} and \breg originating in \parencite{baumgartner2013regularity} can not be categories as relying on either one of the above mentioned modelling languages, i.e.\ Causal Models, Action Languages and CP-Logic.
+Firstly, with \bci, Bochman coined a definition emerging out of the regularity theoretic tradition that uses two separate logics, namely causal theories introduced in \parencite{mccain1997causal} and his logic of causal rules introduced in \parencite{bochman2004causal}, for reasoning about causality. 
+This is in stark contrast with \breg. Rather than relying a specialised language, in \bci cases even two, with a complicated and heavy semantic machinery, Baumgartner took great effort in requiring only fairly common logical concepts. That is, his definition, which clearly follows the regularity tradition, relies only on material implication and some minimality constraint, thus allowing him to construct his definition using first-order logic only.
+
+
+
+Before moving on to the more informal definitions, there are also some that are difficult to place.
+Among the publications in the $\prset$ those definitions are primarily discussed in \parencite{beckers2016general}. All three of which were put forward by Hall, one termed \hall was coined in \parencite{hall2007structural} and the other two, called here \hallp and \halld, are taken from \parencite{hall2004two}. Those definition were originally defined using neuron diagrams and structural equations. The two latter definitions reflect the Hall's view in \parencite{hall2004two} that causality is separated into different relations, namely production and dependence.
+
+
 
 Additionally, there are some definitions of token causality that are not completely formalised.  
-%FCA
-Starting with the definition provided in \parencite{liepicna2019evaluation}, using the language FCA, is categorised by its authors as semi-formal. Their definition called causal argument evaluation criteria or \texttt{CAEC} is strongly inspired by the NESS account.
-%But For
-Moving fully into the informal realm, arguably the simplest definition in this category is the \texttt{but-for} or \emph{sine qua non} test. Heavily used in the legal profession, it captures a highly simplified form of counterfactual reasoning. Articles discussing this approach in detail are \parencite{gerstenberg2010spreading,liepicna2020arguing,wright2017ness}.  
-% Hart
-A more elaborate improvement on the but-for test is the definition of Hart and Honore's called \emph{causally relevant factors}, here abbreviated with \texttt{CRF}. It is discussed in \parencite{liepicna2020arguing,wright2017ness} and according to \parencite{wright2017ness} has its origins in \parencite{hart1985causation}. 
-% INUS
-Building on the ideas discussed, John Mackie introduces the so called \texttt{INUS}-condition (Insufficient but Necessary part of an Unnecessary but Sufficient condition) in \parencite{mackie1965causes}. This account is discussed in articles such as \parencite{wright2017ness,baumgartner2013regularity}.
-% NESS
-Wright, inspired by both of those accounts, formulates his \texttt{NESS}-account (Necessary Element of a Sufficient Set) in \parencite{wright1987causation}, an account that is discussed in \parencite{wright2017ness,baumgartner2013regularity,bochman2018actual}.
+Starting with the definition provided in \parencite{liepicna2019evaluation}, using the language FCA, is categorised by its authors as semi-formal. Their definition called causal argument evaluation criteria or \caec is strongly inspired by the NESS account.
+Moving fully into the informal realm, arguably the simplest definition in this category is the \butfor or \emph{sine qua non} test. Heavily used in the legal profession, it captures a highly simplified form of counterfactual reasoning.
+An improvement on the but-for test is the definition of Hart and Honore's called \emph{causally relevant factors}, here abbreviated with \crf, which according to \parencite{wright2017ness} has its origins in \parencite{hart1985causation}. 
+Later on, John Mackie introduced the so called \inus-condition (Insufficient but Necessary part of an Unnecessary but Sufficient condition) in \parencite{mackie1965causes}. 
+Wright, inspired by both of those accounts, formulates his \texttt{NESS}-account (Necessary Element of a Sufficient Set) in \parencite{wright1987causation}.
 The latter two are both considered to be contributions to the regularity theoretic literature \parencite{baumgartner2013regularity}.
 
 A honourable mention must be given to a definition from \parencite{bex2010hybrid}. This definition exists in the intersection of logic and law and is formulated using abductive causal theories. Its core idea is to check whether a given story (a chronological sequence of events) to explains a designated set of proposition using the provided abductive causal theory. Then they use an abstract argumentation framework to rank the stories based on their compliance with evidence. It was not considered a token causality definition, as it is not intended for extracting causally significant events from the given story.
 
 
-Ignoring some of the preliminary definitions found in \parencite{halpern2015graded}, \parencite{weslake2015partial} and \parencite{glymour2010actual}. The subsequent Table XXXX provides a detailed overview of all the definitions presented above. 
+%
+%% BCI
+% While the previously mentioned definition heavily rely on the counterfactual tradition, Bochman provides a definition emerging out of the regularity theoretic tradition. That is, in  \parencite{bochman2018laws,bochman2018actual} he discusses a definition (\texttt{BCI}) relying on the causal theories introduced in \parencite{mccain1997causal} and his logic of causal rules introduced in \parencite{bochman2004causal}.
+% % SC-ACC 
+%Switching towards a more process oriented perspective on causation, \parencite{batusov2018situation} introduces a new definition of token causality using situation calculus. Further discussion of this definition can be found in \parencite{khannecessary}. They define the notion of \emph{achievement causal chains} (\texttt{SC-ACC}) to identify token causes.  With respect to the set $\prset$ this definition is one of the few that can identify causes expressed in first-order logic, as many of the other approaches are, as of now, limited by the expressibility of their underlying language, which for the most part is bound to propositional logic, e.g.\ causal models. 
+% % SC-CF 
+%In \parencite{khannecessary} the authors remain faithful, relying on situation calculus once more. However, they introduce a revised (but equivalent) definition that is not only build in the shadows of the counterfactual tradition, but also can illustrate some of the accounts found in the regularity tradition. This definition will be referenced under the name \texttt{SC-CF}.
+%% 
+%Another process orientated definition can be found in \parencite{denecker2018causal,denecker2019explaining}, their definition is constructed with a regularity theoretical perspective in mind. This is possible, as the CP-Logic variant allows one to reference causal processes within the language. They call the semantic underpinning their approach the possible causal process semantics, thus their definition will be abbreviated with \texttt{PCPS}
+%
+%
+%There are other rather rudimentary definitions using causal models, which can be found in \parencite{halpern2011actual}, \parencite{halpern2015graded}, \parencite{schaffer2016grounding} and \parencite{weslake2015partial}. 
+%%Simple SimpleJ
+%%In \parencite{glymour2010actual} two simplified versions of HP-05 called, \emph{Simple} and \emph{SimpleJ}, or abbreviated \texttt{S} and \texttt{SJ}, are proposed. However, they disagree with HP-05 on some of the traditional examples found in the literature. 
+%% Partial Theory
+%Particularly of note is the \emph{Partial Theory of Actual Causation},  or abbreviated \texttt{PTC}, put forward by Weslake in \parencite{weslake2015partial}, as he claims that his version improves upon the HP-2005 definition. This is partially accomplished by incorporating some tools from the regularity theoretic tradition.
+%% HmM and MbM
+%Two definitions fuse normality assessments with causal models are discussed in \parencite{blanchard2017cause}, both require a slight extension of regular causal models. The first one is called \emph{Hitchcock-meets-Menzies} or \texttt{HmM}, and is a modified version of the one found in \parencite{hitchcock2007prevention}. It incorporates normality assumptions by simply partitioning the range of each variable in a causal model into default and deviant values. 
+%% MbM
+%The second one is called \emph{Menzies-by-Menzies} or \texttt{MbM}, it builds on the ideas proposed in \parencite{menzies2007causation}, requires one to rank the possible states of the world based on their normality. 
+%% BV-CM
+%The last approach formulated using causal models is one proposed in \parencite{beckers2018principled}, let it be called \texttt{BV-CM}. What distinguishes this particular approach is that it is build according to an collection necessary and sufficient conditions derived from common examples that are allegedly inherent to causation. This approach builds heavily on Hall's separation of causality into production and counterfactual dependence. 
+%% BV11 BV12
+%In \parencite{beckers2016general} several formalisms are discussed. That is, they discuss their own definition of token causality in CP-Logic, which was defined in \parencite{vennekens2011actual} and will be called \texttt{BV-11} and modified in \parencite{beckers2012counterfactual}, which will be called \texttt{BV-12}. They achieve this by introducing a probabilistic account of causation, thus imbuing CP-Logic with tools that permit counterfactual reasoning.
+%% Hall07, Hall04d, Hall04p
+%Moreover, they discuss three definitions put forward by Hall, one termed \texttt{Hall-07} was coined in \parencite{hall2007structural} and the other two, called here \texttt{Hall-04p} and \texttt{Hall-04d}, are taken from \parencite{hall2004two}. Those definition were originally defined using neuron diagrams and structural equations. The fact that two definitions are taken from \parencite{hall2004two} arises from the fact that this article argues for the separation of causation into two relations, namely production and dependence.
+%% HH-CP
+%Furthermore, they extend their definition of token causality in CP-Logic akin to the normality extension of HP-05, creating the \texttt{HH-CP} definition.
+%%BReg
+%While most definition of token causality rely a specialised language with a complicated and heavy semantic machinery, Baumgartner takes a rather unorthodox approach, which will be abbreviated with \texttt{B-Reg}. That is, in 
+%\parencite{baumgartner2013regularity} he proposes a definition that relies on material implication and some minimality constraint, thus allowing him to construct his definition using first-order logic.
+%%AT
+%The approach presented in \parencite{leblanc2019explaining}, which shall be abbreviated with \texttt{AT}, uses the action language $\mathcal{AL}$ and is therefore related to the approaches relying on situation calculus. However, when contrasted against those approaches $\mathcal{AL}$ is not only better equipped for representing indirect effects, but also accommodates an (arguably) simple semantic.
+%
+%Additionally, there are some definitions of token causality that are not completely formalised.  
+%%FCA
+%Starting with the definition provided in \parencite{liepicna2019evaluation}, using the language FCA, is categorised by its authors as semi-formal. Their definition called causal argument evaluation criteria or \texttt{CAEC} is strongly inspired by the NESS account.
+%%But For
+%Moving fully into the informal realm, arguably the simplest definition in this category is the \texttt{but-for} or \emph{sine qua non} test. Heavily used in the legal profession, it captures a highly simplified form of counterfactual reasoning. Articles discussing this approach in detail are \parencite{gerstenberg2010spreading,liepicna2020arguing,wright2017ness}.  
+%% Hart
+%A more elaborate improvement on the but-for test is the definition of Hart and Honore's called \emph{causally relevant factors}, here abbreviated with \texttt{CRF}. It is discussed in \parencite{liepicna2020arguing,wright2017ness} and according to \parencite{wright2017ness} has its origins in \parencite{hart1985causation}. 
+%% INUS
+%Building on the ideas discussed, John Mackie introduces the so called \texttt{INUS}-condition (Insufficient but Necessary part of an Unnecessary but Sufficient condition) in \parencite{mackie1965causes}. This account is discussed in articles such as \parencite{wright2017ness,baumgartner2013regularity}.
+%% NESS
+%Wright, inspired by both of those accounts, formulates his \texttt{NESS}-account (Necessary Element of a Sufficient Set) in \parencite{wright1987causation}, an account that is discussed in \parencite{wright2017ness,baumgartner2013regularity,bochman2018actual}.
+%The latter two are both considered to be contributions to the regularity theoretic literature \parencite{baumgartner2013regularity}.
+%
+%A honourable mention must be given to a definition from \parencite{bex2010hybrid}. This definition exists in the intersection of logic and law and is formulated using abductive causal theories. Its core idea is to check whether a given story (a chronological sequence of events) to explains a designated set of proposition using the provided abductive causal theory. Then they use an abstract argumentation framework to rank the stories based on their compliance with evidence. It was not considered a token causality definition, as it is not intended for extracting causally significant events from the given story.
 
 
-\begin{table}
-\centering
-\scriptsize
-\begin{tabular}{lllll}
-\toprule
-&Year	&Language	& Approach & Source\\
-\midrule   
-But For &	?	& NL &	 CF & ?\\
-CRF	& 1959	& NL	& RE & \parencite{hart1985causation}\\
-INUS &	1965 &	NL&	RE& \parencite{mackie1965causes}\\
-NESS&	1987&	NL&	RE& \parencite{wright1987causation}\\
-Hitch-01&	2001	&CM	&CF& \parencite{hitchcock2001intransitivity}\\
-HP-01	&2001	&CM&	CF& \parencite{halpern2005causes}*\\
-Wood-03 &	2003 &	CM &	CF& \parencite{woodward2005making}°\\
-Hall-04p	&2004	&?  &	CF& \parencite{hall2004two}\\
-Hall-04d		&2004	&? &	CF& \parencite{hall2004two}\\
-HP-05	&2005	&CM&	CF& \parencite{halpern2005causes}\\
-Hall-07	&2007	&CM	&CF& \parencite{hall2007structural}\\
-HP-08d &	2008	&CM+N	&CF,RE& \parencite{halpern2008defaults}\\
-Simple	&2010	&CM&	CF& \parencite{glymour2010actual}\\
-SimpleJ&	2010	&CM	&CF& \parencite{glymour2010actual}\\
-PAP	&2011	&CM+P&	CF, PR& \parencite{twardy2011actual}\\
-BV-11	& 2011&	CP	&CF, PR& \parencite{vennekens2011actual}\\
-BV-12	&2012&	CP	&CF, PR& \parencite{beckers2012counterfactual}\\
-BReg	&2013	&FOL	&RE& \parencite{baumgartner2013regularity}\\
-PTC &2015	& CM&	CF,RE& \parencite{weslake2015partial}\\
-HP-15 & 	2016	& CM+N	&CF, RE & \parencite{halpern2015modification}\\
-HH-CP & 	2016	& CP+N	&CF, RE, PR& \parencite{beckers2016general}\\
-HP-05c & 2017 & CM & CF & \parencite{fenton2017proposed} \\
-HP-05p & 2017 & CM+P& CF, PR & \parencite{fenton2017proposed} \\
-HmM &	2017	& CM+D	& CF, RE& \parencite{blanchard2017cause}\\
-MbM & 	2017	 & CM+N & 	CF, RE& \parencite{blanchard2017cause}\\
-BV-CM & 2018	& CM+T &	CF, PO& \parencite{beckers2018principled}\\
-BCI &	2018&	CT	& RE& \parencite{bochman2018actual}\\
-SC-ACC &	2018	& SC	& PO& \parencite{batusov2018situation}\\
-PCPS	& 2018	& CP2	& RE, PO& \parencite{denecker2018causal}\\
-AT &2019	 & AL	 &PO& \parencite{leblanc2019explaining}\\
-SC-CF	& 2020	& SC&	PO& \parencite{khannecessary}\\
-CAEC & 2020 & FCA & RE &  \parencite{khannecessary}\\
-\bottomrule
-\end{tabular}
-\caption{\scriptsize Overview of some of the token causality definitions found in $\prset$.
-The language used are 
-Action Language $\mathcal{AL}$ (AL);
-Causal Models (CM); 
-Causal Models with Default/Deviant distinction (CM+D);
-Causal Models with Normality ranking (CM+N);
-Probabilistic Causal Models (CM+P);
-Causal Models with Timing (CM+T);
-CP-Logic (CP);
-CP-Logic with Norms (CP+N);
-CP-Logic: Causal Logic (CP2);
-Causal Theories (CT);
-Neuron Diagrams (ND);
-Natural Language (NL); 
-Situation Calculus (SC).
-The approaches considered are 
-the Counterfactual approach (CF);
-a Process Oriented approach (PO);
-the Regularity Theoretic approach (RE);
-a (explicit) Probabilistic approach (PR).
-(*: Original in 2001; °: Original in 2003)}
-\label{tab:definition_overview}
-\end{table}
+\subsection{Categorisation}
+In this subsection, the introduced definitions are categorised based on several aspects. Firstly, their popularity (wrt. $\prset$) will be investigated, secondly they are categorised based on the languages used and finally there will be an attempt to roughly identify tradition from which each of those definitions emerged. 
 
-
-
-
-
-\begin{sidewaystable}
-\centering
-\tiny
-\begin{tabular}{lp{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1.1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
-\toprule
-	 &  Causal Model	 &  CP-Logic	 &  Situation Calculus	 &   Non-Monotonic Causal Theory  	 & FOL	 & Neuron Diagrams	 & Conditional Logic	 &  AL	 &  SFCA	 &   Abductive Causal Theory	\\
-\midrule
-But For	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-CRF	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-INUS	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-NESS	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-Hitch-01	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HP-01	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-Wood-03	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-Hall-04p	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-Hall-04d	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HP-05	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-Hall-07	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HP-08d	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-Simple	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-SimpleJ	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-PAP	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-BV-11	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
-BV-12	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
-BReg	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
-PTC	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HP-15	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HH-CP	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HP-05c	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HP-05p	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-HmM	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-MbM	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-BV-CM	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-BCI	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
-SC-ACC	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
-PCPS	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
-AT	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
-SC-CF	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
-CAEC	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
-
-\bottomrule
-\end{tabular}
-\caption{Depicts which publication discuss which languages families}
-\label{tab:language}
-\end{sidewaystable}
-
-
-
-\begin{table}
-\centering
-\scriptsize
-\begin{tabular}{lllll}
-\toprule
-	 & Counterfactual	 & Probability	 & Process	 & ﻿Regularity	\\
-	 \midrule
-But For	& X	& 	& 	& 	\\
-CRF	& 	& 	& 	& X	\\
-INUS	& 	& 	& 	& X	\\
-NESS	& 	& 	& 	& X	\\
-Hitch-01	& X	& 	& 	& 	\\
-HP-01	& X	& 	& 	& 	\\
-Wood-03	& X	& 	& 	& 	\\
-Hall-04p	& X	& 	& 	& 	\\
-Hall-04d	& X	& 	& 	& 	\\
-HP-05	& X	& 	& 	& 	\\
-Hall-07	& X	& 	& 	& 	\\
-HP-08d	& X	& 	& 	& X	\\
-Simple	& X	& 	& 	& 	\\
-SimpleJ	& X	& 	& 	& 	\\
-PAP	& X	& X	& 	& 	\\
-BV-11	& X	& X	& 	& 	\\
-BV-12	& X	& X	& 	& 	\\
-BReg	& 	& 	& 	& X	\\
-PTC	& X	& 	& 	& X	\\
-HP-15	& X	& 	& 	& X	\\
-HH-CP	& X	& X	& 	& X	\\
-HP-05c	& X	& 	& 	& 	\\
-HP-05p	& X	& 	& 	& X	\\
-HmM	& X	& 	& 	& X	\\
-MbM	& X	& 	& 	& X	\\
-BV-CM	& X	& 	& X	& 	\\
-BCI	& 	& 	& 	& X	\\
-SC-ACC	& 	& 	& X	& 	\\
-PCPS	& 	& 	& X	& X	\\
-AT	& 	& 	& X	& 	\\
-SC-CF	& 	& 	& X	& 	\\
-CAEC	& 	& 	& 	& X	\\
-\bottomrule
-\end{tabular}
-\caption{}
-\label{tab:definition_overview}
-\end{table}
-
-The language of choice heavily informs the definitions of token causality formulated within, e.g.\ definitions formulated in Situation Calculus (or some other action language) emphasise the procedural nature of causation, definitions formulated in CP-Logic highlight its probabilistic nature. However, while some formalisms only have a handful of definitions under their belt, causal models in particular (and structural equations in general) are used to formulate a disproportionate amount of sometimes vastly different definitions,  e.g.\  see \parencite{fenton2017proposed} and \parencite{weslake2015partial}. Properly assessing which language provides is the most suitable for defining token causality, is far beyond the scope of work. However, counting the number of original token causality definitions (in $\prset$) for each language, a measure of popularity different to the one provided in Table \ref{tab:language}, can be provided.
-
-
- The results of this can be viewed in Table \ref{tab:definition_language_count}. Apart from that, notable comments to the data presented in Table \ref{tab:definition_language_count} can be made with respect to seniority of definitions found within a respective language family. The most recent definition of token causality using some variant of CP-Logic can be found in \parencite{denecker2019explaining}. The latest definition using the original CP-Logic can be found in \parencite{beckers2016general}, where they extended the original one by allowing one to consider normality. 
-As for causal models, \parencite{beckers2018principled} is the most recent definition. However, they adapt causal models by adding  a function encoding timing to the original causal models. By contrast \parencite{weslake2015partial}
-provides the latest definition, while relying solely on the original form of causal models. As the remaining languages are only associated with less than two definitions of token causality (see Table \ref{tab:definition_language_count})
-the seniority of definitions is immediate. 
-
-\begin{table}
-\centering
-\scriptsize
-\begin{tabular}{lc}
-\toprule
-Language & Number of Token Causality Definitions\\   
-\midrule        
-Causal Model	& 12\\
-CP-Logic	& 4 \\
-Situation Calculus & 2 \\
- Non-Monotonic Causal Theory & 1 \\
- First-order Logic & 1 \\
- Neuron Diagrams & 	0$^{\star}$\\
- Conditional Logic	& 0$^{\circ}$ \\
- $\mathcal{AL}$	& 1\\
- FCA & 1\\ 
-\bottomrule
-\end{tabular}
-\caption{Depicts the number of token causality definitions for each of the formal languages discussed in the articles found in $\prset$.
-$\star$: Neuron Diagram are mostly used to present to encode and demonstrate examples. 
-$\circ$: The articles discussing conditional logic focus more on the formalism itself, e.g.\ the explore its properties or demonstrate the rules for the used for performing conditional and counterfactual reasoning.}
-\label{tab:definition_language_count}
-\end{table}
-
-
-
+The popularity of a definition will be assessed based on the how many publications in $\prset$ are mentioning the definition in question.
+To that extend Table \ref{tab:definitions-1} and Table \ref{tab:definitions-2} were constructed. Those tables depict which publication from $\prset$ mentions which definition.
+On further analysis of the fully formalised definitions, it becomes quite apparent that \hpu, which is mentioned by 15 publications, is the most popular of the considered formalism by a considerable margin. As the distant second place is held by \hpud with 4 mentions. However, with \hpud being merely an extension of \hpu, this further solidifies its position as the benchmark formalism across the literature.
+Furthermore, with another definition from Hapern and Pearl \hpo being the third most popular, the dominance Halpern's ideas throughout the field becomes quite apparent.
+However, on closer look this assessment may change slightly. It is clear that this assessment favours old formalisms that were consistently discussed, investigated and refined.
+Since, this could be (and most likely is) done by the same author one can recalculate this ranking while ignoring self-references. When corrected for this, i.e.\ when considering publications form other authors only, \hpu is still referenced $11$ times. However, the second place with 2 references is now shared by \hpm, \wood and \hitch. 
 
  \begin{sidewaystable}
 \centering
@@ -1484,7 +1444,7 @@ $\circ$: The articles discussing conditional logic focus more on the formalism i
 \bottomrule
 \end{tabular}
 \caption{Depicts which publication discuss which token causality definition (formulated before 2011).  }
-\label{tab:language}
+\label{tab:definitions-1}
 \end{sidewaystable}
 
 
@@ -1493,217 +1453,334 @@ $\circ$: The articles discussing conditional logic focus more on the formalism i
  \begin{sidewaystable}
 \centering
 \tiny
-\begin{tabular}{lp{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}p{0.5cm}}
+\begin{tabular}{lp{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}p{0.4cm}}
 \toprule
-	 & PAP	 & BV-11  & BV12	 & B-Reg	 & PTC	 & HH-CP	 & HP-05c	 & HP-05p	 & HmM	 & MbM	 & BV-CM	 & BCI	 & SC-ACC	 & PCPS	 & AT	 & SC-CF	 & CAEC	\\
-\cite{vennekens2010embracing} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{bex2010hybrid} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{lee2010representing}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{lifschitz2010translating} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{glymour2010actual}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{claassen2010causal} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{gerstenberg2010spreading}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{halpern2011actual} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{shulz2011if} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{briggs2012interventionist}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{baumgartner2013regularity} 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{hyttinen2013discovering} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{halpern2015graded} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{weslake2015partial} 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{chockler2015causal}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{beckers2016general} 	& 	& X	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{schaffer2016grounding}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{halpern2016appropriate} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{blanchard2017cause}  	& 	& 	& 	& 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{wright2017ness}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{icard2017normality} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{aleksandrowicz2017computational}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{fenton2017proposed}  	& X	& 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{lagnado2017causation}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{bochman2018actual}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
- \cite{ibeling2018conditional}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{beckers2018principled} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
- \cite{bochman2018laws}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
- \cite{denecker2018causal}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
- \cite{batusov2018situation}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
- \cite{denecker2019explaining}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
- \cite{liepicna2019evaluation}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
- \cite{leblanc2019explaining} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
- \cite{liepicna2020arguing} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \cite{khannecessary}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
- \cite{ibeling2020probabilistic}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
- \hline 
-\cite{halpern2016actual} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ & PAP	 & BV-11	 & BV12	 & B-Reg	 & PTC	 & HP-15	 & HH-CP	 & HP-05c	 & HP-05p	 & HmM	 & MbM	 & BV-CM	 & BCI	 & SC-ACC	 & PCPS	 & AT	 & SC-CF	 & CAEC	\\
+\cite{vennekens2010embracing} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bex2010hybrid} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{lee2010representing}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{lifschitz2010translating} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{glymour2010actual}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{claassen2010causal} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{gerstenberg2010spreading}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2011actual} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{shulz2011if} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{briggs2012interventionist}	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{baumgartner2013regularity} 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{hyttinen2013discovering} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2015graded} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{weslake2015partial} 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{chockler2015causal}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{beckers2016general} 	& 	& X	& X	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{schaffer2016grounding}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2016appropriate} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{blanchard2017cause}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{wright2017ness}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{icard2017normality} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{aleksandrowicz2017computational}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{fenton2017proposed}  	& X	& 	& 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{lagnado2017causation}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bochman2018actual}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
+ \cite{ibeling2018conditional}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{beckers2018principled} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{bochman2018laws}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
+ \cite{denecker2018causal}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+ \cite{batusov2018situation}  	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
+ \cite{denecker2019explaining}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+ \cite{liepicna2019evaluation}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
+ \cite{leblanc2019explaining} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
+ \cite{liepicna2020arguing} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
+ \cite{khannecessary}  	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+ \cite{ibeling2020probabilistic}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+
 \bottomrule
 \end{tabular}
 \caption{Depicts which publication discuss which token causality definition (formulated from 2011 onwards).  }
-\label{tab:language}
+\label{tab:definitions-2}
 \end{sidewaystable}
 
-%
-%
-% \begin{sidewaystable}
+
+\clearpage
+
+
+The definitions can also be differentiated based on the original language used to formulate them.
+The data collected to do so can be viewed in Table \ref{tab:definitions-language}. Here, it must be remarked that 
+the depicted data are already aggregated based on language families. That is, rather that listing every variant in a particular language family, the family itself is used in the categorisation process.
+In particular this effects definitions using one of the CP-Logics, and definitions using one of the many extensions and generalisations of causal models.
+A mere glance at the data suffices, to further strengthen the claim that the ideas put forward by Halpern and Pearl shape the literature around causality.
+Namely, a total of 16 definitions rely on causal models in one form or another. Removing all definitions formulated by either Halpern or Pearl, still provides us with a total of 12 definitions.
+That is in stark contrast with the second most popular modelling language, CP-Logic. This language is only used by four definitions, all of which were either formulated by its creator Vennekens.
+Among those languages with zero definitions under their belt, particular mention must be given to neuron diagrams. Firstly, although no definition found in $\prset$ uses this language, it is often applied as a modelling tool for conveying the type causal relations of an example in an intuitive manner. Secondly, as already mentioned \parencite{erwig2010causal} formulated a definition for token causes using neuron diagrams.  Within the language families the definitions can be distinguished further. In the CP-Logic family, \bvo, \bvu use the original formulation, \hhcp uses a slight extension of the original language that allows for the expression of norms and \pcps relies on the deterministic second language in this family.
+With respect to causal models the following differentiations can be made. \hpud, \mbm (and arguably \hpm as it can be extended to a definition that incorporates normality) rely on causal models extended by a normality ranking. \hmm used causal models where variables have default values. Both \pap and \hpup use some form of probabilistic causal models and \bvcm require their causal models to be extended by a timing function.
+
+
+
+\begin{sidewaystable}
+\centering
+\tiny
+\begin{tabular}{lp{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1.1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
+\toprule
+	 &  Causal Model	 &  CP-Logic	 &  Situation Calculus	 &   Non-Monotonic Causal Theory  	 & First-order Logic	 & Neuron Diagrams	 & Conditional Logic	 &  AL	 &  SFCA	 &   Abductive Causal Theory	\\
+\midrule
+\butfor	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\crf	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\inus	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\ness	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hitch	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hpo	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\wood	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hallp	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\halld	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hpu	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hall	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hpud	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\simple	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\simplej	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\pap	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\bvo	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\bvu	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\breg	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
+\ptc	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hpm	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hhcp	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hpuc	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hpup	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\hmm	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\mbm	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\bvcm	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\bci	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+\scacc	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
+\pcps	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+\at	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
+\sccf	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
+\caec	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+\bottomrule
+\end{tabular}
+\caption{This table depicts which definitions rely on which language family}
+\label{tab:definitions-language}
+\end{sidewaystable}
+
+
+
+
+
+Another categorisation of the discovered definitions can be made based on the traditions they follow. That is, whether the take a counterfactual, regularity, probability or process orientated view of causality.
+The assessment is primarily done based on the self-assessment of the authors and or comments from other authors.
+
+
+
+
+
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lllll}
+\toprule
+	 & Counterfactual	 & Probability	 & Process	 & Regularity	\\
+	 \midrule
+\butfor	& X	& 	& 	& 	\\
+\crf	& 	& 	& 	& X	\\
+\inus	& 	& 	& 	& X	\\
+\ness	& 	& 	& 	& X	\\
+\hitch	& X	& 	& 	& 	\\
+\hpo	& X	& 	& 	& 	\\
+\wood	& X	& 	& 	& 	\\
+\hallp	& X	& 	& 	& 	\\
+\halld	& X	& 	& 	& 	\\
+\hpu	& X	& 	& 	& 	\\
+\hall	& X	& 	& 	& 	\\
+\hpud	& X	& 	& 	& X	\\
+\simple	& X	& 	& 	& 	\\
+\simplej	& X	& 	& 	& 	\\
+\pap	& X	& X	& 	& 	\\
+\bvo	& X	& X	& 	& 	\\
+\bvu	& X	& X	& 	& 	\\
+\breg	& 	& 	& 	& X	\\
+\ptc	& X	& 	& 	& X	\\
+\hpm	& X	& 	& 	& 	\\
+\hhcp	& X	& X	& 	& X	\\
+\hpuc	& X	& 	& 	& 	\\
+\hpup	& X	& X	& 	& 	\\
+\hmm	& X	& 	& 	& X	\\
+\mbm	& X	& 	& 	& X	\\
+\bvcm	& X	& 	& X	& 	\\
+\bci	& 	& 	& 	& X	\\
+\scacc	& 	& 	& X	& 	\\
+\pcps	& 	& 	& X	& X	\\
+\at	& 	& 	& X	& 	\\
+\sccf	& X	& 	& X	& 	\\
+\caec	& 	& 	& 	& X	\\
+
+\bottomrule
+\end{tabular}
+\caption{This table depicts which definitions follow which tradition.}
+\label{tab:definition_traditions}
+\end{table}
+
+
+
+
+
+
+Finally, Table \ref{tab:definition_summary} provides a summery of the token causal definition and their categorisation based in the dimension discussed in this section.
+Additionally, it provides information about their age and provides a reference to the publication of origin.
+
+
+
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{llllll}
+\toprule
+&Year	& References &Language	& Approach & Source\\
+\midrule   
+\butfor &	 ? &	4 &	 NL &	 CF &	? \\
+\crf &	1959 &	2 &	 NL &	 RE &	\parencite{hart1985causation} \\
+\inus &	1965 &	3 &	 NL &	 RE &	\parencite{mackie1965causes} \\
+\ness &	1987 &	4 &	 NL &	 RE &	\parencite{wright1987causation} \\
+\hitch &	2001 &	2 &	 CM &	 CF &	\parencite{hitchcock2001intransitivity} \\
+\hpo &	2001 &	3 &	 CM &	 CF &	\parencite{halpern2005causes}* \\
+\wood &	2003 &	2 &	 CM &	 CF &	\parencite{woodward2005making}° \\
+\hallp &	2004 &	1 &	 ? &	 CF &	\parencite{hall2004two} \\
+\halld &	2004 &	1 &	 ? &	 CF &	\parencite{hall2004two} \\
+\hpu &	2005 &	15 &	 CM &	 CF &	\parencite{halpern2005causes} \\
+\hall &	2007 &	1 &	 CM &	 CF &	\parencite{hall2007structural} \\
+\hpud &	2008 &	4 &	 CM+N &	 CF,RE &	\parencite{halpern2008defaults} \\
+\simple &	2010 &	1 &	 CM &	 CF &	\parencite{glymour2010actual} \\
+\simplej &	2010 &	1 &	 CM &	 CF &	\parencite{glymour2010actual} \\
+\pap &	2011 &	1 &	 CM+P &	 CF, PR &	\parencite{twardy2011actual} \\
+\bvo &	2011 &	1 &	 CP &	 CF, PR &	\parencite{vennekens2011actual} \\
+\bvu &	2012 &	1 &	 CP &	 CF, PR &	\parencite{beckers2012counterfactual} \\
+\breg &	2013 &	1 &	 FOL &	 RE &	\parencite{baumgartner2013regularity} \\
+\ptc &	2015 &	1 &	 CM &	 CF,RE &	\parencite{weslake2015partial} \\
+\hpm &	2015 &	2 &	CM &	CF &	\parencite{halpern2015modification} \\
+\hhcp &	2016 &	1 &	 CP+N &	 CF, PR, RE &	\parencite{beckers2016general} \\
+\hpuc &	2017 &	1 &	 CM &	 CF &	\parencite{fenton2017proposed}  \\
+\hpup &	2017 &	1 &	 CM+P &	 CF, PR &	\parencite{fenton2017proposed}  \\
+\hmm &	2017 &	1 &	 CM+D &	 CF, RE &	\parencite{blanchard2017cause} \\
+\mbm &	2017 &	1 &	 CM+N &	 CF, RE &	\parencite{blanchard2017cause} \\
+\bvcm &	2018 &	1 &	 CM+T &	 CF, PO &	\parencite{beckers2018principled} \\
+\bci &	2018 &	2 &	 CT &	 RE &	\parencite{bochman2018actual} \\
+\scacc &	2018 &	1 &	 SC &	 PO &	\parencite{batusov2018situation} \\
+\pcps &	2018 &	2 &	 CP2 &	 PO, RE &	\parencite{denecker2018causal} \\
+\at &	2019 &	1 &	 AL &	 PO &	\parencite{leblanc2019explaining} \\
+\sccf &	2020 &	1 &	 SC &	 CF, PO &	\parencite{khannecessary} \\
+\caec &	2020 &	2 &	 FCA &	 RE &	\parencite{liepicna2020arguing} \\
+\bottomrule
+\end{tabular}
+\caption{Summary of the token causality definitions discussed.
+The language used are 
+Action Language $\mathcal{AL}$ (AL);
+Causal Models (CM); 
+Causal Models with Default/Deviant distinction (CM+D);
+Causal Models with Normality ranking (CM+N);
+Probabilistic Causal Models (CM+P);
+Causal Models with Timing (CM+T);
+CP-Logic (CP);
+CP-Logic with Norms (CP+N);
+CP-Logic: Causal Logic (CP2);
+Causal Theories (CT);
+%Neuron Diagrams (ND);
+Natural Language (NL); 
+Situation Calculus (SC).
+The approaches considered are 
+the Counterfactual approach (CF);
+a Process Oriented approach (PO);
+the Regularity Theoretic approach (RE);
+a (explicit) Probabilistic approach (PR).
+(*: Original in 2001; °: Original in 2003)
+}
+\label{tab:definition_summary}
+\end{table}
+
+
+
+
+%\begin{table}
 %\centering
-%\tiny
-%\begin{tabular}{lp{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.2cm}p{0.05cm}p{0.05cm}p{0.1cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.2cm}p{0.1cm}p{0.1cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}}
+%\scriptsize
+%\begin{tabular}{lllll}
 %\toprule
-%Articles & But-For & CRF & INUS & NESS & Hitch-01 & HP-01 & 	Wood-03	& Hall-04p	& Hall-04d & HP-05 & Hall-07 & HP-08d & S & SJ & BV-11 &  BV-12 &  B-Reg &
-%PTC &  HH-CP & HM & MM & BV-CM & BCI & SC-ACC & PCPS & AT & SC-CF & CAEC \\
-%\\   
-%\midrule        
-%\cite{vennekens2010embracing} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{bex2010hybrid} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{lee2010representing} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{lifschitz2010translating} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{glymour2010actual}& 	& 	& 	& 	& 	& 	& X	& 	& 	& X	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{claassen2010causal} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{gerstenberg2010spreading} & X	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{halpern2011actual} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{shulz2011if} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{briggs2012interventionist} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{baumgartner2013regularity} & 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{hyttinen2013discovering} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{halpern2015graded} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{weslake2015partial} & 	& 	& 	& 	& X	& X	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{chockler2015causal} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{beckers2016general} & 	& 	& 	& 	& 	& 	& 	& X	& X	& X	& X	& X	& 	& 	& X	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{schaffer2016grounding} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{halpern2016appropriate} & 	& 	& 	& 	& 	& X	& 	& 	& 	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{blanchard2017cause} & 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{wright2017ness} & X	& X	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{icard2017normality} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{aleksandrowicz2017computational} & 	& 	& 	& 	& 	& X	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{fenton2017proposed} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{lagnado2017causation} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{bochman2018actual} & 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
-% \cite{ibeling2018conditional} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{beckers2018principled} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
-% \cite{bochman2018laws} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
-% \cite{denecker2018causal} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
-% \cite{batusov2018situation} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
-% \cite{denecker2019explaining} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
-% \cite{liepicna2019evaluation} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
-% \cite{leblanc2019explaining}& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
-% \cite{liepicna2020arguing} & X	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
-% \cite{khannecessary} & 	& 	& X	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
-% \cite{ibeling2020probabilistic} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+%&Year	&Language	& Approach & Source\\
+%\midrule   
+%But For &	?	& NL &	 CF & ?\\
+%CRF	& 1959	& NL	& RE & \parencite{hart1985causation}\\
+%INUS &	1965 &	NL&	RE& \parencite{mackie1965causes}\\
+%NESS&	1987&	NL&	RE& \parencite{wright1987causation}\\
+%Hitch-01&	2001	&CM	&CF& \parencite{hitchcock2001intransitivity}\\
+%HP-01	&2001	&CM&	CF& \parencite{halpern2005causes}*\\
+%Wood-03 &	2003 &	CM &	CF& \parencite{woodward2005making}°\\
+%Hall-04p	&2004	&?  &	CF& \parencite{hall2004two}\\
+%Hall-04d		&2004	&? &	CF& \parencite{hall2004two}\\
+%HP-05	&2005	&CM&	CF& \parencite{halpern2005causes}\\
+%Hall-07	&2007	&CM	&CF& \parencite{hall2007structural}\\
+%HP-08d &	2008	&CM+N	&CF,RE& \parencite{halpern2008defaults}\\
+%Simple	&2010	&CM&	CF& \parencite{glymour2010actual}\\
+%SimpleJ&	2010	&CM	&CF& \parencite{glymour2010actual}\\
+%PAP	&2011	&CM+P&	CF, PR& \parencite{twardy2011actual}\\
+%BV-11	& 2011&	CP	&CF, PR& \parencite{vennekens2011actual}\\
+%BV-12	&2012&	CP	&CF, PR& \parencite{beckers2012counterfactual}\\
+%BReg	&2013	&FOL	&RE& \parencite{baumgartner2013regularity}\\
+%PTC &2015	& CM&	CF,RE& \parencite{weslake2015partial}\\
+%HP-15 & 	2015	& CM 	&CF  & \parencite{halpern2015modification}\\
+%HH-CP & 	2016	& CP+N	&CF, RE, PR& \parencite{beckers2016general}\\
+%HP-05c & 2017 & CM & CF & \parencite{fenton2017proposed} \\
+%HP-05p & 2017 & CM+P& CF, PR & \parencite{fenton2017proposed} \\
+%HmM &	2017	& CM+D	& CF, RE& \parencite{blanchard2017cause}\\
+%MbM & 	2017	 & CM+N & 	CF, RE& \parencite{blanchard2017cause}\\
+%BV-CM & 2018	& CM+T &	CF, PO& \parencite{beckers2018principled}\\
+%BCI &	2018&	CT	& RE& \parencite{bochman2018actual}\\
+%SC-ACC &	2018	& SC	& PO& \parencite{batusov2018situation}\\
+%PCPS	& 2018	& CP2	& RE, PO& \parencite{denecker2018causal}\\
+%AT &2019	 & AL	 &PO& \parencite{leblanc2019explaining}\\
+%SC-CF	& 2020	& SC&	PO& \parencite{khannecessary}\\
+%CAEC & 2020 & FCA & RE &  \parencite{khannecessary}\\
 %\bottomrule
 %\end{tabular}
-%\caption{Depicts which publication discuss which languages families}
-%\label{tab:language}
-%\end{sidewaystable}
+%\caption{Summary of the token causality definitions discussed.}
+%\label{tab:definition_summary}
+%\end{table}
 
 
 
+
+
+%The language of choice heavily informs the definitions of token causality formulated within, e.g.\ definitions formulated in Situation Calculus (or some other action language) emphasise the procedural nature of causation, definitions formulated in CP-Logic highlight its probabilistic nature. However, while some formalisms only have a handful of definitions under their belt, causal models in particular (and structural equations in general) are used to formulate a disproportionate amount of sometimes vastly different definitions,  e.g.\  see \parencite{fenton2017proposed} and \parencite{weslake2015partial}. Properly assessing which language provides is the most suitable for defining token causality, is far beyond the scope of work. However, counting the number of original token causality definitions (in $\prset$) for each language, a measure of popularity different to the one provided in Table \ref{tab:language}, can be provided.
 %
-%\cite{vennekens2010embracing} 	
-% \cite{bex2010hybrid} 
-% \cite{lee2010representing}
-% \cite{lifschitz2010translating} 
-% \cite{glymour2010actual}
-% \cite{claassen2010causal} 
-% \cite{gerstenberg2010spreading}
-% \cite{halpern2011actual} 
-% \cite{shulz2011if} 
-% \cite{briggs2012interventionist}
-% \cite{baumgartner2013regularity} 
-% \cite{hyttinen2013discovering} 
-% \cite{halpern2015graded} 
-% \cite{weslake2015partial} 
-% \cite{chockler2015causal}  
-% \cite{beckers2016general} 
-% \cite{schaffer2016grounding}  
-% \cite{halpern2016appropriate} 
-% \cite{blanchard2017cause}  
-% \cite{wright2017ness}  
-% \cite{icard2017normality} 
-% \cite{aleksandrowicz2017computational}  
-% \cite{fenton2017proposed}  
-% \cite{lagnado2017causation}  
-% \cite{bochman2018actual}  
-% \cite{ibeling2018conditional}  
-% \cite{beckers2018principled} 
-% \cite{bochman2018laws}  
-% \cite{denecker2018causal}  
-% \cite{batusov2018situation}  
-% \cite{denecker2019explaining}  
-% \cite{liepicna2019evaluation}  
-% \cite{leblanc2019explaining} 
-% \cite{liepicna2020arguing} 
-% \cite{khannecessary}  
-% \cite{ibeling2020probabilistic}  
-
-
 %
-%\begin{itemize}
+% The results of this can be viewed in Table \ref{tab:definition_language_count}. Apart from that, notable comments to the data presented in Table \ref{tab:definition_language_count} can be made with respect to seniority of definitions found within a respective language family. The most recent definition of token causality using some variant of CP-Logic can be found in \parencite{denecker2019explaining}. The latest definition using the original CP-Logic can be found in \parencite{beckers2016general}, where they extended the original one by allowing one to consider normality. 
+%As for causal models, \parencite{beckers2018principled} is the most recent definition. However, they adapt causal models by adding  a function encoding timing to the original causal models. By contrast \parencite{weslake2015partial}
+%provides the latest definition, while relying solely on the original form of causal models. As the remaining languages are only associated with less than two definitions of token causality (see Table \ref{tab:definition_language_count})
+%the seniority of definitions is immediate. 
 %
-%\item CM Woodward
-%\item CM HP 2001	
-%\item CM HP 2005	
-%\item CM HP 2005 + Normality	
-%\item CM Hitchcock	
-%\item Bochman Causal Inference
-%\item Simulation Model
-%\item Causal Process Semantics
-%\item Achievment Causal Chain
-%\item SFCA
-%\end{itemize}
+%\begin{table}
+%\centering
+%\scriptsize
+%\begin{tabular}{lc}
+%\toprule
+%Language & Number of Token Causality Definitions\\   
+%\midrule        
+%Causal Model	& 12\\
+%CP-Logic	& 4 \\
+%Situation Calculus & 2 \\
+% Non-Monotonic Causal Theory & 1 \\
+% First-order Logic & 1 \\
+% Neuron Diagrams & 	0$^{\star}$\\
+% Conditional Logic	& 0$^{\circ}$ \\
+% $\mathcal{AL}$	& 1\\
+% FCA & 1\\ 
+%\bottomrule
+%\end{tabular}
+%\caption{Depicts the number of token causality definitions for each of the formal languages discussed in the articles found in $\prset$.
+%$\star$: Neuron Diagram are mostly used to present to encode and demonstrate examples. 
+%$\circ$: The articles discussing conditional logic focus more on the formalism itself, e.g.\ the explore its properties or demonstrate the rules for the used for performing conditional and counterfactual reasoning.}
+%\label{tab:definition_language_count}
+%\end{table}
 
 
 
 
-%\item But For 	
-%\item INUS
-%\item NESS	
-%\item Hart
-
-
-%\begin{itemize}
-%
-%\item CM Partial Theory	
-%\item CM Hitchcock	
-%\item CM Hitchcock meets Menzies	
-%\item CM Menzies-by-Menzies	
-%\item CM VB
-%\item Hall 2007	Production	
-%\item Dependence	
-%\item BV12	
-%\item HH-CP	
-%\item FO Minimality	
-%\item But For 	
-%\item INUS
-%\item NESS	
-%\item Hart	
-%\item Bochman Causal Inference
-%\item Simulation Model
-%\item Causal Processes
-%\item Achievment Causal Chain
-%\item AL
-%\item SFCA
-%\end{itemize}
-
-
-
-%
-%\begin{figure}[h]
-%\includegraphics[width=\textwidth]{important_cgraph.png}
-%\caption{XXXX}
-%\label{fig:cgraph-important}
-%\end{figure}
-%
-%\begin{figure}[h]
-%\includegraphics[width=\textwidth]{important_acgraph.png}
-%\caption{XXXX}
-%\label{fig:acgraph-important}
-%\end{figure}
-
-
-
-%Structural Equations and Beyond generalises structural models
-%
-%Causality Checking for Complex System Models Event order logic
-
-\section{Examples}
+\chapter{Properties of Causation: A Collection of Examples}
 % !!!XXXXXX Wall / Loader / Push
 
 
@@ -1754,7 +1831,7 @@ $\circ$: The articles discussing conditional logic focus more on the formalism i
 \bottomrule
 \end{tabular}
 \caption{Depicts which publication discuss which token causality definition (formulated from 2011 onwards).  }
-\label{tab:language}
+\label{tab:examples}
 \end{sidewaystable}
 
 
@@ -1764,7 +1841,7 @@ Currently amidst the quest of formally capturing causation, the literature conce
 Those examples, increasingly complex, attempt to capture fragments of causality, as intuitively understood by humans. With many authors proposing new examples to highlight points of failures for previously established formalisms, the literature concerning causation has amassed a wealth of such examples. Unfortunately, as far as I am aware, no attempt was made to collect and classify those examples. Hence, the subsequent section shall be an approximation of precisely that. However, being fully aware that a mere list of possibly redundant examples is of little use, thus only prominent examples will be discussed while the remaining examples will be relegated to the database accompanying this work.
 
 
-
+\section{Examples}
 \subsection{Basic Examples}
 
 
@@ -3243,7 +3320,8 @@ Suppose $C = R = 1$ and $W = H_1 = H_2 = 0$ (and so $O = 1$). Was $W = 0$ an act
 
 
 
-\section{Discussion}
+
+\section{Properties of Causation}
 
 \subsection{Redundant Causation}
 
@@ -3313,9 +3391,246 @@ For Example \ref{ex:omission-1} this would imply that only the neighbour and no 
 
 
 
-\chapter{Computational Causality}
-\label{ch:comp_causality}
 
+\chapter{Token Causal Definitions: A comparison}
+\label{ch:literature_review}
+
+\section{Token Causal Definitions}
+\subsection{Modified Halpern and Pearl Definition}
+
+\subsection{Bochmans Causal Inference}
+
+\subsection{Possible Causal Processes}
+
+
+\section{Comparison}
+
+
+The important publications as contained in $\prset$ (see Subsection \ref{subsec:important_pubs}) rely on a variety of languages to encode causal relations. Table \ref{tab:language} provides insight into which publications discuss which language family.
+However, it must be remarked that some liberty with respect to aggregation was taken, e.g.\ causal models with and without defaults are considered part of the same language family. 
+Here it is important to point out that by far the most discussed framework are causal models, with CP-Logic and Causal Logic tying for a distant second place. 
+
+
+\begin{sidewaystable}
+\centering
+\tiny
+\begin{tabular}{lp{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1.1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
+\toprule
+Articles & Causal Models	& CP-Logic	& Situation Calculus	&  Non-Monotonic Causal Theory & FOL & Neuron Diagrams & 	Conditional Logic	& $\mathcal{AL}$	& SFCA &  Abductive Causal Theory \\   
+\midrule        
+\cite{vennekens2010embracing} 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bex2010hybrid} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
+ \cite{lee2010representing}	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{lifschitz2010translating} 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{glymour2010actual}	& X	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
+ \cite{claassen2010causal} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{gerstenberg2010spreading}	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2011actual} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{shulz2011if} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{briggs2012interventionist}	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{baumgartner2013regularity} 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	\\
+ \cite{hyttinen2013discovering} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2015graded} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{weslake2015partial} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{chockler2015causal}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{beckers2016general} 	& 	& X	& 	& 	& 	& X	& 	& 	& 	& 	\\
+ \cite{schaffer2016grounding}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{halpern2016appropriate} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{blanchard2017cause}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{wright2017ness}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{icard2017normality} 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{aleksandrowicz2017computational}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{fenton2017proposed}  	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{lagnado2017causation}  	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bochman2018actual}  	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{ibeling2018conditional}  	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+ \cite{beckers2018principled} 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{bochman2018laws}  	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+ \cite{denecker2018causal}  	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{batusov2018situation}  	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{denecker2019explaining}  	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{liepicna2019evaluation}  	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+ \cite{leblanc2019explaining} 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
+ \cite{liepicna2020arguing} 	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+ \cite{khannecessary}  	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	\\
+ \cite{ibeling2020probabilistic}  	& X	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+\bottomrule
+\end{tabular}
+\caption{Depicts which publication discuss which languages families}
+\label{tab:language}
+\end{sidewaystable}
+
+
+ 
+
+%
+%
+% \begin{sidewaystable}
+%\centering
+%\tiny
+%\begin{tabular}{lp{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.2cm}p{0.05cm}p{0.05cm}p{0.1cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.2cm}p{0.1cm}p{0.1cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}p{0.3cm}}
+%\toprule
+%Articles & But-For & CRF & INUS & NESS & Hitch-01 & HP-01 & 	Wood-03	& Hall-04p	& Hall-04d & HP-05 & Hall-07 & HP-08d & S & SJ & BV-11 &  BV-12 &  B-Reg &
+%PTC &  HH-CP & HM & MM & BV-CM & BCI & SC-ACC & PCPS & AT & SC-CF & CAEC \\
+%\\   
+%\midrule        
+%\cite{vennekens2010embracing} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{bex2010hybrid} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{lee2010representing} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{lifschitz2010translating} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{glymour2010actual}& 	& 	& 	& 	& 	& 	& X	& 	& 	& X	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{claassen2010causal} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{gerstenberg2010spreading} & X	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{halpern2011actual} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{shulz2011if} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{briggs2012interventionist} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{baumgartner2013regularity} & 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{hyttinen2013discovering} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{halpern2015graded} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{weslake2015partial} & 	& 	& 	& 	& X	& X	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{chockler2015causal} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{beckers2016general} & 	& 	& 	& 	& 	& 	& 	& X	& X	& X	& X	& X	& 	& 	& X	& X	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{schaffer2016grounding} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{halpern2016appropriate} & 	& 	& 	& 	& 	& X	& 	& 	& 	& X	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{blanchard2017cause} & 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& X	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{wright2017ness} & X	& X	& X	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{icard2017normality} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{aleksandrowicz2017computational} & 	& 	& 	& 	& 	& X	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{fenton2017proposed} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{lagnado2017causation} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{bochman2018actual} & 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
+% \cite{ibeling2018conditional} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{beckers2018principled} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	\\
+% \cite{bochman2018laws} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	\\
+% \cite{denecker2018causal} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+% \cite{batusov2018situation} & 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	\\
+% \cite{denecker2019explaining} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	\\
+% \cite{liepicna2019evaluation} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	\\
+% \cite{leblanc2019explaining}& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	\\
+% \cite{liepicna2020arguing} & X	& X	& 	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+% \cite{khannecessary} & 	& 	& X	& 	& 	& 	& 	& 	& 	& X	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& X	& 	\\
+% \cite{ibeling2020probabilistic} & 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	& 	\\
+%\bottomrule
+%\end{tabular}
+%\caption{Depicts which publication discuss which languages families}
+%\label{tab:language}
+%\end{sidewaystable}
+
+
+
+%
+%\cite{vennekens2010embracing} 	
+% \cite{bex2010hybrid} 
+% \cite{lee2010representing}
+% \cite{lifschitz2010translating} 
+% \cite{glymour2010actual}
+% \cite{claassen2010causal} 
+% \cite{gerstenberg2010spreading}
+% \cite{halpern2011actual} 
+% \cite{shulz2011if} 
+% \cite{briggs2012interventionist}
+% \cite{baumgartner2013regularity} 
+% \cite{hyttinen2013discovering} 
+% \cite{halpern2015graded} 
+% \cite{weslake2015partial} 
+% \cite{chockler2015causal}  
+% \cite{beckers2016general} 
+% \cite{schaffer2016grounding}  
+% \cite{halpern2016appropriate} 
+% \cite{blanchard2017cause}  
+% \cite{wright2017ness}  
+% \cite{icard2017normality} 
+% \cite{aleksandrowicz2017computational}  
+% \cite{fenton2017proposed}  
+% \cite{lagnado2017causation}  
+% \cite{bochman2018actual}  
+% \cite{ibeling2018conditional}  
+% \cite{beckers2018principled} 
+% \cite{bochman2018laws}  
+% \cite{denecker2018causal}  
+% \cite{batusov2018situation}  
+% \cite{denecker2019explaining}  
+% \cite{liepicna2019evaluation}  
+% \cite{leblanc2019explaining} 
+% \cite{liepicna2020arguing} 
+% \cite{khannecessary}  
+% \cite{ibeling2020probabilistic}  
+
+
+%
+%\begin{itemize}
+%
+%\item CM Woodward
+%\item CM HP 2001	
+%\item CM HP 2005	
+%\item CM HP 2005 + Normality	
+%\item CM Hitchcock	
+%\item Bochman Causal Inference
+%\item Simulation Model
+%\item Causal Process Semantics
+%\item Achievment Causal Chain
+%\item SFCA
+%\end{itemize}
+
+
+
+
+%\item But For 	
+%\item INUS
+%\item NESS	
+%\item Hart
+
+
+%\begin{itemize}
+%
+%\item CM Partial Theory	
+%\item CM Hitchcock	
+%\item CM Hitchcock meets Menzies	
+%\item CM Menzies-by-Menzies	
+%\item CM VB
+%\item Hall 2007	Production	
+%\item Dependence	
+%\item BV12	
+%\item HH-CP	
+%\item FO Minimality	
+%\item But For 	
+%\item INUS
+%\item NESS	
+%\item Hart	
+%\item Bochman Causal Inference
+%\item Simulation Model
+%\item Causal Processes
+%\item Achievment Causal Chain
+%\item AL
+%\item SFCA
+%\end{itemize}
+
+
+
+%
+%\begin{figure}[h]
+%\includegraphics[width=\textwidth]{important_cgraph.png}
+%\caption{XXXX}
+%\label{fig:cgraph-important}
+%\end{figure}
+%
+%\begin{figure}[h]
+%\includegraphics[width=\textwidth]{important_acgraph.png}
+%\caption{XXXX}
+%\label{fig:acgraph-important}
+%\end{figure}
+
+
+
+%Structural Equations and Beyond generalises structural models
+%
+%Causality Checking for Complex System Models Event order logic
+
+
+%
+%\chapter{Computational Causality}
+%\label{ch:comp_causality}
+%
 
 
 
@@ -3455,97 +3770,97 @@ For Example \ref{ex:omission-1} this would imply that only the neighbour and no 
 
 
 
-
 %
-\subsection{Causal Models}
-\label{sec:causal_models}
-
-the version introduced, taken from \parencite{halpern2015cause}, was formulated in \cite{halpern2000axiomatizing}. However, \parencite{Weslake2015partial} slightly changed the notation to make the direction of such structural equations more apparent, thus this convention will be carried over into this work \parencite{halpern2015cause,Weslake2015partial}. 
+%%
+%\subsection{Causal Models}
+%\label{sec:causal_models}
 %
-% all relevant factors into a single exogenous variable. The value of this variable can provide the context necessary to explain the required background conditions for events to occur.
-%Using such a variable, one could also 
+%the version introduced, taken from \parencite{halpern2015cause}, was formulated in \cite{halpern2000axiomatizing}. However, \parencite{Weslake2015partial} slightly changed the notation to make the direction of such structural equations more apparent, thus this convention will be carried over into this work \parencite{halpern2015cause,Weslake2015partial}. 
+%%
+%% all relevant factors into a single exogenous variable. The value of this variable can provide the context necessary to explain the required background conditions for events to occur.
+%%Using such a variable, one could also 
+%%
+%%
+%%, e.g.\ this variable would explain all the conditions required for the lightning to strike or the arsonist to drop their match.  Moreover, the utility of $U$ can be further expanded upon, by allowing it to encode the relation between values, in this case it determines the value of $\mathit{FF}$ by allowing $U$ to determine the structural equation used, e.g.\ $\min$ or $\max$. As in Subsection \ref{subsec:neural_diagrams}, the variables of an causal model can be split into exogenous and endogenous variables. Depending on whether $U$ was used or not, either $U$ is exogenous and $\mathit{LS}$, $\mathit{MD}$ and $\mathit{FF}$ are endogenous or $\mathit{LS}$  and $\mathit{MD}$ exogenous and $\mathit{FF}$ is endogenous. Using the now cultivated intuition a formal definition can be given \cite{halpern2015cause}.
+%%
+%%
+%%
+%% Apart from being directed, another design choice made 
+%% 
+%% in this case $\mathit{FF}$,are best read as assignments rather than as a algebraic equation, in this case $\mathit{MD}$ and $\mathit{LS}$
+%%  are best read as assignments rather than as a algebraic equation.
+%%
+%%
+%%
+%%
+%%In \cite{halpern2015cause} Halpern introduces structural models using the following example.
+%%
+%%\begin{example}
+%%\label{ex:causal_model_forrest_fire}
+%%Consider Example \ref{ex:causal_model_forrest_fire_1}  and Example \ref{ex:causal_model_forrest_fire_2}.
+%%In both cases the variables are considered as binary random variables, e.g.\ if $\mathit{FF} = 1$ then the forest fire occurred, if $\mathit{FF} = 0$ it did not.
+%%For the prior the causal relationship is encoded by the structural equation $\mathit{FF} = \max(\mathit{LS}, \mathit{MD})$, while for the latter the structural equation $\mathit{FF} = \min(\mathit{LS}, \mathit{MD})$
+%%can be used.
+%%\end{example}
+%%
+%%Be not mistaken, a structural equation are best read as assignments rather than as a algebraic equation. Meaning that the value of the dependent variable, in this case $\mathit{FF}$, can not influence the values of the variables determining its values, in this case $\mathit{MD}$ and $\mathit{LS}$. As eluded to earlier, in this example the temptation of imposing a probabilistic relationship between values becomes apparent, e.g.\ it is tempting say that if a lighting strikes there is a probability of $0.8$ of a forest fire occurring. Similarly to Pearl, Haplern advises against such relations, suggesting instead two alternative approaches. Firstly, expand the model such that this uncertainty can be described, e.g.\ adding variables such as dryness or altitude. Secondly, he suggest, one could push all relevant factors into a single variable $U$, e.g.\ this variable would explain all the conditions required for the lightning to strike or the arsonist to drop their match.  Moreover, the utility of $U$ can be further expanded upon, by allowing it to encode the relation between values, in this case it determines the value of $\mathit{FF}$ by allowing $U$ to determine the structural equation used, e.g.\ $\min$ or $\max$. As in Subsection \ref{subsec:neural_diagrams}, the variables of an causal model can be split into exogenous and endogenous variables. Depending on whether $U$ was used or not, either $U$ is exogenous and $\mathit{LS}$, $\mathit{MD}$ and $\mathit{FF}$ are endogenous or $\mathit{LS}$  and $\mathit{MD}$ exogenous and $\mathit{FF}$ is endogenous. Using the now cultivated intuition a formal definition can be given \cite{halpern2015cause}.
+%% 
+%
+%\begin{definition}[\parencite{halpern2015cause}]
+%A \emph{causal model} $\cmodel:=(\csig, \cfoos)$ is a pair, where $\csig$ is a signature and $\cfoos$ is a set of modifiable structural equations.
+%A signature $\csig:=(\cexvars, \cenvars, \crange)$ is a tuple, where $\cexvars$ is a set of exogenous variables, $\cenvars$ is a set of endogenous variables and $\crange$ is a function mapping 
+%a variable $Y \in \cvars$ ($:=\cexvars \cup \cenvars$) to a set containing all possible values of $Y$. 
+%$\cfoos$ maps each variable $X\in \cenvars$ to a function $F_X:  \bigtimes_{Y \in \cvars\setminus \{X\}} \crange(Y) \to \crange(X)$.
+%\end{definition}
+%
+%While never explicitly stated, the definition of $F_X$ requires some order imposed onto the variables in $\cvars$. To prevent unnecessary and cumbersome notational overload, such an approach will be followed in this work as well.
+%More often than not, the function $F_X$ will be expressed using a short hand notation. That is, for the causal model $\cmodel$ where $\cexvars := \{U\}$ and $\cenvars := \{Y,Y',X\}$, the function $F_{X}(Y,Y',U):=Y+U$ is abbreviated
+%as $X = Y+U$. To emphasise that this structural equation not an equation in the classical algebraic sense \parencite{Weslake2015partial} writes it as assignment $X := Y+U$.
+%Moreover, if $\forall x \in \cvars\; \crange(x)=\mathbb{B}$ then one speaks of an \emph{binary causal model}.
+%
+%Emerging out of the counterfactual tradition, it is natural that the language provides a convenient method to express \emph{interventions}. That is, given a causal model $\cmodel:=(\csig, \cfoos)$, the model $\cmodel_{X \leftarrow x}:=(\csig, \cfoos_{X \leftarrow x})$ where $\cfoos_{X \leftarrow x}$ is identical to $\cfoos$, but for the structural equation of $X$ which will be fixed to $X:=x$.
 %
 %
-%, e.g.\ this variable would explain all the conditions required for the lightning to strike or the arsonist to drop their match.  Moreover, the utility of $U$ can be further expanded upon, by allowing it to encode the relation between values, in this case it determines the value of $\mathit{FF}$ by allowing $U$ to determine the structural equation used, e.g.\ $\min$ or $\max$. As in Subsection \ref{subsec:neural_diagrams}, the variables of an causal model can be split into exogenous and endogenous variables. Depending on whether $U$ was used or not, either $U$ is exogenous and $\mathit{LS}$, $\mathit{MD}$ and $\mathit{FF}$ are endogenous or $\mathit{LS}$  and $\mathit{MD}$ exogenous and $\mathit{FF}$ is endogenous. Using the now cultivated intuition a formal definition can be given \cite{halpern2015cause}.
+%Computing the values of the variables present in an causal model requires \emph{context}, i.e.\ an assignment of values to all exogenous variables. From there, one can compute the values of all endogenous variables, by solving the respective equations.
+%
+%\begin{definition}
+%Given a causal model $\cmodel:=(\csig, \cfoos)$ and an assignment $\sigma$ where for $u \in \cexvars$ $\sigma(u) \in \crange(u)$, then $(\cmodel, \sigma)$ is a causal model with context.
+%\end{definition}
+%
+%
+%\begin{definition}[\cite{halpern2015cause}]
+%Let $\cmodel$ be a causal model, $\cmodel$ is \emph{acyclic} (or \emph{recursive}) if $X$ is independent $Y$, i.e.\ there exists a total ordering $\prec$ of $\cenvars$ such that
+%\begin{equation*}
+% X \prec Y \implies  \forall y,y' \in \crange(Y) \; F_X(\dots , y, \dots) = F_X(\dots , y', \dots) 
+%\end{equation*}
+%\end{definition}
 %
 %
 %
-% Apart from being directed, another design choice made 
-% 
-% in this case $\mathit{FF}$,are best read as assignments rather than as a algebraic equation, in this case $\mathit{MD}$ and $\mathit{LS}$
-%  are best read as assignments rather than as a algebraic equation.
+%\begin{definition}[\cite{halpern2015cause}]
+%The tuple $\cmodel:= (\csig, \cfoos, \succeq)$ is called an extended causal model, iff $(\csig, \cfoos)$ is a causal model and $\succeq$ is a pre-order over worlds. A
+%world $s$ being $s \in   \bigtimes_{U \in \cexvars} \crange(U)$.
+%\end{definition}
+%
+%
+%%Such extended causal models provide a high degree of modelling power. Such power generates certain advantages, such as allowing one to capture the distinction between conditions and causes present in the legal tradition of causality, with conditions being simply values of variables with a higher degree of normality. However, it also provides the modeller with the ability to render many causal semantics irrelevant, thus further exacerbating Hall's complaint\footnote{The structural equations approach places a much greater emphasis on problem modelling, amounting to little more than building the solution into the model \cite{erwig2010causal}} about the structural equation approach. 
+%
+%\subsection{Causal Calculus}
 %
 %
 %
+%\subsection{Situation Calculus}
 %
-%In \cite{halpern2015cause} Halpern introduces structural models using the following example.
 %
-%\begin{example}
-%\label{ex:causal_model_forrest_fire}
-%Consider Example \ref{ex:causal_model_forrest_fire_1}  and Example \ref{ex:causal_model_forrest_fire_2}.
-%In both cases the variables are considered as binary random variables, e.g.\ if $\mathit{FF} = 1$ then the forest fire occurred, if $\mathit{FF} = 0$ it did not.
-%For the prior the causal relationship is encoded by the structural equation $\mathit{FF} = \max(\mathit{LS}, \mathit{MD})$, while for the latter the structural equation $\mathit{FF} = \min(\mathit{LS}, \mathit{MD})$
-%can be used.
-%\end{example}
+%\subsection{CP-Logic}
+%\label{subsec:cp-logic}
 %
-%Be not mistaken, a structural equation are best read as assignments rather than as a algebraic equation. Meaning that the value of the dependent variable, in this case $\mathit{FF}$, can not influence the values of the variables determining its values, in this case $\mathit{MD}$ and $\mathit{LS}$. As eluded to earlier, in this example the temptation of imposing a probabilistic relationship between values becomes apparent, e.g.\ it is tempting say that if a lighting strikes there is a probability of $0.8$ of a forest fire occurring. Similarly to Pearl, Haplern advises against such relations, suggesting instead two alternative approaches. Firstly, expand the model such that this uncertainty can be described, e.g.\ adding variables such as dryness or altitude. Secondly, he suggest, one could push all relevant factors into a single variable $U$, e.g.\ this variable would explain all the conditions required for the lightning to strike or the arsonist to drop their match.  Moreover, the utility of $U$ can be further expanded upon, by allowing it to encode the relation between values, in this case it determines the value of $\mathit{FF}$ by allowing $U$ to determine the structural equation used, e.g.\ $\min$ or $\max$. As in Subsection \ref{subsec:neural_diagrams}, the variables of an causal model can be split into exogenous and endogenous variables. Depending on whether $U$ was used or not, either $U$ is exogenous and $\mathit{LS}$, $\mathit{MD}$ and $\mathit{FF}$ are endogenous or $\mathit{LS}$  and $\mathit{MD}$ exogenous and $\mathit{FF}$ is endogenous. Using the now cultivated intuition a formal definition can be given \cite{halpern2015cause}.
-% 
-
-\begin{definition}[\parencite{halpern2015cause}]
-A \emph{causal model} $\cmodel:=(\csig, \cfoos)$ is a pair, where $\csig$ is a signature and $\cfoos$ is a set of modifiable structural equations.
-A signature $\csig:=(\cexvars, \cenvars, \crange)$ is a tuple, where $\cexvars$ is a set of exogenous variables, $\cenvars$ is a set of endogenous variables and $\crange$ is a function mapping 
-a variable $Y \in \cvars$ ($:=\cexvars \cup \cenvars$) to a set containing all possible values of $Y$. 
-$\cfoos$ maps each variable $X\in \cenvars$ to a function $F_X:  \bigtimes_{Y \in \cvars\setminus \{X\}} \crange(Y) \to \crange(X)$.
-\end{definition}
-
-While never explicitly stated, the definition of $F_X$ requires some order imposed onto the variables in $\cvars$. To prevent unnecessary and cumbersome notational overload, such an approach will be followed in this work as well.
-More often than not, the function $F_X$ will be expressed using a short hand notation. That is, for the causal model $\cmodel$ where $\cexvars := \{U\}$ and $\cenvars := \{Y,Y',X\}$, the function $F_{X}(Y,Y',U):=Y+U$ is abbreviated
-as $X = Y+U$. To emphasise that this structural equation not an equation in the classical algebraic sense \parencite{Weslake2015partial} writes it as assignment $X := Y+U$.
-Moreover, if $\forall x \in \cvars\; \crange(x)=\mathbb{B}$ then one speaks of an \emph{binary causal model}.
-
-Emerging out of the counterfactual tradition, it is natural that the language provides a convenient method to express \emph{interventions}. That is, given a causal model $\cmodel:=(\csig, \cfoos)$, the model $\cmodel_{X \leftarrow x}:=(\csig, \cfoos_{X \leftarrow x})$ where $\cfoos_{X \leftarrow x}$ is identical to $\cfoos$, but for the structural equation of $X$ which will be fixed to $X:=x$.
-
-
-Computing the values of the variables present in an causal model requires \emph{context}, i.e.\ an assignment of values to all exogenous variables. From there, one can compute the values of all endogenous variables, by solving the respective equations.
-
-\begin{definition}
-Given a causal model $\cmodel:=(\csig, \cfoos)$ and an assignment $\sigma$ where for $u \in \cexvars$ $\sigma(u) \in \crange(u)$, then $(\cmodel, \sigma)$ is a causal model with context.
-\end{definition}
-
-
-\begin{definition}[\cite{halpern2015cause}]
-Let $\cmodel$ be a causal model, $\cmodel$ is \emph{acyclic} (or \emph{recursive}) if $X$ is independent $Y$, i.e.\ there exists a total ordering $\prec$ of $\cenvars$ such that
-\begin{equation*}
- X \prec Y \implies  \forall y,y' \in \crange(Y) \; F_X(\dots , y, \dots) = F_X(\dots , y', \dots) 
-\end{equation*}
-\end{definition}
-
-
-
-\begin{definition}[\cite{halpern2015cause}]
-The tuple $\cmodel:= (\csig, \cfoos, \succeq)$ is called an extended causal model, iff $(\csig, \cfoos)$ is a causal model and $\succeq$ is a pre-order over worlds. A
-world $s$ being $s \in   \bigtimes_{U \in \cexvars} \crange(U)$.
-\end{definition}
-
-
-%Such extended causal models provide a high degree of modelling power. Such power generates certain advantages, such as allowing one to capture the distinction between conditions and causes present in the legal tradition of causality, with conditions being simply values of variables with a higher degree of normality. However, it also provides the modeller with the ability to render many causal semantics irrelevant, thus further exacerbating Hall's complaint\footnote{The structural equations approach places a much greater emphasis on problem modelling, amounting to little more than building the solution into the model \cite{erwig2010causal}} about the structural equation approach. 
-
-\subsection{Causal Calculus}
-
-
-
-\subsection{Situation Calculus}
-
-
-\subsection{CP-Logic}
-\label{subsec:cp-logic}
-
-
-\subsection{Causal Logic}
-\label{subsec:causal-logic-mccain}
-
-
-
+%
+%\subsection{Causal Logic}
+%\label{subsec:causal-logic-mccain}
+%
+%
+%
 
 
 
