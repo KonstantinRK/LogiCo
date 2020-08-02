@@ -379,6 +379,8 @@ This database is analysed to obtain a structural overview of the literature, all
 
 \section{Methodology}
 \label{sec:methodology}
+
+\subsection{Data Collection and Storage}
 The methodology underlying this systematic literature review employs a snowball search strategy. 
 In general, according to \parencite{wohlin2014guidelines} any snowball search strategy should characterise an appropriate initial set of publications, i.e.\ the start set, which is then iteratively expanded by either forward or backward snowballing until a desirable final set of publications is obtained.
 Furthermore, starting set should satisfied the following criteria.
@@ -453,50 +455,11 @@ let $\tpset_x$ be the set of all publications obtained by snowballing on a previ
 \end{itemize}
 % XXXX paperb vs publication straiten out.
 
-In an ideal world, the methodology would provide a perfectly reproducible algorithm that reliably and deterministically produces the same set of publications on each execution.
+
+Before moving on, a small discussion about the single most undesirable property of this process. That is, in an ideal world the methodology would provide a perfectly reproducible algorithm that reliably and deterministically produces the same set of publications on each execution.
 Unfortunately, this property can not be satisfied by the constructed methodology, as any employment of forward snowballing introduces variability into the system. Considering the importance of forward snowballing to identify the most recent literature, foregoing the application of this tool in the construction of $\pset$ would not have been feasible. Having already parted with this desirable property, additional subjectivity, i.e. the soft categorisation of relevance and the removal of inaccessible publications, could be added without concerns.
 
 
-\subsection{Data Collection}
-
-Using the outlined methodology the following literature database was constructed. 
-In Step 1 one obtains a set containing $4223$ publications\footnote{Journal Artificial Intelligence: $267$; Journal Artificial Intelligence and Law:  $60$; Journal Knowledge-Bases Systems: $1281$; International Joint Conferences on Artificial Intelligence Organization: $2615$}. 
-Which is in \emph{Step 2} subsequently narrowed down to just $37$ articles\parencite{van2019separators,verheij2017proof,chen2019judicial,neil2019modelling,li2019context,lu2018mining,zhang2018collective,
-constantinou2017towards,liang2017evaluation,zhang2017characterizing,mu2018measuring,kronegger2019backdoors,hyttinen2017core,
-zhang2017transfer,zhang2017causal,liu2017cause,summerville2017charda,zhang2016causal,albrecht2016exploiting,chai2018language,
-bochman2018actual,ibeling2018conditional,laurent2018counterfactual,chikahara2018causal,zhang2017achieving,backstrom2018novel,
-jaber2018graphical,sridhar2018scalable,wenjuan2018mixed,xu2019achieving,zhang2019asp,Cai2019CausalDW,Sridhar2019EstimatingCE,
-xie2019boosting,hassanzadeh2019answering,shankar2019three,Liepina2019ArguingAC}.
-
-
-Finally, after executing \emph{Step 3} one obtains the specified starting set containing $8$ articles. Namely,
-\begin{itemize}
-\item Proof with and without probabilities \parencite{verheij2017proof},
-\item Characterizing causal action theories and their implementations in answer set programming\footnote{Since \parencite{zhang2017characterizing} was not accessible ``Characterizing causal action theories and their implementations in answer set programming: Action languages b, c, and beyond" \parencite{zhang2015characterizing} will be used for the snowballing step. This departure from the methodology, is justified due to its initially high reprieved relevancy.}  \parencite{zhang2017characterizing},
-\item Actual Causality in a Logical Setting \parencite{bochman2018actual},
-\item On the conditional logic of simulation models \parencite{ibeling2018conditional},
-\item  Counterfactual Resimulation for Causal Analysis of Rule-Based Models \parencite{laurent2018counterfactual},
-\item Scalable Probabilistic Causal Structure Discovery \parencite{sridhar2018scalable},
-\item  ASP-based discovery of semi-Markovian causal models under weaker assumptions \parencite{zhang2019asp} and 
-\item Arguing about causes in law: a semi-formal framework for causal arguments \parencite{Liepina2019ArguingAC}.
-\end{itemize}
-
-Executing the described snowballing steps on the start set, one has to parse a total of $872$ publications. Out of which only $294$ (around $34 \%$) are categorised as relevant. The relationship between relevant and irrelevant publications at each setp of the process can be observed in Figure \ref{fig:pgraph-relevant_publications_per_step}.
-
-
-\begin{figure}[h!]
-\includegraphics[width=\textwidth]{relevant_publications_per_step.png}
-\caption{Number of publications contained in each $\pset_x$ for $x \in \{ \mathit{+1}, \mathit{+1-1}, \mathit{+2}, \mathit{+2-1}, \mathit{-1}, \mathit{-2}\}$}
-\label{fig:pgraph-relevant_publications_per_step}
-\end{figure}
-
-
-Although great effort was taken to make the data collection sufficiently accurate. Some mistakes were discovered the data collection was already completed.
-Firstly, there are two publications titled ``Causes and explanations: a structural-model approach: part i: causes'' by the same authors, i.e.\ \parencite{halpern2001causes} and \parencite{halpern2005causes}.
-During the data collection process those two publication were unfortunately conflated. Fortunately, the similarities between those two publications, the latter provides an updated to definition presented in the prior, relativise this mistake.
-
-\subsection{Database}
-\label{subsec:database}
 The dataset constructed using this methodology will be made publicly available. Doing so does not only provide other researchers access to this snapshot of the literature, but also enhances transparency. Allowing for the detection of erroneous inferences and the identification of sloppy data collection. The data are stored in a \href{https://www.sqlite.org/index.html}{SQLite-database}. This database can store publications, authors, venues and tags. Its structure is depicted in Figure \ref{fig:er-diagram-publication-db} as an ER-diagram using Chen notation \parencite{chen1976entity}.
 
 The table ``Venue'' stores platforms that publish research, e.g.\ journals such as AI or conferences such as IJCAI. This table is rather sparse, having only a column for the names of the venues and a column reserved for a \href{https://www.json.org/json-en.html}{JSON-string} for additional data. 
@@ -596,6 +559,7 @@ Thirdly, to store the citation relations between publications, the table ``Paper
 
 
 
+
 %\begin{tikzpicture}[auto,node distance=1cm]
 
   % Create an entity with ID node1, label "Fancy Node 1".
@@ -646,23 +610,18 @@ Thirdly, to store the citation relations between publications, the table ``Paper
 %\end{tikzpicture}
 
 
+\subsection{Citation Analysis}
+
+The objective of this chapter is to identify publications provide significant contributions in the quest of illuminating the concept of causality. Unfortunately, the discovery of such literature is rather difficult, in particular when the total amount of publications exceeds a certain threshold. Hence, this section attempts to identify particularly relevant relevant authors and publications by through the use of several heuristics.
+That is, using the citation relationship stored in the constructed database (see Subsection \ref{subsec:database}) one can build various graphs to obtain a macro level view of the literature landscape and the communities within. In particular, the use of centrality measures will allow for the identification of important vertices, i.e. authors and publications, while the the application on the community detection algorithm 
+proposed in 
+ \parencite{meho2007rise,mingers2015review,leydesdorff2012scientometrics}.
 
 
 
+F
 
 
-
-
-
-
-
-
-
-
-
-\section{Citation Analysis}
-The objective of this section is to identify publications provide significant contributions in the quest of illuminating the concept of causality. Unfortunately, the discovery of such literature is rather difficult, in particular when the total amount of publications exceeds a certain threshold. Hence, this section attempts to identify particularly relevant authors and publications by through the use of several heuristics.
-That is, using the citation relationship stored in the constructed database (see Subsection \ref{subsec:database}) one can build various graphs to obtain a macro level view of the literature landscape and the communities within. In particular, although problematic, the use of centrality measures will allow for the identification of important vertices, i.e. authors and publications  \parencite{meho2007rise,mingers2015review,leydesdorff2012scientometrics}.
 
 
 
@@ -699,6 +658,56 @@ Moreover, this implies that edge weights must indicated a notion of dissimilarit
 
  \emph{Alpha centrality} is a generalisation of the Eigenvector centrality for directed graphs. The idea behind this centrality is that it assumes that a vertex has some exogenously defined value. \emph{Katz-Bonacich centrality} generalises the Eigenvector centrality by reducing the importance of distant vertices. 
 \emph{Page Rank} revitalises the centrality score passed on by a vertex, based on the number if neighbours. Hence, a vertex having a directed edge to an important vertex must not necessarily have a high importance itself, e.g.\ a webpage linking to an important webpage must not necessarily be important itself. Furthermore, to ensure sensible results in directed graphs, dead ends are avoided by jumping to a random vertex.
+
+
+
+
+
+\section{Data Analysis}
+
+
+
+\subsection{Data Collection Process}
+
+Using the outlined methodology the following literature database was constructed. 
+In Step 1 one obtains a set containing $4223$ publications\footnote{Journal Artificial Intelligence: $267$; Journal Artificial Intelligence and Law:  $60$; Journal Knowledge-Bases Systems: $1281$; International Joint Conferences on Artificial Intelligence Organization: $2615$}. 
+Which is in \emph{Step 2} subsequently narrowed down to just $37$ articles\parencite{van2019separators,verheij2017proof,chen2019judicial,neil2019modelling,li2019context,lu2018mining,zhang2018collective,
+constantinou2017towards,liang2017evaluation,zhang2017characterizing,mu2018measuring,kronegger2019backdoors,hyttinen2017core,
+zhang2017transfer,zhang2017causal,liu2017cause,summerville2017charda,zhang2016causal,albrecht2016exploiting,chai2018language,
+bochman2018actual,ibeling2018conditional,laurent2018counterfactual,chikahara2018causal,zhang2017achieving,backstrom2018novel,
+jaber2018graphical,sridhar2018scalable,wenjuan2018mixed,xu2019achieving,zhang2019asp,Cai2019CausalDW,Sridhar2019EstimatingCE,
+xie2019boosting,hassanzadeh2019answering,shankar2019three,Liepina2019ArguingAC}.
+
+
+Finally, after executing \emph{Step 3} one obtains the specified starting set containing $8$ articles. Namely,
+\begin{itemize}
+\item Proof with and without probabilities \parencite{verheij2017proof},
+\item Characterizing causal action theories and their implementations in answer set programming\footnote{Since \parencite{zhang2017characterizing} was not accessible ``Characterizing causal action theories and their implementations in answer set programming: Action languages b, c, and beyond" \parencite{zhang2015characterizing} will be used for the snowballing step. This departure from the methodology, is justified due to its initially high reprieved relevancy.}  \parencite{zhang2017characterizing},
+\item Actual Causality in a Logical Setting \parencite{bochman2018actual},
+\item On the conditional logic of simulation models \parencite{ibeling2018conditional},
+\item  Counterfactual Resimulation for Causal Analysis of Rule-Based Models \parencite{laurent2018counterfactual},
+\item Scalable Probabilistic Causal Structure Discovery \parencite{sridhar2018scalable},
+\item  ASP-based discovery of semi-Markovian causal models under weaker assumptions \parencite{zhang2019asp} and 
+\item Arguing about causes in law: a semi-formal framework for causal arguments \parencite{Liepina2019ArguingAC}.
+\end{itemize}
+
+Executing the described snowballing steps on the start set, one has to parse a total of $872$ publications. Out of which only $294$ (around $34 \%$) are categorised as relevant. The relationship between relevant and irrelevant publications at each setp of the process can be observed in Figure \ref{fig:pgraph-relevant_publications_per_step}.
+
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{relevant_publications_per_step.png}
+\caption{Number of publications contained in each $\pset_x$ for $x \in \{ \mathit{+1}, \mathit{+1-1}, \mathit{+2}, \mathit{+2-1}, \mathit{-1}, \mathit{-2}\}$}
+\label{fig:pgraph-relevant_publications_per_step}
+\end{figure}
+
+
+Although great effort was taken to make the data collection sufficiently accurate. Some mistakes were discovered the data collection was already completed.
+Firstly, there are two publications titled ``Causes and explanations: a structural-model approach: part i: causes'' by the same authors, i.e.\ \parencite{halpern2001causes} and \parencite{halpern2005causes}.
+During the data collection process those two publication were unfortunately conflated. Fortunately, the similarities between those two publications, the latter provides an updated to definition presented in the prior, relativise this mistake.
+
+
+
+
 
 \subsection{Citation Graphs}
 
@@ -898,9 +907,9 @@ Weighted Out-Degree &  0 &    32 & 8.80769 &   5.5 \\
 
 
 
-XXXX WICHTIG For example, in \parencite{hall2007structural} Hall criticises the structural equations approach, especially due to its failure to distinguish between default and deviant behaviour. Moreover, while acknowledging their value, he perceives their status as inflated, favouring neuron diagrams instead. In particular he endorses them due to their simplicity and their ability to encode a default/deviant distinction. By contrast, Hitchcock clearly opposes neuron diagrams as a general representation tool, arguing extensively in \parencite{hitchcock2007s} why structural equations should be preferred instead.
-Halpern, also favouring structural equations, is one of the most prominent figure in the contemporary token causality literature (see Section XXXX). This prominence in part can be attributed to his (and Judea Pearl's) definition of token causality (see Section XXX). This definition has its origin in \parencite{halpern2005causes} and is, unsurprisingly, the article with the highest citation count.
-
+%XXXX WICHTIG For example, in \parencite{hall2007structural} Hall criticises the structural equations approach, especially due to its failure to distinguish between default and deviant behaviour. Moreover, while acknowledging their value, he perceives their status as inflated, favouring neuron diagrams instead. In particular he endorses them due to their simplicity and their ability to encode a default/deviant distinction. By contrast, Hitchcock clearly opposes neuron diagrams as a general representation tool, arguing extensively in \parencite{hitchcock2007s} why structural equations should be preferred instead.
+%Halpern, also favouring structural equations, is one of the most prominent figure in the contemporary token causality literature (see Section XXXX). This prominence in part can be attributed to his (and Judea Pearl's) definition of token causality (see Section XXX). This definition has its origin in \parencite{halpern2005causes} and is, unsurprisingly, the article with the highest citation count.
+%
 
 
 \subsection{Important Authors and Publications}
@@ -1565,9 +1574,14 @@ With respect to causal models the following differentiations can be made. \hpud,
 
 
 Another categorisation of the discovered definitions can be made based on the traditions they follow. That is, whether the take a counterfactual, regularity, probability or process orientated view of causality.
-The assessment is primarily done based on the self-assessment of the authors and or comments from other authors.
+The assessment is primarily done by relying on assessments made in the literature. Nevertheless, the reasoning behind each of the judgement will be given.  
+
+Firstly, all those that belong to the counterfactual tradition
 
 
+
+\butfor was classified as belonging to the counterfactual 
+Due to the fact \crf served as a source of inspiration for \ness, and thus shares strong similarities with it, the this definition was judged as being part of the regularity tradition by analogy.
 
 
 
