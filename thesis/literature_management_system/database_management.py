@@ -119,7 +119,7 @@ class DBManager:
                 q = q.filter(Author.comment == comment)
         result = list(q)[-1]
         if as_dict:
-            result.transform_to_dict()
+            result = result.transform_to_dict()
         return result
 
     def __get_author_key(self, name,  surname, comment=None):
@@ -687,7 +687,7 @@ class DBManager:
     # ---------------------------------------------- Author: Get Functions
 
     def get_author(self, author_key):
-        return self.execute(True, self.__get_author, author_key=author_key, as_dict=True).transform_to_dict()
+        return self.execute(True, self.__get_author, author_key=author_key, as_dict=True)
 
     def get_author_key(self, name, surname, comment=None):
         return self.execute(True, self.__get_author_key, name=name, surname=surname, comment=comment)
